@@ -1,8 +1,15 @@
-<div>
+<div class="entity-form-container togglable">
 
 	<div>
 		<h3>
-			<g:message code="default.new.label" args="[message(code:'datalocation.label')]"/>
+			<g:if test="${location.id != null}">
+				<g:message code="default.edit.label"
+					args="[message(code:'datalocation.label')]" />
+			</g:if>
+			<g:else>
+				<g:message code="default.new.label"
+					args="[message(code:'datalocation.label')]" />
+			</g:else>
 		</h3>
 		<g:locales/>
 	</div>

@@ -1,11 +1,16 @@
-<div>
+<div class="entity-form-container togglable">
 	<div>
 		<h3>
-			<g:message code="default.new.label" args="[message(code:'department.label')]"/>
+			<g:if test="${department.id != null}">
+				<g:message code="default.edit.label" args="[message(code:'department.label')]" />
+			</g:if>
+			<g:else>
+				<g:message code="default.new.label" args="[message(code:'department.label')]" />
+			</g:else>
 		</h3>
-		<g:locales/>
+		<g:locales />
 	</div>
-	
+
 	<g:form url="[controller:'department', action:'save', params:[targetURI: targetURI]]" useToken="true">
 	
 		<g:input name="code" label="${message(code:'entity.code.label')}" bean="${department}" field="code"/>

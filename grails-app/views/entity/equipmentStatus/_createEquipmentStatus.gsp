@@ -1,10 +1,15 @@
 <%@ page import="org.chai.memms.equipment.EquipmentType.Status" %>
 <div id="popup-contact">
 	<a id="popup-contact-close">x</a>
-	<div>
+	<div  class="entity-form-container togglable">
 		<div>
 			<h3>
-				<g:message code="default.new.label" args="[message(code:'model.label')]"/>
+			<g:if test="${status.id != null}">
+				<g:message code="default.edit.label" args="[message(code:'model.label')]" />
+			</g:if>
+			<g:else>
+				<g:message code="default.new.label" args="[message(code:'model.label')]" />
+			</g:else>
 			</h3>
 			<g:locales/>
 		</div>

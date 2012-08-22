@@ -1,0 +1,158 @@
+.nav-table-wrap
+  position: relative
+  
+  .category
+    bottom: 10px
+    color: rgba(0, 0, 0, 0.25)
+    font-size: 11px
+    left: 20px
+    position: absolute
+    text-transform: uppercase
+    +rotate(-90deg)
+    +text-shadow(#fff 0 1px 1px)
+    +transform-origin(bottom, left)
+  
+.nav-table
+  font-size: 11px
+  width: 970px
+  thead
+    background: $filler
+    border: 1px solid $filler - #111
+    border-bottom: 1px solid $primary
+    color: $primary
+    +box-shadow($filler - #111 0 1px 4px inset)
+    +text-shadow(#fff 0 1px 0)
+
+  tbody
+    border: 1px solid $filler - #111
+    border-top: 1px solid $primary
+    border-right: none
+    tr:nth-child(2) td
+      padding-top: 12px
+    tr:last-child td
+      padding-bottom: 12px
+
+  th
+    padding: 10px
+
+  td
+    padding: 3px 15px
+    &:nth-child(2)
+      background: $filler
+      border-left: 1px solid $filler - #111
+      border-right: 1px solid $primary
+      color: $primary
+      font-weight: bold
+      text-align: right
+    
+    a
+      font-size: 11px
+
+  th, td
+    &:first-child
+      text-align: right
+    &:nth-child(2)
+      width: 25px
+        
+  tr.parent
+    td, th
+      background: $filler
+      border-bottom: 1px solid #8fbde0
+      padding: 15px !important
+    td, th, a
+      font-size: 14px
+      font-weight: bold
+      
+  tr.program
+    > td
+      border: none
+      padding: 0 !important
+      div
+        position: relative
+    table
+      width: 100%
+    tbody
+      border-top: none
+      border-right: none
+      border-left: none
+      td
+        background: $filler2
+        &:nth-child(2)
+          width: 28px
+    
+  &.number
+    td, th
+      padding: 7px 15px
+      &:first-child
+        width: 200px
+      &:nth-child(n+3)
+        text-align: right
+      &:last-child
+        border-right: 1px solid $filler - #111
+    .program tbody
+      td:last-child
+        border-right: none
+      
+  &.graph
+    td, th
+      &:first-child
+        width: 199px
+      &:last-child
+        +box-shadow($filler - #060606 3px 0 0 inset)
+        border-right: 1px solid $filler - #111
+        padding-left: 0 !important
+        width: 604px
+    .program tbody
+      tr:first-child
+        td
+          padding-top: 15px
+      td:last-child
+        width: 604px
+        border-right: none
+      td
+        padding-top: 3px
+        
+.map-wrap
+  border: 1px solid $filler
+  margin-bottom: 1px
+  position: relative
+  width: 968px
+  
+.switch
+  background: #fff
+  border: 1px solid $primary + #222
+  color: $primary
+  font-size: 11px
+  font-weight: bold
+  margin: 8px 0 0 10px
+  opacity: 0.9
+  padding: 5px 12px
+  text-decoration: none
+  +border-radius(3px)
+  +box-shadow($filler 0 2px 0px)
+  &:hover, &:focus
+    border: 1px solid $primary
+    opacity: 1
+    
+.nodata
+  background: $filler2
+  border: 1px solid #888
+  color: #222
+  font-size: 12px
+  height: 40px
+  left: 50%
+  line-height: 40px
+  margin: -20px 0 0 -150px
+  +opacity(0.95)
+  padding: 5px 12px
+  position: absolute
+  text-align: center
+  top: 50%
+  z-index: 20
+  width: 300px
+  text-decoration: none
+  +border-radius(3px)
+  +box-shadow(rgba(0, 0, 0, 0.2) 0 0 3px)
+  &:hover, &:focus
+    border: 1px solid $primary
+    opacity: 1

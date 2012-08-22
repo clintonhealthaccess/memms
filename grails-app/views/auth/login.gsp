@@ -5,10 +5,11 @@
 		<title><g:message code="login.title"/></title>
 	</head>
 	<body>
-		<h3><g:message code="login.header.label"/></h3>
-			<g:form action="signIn">
+		<h2 class="login-heading"><g:message code="login.header.label"/></h3>
+		<div class="form-box">
+			<g:form action="signIn" class="nice-form login-form">
 				<input type="hidden" name="targetURI" value="${targetURI}" />
-				<table>
+				<table class="listing">
 					<tbody>
 						<tr><td>
 							<label><g:message code="login.username.label"/></label>
@@ -26,5 +27,6 @@
 					</tbody>
 				</table>
 			</g:form>
+		</div>
 	</body>
 </html>

@@ -1,0 +1,56 @@
+// slister start: modified dsr -> report
+#report
+  // slister end
+  
+  #values
+    overflow: auto
+    
+  .parent-row
+    background-color: $primary
+    color: #fff
+    
+  // slister start: modified dsr -> report
+  .box-report-value
+    background-color: #ffffff
+    border: 1px solid $filler - #111
+    text-align: right
+  // slister end
+
+  // slister start: modified dsr -> report
+  .box-report-organisation
+    background-color: $filler
+    border: 1px solid $filler - #111
+    color: $primary
+    text-align: left
+  // slister end
+    
+  .object-name-box
+    background: $filler2
+    border: 1px solid $filler - #111
+    color: $primary
+    width: 70px
+    font-weight: bold
+    div
+      margin-bottom: 5px
+    span a
+      font-size: 10px
+      font-weight: normal
+    
+  .title-th
+    width: 10px
+    color: $primary
+    background: $filler
+    border: 1px solid $filler - #111
+    border-width: 1px 1px 1px 0px
+    vertical-align: bottom
+    a
+      font-size: 10px
+      font-weight: normal
+      
+  .add-link, .edit-link
+    &:hover, &:focus
+      color: $yes
+      
+  .delete-link
+    &:hover, &:focus
+      color: $no

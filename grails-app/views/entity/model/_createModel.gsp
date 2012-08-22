@@ -1,7 +1,12 @@
-<div>
+<div  class="entity-form-container togglable">
 	<div>
 		<h3>
-			<g:message code="default.new.label" args="[message(code:'equipment.model.label')]"/>
+		<g:if test="${model.id != null}">
+				<g:message code="default.edit.label" args="[message(code:'equipment.model.label')]" />
+			</g:if>
+			<g:else>
+				<g:message code="default.new.label" args="[message(code:'equipment.model.label')]" />
+			</g:else>
 		</h3>
 		<g:locales/>
 	</div>

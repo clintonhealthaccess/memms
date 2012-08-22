@@ -66,9 +66,8 @@ class UtilTagLib {
 	}
 	
 	def locales = { attrs, body ->
-		//TODO find a way to solve this, probably after adding in the location services
-		//attrs["locales"] = languageService.getAvailableLanguages();
-		//out << render(template:"/tags/util/locales", model: attrs)
+		attrs["locales"] = languageService.getAvailableLanguages();
+		out << render(template:"/tags/util/locales", model: attrs)
 	}
 	
 	def i18n = { attrs, body ->

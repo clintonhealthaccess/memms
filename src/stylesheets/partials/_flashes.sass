@@ -1,0 +1,198 @@
+
+.help
+  background: url('../images/icons/point.png') no-repeat 0 0
+  padding: 10px 10px 10px 42px
+  
+.success-box
+  background-color: $filler2
+  border: 1px solid $filler2 - #111
+  margin-bottom: 10px
+  padding: 10px
+  +border-radius(3px)
+  +pie-clearfix
+  +text-shadow(#fff, 0, 1px, 0)
+  
+  .success
+    float: left
+    width: 70%
+  form
+    float: right
+  
+.success
+  background: url('../images/icons/check.png') no-repeat 0 0
+  padding: 10px 10px 10px 42px
+  
+.question-container
+  margin-bottom: 20px
+  +pie-clearfix
+
+.question-help-container
+  position: relative
+  
+.question-help
+  background: url('../images/icons/info.png') no-repeat 11px center $filler2
+  border: 1px solid $filler2 - #111
+  font-size: 11px
+  line-height: 1.5
+  margin-bottom: 10px
+  padding: 15px 45px
+  position: relative
+  +border-radius(3px)
+  +text-shadow(#fff, 0, 1px, 0)
+  
+.show-question-help
+  display: none
+  a
+    font-size: 11px
+    opacity: 0.6
+    +text-shadow(#fff 0 1px 0)
+    &:hover, &:focus
+      color: $primary
+      opacity: 1
+  &.moved
+    float: right
+    margin-top: -42px
+    position: relative
+    z-index: 11
+  
+.hide-question-help
+  background: url('../images/icons/icon_close_flash.png') no-repeat center
+  cursor: pointer
+  height: 12px
+  left: 97%
+  opacity: 0.3
+  position: absolute
+  text-indent: -6666px
+  top: 40%
+  width: 12px
+  &:hover, &:focus
+    opacity: 1
+    
+#incomplete-sections-container
+  > div
+    background: url('../images/icons/fail.png') no-repeat 11px center $filler3
+    border: 1px solid $filler3 - #111
+    margin-bottom: 10px
+    padding: 10px 10px 10px 52px
+    +border-radius(3px)
+    +pie-clearfix
+    +text-shadow(#fff, 0, 1px, 0)
+  li
+    padding: 6px 0 0 10px
+
+#invalid-questions-container
+  > div
+    background: url('../images/icons/warning.png') no-repeat 11px center $filler
+    border: 1px solid $filler2 - #111
+    padding: 10px 10px 10px 52px
+    +border-radius(3px)
+    +pie-clearfix
+    +text-shadow(#fff, 0, 1px, 0)
+  h5
+    font-style: italic
+    padding: 10px 0 5px 8px
+
+.message
+  &.login
+    background: $filler
+    border: 1px solid $filler - #111
+    color: $no
+    font-size: 11px
+    margin: 15px auto 0
+    padding: 10px
+    text-align: center
+    width: 400px
+    +border-radius
+    +text-shadow(#fff, 0, 1px, 0)
+
+.item-status
+  position: absolute
+  right: 0px
+
+  span
+    display: block
+    width: 16px
+    height: 12px
+    
+    &.hidden
+      display: none
+
+  .section-status-incomplete, .objective-status-incomplete
+
+  .section-status-complete, .objective-status-complete
+    background: url('../images/icons/status_complete.png') center no-repeat
+  .section-status-invalid, .objective-status-invalid
+    background: url('../images/icons/status_invalid.png') center no-repeat
+  .section-status-closed, .objective-status-closed
+    background: url('../images/icons/status_closed.png') center no-repeat
+
+
+.element.errors
+  position: relative
+  
+.error-list 
+  opacity: 0.75
+  li
+    background: $no
+    color: #fff
+    float: left
+    font-size: 11px
+    font-weight: bold
+    padding: 7px 15px
+    +box-shadow(#aaa 1px 1px 3px)
+    +text-shadow($no - #444 0 1px 0)
+    &:last-child
+      +border-bottom-radius
+      +border-top-right-radius
+    a
+      color: #fff
+      font-size: 11px
+
+.adv-form .error-list
+  position: absolute
+  top: 21px
+  left: 0
+  z-index: 20
+  
+  
+// Status notifications
+
+.ajax-in-process
+  input, input:hover, input:focus
+    background: url("../images/icons/in_progress.gif") no-repeat 95% center
+  select, select:hover, select:focus
+    background: url("../images/icons/in_progress.gif") no-repeat 90% center
+  
+.ajax-error
+  input, input:hover, input:focus
+    background: url("../images/icons/input_error.png") no-repeat 95% center
+  select, select:hover, select:focus
+    background: url("../images/icons/input_error.png") no-repeat 90% center
+
+.ajax-disabled, .skipped
+  cursor: wait
+  opacity: 0.5
+  
+// Standard flash messages
+.message
+  background: $yes
+  border: 1px solid $yes - #111
+  color: #fff
+  font-size: 11px
+  font-weight: bold
+  margin: 0 275px
+  opacity: 0.8
+  padding: 5px 10px
+  position: absolute
+  text-align: center
+  top: 0
+  width: 430px
+  +border-bottom-radius(3px)
+  +box-shadow(#ccc 0 1px 3px)
+  +text-shadow($yes - #222 0 1px 0)
+  &.error
+    background: $no
+    border: 1px solid $no - #111
+    +text-shadow($no - #222 0 1px 0)
+  &:hover
+    opacity: 1

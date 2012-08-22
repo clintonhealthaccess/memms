@@ -1,0 +1,527 @@
+// ADVANCED FORM STYLES
+
+.adv-form-row
+  border: 1px solid $filler
+  padding: 25px 15px 15px
+  +border-radius(3px)
+  +pie-clearfix
+  &.minimized
+    background: $filler
+    margin-bottom: -1px
+    padding: 7px 15px
+    +background(linear-gradient($filler + #060606, $filler))
+    +text-shadow(#fff, 0, 1px, 0)
+  
+.adv-form-section
+  +pie-clearfix
+  &.last
+    border: none
+    margin: 0
+    padding: 0
+  &.no-border
+    border: none
+  .adv-form-section
+    padding-bottom: 0
+    margin-bottom: 0
+  
+.adv-form-fields li
+  margin: 12px 5px 6px 0
+  &.adv-form-subsection
+    margin: 0 5px 0 0
+  
+.adv-form
+
+  .element-map-level-2
+    > h6
+      margin-top: 5px
+      
+  .horizontal li
+    margin-bottom: 10px
+  
+  h5
+    border-bottom: 2px dotted $filler - #090909
+    font-weight: bold
+    margin-bottom: 12px
+    margin-top: 15px
+    padding-bottom: 5px
+    +text-shadow(#fff, 0, 1px, 0)
+  
+  label
+    display: block
+    font-size: 10px
+    margin-bottom: 3px
+    
+  input
+    background: #fff
+    border: 1px solid $filler - #333
+    color: #444
+    font: normal 12px Arial, sans-serif
+    margin-right: 5px
+    padding: 3px
+    width: 206px
+    +box-shadow($filler - #111, 1px, 1px, 3px, 0, inset)
+    &:hover, &:focus
+      background: $filler + #030303
+      border-color: $primary
+      
+  select
+    background: #fff
+    margin-right: 14px
+    width: 205px
+    
+.adv-form-mini
+  float: left
+  
+  &.horizontal li
+    margin-bottom: 0
+    
+  .adv-form-subsection
+    background: none
+    border: none
+    cursor: pointer
+    font-weight: bold
+    margin-top: 0
+    margin-bottom: 0 !important
+    padding: 3px 0
+    
+.adv-form-subsection
+  background: #fff
+  border: 1px solid $filler - #090909
+  clear: both
+  margin-top: 5px
+  padding: 3px 7px 0
+  
+  h6
+    background: #fff
+    color: $primary
+    float: left
+    font-size: 9px
+    left: -2px
+    padding: 0 2px
+    position: relative
+    text-transform: uppercase
+    top: -7px
+    
+  input, select
+    background: #f9f9f9
+    
+  ul
+    clear: both
+    
+  li
+    margin-top: 0
+    margin-bottom: 0
+    
+.adv-form-actions
+  li
+    margin-bottom: 0 !important
+  a
+    font-size: 11px
+
+.adv-form-checkbox
+  +pie-clearfix
+  label
+    display: inline
+    float: none
+
+.element-bool
+  float: left
+.question-checkbox
+  li
+    clear: both
+    padding: 5px 10px
+  input[type=checkbox]
+    margin: 0 5px 0 0
+    
+.form-actions
+  border-top: 2px solid $filler
+  margin-top: 15px
+  +pie-clearfix
+  li
+    display: inline
+    float: left
+    padding: 10px 0 10px 10px
+    
+.go-back
+  color: $no
+  display: block
+  font-size: 11px
+  opacity: 0.6
+  padding: 11px 0 0
+  &:hover, &:focus
+    opacity: 1
+    
+.facility-type
+  background: $filler2
+  border: 1px solid $filler2 - #111
+  margin: 15px
+  padding: 11px 15px
+  width: 940px
+  +border-radius
+  +pie-clearfix
+  &.no-margin
+    margin: 0 0 15px
+  h4
+    color: #888
+    float: left
+    font-size: 12px
+    padding: 3px 5px 0 0
+  #facility-type-filter
+    color: $primary
+    font-size: 11px
+  
+button, input[type=submit], .next
+  background: $yes
+  border: 1px solid $yes - #222
+  clear: both
+  color: $filler
+  cursor: pointer
+  display: inline-block
+  font-size: 14px
+  font-weight: bold
+  padding: 6px 40px
+  +border-radius(3px)
+  +box-shadow(#ddd, 0px, 3px, 1px)
+  +background(linear-gradient($yes + #090909, $yes - #090909))
+  +text-shadow($yes - #333, 0, 1px, 0)
+  &:hover, &:focus
+    background: $yes - #111
+    border: 1px solid $yes - #333
+    +background(linear-gradient($yes, $yes - #111))
+  &:active
+    position: relative
+    top: 2px
+    +box-shadow(#ddd, 0px, 1px, 1px)
+    
+  &#cancel-button
+    background: none
+    border: none
+    color: $no
+    font-size: 11px
+    padding: 7px 10px
+    text-decoration: underline
+    +box-shadow(none)
+    +background(linear-gradient(#fff, #fff))
+    +text-shadow(#fff, 0, 0, 0)
+  &.medium
+    font-size: 12px
+    padding: 4px 20px
+  
+select
+  background: #f6f6f6
+  border: 1px solid $filler - #333
+  color: #444
+  font: normal 12px Arial, sans-serif
+  padding: 2px
+  min-width: 140px
+  +box-shadow($filler - #111, 1px, 1px, 3px, 0, inset)
+  &:hover, &:focus
+    background: $filler + #030303
+    border-color: $primary
+
+.entity-form-container
+  float: left
+  width: 100%
+  
+  .entity-form-header
+
+    .title
+      float: left
+      color: $primary
+       
+    .locales
+      float: right
+      padding: 4px
+    
+      a
+        padding: 2px
+    
+      a.no-link
+        font-weight: bold
+        
+  .forms-container 
+    width: 100%
+        
+  .data-search-column
+    float: right
+    margin-right: 20px
+    width: 460px
+    
+    form
+      border: none
+    
+    input.radio
+      width: auto
+  
+      label
+        font-weight: bold
+        margin-bottom: 2px
+    
+      #data
+        width: 600px
+    
+  .data-field-column
+    float: left
+    width: 460px
+    
+.entity-form-container form
+  background-color: inherit
+  border: 1px solid $filler
+  padding: 15px
+  position: relative
+  
+  .row
+    border-bottom: 1px dotted $filler
+    margin-bottom: 10px
+    padding-bottom: 10px
+    +pie-clearfix
+    
+    //.error-list
+    //  height: 14px
+      
+  .toggle-entry
+    float: left
+    margin-right: 15px
+
+  input, textarea
+    width: 280px
+    
+  input.radio
+    width: auto
+  
+  label
+    color: $primary
+    display: block
+    font-size: 11px
+    margin-bottom: 3px
+    
+  // fterrier start: added span for summary in admin forms
+  span, a
+    font-size: 11px
+    
+  span.bold
+    color: $primary
+  // fterrier end
+    
+.focus-field
+  border: solid 1px $filler - #222
+  background: $filler + #060606
+  color: #333
+  padding: 3px
+  
+.idle-field
+  background: #f9f9f9
+  border: 1px solid $filler - #333
+  color: #444
+  font: normal 12px Arial, sans-serif
+  padding: 3px
+  +box-shadow($filler - #111, 1px, 1px, 3px, 0, inset)
+  &:hover, &:focus
+    background: $filler + #030303
+    border-color: $primary
+  
+.completed-field
+  background: #ededed
+  color: #333
+  border: solid 1px $yes
+  
+.ajax-search-field
+  width: 340px
+  
+.login-field
+  background: $filler
+  border: 1px solid $filler - #333
+  color: #444
+  font: normal 16px 'Lucida Grande', Arial, sans-serif
+  padding: 4px
+  text-align: center
+  width: 154px
+  +box-shadow($filler - #111, 1px, 1px, 3px, 0, inset)
+  &:hover, &:focus
+    background: $filler + #030303
+    border-color: $primary
+    
+// fterrier start: added textare style
+textarea.login-field
+  width: 400px
+  height: 50px
+  text-align: left
+// fterrier end
+    
+.login-label
+  color: $primary
+  font-family: 'Lucida Grande', Arial, sans-serif
+  font-size: 11px
+  margin: 0 auto
+  padding: 3px
+  text-align: center
+  width: 154px
+  
+ul.filtered
+  border: 1px solid lightGrey
+  padding: 4px
+  height: 270px
+  overflow: auto
+  
+  li
+    display: block
+    white-space: nowrap
+
+    span
+      color: grey
+
+  li:hover
+    background-color: yellow
+
+.element-list
+  .element-map-header, .element-map-body
+    display: block
+    .element-map-header, .element-map-body
+    .element-map-header
+      font-size: 11px
+    input
+      width: 121px
+    select
+      width: 129px
+      
+  li
+    position: relative
+      
+  h5
+    color: $primary
+    font-size: 14px
+    
+.element-map-level-2
+  float: left
+  padding-top: 5px
+  position: relative
+  > li
+    margin-bottom: 5px
+    
+.element-list-row
+  background: #fafafa
+  border: 1px solid $dropdown
+  padding: 15px
+  position: relative
+  
+ul.element-map
+  +pie-clearfix
+  li
+    +pie-clearfix
+    
+  ul.element-map li
+    display: inline
+    float: left
+    
+  label
+    font-size: 10px
+    margin-bottom: 3px
+
+.form-heading-list
+  padding-left: 20px
+  li
+    background: url('../images/select.png') no-repeat left center
+    color: $primary
+    padding-left: 10px
+
+.inline-list li
+  display: inline
+  float: left
+  
+form.search-form
+  background: $filler
+  border: 1px solid $filler - #111
+  color: $primary
+  font-size: 12px
+  margin: 10px 15px 5px
+  padding: 10px
+  text-align: center
+  +border-radius
+  input
+    background: #f9f9f9
+    border: 1px solid $filler - #333
+    color: #444
+    font: normal 12px Arial, sans-serif
+    padding: 5px
+    +box-shadow($filler - #111, 1px, 1px, 3px, 0, inset)
+    &:hover, &:focus
+      background: $filler + #030303
+      border-color: $primary
+
+.form-box
+  border: 1px solid #ddd
+  margin: 0 auto
+  width: 250px
+  +box-shadow(#eee 0 0 5px)
+  +border-radius(3px)
+  table.listing
+    tbody
+      border: none
+    tr:last-child td
+      border: none
+      padding-top: 10px
+      padding-bottom: 10px
+    tr:first-child td
+      border: none
+    td
+      border: none
+      padding: 12px 0 5px 0
+      text-align: center
+
+  a
+    font-size: 11px
+    
+.nice-form
+  padding-top: 10px
+  
+  input, select
+    font-family: 'Lucida Grande', Arial, sans-serif
+    width: 250px
+    background: $filler
+    border: 1px solid $filler - #333
+    color: #444
+    font-size: 14px
+    padding: 4px
+    margin-bottom: 0px
+    +box-shadow($filler - #111, 1px, 1px, 3px, 0, inset)
+    &:hover, &:focus
+      background: $filler + #030303
+      border-color: $primary
+  
+  select
+    width: 200px
+    
+  label, span, a, div:not(.error-list)
+    font-family: 'Lucida Grande', Arial, sans-serif
+    color: $primary
+    font-size: 11px
+    margin: 0 auto
+    padding: 3px
+    
+  td:first-child
+    width: 345px
+    text-align: right
+
+  td
+    vertical-align: middle
+    
+  tr
+    height: 42px
+    
+.login-form
+  button
+    margin-bottom: 5px
+  td:first-child
+    text-align: center
+  input
+    width: 200px
+    text-align: center
+  input[type=checkbox]
+    width: 14px
+  a
+    display: block
+  button
+    margin: 0 auto
+  .error-list
+    position: relative
+    left: 20px

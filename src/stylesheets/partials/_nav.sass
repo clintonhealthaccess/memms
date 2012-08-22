@@ -1,0 +1,124 @@
+
+// Languages switch
+#switcher, #top_nav
+  position: absolute
+  top: 0
+  +pie-clearfix
+
+  li
+    display: inline
+    float: left
+    margin-left: 3px
+
+  a    
+    color: #fff
+    display: inline-block
+    font-size: 9px
+    padding: 7px 6px 5px
+    text-decoration: none
+    text-transform: uppercase
+    +border-bottom-radius(3px)
+    &:hover, &:focus, &.no-link
+      background: $filler
+      color: $primary - #222
+      
+      
+#switcher
+  left: 0
+#top_nav
+  right: 0
+
+
+// Main navigation
+#navigation
+  background: url('../images/bg-nav.png') repeat-x
+  height: 42px
+  position: relative
+  z-index: 50
+
+#main-menu
+  float: left
+  +pie-clearfix
+  li
+    display: inline
+    float: left
+    position: relative
+    &:last-child
+      border-right: 1px solid $primary_dark
+
+  a
+    border-left: 1px solid $primary_dark
+    color: #fff
+    display: inline-block
+    font-size: 12px
+    font-weight: bold
+    padding: 15px 22px
+    text-decoration: none
+    +text-shadow(rgba(0, 0, 0, 0.3) 0 1px 0)
+    &:hover, &:focus, &.active
+      background: $primary_dark - #020202
+      +box-shadow($primary - #161616 0 -3px 8px 6px inset)
+    &:active
+      +box-shadow($primary - #292929 0 -2px 10px 10px inset)
+
+
+// Logout navigation
+#logout
+  position: absolute
+  right: 0
+  top: 100px
+  z-index: 60
+
+  li
+    display: inline
+    float: left
+    margin-left: 7px
+
+  a
+    background: $primary_dark
+    color: $filler
+    display: block
+    font-size: 11px
+    padding: 6px 12px
+    text-decoration: none
+    +border-radius(3px)
+    +box-shadow($primary - #333 0 -2px 9px 1px inset)
+    +text-shadow($primary - #333 0 1px 0)
+    &:hover, &:focus
+      color: #fff
+      +box-shadow($primary - #333 0 -2px 9px 4px inset)
+    &:active
+      +box-shadow($primary - #333 0 2px 9px 4px inset)
+    &.redmine
+      color: #fff
+      opacity: 0.7
+      &:hover, &:focus
+        opacity: 1
+
+
+// Tab navigation
+
+#tab-nav
+  background: #eee
+  border-bottom: 1px solid #e3e3e3
+  margin: -15px -15px 15px
+  +background(linear-gradient(#fafafa, #f1f1f1))
+  +pie-clearfix
+  li
+    margin-right: 0
+  a
+    border-right: 1px solid #e3e3e3
+    color: #666
+    display: block
+    padding: 14px 20px
+    text-decoration: none
+    +text-shadow(#fff 0 1px 0)
+    &:hover, &:focus, &.selected
+      background: #fff
+      color: $primary
+      +background(linear-gradient(#fff, #fff))
+      +transition(all .5s)
+
+    &.selected
+      border-bottom: 1px solid #fff
+      margin-bottom: -1px

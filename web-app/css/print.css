@@ -1,0 +1,74 @@
+/* line 1, ../../src/stylesheets/print.sass */
+body { line-height: 1.2; font-family: "Helvetica Neue", Arial, Helvetica, sans-serif; font-size: 0.8em; width: 720px; }
+
+/* line 7, ../../src/stylesheets/print.sass */
+.body-print { background-color: white; margin: 100px 0; }
+/* line 11, ../../src/stylesheets/print.sass */
+.body-print ol { margin-bottom: 16px; }
+
+/* line 14, ../../src/stylesheets/print.sass */
+div { page-break-inside: avoid; }
+
+/* line 16, ../../src/stylesheets/print.sass */
+label { display: block; font-weight: bold; }
+
+/* line 20, ../../src/stylesheets/print.sass */
+#print-header { border: 4px solid black; width: 500px; height: 220px; margin: 0 auto; text-align: center; }
+/* line 27, ../../src/stylesheets/print.sass */
+#print-header div { font-size: 25px; height: 44px; font-weight: bold; display: block; }
+
+/* line 33, ../../src/stylesheets/print.sass */
+#print-questions { margin: 100px 0; }
+/* line 36, ../../src/stylesheets/print.sass */
+#print-questions ol { margin-top: 10px; }
+/* line 39, ../../src/stylesheets/print.sass */
+#print-questions ol > li { margin-left: 10px; padding-left: 4px 4px 4px 0px; list-style: none; }
+/* line 44, ../../src/stylesheets/print.sass */
+#print-questions .objective-title { font-weight: bold; font-size: 14px; border-bottom: 3px solid black; padding-left: 5px; padding-bottom: 0px; margin: 0px 3px 0px 3px; }
+/* line 52, ../../src/stylesheets/print.sass */
+#print-questions .section-title { font-weight: bold; background-color: #cccccc; font-size: 13px; padding-left: 5px; margin: 2px 3px 0px 3px; }
+/* line 59, ../../src/stylesheets/print.sass */
+#print-questions .question-container { margin-bottom: 4px; }
+/* line 62, ../../src/stylesheets/print.sass */
+#print-questions .question-container table { border-collapse: collapse; border: 1px solid #cccccc; margin: 10px 2px 10px 2px; width: inherit; }
+/* line 69, ../../src/stylesheets/print.sass */
+#print-questions .question-container table .element-date input, #print-questions .question-container table .element-string input, #print-questions .question-container table .element-number input { width: 80px; }
+/* line 73, ../../src/stylesheets/print.sass */
+#print-questions .question-container table .element-bool input, #print-questions .question-container table .element-enum input { width: 10px; }
+/* line 76, ../../src/stylesheets/print.sass */
+#print-questions .question-container th { padding: 5px; }
+/* line 78, ../../src/stylesheets/print.sass */
+#print-questions .question-container td { border: 1px solid #cccccc; padding: 3px; }
+/* line 81, ../../src/stylesheets/print.sass */
+#print-questions .question-container h4 { font-weight: normal; margin-top: 14px; margin-bottom: 4px; }
+/* line 85, ../../src/stylesheets/print.sass */
+#print-questions .question-container h4 .question-number { padding-right: 5px; font-weight: bold; }
+/* line 89, ../../src/stylesheets/print.sass */
+#print-questions .block-with-height { height: 30px; }
+/* line 92, ../../src/stylesheets/print.sass */
+#print-questions div, #print-questions .element { display: inline; }
+/* line 95, ../../src/stylesheets/print.sass */
+#print-questions div.admin-hint { display: none; }
+/* line 98, ../../src/stylesheets/print.sass */
+#print-questions li.survey-element { display: block; }
+/* line 101, ../../src/stylesheets/print.sass */
+#print-questions .question-tab-title, #print-questions .element-map .element-map-header { font-weight: 500; background-color: #9f9f9f; padding: 2px; text-align: center; border: 1px solid #c7c5c5; border-left: 1px solid white; }
+/* line 109, ../../src/stylesheets/print.sass */
+#print-questions .question-tab-title-name { border: 1px solid #cccccc; }
+/* line 112, ../../src/stylesheets/print.sass */
+#print-questions .question-checkbox ul { padding-left: 0px; }
+/* line 115, ../../src/stylesheets/print.sass */
+#print-questions .show-question-help, #print-questions .hide-question-help { display: none; }
+/* line 118, ../../src/stylesheets/print.sass */
+#print-questions .question-help-container { border: 0.5px dotted grey; padding: 4px; display: block; margin-top: 0px; margin-bottom: 4px; }
+/* line 126, ../../src/stylesheets/print.sass */
+#print-questions .question-simple textarea { display: block; width: 600px; }
+/* line 130, ../../src/stylesheets/print.sass */
+#print-questions .oddrow { background-color: #eeeeee; }
+/* line 134, ../../src/stylesheets/print.sass */
+#print-questions .element-number input, #print-questions .element-date input { border: none; background: transparent; border-bottom: 2px solid black; }
+/* line 139, ../../src/stylesheets/print.sass */
+#print-questions .element-enum > div { display: block; }
+
+/* line 142, ../../src/stylesheets/print.sass */
+.appendix-content h3, .appendix-content ol { display: none; }

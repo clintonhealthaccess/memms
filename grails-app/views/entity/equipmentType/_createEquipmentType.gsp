@@ -1,8 +1,13 @@
 <%@ page import="org.chai.memms.equipment.EquipmentType.Observation" %>
-<div>
+<div  class="entity-form-container togglable">
 	<div>
 		<h3>
-			<g:message code="default.new.label" args="[message(code:'model.label')]"/>
+		<g:if test="${type.id != null}">
+				<g:message code="default.edit.label" args="[message(code:'equipment.type.label')]" />
+			</g:if>
+			<g:else>
+				<g:message code="default.new.label" args="[message(code:'equipment.type.label')]" />
+			</g:else>
 		</h3>
 		<g:locales/>
 	</div>

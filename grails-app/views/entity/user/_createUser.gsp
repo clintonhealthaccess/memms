@@ -4,7 +4,12 @@
 	
 	<div >
 		<h3 >
-			<g:message code="default.new.label" args="[message(code:'user.label')]"/>
+		<g:if test="${user.id != null}">
+				<g:message code="default.edit.label" args="[message(code:'user.label')]" />
+			</g:if>
+			<g:else>
+				<g:message code="default.new.label" args="[message(code:'user.label')]" />
+			</g:else>
 		</h3>
 		<g:locales/>
 	</div>
