@@ -53,6 +53,10 @@ class EquipmentService {
 	def languageService;
 	def sessionFactory;
 	
+	Integer countEquipment(String text) {
+		return getSearchCriteria(text).setProjection(Projections.count("id")).uniqueResult()
+	}
+	
 	public List<Equipment> searchEquipment(String text, Map<String, String> params) {
 		def criteria = getSearchCriteria(text)
 		List<Equipment> equipments = []
@@ -64,8 +68,7 @@ class EquipmentService {
 		StringUtils.split(text).each { chunk ->
 			equipments.retainAll { equipment ->
 				Utils.matches(chunk, equipment.serialNumber) ||
-				Utils.matches(chunk, equipment.getDescriptions(languageService.getCurrentLanguage())) ||
-				Utils.matches(chunk, equipment.getObservations(languageService.getCurrentLanguage())) 
+				Utils.matches(chunk, equipment.getDescriptions(languageService.getCurrentLanguage()))
 			}
 		}
 		return equipments
@@ -73,7 +76,6 @@ class EquipmentService {
 	
 	private Criteria getSearchCriteria(String text) {
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
-		def dbFieldObservations = 'observations_'+languageService.getCurrentLanguagePrefix();
 		def criteria = sessionFactory.getCurrentSession().createCriteria(Equipment.class)
 		
 		def textRestrictions = Restrictions.conjunction()
@@ -87,21 +89,26 @@ class EquipmentService {
 		return criteria
 	}
 	
-	public List<Equipment> myEquipments(CalculationLocation location) {
+
+	public List<Equipment> filterEquipment(){
+		return null
+	}
+	public List<Equipment> getEquipmentsByDataLocation(CalculationLocation location) {
 		
-		List<Equipment> myEquipments = []
+		List<Equipment> equipments = []
 		
 		if(location instanceof DataLocation){
-			myEquipments = Equipment.findAll{
+			equipments = Equipment.findAll{
 				dataLocation == location
 			}
 		}else if (location instanceof Location){
-			myEquipments = Equipment.findAll{
+			equipments = Equipment.findAll{
 				dataLocation in ((Location)location).dataLocations
 			}
 		}
 		
-		return myEquipments
+		return equipments
+
 	}
 
 }

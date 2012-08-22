@@ -1,5 +1,5 @@
 <%@ page import="org.chai.memms.util.Utils" %>
-<%@ page import="org.chai.memms.equipment.EquipmentStatus" %>
+<%@ page import="org.chai.memms.equipment.EquipmentStatus.Status" %>
 <div  class="entity-form-container togglable">
 	<div>
 		<h3>
@@ -15,10 +15,15 @@
 	<g:form url="[controller:'equipment', action:'save', params:[targetURI: targetURI]]" useToken="true">
 	<fieldset>
     	<legend>Basic Information:</legend>	
-    	<g:selectFromList name="type.id" label="${message(code:'equipment.type.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
+    	<g:selectFromList name="dataLocation.id" label="${message(code:'entity.dataLocation.label')}" bean="${equipment}" field="dataLocation" optionKey="id" multiple="false"
+			ajaxLink="${createLink(controller:'location', action:'getAjaxData', params:[class: 'DataLocation'])}"
+			from="${dataLocations}" value="${equipment?.dataLocation?.id}" values="${dataLocations.collect{it.names}}" />
+			
+    	<g:selectFromList name="type.id" label="${message(code:'entity.equipmentType.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
 			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData')}"
 			from="${types}" value="${equipment?.type?.id}" values="${types.collect{it.names}}" />
-		<g:input name="expectedLifeTime" label="${message(code:'equipment.expected.life.time.label')}" bean="${equipment}" field="expectedLifeTime"/>
+			
+		<g:input name="expectedLifeTime" label="${message(code:'equipment.expectedlifetime.label')}" bean="${equipment}" field="expectedLifeTime"/>
 			
 		<g:input name="serialNumber" label="${message(code:'equipment.serial.number.label')}" bean="${equipment}" field="serialNumber"/>
 		<g:input name="model" label="${message(code:'equipment.model.label')}" bean="${equipment}" field="model"/>
@@ -29,6 +34,9 @@
 			from="${departments}" value="${equipment?.department?.id}" values="${departments.collect{it.names}}" />
 			
 		<g:input name="room" label="${message(code:'equipment.room.label')}" bean="${equipment}" field="room"/>
+		
+		<g:input name="obsolete" type="checkbox" label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" field="obsolete"/>
+		<g:input name="donation" type="checkbox" label="${message(code:'equipment.donation.label')}" bean="${equipment}" field="donation"/>
 	</fieldset>	
 	<fieldset>
     	<legend>Manufacture Information:</legend>
@@ -50,22 +58,29 @@
 	<fieldset>
     	<legend>Status Information:</legend>
     	<g:if test="${equipment.id == null}">
-   			<g:selectFromEnum name="status" bean="${equipment}" values="${EquipmentStatus.Status.values()}" field="status" label="${message(code:'equipmentstatus.label')}"/>
+   			<g:selectFromEnum name="status" bean="${equipment}" values="${Status.values()}" field="status" label="${message(code:'equipmentstatus.label')}"/>
+   			<g:inputDate name="dateOfEvent" precision="day"  value="${equipment.status?.dateOfEvent}" id="date-of-event" label="${message(code:'entity.date.of.event.label')}" bean="${equipment.status}" field="status.dateOfEvent"/>
     	</g:if>
-    	<g:if test="${equipment?.status?.size() > 0}">
+    	<g:if test="${equipment?.status!=null}">
 	    	<g:each in="${equipment?.status}" status="i" var="status">
 		    	<table>
 		    		<tr>
 		    			<td>${status.value}</td>
-		    			<td>${Utils.formatDate(status.statusChangeDate)}</td>
+		    			<td>${Utils.formatDate(status?.statusChangeDate)}</td>
 		    			<td>${status.current}</td>
+		    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
 		    		</tr>
 		    	</table>
 	    	</g:each>
+	    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'edit', params:[equipment: equipment?.id])}">
+	    		<g:message code="equipment.change.status.label" default="Change Status"/>
+	    	</a>
    		</g:if>
    	</fieldset>
 	<fieldset>
     	<legend>Warranty Information:</legend>	
+    	<g:inputDate name="warranty.startDate" precision="day" id="start-date" value="${equipment?.warranty?.startDate}" label="${message(code:'warranty.startDate.label')}" bean="${equipment?.warranty}" field="startDate"/>
+    	<g:inputDate name="warranty.endDate" precision="day" id="end-date" value="${equipment?.warranty?.endDate}" label="${message(code:'warranty.endDate.label')}" bean="${equipment?.warranty}" field="endDate"/>
     	<g:input name="warranty.contact.contactName" label="${message(code:'contact.name.label')}" bean="${equipment?.warranty?.contact}" field="contactName"/>
     	<g:input name="warranty.contact.email" label="${message(code:'contact.email.label')}" bean="${equipment?.warranty?.contact}" field="email"/>
     	<g:input name="warranty.contact.phone" label="${message(code:'contact.phone.label')}" bean="${equipment?.warranty?.contact}" field="phone"/>

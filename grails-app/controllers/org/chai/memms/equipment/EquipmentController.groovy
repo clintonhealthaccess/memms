@@ -7,9 +7,12 @@ import org.chai.memms.Initializer;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.security.User;
 import org.chai.memms.equipment.Provider
+import org.chai.memms.location.DataLocation;
 import org.chai.memms.location.CalculationLocation;
 
+
 class EquipmentController extends AbstractEntityController{
+	
 	def providerService
 	def equipmentService
     def getEntity(def id) {
@@ -35,40 +38,48 @@ class EquipmentController extends AbstractEntityController{
 	def getEntityClass() {
 		return Equipment.class;
 	}
-	def bindParams(def entity) {	
-		if(log.isDebugEnabled()) log.debug("parameter before binding: "+params);
-		bindData(entity,params, [exclude:['status']])
-		if(log.isDebugEnabled()) log.debug("data after binding: "+params);
+	def bindParams(def entity) {
+		if(!entity.id)
+			entity.registeredOn=new Date()
+		bindData(entity,params, [exclude:['status','dateOfEvent']])
 	}
 	
+	def validateEntity(def entity) {
+		boolean valid = true
+		if(entity.id!=null && params["status"].equals("NONE") && params["dateOfEvent"]){
+			valid = false
+			entity.errors.rejectValue("status","equipment.status.notselected", "You have to select a status.");
+		}
+		return (valid & entity.validate())
+	}
+	
+	def saveEntity(def entity) {
+		entity.save()
+		def status = params['status']
+		status = Status."$status"
+		def currentStatus = newEquipmentStatus(new Date(),getUser(),status,entity,true,params["dateOfEvent"])
+	}
+	 
 	def getModel(def entity) {
 		[
 			equipment:entity,
 			departments:Department.list(),
 			manufactures: providerService.getManufacturesAndBoth(),
 			suppliers: providerService.getSuppliersAndBoth(),
-			types: EquipmentType.list()
+			types: EquipmentType.list(),
+			dataLocations: DataLocation.list()
 		]
 	}
 
 	def list={
 		adaptParamsForList()
-		def equipments
-//		log.debug("++++++++++++++++Equipment lists \r\n")
-//		log.debug("++++++++++++++++  user: " + getUser().username +" \r\n")
-//		log.debug("++++++++++++++++  permissins: " + getUser().getPermissions().each{it} +" \r\n")
-//		log.debug("++++++++++++++++  security utils: " + SecurityUtils.subject.isPermitted("equipment:list") +" \r\n")
-		
+		def equipments		
 		if(SecurityUtils.subject.isPermitted("*:*")){
-			log.debug("+++++++++++++++ loged in user is admin \r\n")
 			equipments = Equipment.list(params)
-//			log.debug("+++++++++++++++ Total equipments: " + equipments.size() + "\r\n")
 		}else if(SecurityUtils.subject.isPermitted("equipment:list")){
 			def user = getUser()
-//			log.debug("+++++++++++++++ loged in user is: " + user.username + "\r\n")
 			if(user != null){
-				equipments = equipmentService.myEquipments(user.location)
-//				log.debug("+++++++++++++++ number of equipments : " + equipments.size()+ "\r\n")
+				equipments = equipmentService.getEquipmentsByDataLocation(user.location)
 			}
 		}
 		render(view:"/entity/list", model:[
@@ -79,12 +90,29 @@ class EquipmentController extends AbstractEntityController{
 			entityClass: getEntityClass()
 			])
 	}
+	def search = {
+		adaptParamsForList()
+		List<Equipment> equipments = equipmentService.searchEquipment(params['q'], params)	
+		render (view: '/entity/list', model:[
+			template:"equipment/equipmentList",
+			entities: equipments,
+			entityCount: equipmentService.countEquipment(params['q']),
+			code: getLabel()
+		])
+		
+	}
+	def filter = {
+		
+	}
 	
 	def export = {
 		
 	}
 	def importer = {
 		
+	}
+	static def newEquipmentStatus(def statusChangeDate,def changedBy,def value, def equipment,def current,def dateOfEvent){
+		return new EquipmentStatus(statusChangeDate:statusChangeDate,changedBy:changedBy,value:value,equipment:equipment,current:current,dateOfEvent:dateOfEvent).save(failOneError:true,flush:true)
 	}
 	
 }

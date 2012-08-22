@@ -9,7 +9,9 @@ class EquipmentStatusController extends AbstractEntityController{
 	}
 
 	def createEntity() {
-		return new EquipmentStatus();
+		def entity = new EquipmentStatus();
+		if(!params["equipment.id"]) entity.equipment = Equipment.get(params.int("equipment"))
+		return entity;
 	}
 
 	def getTemplate() {
@@ -21,8 +23,9 @@ class EquipmentStatusController extends AbstractEntityController{
 	}
 	
 	def deleteEntity(def entity) {
-//		if(Equipment.findByDepartment(entity)==null)
-//			flash.message = message(code: 'department.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Department {0} still has associated equipment.')
+		if(Equipment.findByDepartment(entity)==null)
+			flash.message = message(code: 'status.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Status {0} still has associated equipment.')
+		else entity.delete()
 	}
 	
 	def getEntityClass() {
@@ -34,16 +37,16 @@ class EquipmentStatusController extends AbstractEntityController{
 	
 	def getModel(def entity) {
 		[
-			model:entity
+			status:entity
 		]
 	}
 	
 	def list={
 		adaptParamsForList()
-		def equipmentStatuses = EquipmentStatus.list(params)
+		def equipmentStatus = EquipmentStatus.list(params)
 		render(view:"/entity/list", model:[
 			template:"equipmentStatus/equipmentStatusList",
-			entities: equipmentStatuses,
+			entities: equipmentStatus,
 			entityCount: EquipmentStatus.count(),
 			code: getLabel(),
 			entityClass: getEntityClass()

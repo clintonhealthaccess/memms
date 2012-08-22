@@ -81,7 +81,10 @@ abstract class IntegrationTests extends IntegrationSpec {
 		//springcacheService.flushAll()
 		//new org.apache.shiro.grails.ShiroSecurityService()
 	}
-	
+	static def setupSystemUse(){
+		def user = newUser("systemUser","systemUser", true, true)
+		setupSecurityManager(User.findByUsername("systemUser"))
+	}
 	static def setupLocationTree() {
 		// for the test environment, the location level is set to 4
 		// so we create a tree accordingly
@@ -149,7 +152,7 @@ abstract class IntegrationTests extends IntegrationSpec {
 	}
 	
 	static def newUser(def username, def passwordHash, def active, def confirmed) {
-		return new User(userType: UserType.OTHER, username: username, email: username,
+		return new User(userType: UserType.OTHER, username: username, email: "username@yahoo.co.rw",
 			passwordHash: passwordHash, active: active, confirmed: confirmed, uuid: 'uuid', firstname: 'first', lastname: 'last',
 			organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
 	}
@@ -161,7 +164,7 @@ abstract class IntegrationTests extends IntegrationSpec {
 	static def newSystemUser(def username, def uuid, def locationId) {
 		return new User(userType: UserType.SYSTEM, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, locationId: locationId, firstname: 'first', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
 	}
-	def setupSecurityManager(def user) {
+	static def setupSecurityManager(def user) {
 		def subject = [getPrincipal: { user?.uuid }, isAuthenticated: { user==null?false:true }, login: { token -> null }] as Subject
 		ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, [ getSubject: { subject } ] as SecurityManager )
 		SecurityUtils.metaClass.static.getSubject = { subject }

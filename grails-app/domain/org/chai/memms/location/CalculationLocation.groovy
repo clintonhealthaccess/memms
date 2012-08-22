@@ -40,7 +40,6 @@ abstract class CalculationLocation {
 		String coordinates
 		
 		static i18nFields=['names']
-	    static embedded = ['names']
 	
 	
 		boolean collectLocations(List<Location> locations, List<DataLocation> dataLocations, Set<LocationLevel> skipLevels, Set<DataLocationType> types) {
@@ -77,6 +76,8 @@ abstract class CalculationLocation {
 			table "chai_location_abstract"
 			tablePerSubclass true
 			version false
+			names_en type: "text"
+			names_en type: "text"
 		}
 
 		@Override

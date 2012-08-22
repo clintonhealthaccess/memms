@@ -41,7 +41,8 @@ class EquipmentStatusControllerSpec extends IntegrationTests{
 					equipmentType,manufacture,supplier
 					)
 		when:
-		equipmentStatusController.params.statusChangeDate = new Date()
+		equipmentStatusController.params.dateOfEvent =Initializer.getDate(01,01,2012)
+		equipmentStatusController.params.statusChangeDate = Initializer.now()
 		equipmentStatusController.params.changedBy = User.findByUsername("admin")
 		equipmentStatusController.params.value = Status.INSTOCK
 		equipmentStatusController.params.current = true

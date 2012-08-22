@@ -91,11 +91,26 @@
   <div id="navigation">
     <div class="wrapper">
       <ul id="main-menu" class="menu">
-        <li><a href="#" class="active">First item</a></li>
-        <li><a href="#">Second item</a></li>
-        <li><a href="#">Third item</a></li>
-        <li><a href="#">Fourth item</a></li>
-        <li><a href="#">Fifth item</a></li>
+    	<shiro:hasPermission permission="home:*">
+			<li><a class="active" href="${createLink(controller:'home', action:'index')}">Home</a></li>
+		</shiro:hasPermission>
+        <li><a href="#">Inventory</a></li>
+        <li><a href="#">Corrective Maintenance</a></li>
+        <li><a href="#">Preventive Maintenance</a></li>
+        <li><a href="#">Report</a></li>
+         <li>
+         	<a href="#" onclick="return false;">Administration</a>
+         	<ul class="submenu">
+         		<li><a href="${createLink(controller: 'User', action:'list')}">Users</a></li>
+				<li><a href="${createLink(controller: 'Department', action:'list')}">Departments</a></li>
+				<li><a href="${createLink(controller: 'EquipmentModel', action:'list')}">Equipment Models</a></li>
+				<li><a href="${createLink(controller: 'EquipmentType', action:'list')}">Equipment Types</a></li>
+				<li><a href="${createLink(controller: 'Location', action:'list')}">Location</a></li>
+				<li><a href="${createLink(controller: 'DataLocation', action:'list')}">Data Location</a></li>
+				<li><a href="${createLink(controller: 'LocationLevel', action:'list')}">Location Level</a></li>
+				<li><a href="${createLink(controller: 'DataLocationType', action:'list')}">Data Location Type</a></li>
+         	</ul>
+         </li>
       </ul>
     </div>
   </div>

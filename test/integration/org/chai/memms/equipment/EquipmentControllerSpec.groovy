@@ -4,6 +4,7 @@ import org.chai.memms.IntegrationTests;
 import org.chai.memms.Initializer;
 import org.chai.memms.equipment.EquipmentType.Observation;
 import org.chai.memms.location.DataLocation;
+import org.chai.memms.security.User;
 import org.chai.memms.equipment.Provider.Type;
 
 class EquipmentControllerSpec extends IntegrationTests{
@@ -14,6 +15,8 @@ class EquipmentControllerSpec extends IntegrationTests{
 		
 		setup:
 		setupLocationTree()
+		setupSystemUse()
+		
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
@@ -24,6 +27,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURE,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		log.debug("-------Supplier created is: " + supplier.id + "\n\r")
+	
 		
 		equipmentController = new EquipmentController();
 		when:
@@ -43,6 +47,8 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.manufacture = manufacture
 		equipmentController.params.supplier = supplier
 		equipmentController.params.dataLocation = DataLocation.list().first()
+		equipmentController.params.status="DISPOSED"
+		equipmentController.params.dateOfEvent=Initializer.now()
 		equipmentController.save(failOnError: true)
 		
 		then:
@@ -55,6 +61,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		
 		setup:
 		setupLocationTree()
+		setupSystemUse()
 		
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact(['en':'Address Descriptions '],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
@@ -86,6 +93,8 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.manufacture = manufacture
 		equipmentController.params.supplier = supplier
 		equipmentController.params.dataLocation = DataLocation.list().first()
+		equipmentController.params.status="FORDISPOSAL"
+		equipmentController.params.dateOfEvent=Initializer.now()
 		equipmentController.save()
 		
 		then:

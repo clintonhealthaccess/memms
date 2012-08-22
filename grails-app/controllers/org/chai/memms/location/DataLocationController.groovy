@@ -6,6 +6,7 @@ import org.chai.memms.equipment.Equipment;
 class DataLocationController extends AbstractEntityController {
 
 	def locationService	
+	def languageService
 	def bindParams(def entity) {
 		entity.properties = params
 	}
@@ -46,7 +47,6 @@ class DataLocationController extends AbstractEntityController {
 
 	def list = {
 		adaptParamsForList()
-		
 		List<DataLocation> locations = DataLocation.list(params);
 
 		render (view: '/entity/list', model:[
@@ -60,7 +60,6 @@ class DataLocationController extends AbstractEntityController {
 	
 	def search = {
 		adaptParamsForList()
-		
 		List<DataLocation> locations = locationService.searchLocation(DataLocation.class, params['q'], params)
 				
 		render (view: '/entity/list', model:[
@@ -69,6 +68,21 @@ class DataLocationController extends AbstractEntityController {
 			entityCount: locationService.countLocation(DataLocation.class, params['q']),
 			code: getLabel()
 		])
+	}
+	
+	def getAjaxData = {
+		List<DataLocation> dataLocations = locationService.searchLocation(DataLocation.class, params['term'], [:])
+		
+		render(contentType:"text/json") {
+			elements = array {
+				dataLocations.each { dataLocation ->
+					elem (
+						key: dataLocation.id,
+						value: dataLocation.getNames(languageService.getCurrentLanguage()) + ' ['+dataLocation.location.getNames(languageService.getCurrentLanguage())+']'
+					)
+				}
+			}
+		}
 	}
 	
 }

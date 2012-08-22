@@ -39,6 +39,7 @@ class EquipmentStatus {
 	
 	enum Status{
 		
+		NONE("none"),
 		OPERATIONAL("operational"),
 		INSTOCK("inStock"),
 		UNDERMAINTENANCE("underMaintenance"),
@@ -51,7 +52,7 @@ class EquipmentStatus {
 		Status(String name){ this.name=name }
 		String getKey() { return name() }
 	}
-	
+	Date dateOfEvent;
 	Date statusChangeDate;
 	User changedBy
 	Status value
@@ -64,6 +65,7 @@ class EquipmentStatus {
 	}
 	
 	static constraints = {
+		dateOfEvent nullable:false, validator:{it <= new Date()} 
 		statusChangeDate nullable:false, validator:{it <= new Date()} 
 		changedBy nullable:false 
 		value nullable: false, blank:false
