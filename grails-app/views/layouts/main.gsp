@@ -94,12 +94,20 @@
     	<shiro:hasPermission permission="home:*">
 			<li><a class="active" href="${createLink(controller:'home', action:'index')}">Home</a></li>
 		</shiro:hasPermission>
-        <li><a href="#">Inventory</a></li>
-        <li><a href="#">Corrective Maintenance</a></li>
-        <li><a href="#">Preventive Maintenance</a></li>
-        <li><a href="#">Report</a></li>
-         <li>
-         	<a href="#" onclick="return false;">Administration</a>
+		<shiro:hasPermission permission="equipment:*">
+			<li><a class="active" href="${createLink(controller:'equipment', action:'index')}">Inventory</a></li>
+		</shiro:hasPermission>
+		<shiro:hasPermission permission="maintenance:corrective:*">
+			<li><a class="active" href="${createLink(controller:'equipment', action:'index')}">Corrective Maintenance</a></li>
+		</shiro:hasPermission>
+		<shiro:hasPermission permission="maintenance:preventive:*">
+			<li><a class="active" href="${createLink(controller:'equipment', action:'index')}">Preventive Maintenance</a></li>
+		</shiro:hasPermission>
+		<shiro:hasPermission permission="report:*">
+			<li><a class="active" href="${createLink(controller:'equipment', action:'index')}">Report</a></li>
+		</shiro:hasPermission>
+		<shiro:hasPermission permission="admin:*">
+			<li><a href="#">Administration</a>
          	<ul class="submenu">
          		<li><a href="${createLink(controller: 'User', action:'list')}">Users</a></li>
 				<li><a href="${createLink(controller: 'Department', action:'list')}">Departments</a></li>
@@ -111,6 +119,8 @@
 				<li><a href="${createLink(controller: 'DataLocationType', action:'list')}">Data Location Type</a></li>
          	</ul>
          </li>
+		</shiro:hasPermission>
+        
       </ul>
     </div>
   </div>
