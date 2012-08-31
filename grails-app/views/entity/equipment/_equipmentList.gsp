@@ -44,8 +44,8 @@
 					<g:message code="equipment.room.label"/>: ${equipment.room}<br/>
 				</td>
 				<td>${message(code: equipment.getCurrentStatus()?.status?.messageCode+'.'+equipment.getCurrentStatus()?.status?.name)}</td>
-				<td>${(equipment.donation)? '\u2713':'X'}</td>
 				<td>${(equipment.obsolete)? '\u2713':'X'}</td>
+				<td>${(equipment.donation)? '\u2713':'X'}</td>
 			</tr>
 		</g:each>
 	</tbody>

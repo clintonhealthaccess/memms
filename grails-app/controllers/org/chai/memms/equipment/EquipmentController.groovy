@@ -27,6 +27,7 @@
  */
 package org.chai.memms.equipment
 
+import org.apache.jasper.compiler.Node.ParamsAction;
 import org.apache.shiro.SecurityUtils;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.Contact
@@ -114,27 +115,10 @@ class EquipmentController extends AbstractEntityController{
 			manufactures: manufactures,
 			suppliers: suppliers,
 			types: EquipmentType.list([cache: true]),
-			dataLocations: DataLocation.list([cache: true])
+			gra: DataLocation.list([cache: true])
 		]
 	}
 
-	def list={
-		adaptParamsForList()
-		def location = DataLocation.get(params.int("location"));
-		if (location == null)
-			response.sendError(404)
-		else{	
-			List<Equipment> equipments = equipmentService.getEquipmentsByDataLocation(location,params)
-			render(view:"/entity/list", model:[
-				template:"equipment/equipmentList",
-				dataLocation:location,
-				entities: equipments,
-				entityCount: equipments.totalCount,
-				code: getLabel(),
-				entityClass: getEntityClass()
-				])
-		}
-	}
 	def search = {
 		adaptParamsForList()
 		def location = DataLocation.get(params.int("location"));
@@ -151,14 +135,14 @@ class EquipmentController extends AbstractEntityController{
 				dataLocation:location
 			])
 		}
-		
 	}
+	
 	def summaryPage = {
 		def location = Location.get(params.int('location'))
 		def dataLocationTypesFilter = getLocationTypes()
 		def template = null
 		def inventories = null
-		def locationSkipLevels = new HashSet<LocationLevel>()
+		def locationSkipLevels = inventoryService.getSkipLocationLevels()
 		
 		if (location != null) {
 			template = '/inventory/sectionTable'
@@ -173,8 +157,47 @@ class EquipmentController extends AbstractEntityController{
 			locationSkipLevels: locationSkipLevels
 		])
 	}
-	def filter = {
+	
+	def list={ 
+		def dataLocation = DataLocation.get(params.int('location'))
+		if (dataLocation == null){
+			response.sendError(404)
+		}
 		
+		adaptParamsForList()
+		
+		def equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,params)
+												
+			render(view:"/entity/list", model:[
+				template:"equipment/equipmentList",
+				dataLocation:dataLocation,
+				entities: equipments,
+				entityCount: equipments.totalCount,
+				code: getLabel(),
+				entityClass: getEntityClass()
+				])
+
+	}
+	
+	def filter = { FilterCommand cmd ->
+		if (log.isDebugEnabled()) log.debug("equipments.filter, command "+cmd)
+		
+		if (cmd.dataLocation == null){
+			response.sendError(404)
+		}
+		
+		adaptParamsForList()
+		def equipments = equipmentService.filterEquipment(
+			cmd.dataLocation,cmd.supplier,cmd.manufacturer,cmd.equipmentType,cmd.donated,cmd.obsolete,cmd.status,params)
+		
+		render (view: '/entity/list', model:[
+					template:"equipment/equipmentList",
+					entities: equipments,
+					entityCount: equipments.totalCount,
+					code: getLabel(),
+					dataLocation:cmd.dataLocation,
+					q:params['q']
+				])
 	}
 	
 	def export = {
@@ -187,4 +210,42 @@ class EquipmentController extends AbstractEntityController{
 		return new EquipmentStatus(statusChangeDate:statusChangeDate,changedBy:changedBy,status:value,equipment:equipment,current:current,dateOfEvent:dateOfEvent).save(failOneError:true,flush:true)
 	}
 	
+}
+
+class FilterCommand {
+	DataLocation dataLocation
+	EquipmentType equipmentType
+	Provider manufacturer
+	Provider supplier
+	Status status
+	String donated
+	String obsolete
+	
+	public boolean getDonationStatus(){
+		if(donated) return null
+		else if(donated.equals("true")) return true
+		else if(donated.equals("false")) return false
+	}
+	
+	public boolean getObsoleteStatus(){
+		if(obsolete) return null
+		else if(obsolete.equals("true")) return true
+		else if(obsolete.equals("false")) return false
+	}
+
+	static constraints = {
+		dataLocation(blank: true,nullable:false)
+		equipmentType(blank: true,nullable:true)
+		manufacturer(blank: true,nullable:true)
+		supplier(blank: true,nullable:true)
+		status(blank: true,nullable:true)
+		donated(blank: true,nullable:true)
+		obsolete(blank: true,nullable:true)
+	}
+	
+	String toString() {
+		return "FilterCommand[DataLocation="+dataLocation+", EquipmentType="+equipmentType+
+		", Manufacturer="+manufacturer+", Supplier="+supplier+", Status="+status+", donated="+donated+", obsolete="+obsolete+
+		", Absolote status=" + getObsoleteStatus() + ", Donation status=" + getDonationStatus() + "]"
+	}
 }

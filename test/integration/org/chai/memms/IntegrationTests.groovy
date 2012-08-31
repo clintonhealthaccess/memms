@@ -170,5 +170,10 @@ abstract class IntegrationTests extends IntegrationSpec {
 		SecurityUtils.metaClass.static.getSubject = { subject }
 		WebUtils.metaClass.static.getSavedRequest = { ServletRequest request -> null }
 	}
+	
+	static def adaptParamsForList() {
+		def params = [max:5,offset:0]
+		return params
+	}
 		
 }

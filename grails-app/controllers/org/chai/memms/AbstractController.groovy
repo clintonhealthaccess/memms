@@ -10,7 +10,7 @@ import org.chai.memms.location.Location
 import org.chai.memms.location.LocationLevel
 
 public abstract class AbstractController {
-	
+	def locationService
 	def getTargetURI() {
 		return params.targetURI?: "/"
 	}

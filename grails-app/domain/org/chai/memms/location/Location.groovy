@@ -1,6 +1,6 @@
 package org.chai.memms.location;
 /** 
- * Copyright (c) 2011, Clinton Health Access Initiative.
+ * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
  *
@@ -61,8 +61,8 @@ class Location extends CalculationLocation {
 		}
 		
 		for (Location child : children) {
-			if (skipLevels != null && skipLevels.contains(child.getLevel())) {
-				result.addAll(child.getDataLocationChildren(skipLevels, types));
+			if (skipLevels != null && !skipLevels.contains(child.getLevel())) {
+				result.addAll(child.getDataLocations(skipLevels, types));
 			}
 		}
 		

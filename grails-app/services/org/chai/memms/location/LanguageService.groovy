@@ -55,7 +55,7 @@ class LanguageService {
 		return getCurrentLanguage().getLanguage();
 	}
 	Locale getCurrentLanguage(){
-		return RequestContextUtils.getLocale(RequestContextHolder.currentRequestAttributes().getRequest());;
+		return RequestContextUtils.getLocale(RequestContextHolder.currentRequestAttributes().getRequest());
 	}
 	String getFallbackLanguage() {
 		return grailsApplication.config.site.fallback.language;

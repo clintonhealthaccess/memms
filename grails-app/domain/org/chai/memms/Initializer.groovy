@@ -67,6 +67,7 @@ public class Initializer {
 	static final String EAST = "East"
 	static final String BURERA = "Burera"
 	static final String BURERA1 = "Burera1"
+	static final String BURERA2 = "Burera2"
 	static final String BUTARO = "Butaro DH"
 	static final String KIVUYE = "Kivuye HC"
 	static final String BUNGWE = "Bungwe HC"
@@ -129,10 +130,11 @@ public class Initializer {
 			def east = newLocation(['en':EAST], EAST,rwanda,province)
 			def burera = newLocation(['en':BURERA], BURERA, north, district)
 			def burera1 = newLocation(['en':BURERA1], BURERA1, south, district)
+			def burera2 = newLocation(['en':BURERA2], BURERA2, burera1, sector)
 			
 			//Add DataLocation
 			def butaro = newDataLocation(['en':BUTARO],BUTARO,burera,dh)
-			def kivuye = newDataLocation(['en':KIVUYE],KIVUYE,burera,hc)
+			def kivuye = newDataLocation(['en':KIVUYE],KIVUYE,burera2,hc)
 			def bungwe = newDataLocation(['en':BUNGWE],BUNGWE,burera1,hc)
 		}		
 	}

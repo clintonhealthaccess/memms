@@ -27,9 +27,11 @@
  */
 package org.chai.memms.equipment
 
+import grails.gorm.DetachedCriteria
 import java.util.List;
 import java.util.Map;
 import org.chai.memms.equipment.Equipment
+import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.location.CalculationLocation;
 import org.chai.memms.location.DataLocation
 import org.chai.memms.location.Location
@@ -75,8 +77,39 @@ class EquipmentService {
 			}
 	}
 	
-	public List<Equipment> filterEquipment(){
-		return null
+
+	public List<Equipment> filterEquipment(def dataLocation, def supplier, def manufacturer, def equipmentType, 
+		def donation, def obsolete,def status,Map<String, String> params){
+		
+		def criteria = Equipment.createCriteria();
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			if(dataLocation != null){
+				eq('dataLocation',dataLocation)
+			}
+			if(supplier != null){
+				eq ("supplier", supplier)
+			}
+			if(manufacturer != null){
+				eq ("manufacture", manufacturer)
+			}
+			if(equipmentType != null){
+				eq ("type", equipmentType)
+			}
+			if(donation){
+				eq ("donation", (donation.equals('true'))?true:false)
+			}
+			if(obsolete){
+				eq ("obsolete", (obsolete.equals('true'))?true:false)
+			}
+			if(!status.equals(Status.NONE)){
+				createAlias("status","t")
+				and{
+					eq ("t.status", status)
+					eq ("t.current", true)
+				}
+			}
+				
+		}
 	}
 
 }

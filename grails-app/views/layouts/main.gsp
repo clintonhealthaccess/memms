@@ -23,7 +23,7 @@
 				<% def languageService = grailsApplication.mainContext.getBean('languageService') %>
 				<g:each in="${languageService.availableLanguages}" var="language" status="i">
 					<% params['lang'] = language %>
-					<li><a class="${languageService.currentLanguage==language?'no-link':''}" href="${createLink(controller: controllerName, action: actionName, params: params)}">${language}</a></li>
+					<li><a class="${languageService.currentLanguage.language==language? 'no-link':''}" href="${createLink(controller: controllerName, action: actionName, params: params)}">${language}</a></li>
 				</g:each>
 			</ul>
       

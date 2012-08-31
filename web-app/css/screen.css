@@ -130,12 +130,23 @@ ul.horizontal li.last { margin-right: 0; }
 /* line 18, ../../src/stylesheets/partials/_layout.sass */
 #content { background: url("../images/bg/content_bg.png") repeat-x top center; }
 /* line 21, ../../src/stylesheets/partials/_layout.sass */
+<<<<<<< HEAD
+
+#content .main { background: white; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px; border-bottom-left-radius: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; border-bottom-right-radius: 5px; -webkit-box-shadow: #cccccc 0 0 2px; -moz-box-shadow: #cccccc 0 0 2px; box-shadow: #cccccc 0 0 2px; }
+=======
 #content .main { background: white; border: 1px solid rgba(0, 0, 0, 0.1); }
+>>>>>>> master
 
 <<<<<<< HEAD
 
 /* line 26, ../../src/stylesheets/partials/_layout.sass */
+<<<<<<< HEAD
+.main { padding: 15px; }
+
+
 =======
+=======
+>>>>>>> master
 /* line 27, ../../src/stylesheets/partials/_layout.sass */
 >>>>>>> design
 .clearfix { clear: both; *zoom: 1; }

@@ -75,6 +75,7 @@ class ProviderController  extends AbstractEntityController {
 		
 	}
 	def getAjaxData = {
+		log.debug("=================== Params: " + params)
 		def type =params['type']
 		type = Type."$type";
 		List<Provider> providers = providerService.searchProvider(type, params['term'], [:])

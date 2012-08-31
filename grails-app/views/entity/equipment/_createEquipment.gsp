@@ -17,15 +17,15 @@
   	  <fieldset>
       	<h4 class="section-title">
           <span class="question-default">
-            <img src="${resource(dir:'images/icons',file:'star_small.png')}">
+          <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
           </span>
-          <g:message code="equipment.section.basic.information.label" default="Basic Information"/>
-        </h4>  			  		
-  		<div class="row">
-			<input type="hidden" name="dataLocation.id" value="${equipment.dataLocation.id}" />
-			<label><g:message code="datalocation.label"/>:</label> ${equipment.dataLocation.names}
-		</div>				
-      	<g:selectFromList name="type.id" label="${message(code:'equipment.type.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
+          Basic Information
+        </h4>
+      	<g:selectFromList name="dataLocation.id" label="${message(code:'datalocation.label')}" bean="${equipment}" field="dataLocation" optionKey="id" multiple="false"
+  			ajaxLink="${createLink(controller:'location', action:'getAjaxData', params:[class: 'DataLocation'])}"
+  			from="${dataLocations}" value="${equipment?.dataLocation?.id}" values="${dataLocations.collect{it.names}}" />
+
+      	<g:selectFromList name="type.id" label="${message(code:'entity.equipmentType.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData')}"
   			from="${types}" value="${equipment?.type?.id}" values="${types.collect{it.names}}" />
 			
@@ -47,7 +47,7 @@
     	<fieldset>
       	<h4 class="section-title">
           <span class="question-default">
-            <img src="${resource(dir:'images/icons',file:'star_small.png')}">
+            <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
           </span>
           <g:message code="equipment.section.manufacture.information.label" default="Manufacture Information"/>
         </h4>
@@ -60,7 +60,7 @@
     	<fieldset>
       	<h4 class="section-title">
           <span class="question-default">
-           <img src="${resource(dir:'images/icons',file:'star_small.png')}">
+            <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
           </span>
           <g:message code="equipment.section.supplier.information.label" default="Supplier Information"/>
         </h4>
@@ -75,7 +75,7 @@
     	<fieldset>
       	<h4 class="section-title">
           <span class="question-default">
-           <img src="${resource(dir:'images/icons',file:'star_small.png')}">
+            <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
           </span>
           <g:message code="equipment.section.status.information.label" default="Status Information"/> 
         </h4>
@@ -126,7 +126,7 @@
   	<fieldset>
       	<h4 class="section-title">
           <span class="question-default">
-            <img src="${resource(dir:'images/icons',file:'star_small.png')}">
+            <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
           </span>
           <g:message code="equipment.section.warranty.information.label" default="Warranty Information"/>
         </h4>

@@ -19,7 +19,7 @@ class InventoryService {
 	def grailsApplication
 	
 	public Set<LocationLevel> getSkipLocationLevels() {
-		Set<LocationLevel> levels = new HashSet<LocationLevel>();
+		List<LocationLevel> levels = []
 		for (String skipLevel : grailsApplication.config.location.sector.skip.level) {
 			levels.add(locationService.findLocationLevelByCode(skipLevel));
 		}
