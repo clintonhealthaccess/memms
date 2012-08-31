@@ -1,5 +1,5 @@
 /**
-* Copyright (c) 2011, Clinton Health Access Initiative.
+* Copyright (c) 2012, Clinton Health Access Initiative.
 *
 * All rights reserved.
 *

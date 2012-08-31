@@ -178,26 +178,30 @@ class EquipmentController extends AbstractEntityController{
 				])
 
 	}
-	
+
 	def filter = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("equipments.filter, command "+cmd)
-		
+
 		if (cmd.dataLocation == null){
 			response.sendError(404)
 		}
-		
+
 		adaptParamsForList()
-		def equipments = equipmentService.filterEquipment(
-			cmd.dataLocation,cmd.supplier,cmd.manufacturer,cmd.equipmentType,cmd.donated,cmd.obsolete,cmd.status,params)
-		
+		def equipments = []
+
+		equipments = equipmentService.filterEquipment(
+				cmd.dataLocation,cmd.supplier,cmd.manufacturer,cmd.equipmentType,cmd.donated,cmd.obsolete,cmd.status,params)
+
 		render (view: '/entity/list', model:[
 					template:"equipment/equipmentList",
 					entities: equipments,
 					entityCount: equipments.totalCount,
+					filterCmd:cmd,
 					code: getLabel(),
 					dataLocation:cmd.dataLocation,
 					q:params['q']
 				])
+
 	}
 	
 	def export = {
@@ -234,13 +238,17 @@ class FilterCommand {
 	}
 
 	static constraints = {
-		dataLocation(blank: true,nullable:false)
+		
 		equipmentType(blank: true,nullable:true)
 		manufacturer(blank: true,nullable:true)
 		supplier(blank: true,nullable:true)
 		status(blank: true,nullable:true)
 		donated(blank: true,nullable:true)
 		obsolete(blank: true,nullable:true)
+		
+		dataLocation(blank: false,nullable:false, validator:{val, obj ->
+			return (obj.equipmentType != null || obj.manufacturer != null || obj.supplier != null || (obj.status != null && obj.status != Status.NONE) || obj.donated || obj.obsolete)?true:"select.atleast.one.value.text"
+			})
 	}
 	
 	String toString() {

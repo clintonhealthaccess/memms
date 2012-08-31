@@ -41,11 +41,16 @@
 		<!-- Filter starts here-->
 		<div class="filters main">
 		  <h2>Filter inventory<a href="#" class="right"><img src="${resource(dir:'images/icons',file:'icon_close_flash.png')}" alt="Section"/></a></h2>
-		  <g:if test="${flash.error}">
-                    ${flash.error}
-		  <h2 class="filter-results">Showing filtered list of equipment which contain search term "Scanner"</h2>
-		  </g:if>
-		  <g:form url="[controller:'equipment', action:'filter']" method="get" useToken="false" class="filters-box">
+
+			<g:hasErrors bean="${filterCmd}">
+				<ul>
+					<g:eachError var="err" bean="${filterCmd}">
+						<h2><g:message error="${err}" /></h2>
+					</g:eachError>
+				</ul>
+			</g:hasErrors>
+
+			<g:form url="[controller:'equipment', action:'filter']" method="get" useToken="false" class="filters-box">
 				<ul>
 					<li><g:selectFromList name="equipmentType.id"
 							label="${message(code:'equipment.type.label')}" bean="${}"

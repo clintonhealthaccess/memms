@@ -194,4 +194,56 @@ class EquipmentControllerSpec extends IntegrationTests{
 		then:
 		equipmentController.modelAndView.model.entities.size() == 1
 	}
+	
+	def "filter command validation passes"(){
+		setup:
+		setupLocationTree()
+		
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURE,manufactureContact)
+		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
+		
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+		def commandFilter = new FilterCommand()
+		when:
+		commandFilter.dataLocation = DataLocation.findByCode('Butaro DH')
+		commandFilter.equipmentType = equipmentType
+		commandFilter.manufacturer = manufacture
+		commandFilter.supplier = supplier
+		commandFilter.status = Status.DISPOSED
+		commandFilter.donated = "false"
+		commandFilter.obsolete = "true"
+		
+		commandFilter.validate()
+		
+		then:
+		commandFilter.hasErrors() == false
+	}
+	
+	def "filter command validation fails when only the dataLocation is specified"(){
+		setup:
+		setupLocationTree()
+		def commandFilter = new FilterCommand()
+		when:
+		commandFilter.dataLocation = DataLocation.findByCode('Butaro DH')
+		
+		commandFilter.validate()
+		
+		then:
+		commandFilter.hasErrors() == true
+	}
+	
+	def "filter command validation fails when only the dataLocation is specified and status is none"(){
+		setup:
+		setupLocationTree()
+		def commandFilter = new FilterCommand()
+		when:
+		commandFilter.dataLocation = DataLocation.findByCode('Butaro DH')
+		commandFilter.status = Status.NONE
+		commandFilter.validate()
+		
+		then:
+		commandFilter.hasErrors() == true
+	}
 }
