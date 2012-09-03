@@ -12,9 +12,9 @@
 				<g:dataLocationTypeFilter linkParams="${params}" selected="${currentLocationTypes}"/>
 			</div>
 						
-			<div class="main">			
+			<div class="main">
 				<g:if test="${inventories == null}">
-					<p class="nav-help"><g:message code="inventory.summary.selectlocation.text"/></p>
+					<p class="nav-help"> <g:message code="inventory.summary.selectlocation.text"/></p>
 				</g:if>
 				<g:else>
 					<div>

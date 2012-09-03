@@ -67,7 +67,8 @@ public class Provider{
 	
 	@Override
 	public String toString() {
-		return "Provider [code=" + code + ", type=" + type + "]";
+		//return "Provider [code=" + code + ", type=" + type + "]";
+		return contact.contactName + ' [' + code + ']'
 	}
 	@Override
 	public int hashCode() {

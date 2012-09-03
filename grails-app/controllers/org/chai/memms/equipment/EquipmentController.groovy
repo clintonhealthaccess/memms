@@ -167,15 +167,16 @@ class EquipmentController extends AbstractEntityController{
 		if (dataLocation == null){
 			response.sendError(404)
 		}
-		
 		adaptParamsForList()
 		
 		def equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,params)
 												
 			render(view:"/entity/list", model:[
 				template:"equipment/equipmentList",
+				equipmentFilterTemplate:"equipment/equipmentFilter",
 				dataLocation:dataLocation,
 				entities: equipments,
+				//filterCmd: filterCommand,
 				entityCount: equipments.totalCount,
 				code: getLabel(),
 				entityClass: getEntityClass()
@@ -198,6 +199,7 @@ class EquipmentController extends AbstractEntityController{
 
 		render (view: '/entity/list', model:[
 					template:"equipment/equipmentList",
+					equipmentFilterTemplate:"equipment/equipmentFilter",
 					dataLocation:cmd.dataLocation,
 					entities: equipments,
 					entityCount: equipments.totalCount,

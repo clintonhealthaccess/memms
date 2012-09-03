@@ -50,16 +50,13 @@ class InventoryService {
 		for (String skipLevel : grailsApplication.config.location.sector.skip.level) {
 			levels.add(locationService.findLocationLevelByCode(skipLevel));
 		}
-		if(log.isDebugEnabled()) log.debug("Skipped Levels"+levels)
 		return levels;
 	}
 	
 	public List<Inventory> getInventoryByLocation(Location location,Set<DataLocationType> types) {
 		List<Inventory> inventories = []
 		Set<LocationLevel> skipLevels = getSkipLocationLevels()
-		if(log.isDebugEnabled()) log.debug("skipLevels "+skipLevels+" types "+types+" location.getDataLocations(skipLevels,types)) "+location.getDataLocations(skipLevels,types))
-		for(DataLocation dataLocation : location.getDataLocations(skipLevels,types)){
-			//log.debug("Skipped Levels"+levels)
+		for(DataLocation dataLocation : location.collectDataLocations(skipLevels,types)){
 			inventories.add(new Inventory(dataLocation:dataLocation,equipmentCount:equipmentService.getEquipmentsByDataLocation(dataLocation,[:]).size()))
 		}
 		return inventories

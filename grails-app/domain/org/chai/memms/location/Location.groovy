@@ -41,7 +41,7 @@ class Location extends CalculationLocation {
 	 static hasMany = [dataLocations: DataLocation,children: Location]
 	
 	//gets all location children
-	List<Location> getChildren(Set<LocationLevel> skipLevels) {		
+	List<Location> getChildren(Set<LocationLevel> skipLevels) {
 		def result = new ArrayList<Location>();
 		for (def child : children) {
 			if (skipLevels != null && skipLevels.contains(child.level)) {
@@ -52,7 +52,8 @@ class Location extends CalculationLocation {
 		return result;
 	}
 	
-	//gets all data locations
+	// returns the children data locations only, without collecting data locations at lower levels
+	// if the child's level is skipped, returns the child's data locations
 	List<DataLocation> getDataLocations(Set<LocationLevel> skipLevels, Set<DataLocationType> types) {
 		List<DataLocation> result = new ArrayList<DataLocation>();
 		List<DataLocation> dataLocations = getDataLocations().asList();
@@ -62,7 +63,7 @@ class Location extends CalculationLocation {
 		}
 		
 		for (Location child : children) {
-			if (skipLevels != null && !skipLevels.contains(child.level)) {
+			if (skipLevels != null && skipLevels.contains(child.level)) {
 				result.addAll(child.getDataLocations(skipLevels, types));
 			}
 		}
