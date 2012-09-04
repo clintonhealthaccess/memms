@@ -29,10 +29,12 @@ package org.chai.memms.equipment
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.chai.memms.location.LocationLevel;
 import org.chai.memms.Inventory
+import org.chai.memms.Inventories
 import org.chai.memms.location.CalculationLocation;
 import org.chai.memms.location.DataLocationType;
 import org.chai.memms.location.DataLocation
@@ -53,12 +55,18 @@ class InventoryService {
 		return levels;
 	}
 	
-	public List<Inventory> getInventoryByLocation(Location location,Set<DataLocationType> types) {
+	public Inventories getInventoryByLocation(Location location,Set<DataLocationType> types,Map<String, String> params) {
+		if(log.isDebugEnabled()) log.debug("params="+params)
 		List<Inventory> inventories = []
 		Set<LocationLevel> skipLevels = getSkipLocationLevels()
 		for(DataLocation dataLocation : location.collectDataLocations(skipLevels,types)){
 			inventories.add(new Inventory(dataLocation:dataLocation,equipmentCount:equipmentService.getEquipmentsByDataLocation(dataLocation,[:]).size()))
 		}
-		return inventories
+		
+		Inventories inventory = new Inventories()
+		
+		inventory.inventoryList = inventories[(params.offset) .. ((params.offset + params.max) > inventories.size() ? inventories.size() - 1 : (params.offset + params.max))]
+		inventory.totalCount = inventories.size()
+		return inventory
 	}
 }

@@ -35,6 +35,9 @@
 				</g:each>
 			</tbody>
 		</table>
+		<div class="paginateButtons">
+		<g:paginate total="${entityCount}" params="${params}" action="${actionName}"/>
+		 </div>
 
 </body>
 </html>

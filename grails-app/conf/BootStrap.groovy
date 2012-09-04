@@ -29,7 +29,7 @@
 import org.chai.memms.location.CalculationLocation;
 import org.chai.memms.security.Role;
 import org.chai.memms.security.User;
-import org.chai.memms.security.UserType;
+import org.chai.memms.security.User.UserType;
 
 import java.util.Date;
 

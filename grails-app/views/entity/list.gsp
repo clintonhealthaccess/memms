@@ -8,6 +8,6 @@
 		<r:require modules="chosen"/>
 	</head>
 	<body>
-		<g:render template="/templates/genericList" model="[entityName: entityName, entityClass: entityClass, template: '/entity/'+template,equipmentFilterTemplate:'/entity/'+equipmentFilterTemplate]"/>
+		<g:render template="/templates/genericList" model="[entityName: entityName, entityClass: entityClass, template: '/entity/'+template,filterTemplate:'/entity/'+filterTemplate]"/>
 	</body>
 </html>

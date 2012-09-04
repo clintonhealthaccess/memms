@@ -52,6 +52,7 @@ class EquipmentStatus {
 		Status(String name){ this.name=name }
 		String getKey() { return name() }
 	}
+	
 	Date dateOfEvent;
 	Date statusChangeDate;
 	User changedBy

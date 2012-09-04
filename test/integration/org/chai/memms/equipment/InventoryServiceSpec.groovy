@@ -54,8 +54,9 @@ class InventoryServiceSpec extends IntegrationTests{
 		Initializer.createInventoryStructure()
 		def types = grailsApplication.config.site.datalocationtype.checked.collect{ DataLocationType.findByCode(it) }.toSet()
 		when:
-		def inventories = inventoryService.getInventoryByLocation(Location.findByCode('Burera'),types)
+		def inventories = inventoryService.getInventoryByLocation(Location.findByCode('Burera'),types,adaptParamsForList())
 		then:
-		inventories.size == 1
+		inventories.totalCount == 1
+		inventories.inventoryList.size() == 1
 	}
 }

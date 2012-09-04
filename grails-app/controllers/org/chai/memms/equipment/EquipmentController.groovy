@@ -33,7 +33,7 @@ import org.chai.memms.Contact
 import org.chai.memms.Initializer;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.security.User;
-import org.chai.memms.security.UserType;
+import org.chai.memms.security.User.UserType;
 import org.chai.memms.equipment.Provider
 import org.chai.memms.location.DataLocation;
 import org.chai.memms.location.CalculationLocation;
@@ -146,19 +146,24 @@ class EquipmentController extends AbstractEntityController{
 		def dataLocationTypesFilter = getLocationTypes()
 		def template = null
 		def inventories = null
+		
+		adaptParamsForList()
+		
 		def locationSkipLevels = inventoryService.getSkipLocationLevels()
 		
 		if (location != null) {
 			template = '/inventory/sectionTable'
-			inventories = inventoryService.getInventoryByLocation(location,dataLocationTypesFilter)
+			inventories = inventoryService.getInventoryByLocation(location,dataLocationTypesFilter,params)
 		}
 		
 		render (view: '/inventory/summaryPage', model: [
-			inventories:inventories,
+			inventories:inventories?.inventoryList,
 			currentLocation: location,
 			currentLocationTypes: dataLocationTypesFilter,
 			template: template,
-			locationSkipLevels: locationSkipLevels
+			entityCount: inventories?.totalCount,
+			locationSkipLevels: locationSkipLevels,
+			entityClass: getEntityClass()
 		])
 	}
 	
@@ -173,7 +178,7 @@ class EquipmentController extends AbstractEntityController{
 												
 			render(view:"/entity/list", model:[
 				template:"equipment/equipmentList",
-				equipmentFilterTemplate:"equipment/equipmentFilter",
+				filterTemplate:"equipment/equipmentFilter",
 				dataLocation:dataLocation,
 				entities: equipments,
 				//filterCmd: filterCommand,
@@ -199,7 +204,7 @@ class EquipmentController extends AbstractEntityController{
 
 		render (view: '/entity/list', model:[
 					template:"equipment/equipmentList",
-					equipmentFilterTemplate:"equipment/equipmentFilter",
+					filterTemplate:"equipment/equipmentFilter",
 					dataLocation:cmd.dataLocation,
 					entities: equipments,
 					entityCount: equipments.totalCount,

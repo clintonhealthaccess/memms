@@ -34,6 +34,19 @@ import org.chai.memms.location.Location;
 import org.chai.memms.util.UtilsService
 
 class User {
+	
+	enum UserType{
+		
+		ADMIN("admin"),
+		SYSTEM("system"),
+		OTHER("other");
+		
+		String messageCode = "user.type";
+		final String name
+		UserType(String name){ this.name=name; }
+		String getKey() { return name() }
+	}
+	
     static String PERMISSION_DELIMITER = ";"
 	
 	//Needed to enable cascading deletes, these fields should not be collections since
@@ -82,47 +95,6 @@ class User {
 		this.permissionString = utilsService.unsplit(permissions, User.PERMISSION_DELIMITER)
 	}
 	
-	def setDefaultPermissions() {
-		removeAllDefaultPermissions()
-		addDefaultPermissions()
-	}
-	
-	def setDefaultRoles() {
-		removeAllDefaultRoles()
-		addDefaultRoles()
-	}
-	
-	private def addDefaultPermissions() {
-		userType.defaultPermissions.each { permissionToAdd ->
-			def permission = permissionToAdd.replaceAll('<id>', location+'')
-			addToPermissions(permission)
-		}
-	}
-	
-	private def removeAllDefaultPermissions() {
-		userType.getAllPermissions().each { permissionToRemove ->
-			def regexToCheck = permissionToRemove.replaceAll('\\*','\\\\*').replaceAll('<id>', "\\\\d*")
-			permissions.each { permission ->
-				if (permission.matches(regexToCheck)) {
-					removeFromPermissions(permission)
-				}
-			}
-		}
-	}
-	
-	private def addDefaultRoles() {
-		userType.defaultRoles.each { roleNameToAdd ->
-			def roleToAdd = Role.findByName(roleNameToAdd)
-			if (roleToAdd != null) roles.add(roleToAdd)
-		}
-	}
-	
-	private def removeAllDefaultRoles() {
-		UserType.getAllRoles().each { roleNameToRemove ->
-			def roleToRemove = Role.findByName(roleNameToRemove)
-			if (roleToRemove != null) roles.remove(roleToRemove)
-		}
-	}	
 	
 	def canActivate() {
 		return confirmed == true && active == false

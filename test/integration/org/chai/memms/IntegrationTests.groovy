@@ -1,7 +1,7 @@
 package org.chai.memms
 
 /**
-* Copyright (c) 2011, Clinton Health Access Initiative.
+* Copyright (c) 2012, Clinton Health Access Initiative.
 *
 * All rights reserved.
 *
@@ -36,7 +36,7 @@ import org.apache.shiro.util.ThreadContext;
 import org.apache.shiro.web.util.WebUtils;
 import javax.servlet.ServletRequest;
 import org.chai.memms.security.User;
-import org.chai.memms.security.UserType;
+import org.chai.memms.security.User.UserType;
 
 import org.apache.commons.logging.Log;
 import org.chai.memms.equipment.Department
@@ -49,7 +49,6 @@ import org.chai.memms.location.Location;
 import org.chai.memms.location.LocationLevel;
 import org.chai.memms.location.CalculationLocation;
 
-//import org.codehaus.groovy.grails.commons.ConfigurationHolder as CONF
 
 abstract class IntegrationTests extends IntegrationSpec {
 	

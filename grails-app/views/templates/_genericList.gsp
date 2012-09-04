@@ -38,24 +38,22 @@
 	     	</g:if>
 		</div>
 		<shiro:hasPermission permission="${controllerName}:filter">
-		<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('filter')}">
-		<!-- Filter starts here-->
-		<g:render template="${equipmentFilterTemplate}"/>
-				<h2 class="filter-results">Showing filtered list of equipment which contain search term "Scanner"</h2>
-		<!-- Filter ends here -->
-		</g:if>
+			<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('filter') && filterTemplate != null }">
+				<!-- Filter starts here-->
+				<g:render template="${filterTemplate}" />
+			</g:if>
 		</shiro:hasPermission>
 		<!-- Template goes here -->
-		
+
 		<div class="main table">
-			<g:render template="${template}"/>
+			<g:render template="${template}" />
 			<div class="paginateButtons">
-  			<g:if test="${entityCount != null}">
-  				<g:paginate total="${entityCount}" params="${params}" action="${actionName}"/>
-  			</g:if>
-  		</div>
+				<g:if test="${entityCount != null}">
+					<g:paginate total="${entityCount}" params="${params}" action="${actionName}" />
+				</g:if>
+			</div>
 		</div>
-		
+
 		<g:if test="${entities.empty}">
 			<div class="main"><g:message code="entity.list.empty.label" args="[entityName]"/></div>
 		</g:if>

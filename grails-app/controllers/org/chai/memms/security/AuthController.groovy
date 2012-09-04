@@ -36,6 +36,7 @@ import org.apache.shiro.web.util.SavedRequest
 import org.apache.shiro.web.util.WebUtils
 import org.chai.memms.security.NewPasswordCommand;
 import org.grails.datastore.mapping.config.utils.ConfigUtils;
+import org.chai.memms.security.User.UserType;
 
 class AuthController {
     def shiroSecurityManager

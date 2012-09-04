@@ -13,8 +13,6 @@ import org.chai.memms.IntegrationTests;
 class AuthControllerSpec extends IntegrationTests {
 
 	def authController
-	//def userController
-	//def userService
 	
 	
 	def "users get redirected to correct page after signin"() {

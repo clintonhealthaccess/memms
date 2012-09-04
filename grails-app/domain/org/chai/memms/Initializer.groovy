@@ -46,8 +46,7 @@ import org.chai.memms.location.Location;
 import org.chai.memms.location.LocationLevel;
 import org.chai.memms.security.Role
 import org.chai.memms.security.User
-import org.chai.memms.security.UserType
-//import org.codehaus.groovy.grails.commons.ConfigurationHolder as CONF
+import org.chai.memms.security.User.UserType
 
 public class Initializer {
 		
@@ -68,9 +67,18 @@ public class Initializer {
 	static final String BURERA = "Burera"
 	static final String BURERA1 = "Burera1"
 	static final String BURERA2 = "Burera2"
+	static final String GITARAMA = "Gitarama"
+	static final String KIBUYE = "Kibuye"
+	
+	
 	static final String BUTARO = "Butaro DH"
 	static final String KIVUYE = "Kivuye HC"
 	static final String BUNGWE = "Bungwe HC"
+	
+	static final String GAHINI = "Gahini DH"
+	static final String NYANGE = "Nyange DH"
+	static final String GITWE = "Gitwe HC"
+	static final String MUSANGE = "Musange HC"
 	
 	static def createUsers() {
 		if(!User.count()){
@@ -131,11 +139,17 @@ public class Initializer {
 			def burera = newLocation(['en':BURERA], BURERA, north, district)
 			def burera1 = newLocation(['en':BURERA1], BURERA1, south, district)
 			def burera2 = newLocation(['en':BURERA2], BURERA2, burera1, sector)
+			def gitarama = newLocation(['en':GITARAMA], GITARAMA, west, district)
+			def kibuye = newLocation(['en':KIBUYE], KIBUYE, west, district)
 			
 			//Add DataLocation
 			def butaro = newDataLocation(['en':BUTARO],BUTARO,burera,dh)
 			def kivuye = newDataLocation(['en':KIVUYE],KIVUYE,burera2,hc)
 			def bungwe = newDataLocation(['en':BUNGWE],BUNGWE,burera1,hc)
+			def gitwe = newDataLocation(['en':GAHINI],GAHINI,gitarama,dh)
+			def musange = newDataLocation(['en':MUSANGE],MUSANGE,gitarama,hc)
+			def nyange = newDataLocation(['en':NYANGE],NYANGE,kibuye,dh)
+			def gahini = newDataLocation(['en':GITWE],GITWE,kibuye,hc)
 		}		
 	}
 	static def createInventoryStructure(){
