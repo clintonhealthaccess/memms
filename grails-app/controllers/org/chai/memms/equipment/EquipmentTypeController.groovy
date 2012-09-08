@@ -72,9 +72,13 @@ class EquipmentTypeController extends AbstractEntityController{
 		entity.properties = params		
 	}
 
+	def getExportClass() {
+		return "EquipmentTypeExportTask"
+	}
+	
 	def getModel(def entity) {
 		[
-			type: entity
+			type: entity,
 		]
 	}
 	def list = {
@@ -86,7 +90,9 @@ class EquipmentTypeController extends AbstractEntityController{
 			entityCount: types.totalCount,
 			code: getLabel(),
 			entityClass: getEntityClass(),
-			names:names
+			names:names,
+			importTask:'EquipmentTypeImportTask',
+			exportTask:'EquipmentTypeExportTask'
 			])
 	}
 	
@@ -99,8 +105,8 @@ class EquipmentTypeController extends AbstractEntityController{
 			entityCount: types.totalCount,,
 			code: getLabel(),
 			q:params['q'],
-			names:names
-			
+			names:names,
+			importTask:'EquipmentTypeImportTask'
 		])
 		
 	}

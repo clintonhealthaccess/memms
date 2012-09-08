@@ -180,5 +180,4 @@ abstract class AbstractEntityController extends AbstractController {
 	protected abstract def getLabel();
 		
 	protected abstract def getEntityClass();
-	
 }

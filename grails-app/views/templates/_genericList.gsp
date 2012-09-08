@@ -19,14 +19,15 @@
 		  			<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('importer')}">
 	  				&nbsp;
 		  				<g:if test="${entityClass != null}">
-			  				<a href="${createLinkWithTargetURI(controller: 'entityImporter', action:'importer', params:[entityClass: entityClass.name])+(request.queryString==null?'':'&'+request.queryString)}" class="next medium gray left import">
-			  					<g:message code="default.import.label" />
-			  				</a>
+			  				<a
+							href="${createLinkWithTargetURI(controller: 'task', action:'taskForm', params:[class: importTask, entityClass: entityClass.name])+(request.queryString==null?'':'&'+request.queryString)}" class="next medium gray left import">
+							<g:message code="default.import.label" />
+						</a>
 		  				</g:if>
 	  				</g:if>
 		  			<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('export')}">
 		  			&nbsp;
-			  			<a href="${createLinkWithTargetURI(controller: controllerName, action:'exporter')+(request.queryString==null?'':'&'+request.queryString)}" class="next medium gray left export">
+			  			<a href="${createLinkWithTargetURI(controller: 'task', action:'create',params:[class: exportTask, entityClass: entityClass.name])+(request.queryString==null?'':'&'+request.queryString)}" class="next medium gray left export">
 		  					<g:message code="default.export.label" />
 		  				</a>
 	  				</g:if>

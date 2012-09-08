@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, Clinton Health Access Initiative.
+	 * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
  *
@@ -25,51 +25,33 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.equipment
-import java.util.List;
+
+package org.chai.memms.task
+
 import java.util.Map;
 
-import org.chai.memms.equipment.EquipmentType
-import org.chai.memms.equipment.EquipmentType.Observation
-import org.chai.memms.equipment.Provider.Type;
+import org.chai.memms.exports.EquipmentTypeExport;
+import org.chai.memms.exports.Exporter;
 import org.chai.memms.util.Utils;
-/**
- * @author Jean Kahigiso M.
- *
- */
-class EquipmentTypeService {
 
-	static transactional = true
-	def languageService;
-		
-	public List<EquipmentType> searchEquipmentType(String text, Map<String, String> params) {
-		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
-		def dbFieldDescritpion = 'descriptions_'+languageService.getCurrentLanguagePrefix();
-		def criteria = EquipmentType.createCriteria()
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			or{
-				//TODO
-				//ilike("observation","%"+text+"%")
-				ilike("code","%"+text+"%")
-				ilike(dbFieldName,"%"+text+"%")
-				ilike(dbFieldDescritpion,"%"+text+"%")
-			}
-			
-		}
+class EquipmentTypeExportTask extends DataExportTask {
+
+	def equipmentTypeService
+	def sessionFactory;
+	
+	String getInformation() {
+		//TODO find out why the message is not working
+		return "export"//message(code: 'equipment.type.label') + '<br/>'+message(code:'import.file.label')+': '+getOutputFilename()
 	}
 	
-	def importToBoolean = {
-		if(it.compareToIgnoreCase("no")) return false
-		else if(it.compareToIgnoreCase("yes")) return true
-		else return null
+	Exporter getExporter() {
+		return new EquipmentTypeExport()
 	}
 	
-	def importToObservation = {
-		if (it == null) return Observation.USEDINMEMMS
-		else if(it?.compareToIgnoreCase("Retired concept")) return Observation.RETIRED
-		else if(it?.compareToIgnoreCase("Too detailed")) return Observation.TOODETAILED
-		else if(it?.compareToIgnoreCase("Outside scope")) return Observation.RETIRED
-		else if(!(it?.trim())) return Observation.USEDINMEMMS
-		else return Observation.USEDINMEMMS
+	
+	Map getFormModel() {
+		return [
+			task: this
+		]
 	}
 }

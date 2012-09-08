@@ -13,7 +13,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,51 +25,32 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.equipment
-import java.util.List;
-import java.util.Map;
+package org.chai.memms.imports;
 
-import org.chai.memms.equipment.EquipmentType
-import org.chai.memms.equipment.EquipmentType.Observation
-import org.chai.memms.equipment.Provider.Type;
-import org.chai.memms.util.Utils;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Jean Kahigiso M.
  *
  */
-class EquipmentTypeService {
+public class ImporterErrorManager {
+	
+	String currentFileName;
+	Integer numberOfSavedRows = 0;
+	Integer numberOfUnsavedRows = 0;
+	Integer numberOfRowsSavedWithError = 0;
+	List<ImporterError> errors = new ArrayList<ImporterError>();
 
-	static transactional = true
-	def languageService;
-		
-	public List<EquipmentType> searchEquipmentType(String text, Map<String, String> params) {
-		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
-		def dbFieldDescritpion = 'descriptions_'+languageService.getCurrentLanguagePrefix();
-		def criteria = EquipmentType.createCriteria()
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			or{
-				//TODO
-				//ilike("observation","%"+text+"%")
-				ilike("code","%"+text+"%")
-				ilike(dbFieldName,"%"+text+"%")
-				ilike(dbFieldDescritpion,"%"+text+"%")
-			}
-			
-		}
+	public void incrementNumberOfSavedRows (){
+		numberOfSavedRows++
+	}
+	public void incrementNumberOfUnsavedRows(){
+		numberOfUnsavedRows++
+	}
+	public void incrementNumberOfRowsSavedWithError(Integer value){
+		numberOfRowsSavedWithError += value
 	}
 	
-	def importToBoolean = {
-		if(it.compareToIgnoreCase("no")) return false
-		else if(it.compareToIgnoreCase("yes")) return true
-		else return null
-	}
-	
-	def importToObservation = {
-		if (it == null) return Observation.USEDINMEMMS
-		else if(it?.compareToIgnoreCase("Retired concept")) return Observation.RETIRED
-		else if(it?.compareToIgnoreCase("Too detailed")) return Observation.TOODETAILED
-		else if(it?.compareToIgnoreCase("Outside scope")) return Observation.RETIRED
-		else if(!(it?.trim())) return Observation.USEDINMEMMS
-		else return Observation.USEDINMEMMS
-	}
+
 }

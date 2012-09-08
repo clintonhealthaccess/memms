@@ -29,8 +29,8 @@
 package org.chai.memms.equipment
 
 import java.util.Date;
-
 import i18nfields.I18nFields
+
 /**
  * @author Eugene Munyaneza
  *

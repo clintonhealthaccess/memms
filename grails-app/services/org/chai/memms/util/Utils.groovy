@@ -49,6 +49,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class Utils {
 	
+	
 	private final static String DATE_FORMAT = "dd-MM-yyyy";
 	private final static String DATE_FORMAT_TIME = "dd-MM-yyyy hh:mm:ss";
 	public final static String ZIP_FILE_EXTENSION = ".zip";
@@ -104,8 +105,10 @@ public class Utils {
 		return new SimpleDateFormat(DATE_FORMAT).parse(string);
 	}
 	
-	public static boolean containsId(String string, Long id) {
-		return string.matches(".*\\$"+id+"(\\D|\\z|\\s)(.|\\s)*");
+	//TODO implement reg expressions in groovy
+	public static boolean containsId(String word, Long id) {
+		def pattern = ~/".*\\$"+id+"(\\D|\\z|\\s)(.|\\s)*"/
+		return word.matches(pattern);
 	}
 	
 	public static String stripHtml(String htmlString) {
@@ -136,6 +139,4 @@ public class Utils {
 		}
 		return exportableClazz;
 	}
-
-	
 }

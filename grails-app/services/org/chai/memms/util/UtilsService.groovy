@@ -37,6 +37,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
+import org.chai.memms.security.User
 
 class UtilsService {
 
@@ -77,4 +78,24 @@ class UtilsService {
 	
 		return noHtmlString;
 	}
+	
+	/**
+	 * fieldName has to start with capital letter as
+	 * it is used to create setter of the object field
+	 * @param object
+	 * @param map
+	 * @param fieldName
+	 * @return
+	 */
+	public static def setLocaleValueInMap(def object, def map, def fieldName){
+	   def methodName = 'set'+fieldName
+	   //TODO replace with CONF variable if this fails
+	   def grailsApplication = new User().domainClass.grailsApplication
+	   grailsApplication.config.i18nFields.locales.each{ loc ->
+		   if(map.get(loc) != null)
+			   object."$methodName"(map.get(loc),new Locale(loc))
+		   else
+			   object."$methodName"("",new Locale(loc))
+	   }
+   }
 }

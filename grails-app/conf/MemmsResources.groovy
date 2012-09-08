@@ -104,4 +104,31 @@ modules = {
 		resource url: '/js/dropdown_init.js', bundle: 'core'
 	}
 	
+	richeditor {
+		resource url: '/js/richeditor/nicEdit.js', bundle: 'admin'
+	}
+	
+	spinner {
+		dependsOn 'jquery'
+
+		resource url: '/js/spinner.js'
+	}
+	
+	list {
+		dependsOn 'core,spinner,form,fieldselection,cluetip,dropdown,explanation,chosen'
+	}
+	
+	progressbar {
+		dependsOn 'jquery'
+
+		resource url: '/js/jquery/progressbar/jquery.progressbar.js', bundle: 'core'
+		resource url: '/js/progressbar_init.js', bundle: 'core'
+	}
+	
+	explanation {
+		dependsOn 'jquery'
+
+		resource url: '/js/explanation_init.js', bundle: 'core'
+	}
+	
 }

@@ -7,6 +7,13 @@ class FormTagLib {
 	def languageService
 	def grailsApplication
 		
+	def file = { attrs, body ->
+		attrs["requestCharset"] = request?.characterEncoding==null?Charset.defaultCharset():Charset.forName(request.characterEncoding)
+		attrs["availableCharsets"] = grailsApplication.config.file.upload.available.charset.collect {Charset.forName(it)}
+		attrs["delimiter"] = grailsApplication.config.file.upload.delimiter
+		out << render(template:"/tags/form/file", model: attrs)
+	}
+	
 	def input = { attrs, body ->
 		if (attrs["type"] == null) attrs["type"] = 'text'
 		out << render(template:"/tags/form/input", model: attrs)

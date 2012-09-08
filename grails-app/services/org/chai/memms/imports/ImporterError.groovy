@@ -13,7 +13,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,51 +25,71 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.equipment
-import java.util.List;
-import java.util.Map;
+package org.chai.memms.imports;
 
-import org.chai.memms.equipment.EquipmentType
-import org.chai.memms.equipment.EquipmentType.Observation
-import org.chai.memms.equipment.Provider.Type;
-import org.chai.memms.util.Utils;
 /**
  * @author Jean Kahigiso M.
  *
  */
-class EquipmentTypeService {
+public class ImporterError {
+	
+	private String fileName;
+	private Integer lineNumber;
+	private String header;
+	private String messageCode;
 
-	static transactional = true
-	def languageService;
-		
-	public List<EquipmentType> searchEquipmentType(String text, Map<String, String> params) {
-		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
-		def dbFieldDescritpion = 'descriptions_'+languageService.getCurrentLanguagePrefix();
-		def criteria = EquipmentType.createCriteria()
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			or{
-				//TODO
-				//ilike("observation","%"+text+"%")
-				ilike("code","%"+text+"%")
-				ilike(dbFieldName,"%"+text+"%")
-				ilike(dbFieldDescritpion,"%"+text+"%")
-			}
-			
-		}
+	public ImporterError(String fileName, Integer lineNumber, String header, String messageCode) {
+		super();
+		this.fileName = fileName;
+		this.lineNumber = lineNumber;
+		this.header = header;
+		this.messageCode = messageCode;
 	}
 	
-	def importToBoolean = {
-		if(it.compareToIgnoreCase("no")) return false
-		else if(it.compareToIgnoreCase("yes")) return true
-		else return null
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((fileName == null) ? 0 : fileName.hashCode());
+		result = prime * result + ((header == null) ? 0 : header.hashCode());
+		result = prime * result
+				+ ((lineNumber == null) ? 0 : lineNumber.hashCode());
+		return result;
 	}
-	
-	def importToObservation = {
-		if (it == null) return Observation.USEDINMEMMS
-		else if(it?.compareToIgnoreCase("Retired concept")) return Observation.RETIRED
-		else if(it?.compareToIgnoreCase("Too detailed")) return Observation.TOODETAILED
-		else if(it?.compareToIgnoreCase("Outside scope")) return Observation.RETIRED
-		else if(!(it?.trim())) return Observation.USEDINMEMMS
-		else return Observation.USEDINMEMMS
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ImporterError other = (ImporterError) obj;
+		if (fileName == null) {
+			if (other.fileName != null)
+				return false;
+		} else if (!fileName.equals(other.fileName))
+			return false;
+		if (header == null) {
+			if (other.header != null)
+				return false;
+		} else if (!header.equals(other.header))
+			return false;
+		if (lineNumber == null) {
+			if (other.lineNumber != null)
+				return false;
+		} else if (!lineNumber.equals(other.lineNumber))
+			return false;
+		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "ImporterError [fileName=" + fileName + ", lineNumber="
+				+ lineNumber + ", header=" + header + ", messageCode="
+				+ messageCode + "]";
+	}
+
 }

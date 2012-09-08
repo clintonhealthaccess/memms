@@ -185,6 +185,7 @@ class EquipmentController extends AbstractEntityController{
 				entityCount: equipments.totalCount,
 				code: getLabel(),
 				entityClass: getEntityClass()
+//				importTask:'EquipmentTypeImportTask'
 				])
 
 	}

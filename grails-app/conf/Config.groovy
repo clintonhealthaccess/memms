@@ -163,6 +163,22 @@ environments {
 	}
 }
 
+
+// rabbitmq
+rabbitmq {
+	connectionfactory {
+		username = 'guest'
+		password = 'guest'
+		hostname = '127.0.0.1'
+		consumers = 5
+	}
+	queues = {
+		adminQueue durable: true, autoDelete: false
+	}
+}
+rabbitmq.concurrentConsumers = 1
+rabbitmq.retryPolicy.maxAttempts = 1
+
 site.fallback.language="en"
 site.contact.email="contact@memms.org"
 site.entity.list.max=40
@@ -177,6 +193,11 @@ i18nFields{
 	locales = ["en","fr","rw"]
 	extraLocales = ["rw"]
 }
+
+file.upload.available.charset=["UTF-8", "ISO-8859-1"]
+file.upload.delimiter=","
+
+task.temp.folder='files/'
 
 /**
 * Configuration file override

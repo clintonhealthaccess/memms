@@ -75,17 +75,10 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 		// because of GRAILS-6147, this dependency is in lib instead of here
 		//compile group: "net.sf.json-lib", name: "json-lib", version: "2.4", classifier: "jdk15"
-		
-//		test "org.codehaus.geb:geb-spock:0.7.1"
-//		test("org.seleniumhq.selenium:selenium-firefox-driver:latest.release")
-//		test("org.seleniumhq.selenium:selenium-chrome-driver:latest.release")
-//		test("org.seleniumhq.selenium:selenium-htmlunit-driver:latest.release") {
-//			excludes "xml-apis"
-//		}
-		
 		compile 'net.sf.ezmorph:ezmorph:1.0.6'
 		runtime 'mysql:mysql-connector-java:5.1.5'
 		compile 'commons-lang:commons-lang:2.6'
+		compile 'org.supercsv:SuperCSV:1.52'
     }
 
     plugins {
@@ -101,8 +94,10 @@ grails.project.dependency.resolution = {
 		compile ":mail:1.0"
 		compile ":yui-minify-resources:0.1.5"
         build ":tomcat:$grailsVersion"
+		compile ":rabbitmq:1.0.0.RC1"
 		
 //		test ":geb:0.7.1"
 		test (":spock:0.6") {changing = false}
+		compile ":csv:0.3.1"
     }
 }
