@@ -32,11 +32,14 @@ import org.chai.memms.equipment.EquipmentType
 import org.chai.memms.equipment.EquipmentTypeService;
 import org.chai.memms.imports.ImporterErrorManager
 import org.chai.memms.imports.ImporterError
+import org.chai.memms.task.ImportTask
 import org.chai.memms.util.ImportExportConstant;
 import org.chai.memms.util.UtilsService;
 import org.hibernate.SessionFactory;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -57,7 +60,7 @@ class EquipmentTypeImporter extends FileImporter {
 		this.sessionFactory = sessionFactory
 	}
 
-	private boolean importData(String fileName,ICsvMapReader reader,Integer numberOfLinesToImport,  String[] headers,  Map<String,Integer> positions) throws IOException{
+	private boolean importData(String fileName,ICsvMapReader reader,Integer numberOfLinesToImport,  String[] headers,  Map<String,Integer> positions,ImportTask task) throws IOException{
 
 		Map<String, String> rowValues = reader.read(headers);
 
@@ -107,6 +110,8 @@ class EquipmentTypeImporter extends FileImporter {
 			// we increment the number of imported lines to stop the while loop when it reaches numberOfLinesToImport
 			importedLines++;
 
+			task.incrementProgress()
+			
 			// read new line
 			if (importedLines < numberOfLinesToImport) rowValues = reader.read(headers);
 		}
@@ -115,7 +120,7 @@ class EquipmentTypeImporter extends FileImporter {
 
 
 
-	public boolean importData(final String fileName, final ICsvMapReader csvMapReader) throws IOException {
+	public boolean importData(final String fileName, final ICsvMapReader csvMapReader, File file, ImportTask task) throws IOException {
 		if (log.isInfoEnabled()) log.info("importData( fileName "+fileName+" reader "+csvMapReader+")");
 		manager.setCurrentFileName(fileName);
 		final String[] headers = csvMapReader.getCSVHeader(true);
@@ -129,10 +134,17 @@ class EquipmentTypeImporter extends FileImporter {
 		!Arrays.asList(headers).contains(ImportExportConstant.DEVICE_OBSERVATION))
 			manager.getErrors().add(new ImporterError(fileName,csvMapReader.getLineNumber(), Arrays.asList(headers).toString(),"import.error.message.unknowm.header"));
 		else{
+			def lines = 0
+			file.eachLine {
+				lines++
+			}
+			//Subtract two for the header and since the count starts from zero
+			task.setMaximum(lines -= 2)
+			if (log.isInfoEnabled())log.info("number of lines in file = " + lines)
 			while (!readEntirely) {
 				EquipmentType.withNewTransaction {
 					try {
-						readEntirely = importData(fileName, csvMapReader, ImportExportConstant.NUMBER_OF_LINES_TO_IMPORT, headers, positions);
+						readEntirely = importData(fileName, csvMapReader, ImportExportConstant.NUMBER_OF_LINES_TO_IMPORT, headers, positions,task);
 					} catch (IOException e) {
 						readEntirely = true;
 					}

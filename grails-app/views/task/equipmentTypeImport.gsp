@@ -12,7 +12,7 @@
 				<h3 class="title"><g:message code="import.title"/></h3>
 				<div class="clear"></div>
 			</div>
-			<g:form url="[controller:'task', action:'createTaskWithFile']" useToken="true" method="post" enctype="multipart/form-data">
+			<g:form url="[controller:'task', action:'createTaskWithFile', params:[targetURI: targetURI]]" useToken="true" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="class" value="EquipmentTypeImportTask">
 									
 				<g:file bean="${taskWithFile}"/>

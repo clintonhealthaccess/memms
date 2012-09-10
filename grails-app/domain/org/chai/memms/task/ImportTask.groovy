@@ -55,10 +55,10 @@ abstract class ImportTask extends Task {
 	private void importFile(def importer, File file, String encoding, Character delimiter){
 		switch (getFileType(inputFilename)) {
 		case FileType.ZIP:
-			importer.importZipFiles(new FileInputStream(file), encoding, delimiter);
+			importer.importZipFiles(new FileInputStream(file), encoding, delimiter,file, this);
 			break;
 		case FileType.CSV:
-			importer.importCsvFile(inputFilename, new FileInputStream(file), encoding, delimiter);
+			importer.importCsvFile(inputFilename, new FileInputStream(file), encoding, delimiter,file, this);
 			break;
 		default:
 			throw new IllegalStateException('file type not accepted')
@@ -70,15 +70,15 @@ abstract class ImportTask extends Task {
 		ImporterErrorManager errorManager = new ImporterErrorManager()
 		FileImporter importer = getImporter(errorManager)
 		File inputFile = new File(getFolder(), inputFilename)
-		
+		if (log.isDebugEnabled()) log.debug('input file=' + inputFile + ', importer=' + importer)
 		if (inputFile.exists() && importer != null) {
-			withTransaction {
+			Task.withTransaction {
 				importFile(importer, inputFile, encoding, delimiter)
 			}
 			
 			// put errorManager output in a file and save it
 			String errorOutput = groovyPageRenderer.render template: '/task/importOutput', model: [errorManager: errorManager]
-			File outputFile = new File(getFolder(), getOutputFilename())
+			File outputFile = new File(getFolder(), 'equipmentTypeimportlog.txt')
 			outputFile.createNewFile()
 			
 			def fileWriter = new FileWriter(outputFile)
@@ -92,7 +92,7 @@ abstract class ImportTask extends Task {
 	}
 	
 	String getOutputFilename() {
-		return 'importOutput.txt'
+		return null
 	}
 	
 	boolean isUnique() {

@@ -9,16 +9,18 @@ import org.chai.memms.exports.Exporter;
 
 abstract class DataExportTask extends Task {
 
-	Long exportId
-	
 	def executeTask() {
 		def csvFile = null
 		Task.withTransaction {
+			if (log.isDebugEnabled()) log.debug('getting exporter')
 			def exporter = getExporter()
 			if (exporter != null) {
-				csvFile = exporter.exportData()
+				if (log.isDebugEnabled()) log.debug('exporting data')
+				csvFile = exporter.exportData(this)
+				if (log.isDebugEnabled()) log.debug('done exporting')
 			}
 		}
+		
 		if (csvFile != null) {
 			File outputFile = new File(getFolder(), getOutputFilename())
 			FileUtils.moveFile(csvFile, outputFile);
@@ -26,8 +28,7 @@ abstract class DataExportTask extends Task {
 	}
 	
 	boolean isUnique() {
-		def task = exportId != null ? DataExportTask.findByExportId(exportId) : null
-		return task == null || task.status == TaskStatus.COMPLETED || task.status == TaskStatus.ABORTED
+		return true;
 	}
 	
 	String getOutputFilename() {
@@ -46,8 +47,4 @@ abstract class DataExportTask extends Task {
 		return null
 	}
 	abstract Exporter getExporter()
-	
-	static constraints = {
-		exportId(nullable: true)
-	}
 }

@@ -34,6 +34,7 @@ import java.util.List;
 
 import org.chai.memms.location.LanguageService;
 import org.chai.memms.location.LocationService;
+import org.chai.memms.task.DataExportTask
 import org.chai.memms.util.Utils;
 import org.hibernate.SessionFactory
 
@@ -43,5 +44,5 @@ public abstract class Exporter {
 	public SessionFactory sessionFactory;
 	
 	public abstract List<String> getExportDataHeaders();
-	public abstract File exportData() throws IOException;
+	public abstract File exportData(DataExportTask task) throws IOException;
 }

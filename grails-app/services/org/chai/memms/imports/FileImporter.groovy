@@ -28,6 +28,7 @@
 
 package org.chai.memms.imports;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -39,6 +40,7 @@ import java.util.zip.ZipInputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.chai.memms.task.ImportTask
 import org.supercsv.exception.SuperCSVException;
 import org.supercsv.io.CsvMapReader;
 import org.supercsv.io.ICsvMapReader;
@@ -55,16 +57,16 @@ public abstract class FileImporter{
 		super();
 	}
 	
-	public void importCsvFile(String fileName, InputStream inputStream, String encoding, Character delimiter) throws IOException {
-		importData(fileName, getReaderInCorrectEncodingWithDelimiter(inputStream, encoding, delimiter));	
+	public void importCsvFile(String fileName, InputStream inputStream, String encoding, Character delimiter,File file,ImportTask task) throws IOException {
+		importData(fileName, getReaderInCorrectEncodingWithDelimiter(inputStream, encoding, delimiter),file,task);	
 	}
 
-	public void importZipFiles(InputStream inputStream, String encoding, Character delimiter) throws IOException {
+	public void importZipFiles(InputStream inputStream, String encoding, Character delimiter,File file,ImportTask task) throws IOException {
 		ZipInputStream zipInputStream = null;
 		zipInputStream = new ZipInputStream(inputStream);
 		ZipEntry zipEntry;
 		while((zipEntry = zipInputStream.getNextEntry()) != null) {
-			if (!zipEntry.isDirectory()) importData(zipEntry.getName(), getReaderInCorrectEncodingWithDelimiter(zipInputStream, encoding, delimiter));
+			if (!zipEntry.isDirectory()) importData(zipEntry.getName(), getReaderInCorrectEncodingWithDelimiter(zipInputStream, encoding, delimiter),file,task);
 			if (log.isDebugEnabled()) log.debug("zipEntryName " +zipEntry.getName());
 		}
 	}
@@ -103,6 +105,6 @@ public abstract class FileImporter{
 	 * @param reader
 	 * @throws IOException
 	 */
-	public abstract boolean importData(String fileName, ICsvMapReader reader) throws IOException;
+	public abstract boolean importData(String fileName, ICsvMapReader reader,File file,ImportTask task) throws IOException;
 
 }

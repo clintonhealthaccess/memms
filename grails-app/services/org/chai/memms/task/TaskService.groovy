@@ -44,7 +44,9 @@ class TaskService {
 			
 			// we execute the task
 			try {
+				if (log.isInfoEnabled()) log.info('task starting execution: '+task)
 				if (!task.aborted) task.executeTask()
+				if (log.isInfoEnabled()) log.info('task finished with execution: '+task)
 			} 
 			catch (TaskAbortedException e) {
 				if (log.isInfoEnabled()) log.info('task aborted: '+task)
@@ -57,6 +59,7 @@ class TaskService {
 				
 				task.finished = new Date()
 				task.save(failOnError: true)
+				if (log.isInfoEnabled()) log.info('task done: '+task)
 			}
 		}
 	}

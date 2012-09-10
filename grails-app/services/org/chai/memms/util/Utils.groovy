@@ -27,6 +27,10 @@
  */
 package org.chai.memms.util;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,7 +42,10 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
@@ -65,6 +72,38 @@ public class Utils {
 		return result;
 	}
 
+	//TODO get rid of this
+	public static File getZipFile(File file, String filename) throws IOException {
+		List<File> files = new ArrayList<File>();
+		files.add(file);
+		return getZipFile(files, filename);
+	}
+	
+	public static File getZipFile(List<File> files, String filename) throws IOException {
+		
+		File zipFile = File.createTempFile(filename, ZIP_FILE_EXTENSION);
+
+		ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream(zipFile));
+				
+		try {
+			for(File file: files){
+				FileInputStream fileInputStream = new FileInputStream(file);
+				ZipEntry zipEntry = new ZipEntry(file.getName());
+				zipOutputStream.putNextEntry(zipEntry);
+				
+				IOUtils.copy(fileInputStream, zipOutputStream);
+				zipOutputStream.closeEntry();
+			}
+		} catch (IOException e) {
+			throw e;
+		} finally {
+			IOUtils.closeQuietly(zipOutputStream);
+			IOUtils.closeQuietly(zipOutputStream);
+		}
+			
+		return zipFile;
+	}
+	
 	public static String unsplit(Object list, String delimiter) {
 		List<String> result = new ArrayList<String>();
 		

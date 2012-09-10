@@ -60,7 +60,7 @@ class TaskController extends AbstractController {
 		if (taskClass != null) {
 			if (log.isDebugEnabled()) log.debug("task.taskForm, taskClass:"+taskClass)
 			def task = taskClass.newInstance()
-			render (view: '/task/'+task.getFormView(), model: task.getFormModel())
+			render (view: '/task/'+task.getFormView(), model: [targetURI:getTargetURI()].putAll(task.getFormModel()))
 		}
 		else {
 			if (log.isDebugEnabled()) log.debug("task.taskForm, taskClass.notfound")

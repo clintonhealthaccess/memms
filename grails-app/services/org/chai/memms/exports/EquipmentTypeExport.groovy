@@ -38,6 +38,8 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.chai.memms.equipment.EquipmentType
+import org.chai.memms.task.DataExportTask
+import org.chai.memms.task.Progress
 import org.chai.memms.util.ImportExportConstant;
 import org.chai.memms.util.Utils;
 import org.supercsv.io.CsvListWriter;
@@ -46,18 +48,18 @@ import org.supercsv.prefs.CsvPreference;
 
 public class EquipmentTypeExport extends Exporter {
 
-	public File exportData() throws IOException{
+	public File exportData(DataExportTask task) throws IOException{
 		if (log.isDebugEnabled()) log.debug("exportData");
 		
-		File csvFile = File.createTempFile(getBasicInfo()+"_temp", ImportExportConstant.CSV_FILE_EXTENSION);
+		File csvFile = File.createTempFile("equipmentType.export.temp", ImportExportConstant.CSV_FILE_EXTENSION);
 		FileWriter csvFileWriter = new FileWriter(csvFile);
 		ICsvListWriter writer = new CsvListWriter(csvFileWriter, CsvPreference.EXCEL_PREFERENCE);
-		this.writeFile(writer);
+		this.writeFile(writer,task);
 		return csvFile;
 		
 	}
 		
-	private void writeFile(ICsvListWriter writer) throws IOException {
+	private void writeFile(ICsvListWriter writer, Progress progress) throws IOException {
 		try{
 			String[] csvHeaders = null;
 			// headers
@@ -65,12 +67,14 @@ public class EquipmentTypeExport extends Exporter {
 				csvHeaders = this.getExportDataHeaders()
 				writer.writeHeader(csvHeaders);
 			}
+			progress.setMaximum(EquipmentType.count())
 			for(EquipmentType equipmentType: EquipmentType.list()){
 				if (log.isDebugEnabled()) log.debug(" exportEquipmentType values code:"+equipmentType.code+", names:([en: "+equipmentType.getNames(new Locale("en"))+"], [fr: "+equipmentType.getNames(new Locale("fr"))+"]), "
 					+", descriptions:([en: "+equipmentType.getDescriptions(new Locale("en"))+"], [fr: "+equipmentType.getDescriptions(new Locale("fr"))+"]), Observation: "+equipmentType.observation);
 				List<String> line = [equipmentType.code,equipmentType.getNames(new Locale("en")),equipmentType.getNames(new Locale("fr")),
 					equipmentType.getDescriptions(new Locale("en")),equipmentType.getDescriptions(new Locale("fr")),equipmentType.observation]
 				writer.write(line)
+				progress.incrementProgress()
 			}
 		} catch (IOException ioe){
 			// TODO throw something that make sense
