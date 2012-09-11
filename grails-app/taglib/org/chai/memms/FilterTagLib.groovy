@@ -28,12 +28,14 @@ package org.chai.memms
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.apache.shiro.SecurityUtils;
 import org.chai.memms.location.LocationService;
 import org.chai.memms.location.DataLocationType;
 import org.chai.memms.location.DataLocation
 import org.chai.memms.location.Location;
 import org.chai.memms.location.LocationLevel;
 import org.chai.memms.location.DataLocationType;
+import org.chai.memms.security.User;
 
 class FilterTagLib {
 
@@ -42,11 +44,17 @@ class FilterTagLib {
 
 		
 	def locationFilter = {attrs, body ->
+		def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])
 		Location.withTransaction {
 			def model = new HashMap(attrs)
-			def location = attrs['selected']
-			def locationFilterRoot = locationService.getRootLocation()
-			def locationFilterTree = locationFilterRoot.collectTreeWithDataLocations(attrs['skipLevels'], attrs['selectedTypes'])
+			def location = null
+			def locationFilterRoot = null
+			def locationFilterTree = null
+			if(user.location instanceof Location){
+				location = attrs['selected']
+				locationFilterRoot = user.location//locationService.getRootLocation()
+				locationFilterTree = locationFilterRoot.collectTreeWithDataLocations(attrs['skipLevels'], attrs['selectedTypes'])
+			}
 			model << 
 				[
 					currentLocation: location,

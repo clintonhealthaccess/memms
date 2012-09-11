@@ -282,7 +282,7 @@ class AuthControllerSpec extends IntegrationTests {
 		
 		when:
 		authController.params.id = user.id
-		authController.params.targetURI = '/user/list'
+		authController.params.targetUri = '/user/list'
 		authController.activate()
 		
 		then:
@@ -298,7 +298,7 @@ class AuthControllerSpec extends IntegrationTests {
 		
 		when:
 		authController.params.id = user.id
-		authController.params.targetURI = '/user/list'
+		authController.params.targetUri = '/user/list'
 		authController.activate()
 		
 		then:

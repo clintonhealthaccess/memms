@@ -134,6 +134,7 @@ class EquipmentTypeImporter extends FileImporter {
 		!Arrays.asList(headers).contains(ImportExportConstant.DEVICE_OBSERVATION))
 			manager.getErrors().add(new ImporterError(fileName,csvMapReader.getLineNumber(), Arrays.asList(headers).toString(),"import.error.message.unknowm.header"));
 		else{
+			//TODO find a better way to count the number of lines to be imported to be used by the progress bar
 			def lines = 0
 			file.eachLine {
 				lines++

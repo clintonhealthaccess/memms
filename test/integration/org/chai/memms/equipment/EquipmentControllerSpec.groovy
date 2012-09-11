@@ -147,6 +147,38 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.modelAndView.model.entities.size() == 3
 	}
 	
+	def "redirects to listing when accessing summary page by a user with a datalocation"(){
+		setup:
+		setupLocationTree()
+
+		Initializer.createDummyStructure()
+		Initializer.createUsers()
+		setupSecurityManager(User.findByUsername('user'))//data location
+
+		equipmentController = new EquipmentController();
+		when:
+		equipmentController.summaryPage()
+		
+		then:
+		equipmentController.response.redirectedUrl == '/equipment/list/' + User.findByUsername('user').location.id
+	}
+	
+	def "does not redirects to listing when accessing summary page by a user with a location"(){
+		setup:
+		setupLocationTree()
+
+		Initializer.createDummyStructure()
+		Initializer.createUsers()
+		setupSecurityManager(User.findByUsername('user1'))//data location
+
+		equipmentController = new EquipmentController();
+		when:
+		equipmentController.summaryPage()
+		
+		then:
+		equipmentController.response.redirectedUrl != '/equipment/list/' + User.findByUsername('user1').location.id
+	}
+	
 	def "can filter equipments"(){
 		setup:
 		setupLocationTree()

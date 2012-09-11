@@ -42,11 +42,11 @@ class AuthController {
     def shiroSecurityManager
 	def languageService
 	def grailsApplication
-	def getTargetURI() {
+	def getTargetUri() {
 		// this is because shiro automatically adds the parameter 'targetUri'
 		// and there is no way to change it so we expect it here as well
 		if (params.targetUri != null) return params.targetUri
-		else return params.targetURI?: "/"
+		else return params.targetUri?: "/"
 	}
 	
 	def getFromEmail() {
@@ -57,6 +57,7 @@ class AuthController {
     def index = { redirect(action: "login", params: params) }
 
     def login = {
+		if (log.isDebugEnabled()) log.debug("auth.login, params:"+params)
         return [ username: params.username, rememberMe: (params.rememberMe != null), targetUri: params.targetUri ]
     }
 	
@@ -172,7 +173,7 @@ class AuthController {
 				}
 				
 				flash.message = message(code:'activate.account.successful', default:'The account has been activated and the user notified.')
-				redirect(uri: getTargetURI())
+				redirect(uri: getTargetUri())
 			}
 			else {
 				flash.message = message(code:'activate.account.unconfirmed', default:'The account has not been confirmed. Let the user confirm its address and activate later.')
@@ -184,6 +185,7 @@ class AuthController {
 	}
 	
     def signIn = {
+		if (log.isDebugEnabled()) log.debug("auth.singIn, params:"+params)
         def authToken = new UsernamePasswordToken(params.username, params.password as String)
 
         // Support for "remember me"
@@ -287,11 +289,11 @@ class AuthController {
 		if (params.token != null) token = PasswordToken.findByToken(params.token)
 		if (token != null) {
 			// if token in URL
-			render (view:'newPassword', model:[token: token.token, newPassword: null, targetURI: getTargetURI()])
+			render (view:'newPassword', model:[token: token.token, newPassword: null, targetUri: getTargetUri()])
 		}
 		else if (SecurityUtils.subject?.principal != null) {
 			// if user is logged in
-			render (view:'newPassword', model:[newPassword: null, targetURI: getTargetURI()])
+			render (view:'newPassword', model:[newPassword: null, targetUri: getTargetUri()])
 		}
 		else {
 			// to 404 error page
@@ -303,7 +305,7 @@ class AuthController {
 		if (log.isDebugEnabled()) log.debug("auth.setPassword, params:"+params)
 		
 		if (cmd.hasErrors()) {
-			render (view: 'newPassword', model:[token: params.token, newPassword: cmd, targetURI: getTargetURI()])
+			render (view: 'newPassword', model:[token: params.token, newPassword: cmd, targetUri: getTargetUri()])
 		}
 		else {
 			PasswordToken token = null
@@ -325,9 +327,9 @@ class AuthController {
 				user.passwordHash = new Sha256Hash(cmd.password).toHex()
 				user.save()
 				
-				log.info("password changed succesfully, redirecting to: "+getTargetURI())
+				log.info("password changed succesfully, redirecting to: "+getTargetUri())
 				flash.message = message(code:'set.password.success', default:'Your new password has been set.')
-				redirect(uri: getTargetURI())
+				redirect(uri: getTargetUri())
 			}
 			else {
 				// to 404 error page

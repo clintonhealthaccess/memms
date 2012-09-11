@@ -1,4 +1,4 @@
-<%@ page import="org.chai.memms.security.UserType" %>
+<%@ page import="org.chai.memms.security.User.UserType" %>
 
 <div>
 	<div class="heading1-bar">

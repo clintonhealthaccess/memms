@@ -104,6 +104,8 @@ public class Initializer {
 			userClerk.addToRoles(dataClerkRole)
 			userClerk.addToPermissions("equipment:*")
 			userClerk.addToPermissions("home:*")
+			userClerk.addToPermissions("menu:home")
+			userClerk.addToPermissions("menu:inventory")
 			userClerk.save(failOnError: true, flush:true)
 			
 			def userClerk1= new User(userType: UserType.OTHER,code:"user1", location: CalculationLocation.findByCode(BURERA), username: "user1",
@@ -114,6 +116,8 @@ public class Initializer {
 			userClerk1.addToPermissions("equipment:summaryPage")
 			userClerk1.addToPermissions("equipment:list")
 			userClerk1.addToPermissions("home:*")
+			userClerk1.addToPermissions("menu:home")
+			userClerk1.addToPermissions("menu:inventory")
 			userClerk1.save(failOnError: true, flush:true)
 		}
 	}
