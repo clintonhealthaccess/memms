@@ -34,6 +34,7 @@ import org.chai.memms.equipment.Provider.Type;
 
 
 class ProviderSpec extends IntegrationTests{
+	
 	def "can create and save all three types of providers"() {
 
 		setup:
@@ -47,9 +48,35 @@ class ProviderSpec extends IntegrationTests{
 		def supplier = new Provider(code:CODE(124), type: Type.SUPPLIER, contact:supplierContact)
 		supplier.save(failOnError: true)
 		def both = new Provider(code:CODE(125), type: Type.BOTH, contact:othersContact)
-		both.save(failOnError: true)
+		both.save()
 		
 		then:
 		Provider.count() == 3
+	}
+	
+	
+	def "can't create providers without specifing type"() {
+		
+		setup:
+		def manufactureContact = Initializer.newContact(['en':'Manufacture Address Descriptions One'],"Manufacture Nokia","jkl@yahoo.com","0768-889-787","Street 154","8988")
+		when:
+		def manufacturer = new Provider(code:CODE(123), contact:manufactureContact)
+		manufacturer.save()
+		
+		then:
+		Provider.count() == 0
+		manufacturer.errors.hasFieldErrors('type') == true
+				
+	}
+	
+	def "can't create provider without specifying  address"() {		
+		when:
+		def supplier = new Provider(code:CODE(124), type: Type.SUPPLIER)
+		supplier.save()
+		
+		then:
+		Provider.count() == 0
+		supplier.errors.hasFieldErrors('contact') == true
+		
 	}
 }

@@ -14,7 +14,7 @@ class DepartmentControllerSpec extends IntegrationTests{
 		departmentController.params.code = CODE(123)
 		departmentController.params.names_en = "testNames"
 		departmentController.params.descriptions_en = "test description"
-		departmentController.save(failOnError: true)
+		departmentController.save()
 		
 		then:
 		Department.count() == 1;
@@ -34,7 +34,7 @@ class DepartmentControllerSpec extends IntegrationTests{
 			departmentController.params."descriptions_$it" = "test description "+it
 		}
 		
-		departmentController.save(failOnError: true)
+		departmentController.save()
 		
 		then:
 		log.debug("locales " + grailsApplication.config.i18nFields.locales.each{it})

@@ -27,6 +27,7 @@
  */
 package org.chai.memms.equipment
 
+import java.util.List;
 import org.chai.memms.equipment.Provider.Type;
 
 /**
@@ -51,9 +52,9 @@ class ProviderService {
 				}
 			}
 			or{
+				for(Type t: this.getEnumeMatcher(text))
+					eq("type",t)
 				ilike("code","%"+text+"%")
-				//TODO
-				//	ilike("type","%"+text+"%")
 				ilike("phone","%"+text+"%")
 				ilike("contactName","%"+text+"%")
 				ilike("email","%"+text+"%")
@@ -63,6 +64,15 @@ class ProviderService {
 			}
 		}
 	
+	}
+	public static List<Type> getEnumeMatcher(String text){
+		List<Type> observations=[]
+		if(text!=null && !text.equals(""))
+			for(Type ob: Type.values()){
+				if(ob.name.toLowerCase().contains(text.toLowerCase()))
+					observations.add(ob)
+			}
+		return observations
 	}
 
 }

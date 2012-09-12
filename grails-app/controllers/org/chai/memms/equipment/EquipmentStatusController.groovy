@@ -88,7 +88,8 @@ class EquipmentStatusController extends AbstractEntityController{
 	def getModel(def entity) {
 		[
 			status:entity,
-			equipment:entity.equipment
+			equipment:entity.equipment,
+			numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.equipment.form
 		]
 	}
 	

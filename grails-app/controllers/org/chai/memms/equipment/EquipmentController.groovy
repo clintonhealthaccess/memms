@@ -238,10 +238,6 @@ class EquipmentController extends AbstractEntityController{
 
 	}
 	
-	def importer = {
-	
-	}
-	
 	def export = {
 		def dataLocation = DataLocation.get(params.int('location'))
 		if (dataLocation == null)

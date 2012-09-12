@@ -102,6 +102,7 @@ class EquipmentTypeController extends AbstractEntityController{
 		render (view: '/entity/list', model:[
 			template:"equipmentType/equipmentTypeList",
 			entities: types,
+			entityClass: getEntityClass(),
 			entityCount: types.totalCount,,
 			code: getLabel(),
 			q:params['q'],

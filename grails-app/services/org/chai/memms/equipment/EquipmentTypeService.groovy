@@ -48,14 +48,24 @@ class EquipmentTypeService {
 		def criteria = EquipmentType.createCriteria()
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			or{
-				//TODO
-				//ilike("observation","%"+text+"%")
+				for(Observation obs: this.getEnumeMatcher(text))
+					eq("observation",obs)
 				ilike("code","%"+text+"%")
 				ilike(dbFieldName,"%"+text+"%")
 				ilike(dbFieldDescritpion,"%"+text+"%")
 			}
 			
 		}
+	}
+	
+	public static List<Observation> getEnumeMatcher(String text){
+		List<Observation> observations=[]
+		if(text!=null && !text.equals(""))
+			for(Observation ob: Observation.values()){
+				if(ob.name.toLowerCase().contains(text.toLowerCase()))
+					observations.add(ob)
+			}
+		return observations
 	}
 	
 	def importToBoolean = {
