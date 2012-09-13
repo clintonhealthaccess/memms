@@ -4,7 +4,7 @@ import org.chai.memms.IntegrationTests;
 import org.chai.memms.Initializer;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.equipment.EquipmentType.Observation;
-import org.chai.memms.location.DataLocation;
+import org.chai.location.DataLocation;
 import org.chai.memms.security.User;
 import org.chai.memms.equipment.Provider.Type;
 
@@ -50,7 +50,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.dataLocation = DataLocation.list().first()
 		equipmentController.params.status="DISPOSED"
 		equipmentController.params.dateOfEvent=Initializer.now()
-		equipmentController.save(failOnError: true)
+		equipmentController.save()
 				
 		then:
 		Equipment.count() == 1;
@@ -96,7 +96,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.dataLocation = DataLocation.list().first()
 		equipmentController.params.status="FORDISPOSAL"
 		equipmentController.params.dateOfEvent=Initializer.now()
-		equipmentController.save(failOnError: true)
+		equipmentController.save()
 		
 		then:
 		Equipment.count() == 1;

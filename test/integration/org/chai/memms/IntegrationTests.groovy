@@ -43,11 +43,11 @@ import org.chai.memms.equipment.Department
 import org.chai.memms.equipment.Equipment
 import org.chai.memms.equipment.EquipmentModel
 import org.chai.memms.equipment.EquipmentType
-import org.chai.memms.location.DataLocation;
-import org.chai.memms.location.DataLocationType;
-import org.chai.memms.location.Location;
-import org.chai.memms.location.LocationLevel;
-import org.chai.memms.location.CalculationLocation;
+import org.chai.location.DataLocation;
+import org.chai.location.DataLocationType;
+import org.chai.location.Location;
+import org.chai.location.LocationLevel;
+import org.chai.location.CalculationLocation;
 
 
 abstract class IntegrationTests extends IntegrationSpec {

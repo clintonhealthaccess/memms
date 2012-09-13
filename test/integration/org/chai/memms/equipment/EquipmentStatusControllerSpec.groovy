@@ -3,7 +3,7 @@ package org.chai.memms.equipment
 import org.chai.memms.IntegrationTests;
 import org.chai.memms.Initializer
 import org.chai.memms.equipment.EquipmentType.Observation;
-import org.chai.memms.location.DataLocation;
+import org.chai.location.DataLocation;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.security.User
 import org.chai.memms.equipment.Provider.Type;

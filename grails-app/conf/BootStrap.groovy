@@ -26,7 +26,7 @@
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-import org.chai.memms.location.CalculationLocation;
+import org.chai.location.CalculationLocation;
 import org.chai.memms.security.Role;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;

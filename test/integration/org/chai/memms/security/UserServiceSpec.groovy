@@ -28,7 +28,7 @@
 package org.chai.memms.security
 
 import org.chai.memms.IntegrationTests;
-import org.chai.memms.location.DataLocation;
+import org.chai.location.DataLocation;
 
 /**
  * @author Jean Kahigiso M.

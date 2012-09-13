@@ -32,13 +32,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.chai.memms.location.LocationLevel;
+import org.chai.location.LocationLevel;
 import org.chai.memms.Inventory
 import org.chai.memms.Inventories
-import org.chai.memms.location.CalculationLocation;
-import org.chai.memms.location.DataLocationType;
-import org.chai.memms.location.DataLocation
-import org.chai.memms.location.Location
+import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocationType;
+import org.chai.location.DataLocation
+import org.chai.location.Location
 
 class InventoryService {
 

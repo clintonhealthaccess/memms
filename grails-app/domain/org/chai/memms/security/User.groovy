@@ -28,9 +28,9 @@
 package org.chai.memms.security
 
 
-import org.chai.memms.location.CalculationLocation;
-import org.chai.memms.location.DataLocation;
-import org.chai.memms.location.Location;
+import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocation;
+import org.chai.location.Location;
 import org.chai.memms.util.UtilsService
 
 class User {

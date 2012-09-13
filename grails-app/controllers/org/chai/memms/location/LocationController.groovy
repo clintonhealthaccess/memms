@@ -25,7 +25,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.location;
+package org.chai.location;
 
 import org.chai.memms.AbstractEntityController;
 import java.io.File;
@@ -114,7 +114,7 @@ class LocationController extends AbstractEntityController {
 	
 	def getAjaxData = {
 		def clazz = Location.class
-		if (params['class'] != null) clazz = Class.forName('org.chai.memms.location.'+params['class'], true, Thread.currentThread().contextClassLoader)
+		if (params['class'] != null) clazz = Class.forName('org.chai.location.'+params['class'], true, Thread.currentThread().contextClassLoader)
 		
 		def locations = locationService.searchLocation(clazz, params['term'], [:])
 		render(contentType:"text/json") {

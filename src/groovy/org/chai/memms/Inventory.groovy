@@ -27,7 +27,7 @@
  */
 package org.chai.memms
 
-import org.chai.memms.location.DataLocation
+import org.chai.location.DataLocation
 
 class Inventory {
 	DataLocation dataLocation

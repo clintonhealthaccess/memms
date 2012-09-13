@@ -30,7 +30,7 @@ package org.chai.memms.equipment
 import org.chai.memms.Contact
 import org.chai.memms.Warranty;
 import org.chai.memms.equipment.EquipmentStatus.Status;
-import org.chai.memms.location.DataLocation;
+import org.chai.location.DataLocation;
 
 import i18nfields.I18nFields
 

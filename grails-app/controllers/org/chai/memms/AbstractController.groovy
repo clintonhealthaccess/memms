@@ -31,10 +31,10 @@ import java.util.Set;
 
 import org.apache.commons.lang.math.NumberUtils
 import org.apache.shiro.SecurityUtils;
-import org.chai.memms.location.DataLocationType;
+import org.chai.location.DataLocationType;
 import org.chai.memms.security.User
-import org.chai.memms.location.Location
-import org.chai.memms.location.LocationLevel
+import org.chai.location.Location
+import org.chai.location.LocationLevel
 
 public abstract class AbstractController {
 	def locationService

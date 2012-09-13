@@ -32,9 +32,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.chai.memms.location.LanguageService;
-import org.chai.memms.location.LocationService;
 import org.chai.memms.task.DataExportTask
+import org.chai.location.LanguageService;
+import org.chai.location.LocationService;
 import org.chai.memms.util.Utils;
 import org.hibernate.SessionFactory
 

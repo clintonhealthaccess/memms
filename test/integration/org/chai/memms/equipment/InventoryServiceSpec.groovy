@@ -30,8 +30,8 @@ package org.chai.memms.equipment
 
 import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests;
-import org.chai.memms.location.DataLocationType
-import org.chai.memms.location.Location
+import org.chai.location.DataLocationType
+import org.chai.location.Location
 
 class InventoryServiceSpec extends IntegrationTests{
 	def inventoryService

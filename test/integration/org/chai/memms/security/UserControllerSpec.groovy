@@ -29,7 +29,7 @@ package org.chai.memms.security
 
 import org.apache.shiro.crypto.hash.Sha256Hash
 import org.chai.memms.IntegrationTests;
-import org.chai.memms.location.DataLocation;
+import org.chai.location.DataLocation;
 
 /**
  * @author Jean Kahigiso M.
