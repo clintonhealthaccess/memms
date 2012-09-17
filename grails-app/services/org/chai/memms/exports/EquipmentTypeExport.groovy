@@ -45,8 +45,9 @@ import org.chai.memms.util.Utils;
 import org.supercsv.io.CsvListWriter;
 import org.supercsv.io.ICsvListWriter;
 import org.supercsv.prefs.CsvPreference;
+import org.chai.memms.task.Exporter
 
-public class EquipmentTypeExport extends Exporter {
+public class EquipmentTypeExport implements Exporter {
 
 	public File exportData(DataExportTask task) throws IOException{
 		if (log.isDebugEnabled()) log.debug("exportData");

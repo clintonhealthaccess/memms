@@ -150,26 +150,47 @@ log4j = {
 //MAIL
 environments {
 	production {
-		grails.mail.host = "smtp.gmail.com"
-		grails.mail.port = 465
-		// configuration defined in ${home}/.grails/memms-config.groovy
-//		grails.mail.username = "youracount@gmail.com"
-//		grails.mail.password = "yourpassword"
-		grails.mail.props = [
-			"mail.smtp.auth":"true",
-			"mail.smtp.socketFactory.port":"465",
-			"mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
-			"mail.smtp.socketFactory.fallback":"false"
-		]
+		//Mail
+		grails {
+			mail {
+			  host = "smtp.gmail.com"
+			  port = 465
+			  // configuration defined in ${home}/.grails/memms-config.groovy
+//			  username = "memms.rwanda@gmail.com"
+//			  password = "root?user?96"
+			  props = ["mail.smtp.auth":"true",
+					   "mail.smtp.socketFactory.port":"465",
+					   "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+					   "mail.smtp.socketFactory.fallback":"false"]
+			}
+		 }
+		grails.mail.default.from="memms.rwanda@gmail.com"
 	}
 	development {
-		grails.mail.disabled = true
+		//grails.mail.disabled = true
+		//Mail
+		grails {
+			mail {
+			  host = "smtp.gmail.com"
+			  port = 465
+			  // configuration defined in ${home}/.grails/memms-config.groovy
+			  username = "memms.rwanda@gmail.com"
+			  password = "root?user?96"
+				props = [
+							"mail.debug": "true",
+							"mail.smtp.auth":"true",
+							"mail.smtp.socketFactory.port":"465",
+							"mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+							"mail.smtp.socketFactory.fallback":"false"
+							]
+			}
+		 }
+		grails.mail.default.from="memms.rwanda@gmail.com"
 	}
 	test {
 		grails.mail.disabled = true
 	}
 }
-
 
 // rabbitmq
 rabbitmq {
@@ -187,9 +208,9 @@ rabbitmq.concurrentConsumers = 1
 rabbitmq.retryPolicy.maxAttempts = 1
 
 site.fallback.language="en"
-site.contact.email="contact@memms.org"
+site.contact.email="memms.rwanda@gmail.com"
 site.entity.list.max=40
-site.from.email="no-reply@memms.org"
+site.from.email="memms.rwanda@gmail.com"
 
 site.datalocationtype.checked=["District Hospital","Health Center"]
 location.sector.skip.level=["Sector"]

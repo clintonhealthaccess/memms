@@ -1,5 +1,5 @@
 /**
-	 * Copyright (c) 2012, Clinton Health Access Initiative.
+ * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
  *
@@ -31,17 +31,14 @@ package org.chai.memms.task
 import java.util.Map;
 
 import org.chai.memms.exports.EquipmentTypeExport;
-import org.chai.memms.exports.Exporter;
+import org.chai.memms.task.Exporter;
 import org.chai.memms.util.Utils;
 
 class EquipmentTypeExportTask extends DataExportTask {
-
-	def equipmentTypeService
-	def sessionFactory;
 	
 	String getInformation() {
 		//TODO find out why the message is not working
-		return "export"//message(code: 'equipment.type.label') + '<br/>'+message(code:'import.file.label')+': '+getOutputFilename()
+		return "EquipmentTypeExport"//message(code: 'equipment.type.label') + '<br/>'+message(code:'import.file.label')+': '+getOutputFilename()
 	}
 	
 	Exporter getExporter() {

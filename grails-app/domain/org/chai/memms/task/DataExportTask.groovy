@@ -5,19 +5,18 @@ import org.chai.memms.task.Task.TaskStatus;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.chai.memms.exports.EquipmentTypeExport;
-import org.chai.memms.exports.Exporter;
+import org.chai.memms.task.Exporter;
 
 abstract class DataExportTask extends Task {
 
+	Long exportFilterId
+	
 	def executeTask() {
 		def csvFile = null
 		Task.withTransaction {
-			if (log.isDebugEnabled()) log.debug('getting exporter')
 			def exporter = getExporter()
 			if (exporter != null) {
-				if (log.isDebugEnabled()) log.debug('exporting data')
 				csvFile = exporter.exportData(this)
-				if (log.isDebugEnabled()) log.debug('done exporting')
 			}
 		}
 		
@@ -28,17 +27,14 @@ abstract class DataExportTask extends Task {
 	}
 	
 	boolean isUnique() {
-		return true;
+		def task = DataExportTask.findByExportFilterId(exportFilterId)
+		return task == null || task.status == TaskStatus.COMPLETED || task.status == TaskStatus.ABORTED
 	}
 	
 	String getOutputFilename() {
-		return 'equipmentTypeExportOutput.csv'
+		return getInformation()+".csv"
 	}
 	
-	String getInformation() {
-		return null
-	}
-
 	String getFormView() {
 		return null
 	}
@@ -47,4 +43,8 @@ abstract class DataExportTask extends Task {
 		return null
 	}
 	abstract Exporter getExporter()
+	
+	static constraints = {
+		exportFilterId nullable:false
+	}
 }

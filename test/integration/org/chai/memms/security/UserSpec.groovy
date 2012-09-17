@@ -32,7 +32,8 @@ package org.chai.memms.security
 import org.apache.commons.el.parser.Token;
 import org.chai.memms.IntegrationTests
 import org.chai.memms.security.User.UserType;
-import org.chai.memms.security.User;
+import org.chai.memms.security.User
+import grails.validation.ValidationException
 
 class UserSpec  extends IntegrationTests {
 
@@ -116,24 +117,47 @@ class UserSpec  extends IntegrationTests {
 		then:
 		user.roles.size() == 2
 	}
+	
+	def "can delete a user who has roles - roles used somewhere else"() {
+		setup:
+		setupLocationTree()
+		
+		def roleOne = newRole("RoleOne", "*:*")
+		def roleTwo = newRole("roleTwo", "*:*")
+		def roleThree = newRole("roleThree", "*:*")
 
-	def "can add permisions to roles"() {
+		def userOne = newUser('userone', 'userone', true, true)
+		def userTwo = newUser('usertwo', 'userone', true, true)
 
+		userOne.addToRoles(roleOne)
+		userOne.addToRoles(roleTwo)
+		userOne.save(failOnError: true)
+		userTwo.addToRoles(roleTwo)
+		userTwo.addToRoles(roleThree)
+		userTwo.save(failOnError: true)
 		when:
-		def user = new User(
-				username: 'test', uuid: 'test', permissionString: '',
-				passwordHash: '', email: 'test@test.com', firstname: 'test', lastname: 'test',
-				phoneNumber: '123', organisation: 'test', userType: UserType.OTHER
-				)
-
-		def roleOne = new Role(name:"test role one",permissionString:"new:*;none:ugin:*")
-		def roleTwo = new Role(name:"test role two",permissionString:"new:*")
-
-		user.addToRoles(roleTwo)
-		user.addToRoles(roleOne)
-
+		userOne.delete()
 		then:
-		roleOne.getPermissionString() == "new:*;none:ugin:*"
+		User.count() == 1
+		Role.count() == 3
+	}
+	
+	def "can delete a user who has roles - roles not used somewhere else"() {
+		setup:
+		setupLocationTree()
+		
+		def roleOne = newRole("RoleOne", "*:*")
+		def roleTwo = newRole("roleTwo", "*:*")
+
+		def userOne = newUser('userone', 'userone', true, true)
+
+		userOne.addToRoles(roleOne)
+		userOne.addToRoles(roleTwo)
+		userOne.save(failOnError: true)
+		when:
+		userOne.delete()
+		then:
+		User.count() == 0
 	}
 
 	def "user must have a type"() {
@@ -142,14 +166,11 @@ class UserSpec  extends IntegrationTests {
 		new User(
 				username: 'test1', uuid: 'test1', permissionString: '',
 				passwordHash: '', email: 'test1@test.com', firstname: 'test', lastname: 'test',
-				phoneNumber: '123', organisation: 'test', userType: UserType.OTHER
+				phoneNumber: '123', organisation: 'test'
 				).save(failOnError: true)
 
 		then:
-		//TODO clear this later
-		//log.debug("Errors : " + ValidationException.fullMessage)
-		//thrown ValidationException
-		User.count() == 1
+		thrown ValidationException
 
 		when:
 		new User(
@@ -158,6 +179,6 @@ class UserSpec  extends IntegrationTests {
 				phoneNumber: '123', organisation: 'test', userType: UserType.OTHER
 				).save(failOnError: true)
 		then:
-		User.count() == 2
+		User.count() == 1
 	}
 }

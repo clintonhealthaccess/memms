@@ -17,21 +17,21 @@
 							field="type" optionKey="${filterCmd?.equipmentType? 'id' : null}" multiple="false"
 							ajaxLink="${createLink(controller:'EquipmentType', action:'getAjaxData', params:[class: 'EquipmentType'])}"
 							from="${filterCmd?.equipmentType}" value="${filterCmd?.equipmentType?.id}" 
-							values="${filterCmd?.equipmentType?.collect{it.names + ' ['+ it.code +']'}}"/></li>
+							values="${filterCmd?.equipmentType*.{it.names + ' ['+ it.code +']'}}"/></li>
 
 					<li><g:selectFromList name="manufacturer.id"
 							label="${message(code:'provider.type.manufacturer')}" bean="${filterCmd}"
 							field="manufacturer" optionKey="${filterCmd?.manufacturer? 'id' : null}" multiple="false"
 							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[class: 'Provider',type:'MANUFACTURER'])}"
 							from="${filterCmd?.manufacturer}" value="${filterCmd?.manufacturer?.id}" 
-							values="${filterCmd?.manufacturer?.collect{it.contact.contactName + ' ['+ it.code +']'}}"/></li>
+							values="${filterCmd?.manufacturer*.{it.contact.contactName + ' ['+ it.code +']'}}"/></li>
 
 					<li><g:selectFromList name="supplier.id"
 							label="${message(code:'provider.type.supplier')}" bean="${filterCmd}"
 							field="supplier" optionKey="${filterCmd?.supplier? 'id' : null}" multiple="false"
 							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[class: 'Provider',type:'SUPPLIER'])}"
 							from="${filterCmd?.supplier}" value="${filterCmd?.supplier?.id}"
-							values="${filterCmd?.manufacturer?.collect{it.contact.contactName + ' ['+ it.code +']'}}"
+							values="${filterCmd?.manufacturer*.{it.contact.contactName + ' ['+ it.code +']'}}"
 							/></li>
 					<li>
 						<label><g:message code="equipment.obsolete.label" /></label> 

@@ -27,11 +27,10 @@
  */
 package org.chai.memms.security
 
-
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation;
 import org.chai.location.Location;
-import org.chai.memms.util.UtilsService
+import org.chai.memms.util.Utils
 
 class User {
 	
@@ -67,8 +66,6 @@ class User {
 	CalculationLocation location
 	UserType userType
 	
-	def utilsService
-	static belongsTo = Role
 	static hasMany = [ roles: Role ]
 	
 	User() {
@@ -76,23 +73,23 @@ class User {
 	}
 	
 	def getPermissions() {
-		return utilsService.split(permissionString, User.PERMISSION_DELIMITER)
+		return Utils.split(permissionString, User.PERMISSION_DELIMITER)
 	}
 	
 	def setPermissions(def permissions) {
-		this.permissionString = utilsService.unsplit(permissions, User.PERMISSION_DELIMITER)
+		this.permissionString = Utils.unsplit(permissions, User.PERMISSION_DELIMITER)
 	}
 	
 	def addToPermissions(def permission) {
 		def permissions = getPermissions()
 		permissions << permission
-		this.permissionString = utilsService.unsplit(permissions, User.PERMISSION_DELIMITER)
+		this.permissionString = Utils.unsplit(permissions, User.PERMISSION_DELIMITER)
 	}
 		
 	def removeFromPermissions(def permission) {
 		def permissions = getPermissions()
 		permissions.remove(permission)
-		this.permissionString = utilsService.unsplit(permissions, User.PERMISSION_DELIMITER)
+		this.permissionString = Utils.unsplit(permissions, User.PERMISSION_DELIMITER)
 	}
 	
 	
@@ -101,6 +98,7 @@ class User {
 	}
 	
     static constraints = {
+		permissionString nullable: false
 		email(email:true, unique: true, nullable: true)
         username(nullable: false, blank: false, unique: true)
 		uuid(nullable: false, blank: false, unique: true)
@@ -113,6 +111,9 @@ class User {
 		location(nullable: true)
 		registrationToken(nullable: true)
 		passwordToken(nullable: true)
+		active(validator: {val, obj ->
+			return val ? obj.location != null && (obj.permissionString || obj.roles.size() > 0) : true
+		})
     }
 	
 	static mapping = {
@@ -120,4 +121,5 @@ class User {
 		cache true
 		version false
 	}
+	
 }

@@ -25,67 +25,26 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.security
 
-import org.chai.memms.util.Utils
+package org.chai.memms.task
 
-class Role {
-    String name
-	String permissionString
-	
-	static belongsTo = User
-    static hasMany = [ users: User ]
+import java.util.Map;
+import java.util.Set;
 
-	def getPermissions() {
-		return Utils.split(permissionString, User.PERMISSION_DELIMITER)
-	}
-	
-	def setPermissions(def permissions) {
-		this.permissionString = Utils.unsplit(permissions, User.PERMISSION_DELIMITER)
-	}
-	
-	def addToPermissions(def permission) {
-		def permissions = getPermissions()
-		permissions << permission
-		this.permissionString = Utils.unsplit(permissions, User.PERMISSION_DELIMITER)
-	}
-	
-    static constraints = {
-        name nullable: false, blank: false, unique: true
-		permissionString nullable: false, blank: false
-    }
+import org.chai.memms.equipment.EquipmentType;
+import org.chai.memms.equipment.Provider;
+import org.chai.memms.equipment.EquipmentStatus.Status;
+import org.chai.memms.exports.EquipmentExport;
+import org.chai.memms.exports.EquipmentTypeExport;
+import org.chai.memms.task.Exporter;
+import org.chai.memms.location.CalculationLocation;
+import org.chai.memms.location.DataLocationType;
+import org.chai.memms.util.Utils;
+
+class EquipmentTypeExportFilter extends ExportFilter{
+	//TODO This class is empty but needed in the hierachy find way to eliminate it
 	static mapping = {
-		table "memms_user_role"
-		cache true
+		table "memms_equipment_type_export_filter"
 		version false
-	}
-	
-	String toString() {
-		return name;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof Role))
-			return false;
-		Role other = (Role) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
 	}
 }

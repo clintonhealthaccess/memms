@@ -16,7 +16,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		
 		setup:
 		setupLocationTree()
-		setupSystemUse()
+		setupSystemUser()
 		
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
@@ -62,7 +62,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		
 		setup:
 		setupLocationTree()
-		setupSystemUse()
+		setupSystemUser()
 		
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact(['en':'Address Descriptions '],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")

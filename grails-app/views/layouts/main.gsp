@@ -33,7 +33,7 @@
 					%>
 					<li>
 						<a href="${createLinkWithTargetURI(controller: 'account', action:'editAccount')}">
-							<g:message code="header.navigation.myaccount"/> : ${user.firstname} ${user.lastname}
+							<g:message code="header.navigation.myaccount"/> : ${user?.firstname} ${user?.lastname}
 						</a>
 					</li>
 				</shiro:user>
@@ -110,6 +110,7 @@
 					<li><a href="${createLink(controller: 'location', action:'list')}"><g:message code="location.label"/></a></li>
 					<li><a href="${createLink(controller: 'locationLevel', action:'list')}"><g:message code="location.level.label"/></a></li>
 					<li><a href="${createLink(controller: 'user', action:'list')}"><g:message code="user.label"/></a></li>
+					<li><a href="${createLink(controller: 'equipment', action:'generalExport')}"><g:message code="equipment.export.label"/></a></li>
 	         	</ul>
         	 </li>
 		</shiro:hasPermission>

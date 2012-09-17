@@ -33,8 +33,8 @@
 <classpathentry kind="src" path=".plugin-src-mail-1.0-grails-app-taglib"/>
 <classpathentry kind="src" path=".plugin-src-mail-1.0-grails-app-views"/>
 <classpathentry kind="src" path=".plugin-src-mail-1.0-src-groovy"/>
-<classpathentry kind="src" path=".plugin-src-locations-0.2-CHAI-grails-app-domain"/>
-<classpathentry kind="src" path=".plugin-src-locations-0.2-CHAI-grails-app-services"/>
+<classpathentry kind="src" path=".plugin-src-locations-0.2.2-CHAI-grails-app-domain"/>
+<classpathentry kind="src" path=".plugin-src-locations-0.2.2-CHAI-grails-app-services"/>
 <classpathentry kind="src" path=".plugin-src-jquery-1.7.1-grails-app-conf"/>
 <classpathentry kind="src" path=".plugin-src-jquery-1.7.1-grails-app-i18n"/>
 <classpathentry kind="src" path=".plugin-src-jquery-1.7.1-grails-app-services"/>
@@ -70,117 +70,117 @@
 <classpathentry kind="var" path="GRAILS_IVYCACHE/opensymphony/sitemesh/jars/sitemesh-2.4.jar"/>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-bootstrap/jars/grails-bootstrap-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-core/jars/grails-core-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-crud/jars/grails-crud-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-hibernate/jars/grails-hibernate-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-resources/jars/grails-resources-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-spring/jars/grails-spring-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-web/jars/grails-web-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-logging/jars/grails-logging-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-plugin-codecs/jars/grails-plugin-codecs-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-plugin-controllers/jars/grails-plugin-controllers-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-plugin-domain-class/jars/grails-plugin-domain-class-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-plugin-converters/jars/grails-plugin-converters-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-plugin-datasource/jars/grails-plugin-datasource-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-plugin-filters/jars/grails-plugin-filters-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-plugin-gsp/jars/grails-plugin-gsp-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-plugin-i18n/jars/grails-plugin-i18n-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-plugin-log4j/jars/grails-plugin-log4j-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-plugin-scaffolding/jars/grails-plugin-scaffolding-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-plugin-services/jars/grails-plugin-services-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-plugin-servlets/jars/grails-plugin-servlets-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-plugin-mimetypes/jars/grails-plugin-mimetypes-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-plugin-url-mappings/jars/grails-plugin-url-mappings-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-plugin-validation/jars/grails-plugin-validation-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.springframework/spring-core/jars/spring-core-3.1.0.RELEASE.jar"/>
@@ -200,17 +200,17 @@
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.slf4j/slf4j-api/jars/slf4j-api-1.6.2.jar"/>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-datastore-gorm/jars/grails-datastore-gorm-1.0.9.RELEASE.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-datastore-core/jars/grails-datastore-core-1.0.9.RELEASE.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-datastore-simple/jars/grails-datastore-simple-1.0.9.RELEASE.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.supercsv/SuperCSV/jars/SuperCSV-1.52.jar"/>
@@ -258,21 +258,22 @@
 <classpathentry kind="var" path="GRAILS_IVYCACHE/junit/junit/jars/junit-4.10.jar"/>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-plugin-testing/jars/grails-plugin-testing-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-test/jars/grails-test-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 	<attributes>
-		<attribute name="javadoc_location" value="file:/Users/fterrier/Projects/grails-2.1.0/doc/api/"/>
+		<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
 	</attributes>
 </classpathentry>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.spockframework/spock-grails-support/jars/spock-grails-support-0.6-groovy-1.8.jar"/>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.spockframework/spock-core/jars/spock-core-0.6-groovy-1.8.jar"/>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/junit/junit-dep/jars/junit-dep-4.9.jar"/>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.hamcrest/hamcrest-core/jars/hamcrest-core-1.2.jar"/>
+<classpathentry kind="lib" path="lib/json-lib-2.4-jdk15.jar"/>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.apache.tomcat.embed/tomcat-embed-core/jars/tomcat-embed-core-7.0.27.jar"/>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.apache.tomcat.embed/tomcat-embed-jasper/jars/tomcat-embed-jasper-7.0.27.jar"/>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.apache.tomcat.embed/tomcat-embed-logging-log4j/jars/tomcat-embed-logging-log4j-7.0.27.jar"/>
-<classpathentry kind="var" path="GRAILS_WORKDIR/projects/memms/plugins/yui-minify-resources-0.1.5/lib/yuicompressor-2.4.7.jar"/>
+<classpathentry kind="lib" path="/Users/jeankahigiso/.grails/2.1.0/projects/memms/plugins/yui-minify-resources-0.1.5/lib/yuicompressor-2.4.7.jar"/>
 <classpathentry kind="output" path="web-app/WEB-INF/classes"/>
 </classpath>

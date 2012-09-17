@@ -106,6 +106,7 @@ class ProviderController  extends AbstractEntityController {
 		type = Type."$type";
 		if(type.equals(Type.MANUFACTURER)) detailsLabel="provider.manufacturer.details" else detailsLabel="provider.supplier.details"
 		List<Provider> providers = providerService.searchProvider(type, params['term'], [:])
+		if(log.isDebugEnabled()) log.debug("Providers : " + providers)
 		render(contentType:"text/json") {
 			elements = array {
 				providers.each { provider ->

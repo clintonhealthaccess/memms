@@ -19,7 +19,7 @@
 							location: locationFilterRoot,
 							locationFilterTree: locationFilterTree,				
 							linkParams: linkParams
-						]" />
+						]"/>
 				</ul>
 			</g:if>
 		</div>

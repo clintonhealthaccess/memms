@@ -60,7 +60,7 @@ class TaskController extends AbstractController {
 		if (taskClass != null) {
 			if (log.isDebugEnabled()) log.debug("task.taskForm, taskClass:"+taskClass)
 			def task = taskClass.newInstance()
-			render (view: '/task/'+task.getFormView(), model: [targetURI:getTargetURI()].putAll(task.getFormModel()))
+			render (view: '/task/'+task.getFormView(), model:[task:task.getFormModel().task,targetURI:getTargetURI()])// task.getFormModel().putAll())
 		}
 		else {
 			if (log.isDebugEnabled()) log.debug("task.taskForm, taskClass.notfound")
@@ -156,7 +156,12 @@ class TaskController extends AbstractController {
 			def task = taskClass.newInstance()
 			
 			task.properties = params
+			//TODO why is it not setting this property automatically
+			//task?.exportId = params.long('exportId')
+			
+			
 			def valid = create(task)
+			
 			if (!valid && !flash.message) flash.message = message(code: 'task.creation.validation.error')
 			
 			redirect(uri: targetURI)
@@ -170,7 +175,6 @@ class TaskController extends AbstractController {
 		Class taskClass
 		try {
 			if (params.get('class') != null){
-				log.debug("task.taskForm class param in: params=" + params)
 				taskClass = Class.forName('org.chai.memms.task.'+params['class'], true, Thread.currentThread().contextClassLoader)
 			}
 		} catch (ClassNotFoundException e) {}
@@ -187,7 +191,6 @@ class TaskController extends AbstractController {
 	private def create(def task) {
 		// we set the fields
 		fillFields(task)
-		
 		if (task.validate()) {
 			// we check that it doesn't already exist
 			if (!task.isUnique()) {

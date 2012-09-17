@@ -34,7 +34,7 @@ import org.chai.memms.imports.ImporterErrorManager
 import org.chai.memms.imports.ImporterError
 import org.chai.memms.task.ImportTask
 import org.chai.memms.util.ImportExportConstant;
-import org.chai.memms.util.UtilsService;
+import org.chai.memms.util.Utils
 import org.hibernate.SessionFactory;
 
 import java.io.File;

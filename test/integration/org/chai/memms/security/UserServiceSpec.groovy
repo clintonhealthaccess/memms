@@ -1,5 +1,5 @@
 /**
-* Copyright (c) 2011, Clinton Health Access Initiative.
+* Copyright (c) 2012, Clinton Health Access Initiative.
 *
 * All rights reserved.
 *
@@ -52,12 +52,12 @@ class UserServiceSpec extends IntegrationTests{
 	  
 	  when:
 	  def users = userService.searchUser("user",[:]);
-	  def sortUsersByFirstname = userService.searchUser("one",["sort":"firstname"]);
+	  def sortUsersByFirstname = userService.searchUser("one",["sort":"firstname","order":"asc"]);
 	  def sortUsersByUsername = userService.searchUser("two",["sort":"username"]);
 	  then:
 	  //test default sorting
 	  users.equals([systemUserTwo,systemUserOne,personUserTwo,personUserOne,userTwo,userOne])
-	  sortUsersByFirstname.equals([userOne,personUserOne,systemUserOne])
+	  sortUsersByFirstname.equals([personUserOne,systemUserOne,userOne])
 	  //test if the sorting params is taken in consideration
 	  sortUsersByUsername.equals([userTwo,systemUserTwo,personUserTwo])
 	  

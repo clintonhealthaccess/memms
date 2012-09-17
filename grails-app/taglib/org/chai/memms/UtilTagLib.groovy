@@ -1,7 +1,7 @@
 package org.chai.memms
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.chai.memms.util.UtilsService;
+import org.chai.memms.util.Utils
 
 /*
 * Copyright (c) 2011, Clinton Health Access Initiative.
@@ -34,7 +34,6 @@ import org.chai.memms.util.UtilsService;
 class UtilTagLib {
 	
 	def languageService
-	def utilsService
 	
 	def createLinkWithTargetURI = {attrs, body ->
 		if (attrs['params'] == null) attrs['params'] = [:]
@@ -97,7 +96,7 @@ class UtilTagLib {
 	
 	def stripHtml = { attrs, body ->
 		def text = attrs['field'] == null?'':attrs['field']+''
-		def strippedText = utilsService.stripHtml(text)
+		def strippedText = Utils.stripHtml(text)
 		def smallText = strippedText.length() > attrs.int('chars')?strippedText.substring(0, attrs.int('chars')):strippedText
 		out << render(template:"/tags/util/stripHtml", model: [fullText: strippedText, smallText: smallText])
 	}

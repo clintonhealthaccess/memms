@@ -17,12 +17,13 @@ class AuthControllerSpec extends IntegrationTests {
 	
 	def "users get redirected to correct page after signin"() {
 		setup:
+		setupLocationTree()
 		authController = new AuthController()
-		def user = newUser('test@test.com', new Sha256Hash('1234').toString(), true, true)
+		def user = newUser('user', new Sha256Hash('1234').toString(), true, true)
 		setupSecurityManager(user)
 		
 		when:
-		authController.params.username = 'test@test.com'
+		authController.params.username = 'user'
 		authController.params.password = '1234'
 		authController.params.targetUri = '/user/list'
 		authController.signIn()
@@ -31,40 +32,42 @@ class AuthControllerSpec extends IntegrationTests {
 		authController.response.redirectedUrl == '/user/list' 	
 	}
 
-//	def "users that have default language set get redirected to correct page after signin"() {
-//		setup:
-//		authController = new AuthController()
-//		def user = newUser('test@test.com', new Sha256Hash('1234').toString(), true, true)
-//		user.defaultLanguage = 'fr'
-//		setupSecurityManager(user)
-//		
-//		when:
-//		authController.params.username = 'test@test.com'
-//		authController.params.password = '1234'
-//		authController.params.targetUri = '/user/list'
-//		authController.signIn()
-//		
-//		then:
-//		authController.response.redirectedUrl == '/user/list?lang=fr'
-//	}
-//	
-//	def "users that have default language set get redirected to correct page after signin - with language already set"() {
-//		setup:
-//		authController = new AuthController()
-//		def user = newUser('test@test.com', new Sha256Hash('1234').toString(), true, true)
-//		user.defaultLanguage = 'fr'
-//		setupSecurityManager(user)
-//		
-//		when:
-//		authController.params.username = 'test@test.com'
-//		authController.params.password = '1234'
-//		authController.params.targetUri = '/user/list?lang=de&test=test'
-//		authController.signIn()
-//		
-//		then:
-//		authController.response.redirectedUrl == '/user/list?lang=fr&test=test'
-//	}
-//	
+	def "users that have default language set get redirected to correct page after signin"() {
+		setup:
+		authController = new AuthController()
+		setupLocationTree()
+		def user = newUser('user', new Sha256Hash('1234').toString(), true, true)
+		user.defaultLanguage = 'fr'
+		setupSecurityManager(user)
+		
+		when:
+		authController.params.username = 'user'
+		authController.params.password = '1234'
+		authController.params.targetUri = '/user/list'
+		authController.signIn()
+		
+		then:
+		authController.response.redirectedUrl == '/user/list?lang=fr'
+	}
+	
+	def "users that have default language set get redirected to correct page after signin - with language already set"() {
+		setup:
+		authController = new AuthController()
+		setupLocationTree()
+		def user = newUser('user', new Sha256Hash('1234').toString(), true, true)
+		user.defaultLanguage = 'fr'
+		setupSecurityManager(user)
+		
+		when:
+		authController.params.username = 'user'
+		authController.params.password = '1234'
+		authController.params.targetUri = '/user/list?lang=de&test=test'
+		authController.signIn()
+		
+		then:
+		authController.response.redirectedUrl == '/user/list?lang=fr&test=test'
+	}
+	
 	def "register with wrong email address"() {
 		setup:
 		authController = new AuthController()
@@ -145,25 +148,6 @@ class AuthControllerSpec extends IntegrationTests {
 		authController.modelAndView.model.register.email == 'test@test.com'
 		authController.modelAndView.model.register.errors.hasFieldErrors('email') == true
 	}
-	
-//	def "register with wrong phone number"() {
-//		setup:
-//		authController = new AuthController()
-//		
-//		when:
-//		authController.params.email = 'test@test.com'
-//		authController.params.firstname = 'test'
-//		authController.params.lastname = 'test'
-//		authController.params.organisation = 'test'
-//		authController.params.phoneNumber = 'wrong'
-//		authController.params.password = '1234'
-//		authController.params.repeat = '1234'
-//		authController.sendRegistration()
-//		
-//		then:
-//		authController.modelAndView?.model?.register?.phoneNumber == 'wrong'
-//		authController.modelAndView.model.register.errors.hasFieldErrors('phoneNumber') == true
-//	}
 	
 	def "register with correct phone number"() {
 		setup:
@@ -293,17 +277,19 @@ class AuthControllerSpec extends IntegrationTests {
 	def "activate account with confirmed user deletes registration token"() {
 		setup:
 		authController = new AuthController()
+		setupLocationTree()
 		def user = newUser('test@test.com', false, true)
 		new RegistrationToken(token: '123', user:user, used:true).save(failOnError: true)
-		
 		when:
 		authController.params.id = user.id
 		authController.params.targetUri = '/user/list'
 		authController.activate()
 		
 		then:
+		User.count() == 1
 		authController.response.redirectedUrl == '/user/list'
 		User.findByEmail('test@test.com').active == true
+		User.findByEmail('test@test.com').confirmed == true
 		RegistrationToken.count() == 0
 	}
 	
@@ -390,6 +376,7 @@ class AuthControllerSpec extends IntegrationTests {
 	
 	def "new password with valid token"() {
 		setup:
+		setupLocationTree()
 		authController = new AuthController()
 		def user = newUser('test@test.com', true, true)
 		new PasswordToken(token: '123', user:user).save(failOnError: true)

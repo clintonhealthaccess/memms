@@ -35,6 +35,7 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ThreadContext;
 import org.apache.shiro.web.util.WebUtils;
 import javax.servlet.ServletRequest;
+import org.chai.memms.security.Role
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
 
@@ -80,7 +81,7 @@ abstract class IntegrationTests extends IntegrationSpec {
 		//springcacheService.flushAll()
 		//new org.apache.shiro.grails.ShiroSecurityService()
 	}
-	static def setupSystemUse(){
+	static def setupSystemUser(){
 		def user = newUser("systemUser","systemUser", true, true)
 		setupSecurityManager(User.findByUsername("systemUser"))
 	}
@@ -140,28 +141,32 @@ abstract class IntegrationTests extends IntegrationSpec {
 		return result;
 	}
 	
-	static def newUser(def username, def uuid) {
-		return new User(userType: UserType.OTHER, username: username, permissionString: '', passwordHash:'', uuid: uuid, firstname: 'first', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+	static def newRole(def rolename, def permissions){
+		return new Role(name: rolename, permissionString: permissions).save(failOnError: true)
 	}
 	
+	static def newUser(def username, def uuid) {
+		return new User(userType: UserType.OTHER, username: username, permissionString: '', passwordHash:'', uuid: uuid, firstname: 'user', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+	}
+
 	static def newUser(def username, def active, def confirmed) {
-		return new User(userType: UserType.OTHER, username: username, email: username,
-			passwordHash: '', active: active, confirmed: confirmed, uuid: 'uuid', firstname: 'first', lastname: 'last',
-			organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+		return new User(userType: UserType.OTHER, username: username, email: username,permissionString:'*:*',
+			passwordHash: '', active: active, confirmed: confirmed, uuid: 'uuid', firstname: 'user', lastname: 'last',
+			organisation: 'org', phoneNumber: '+250 11 111 11 11', location:DataLocation.findByCode(KIVUYE)).save(failOnError: true)
 	}
 	
 	static def newUser(def username, def passwordHash, def active, def confirmed) {
-		return new User(userType: UserType.OTHER, username: username, email: "username@yahoo.co.rw",
-			passwordHash: passwordHash, active: active, confirmed: confirmed, uuid: 'uuid', firstname: 'first', lastname: 'last',
-			organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+		return new User(userType: UserType.OTHER, username: username, email: "$username@yahoo.co.rw",permissionString:'*:*',
+			passwordHash: passwordHash, active: active, confirmed: confirmed, uuid: username, firstname: 'user', lastname: 'last',
+			organisation: 'org', phoneNumber: '+250 11 111 11 11',location:DataLocation.findByCode(KIVUYE)).save(failOnError: true)
 	}
 	
 	static def newOtherUser(def username, def uuid, def location) {
-		return new User(userType: UserType.OTHER, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, location: location, firstname: 'first', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+		return new User(userType: UserType.OTHER, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, location: location, firstname: 'other', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
 	}
 	
 	static def newSystemUser(def username, def uuid, def location) {
-		return new User(userType: UserType.SYSTEM, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, location: location, firstname: 'first', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+		return new User(userType: UserType.SYSTEM, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, location: location, firstname: 'system', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
 	}
 	static def setupSecurityManager(def user) {
 		def subject = [getPrincipal: { user?.uuid }, isAuthenticated: { user==null?false:true }, login: { token -> null }] as Subject

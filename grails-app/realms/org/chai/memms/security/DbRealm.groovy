@@ -1,10 +1,11 @@
 package org.chai.memms.security
-
 import org.apache.shiro.authc.AccountException
 import org.apache.shiro.authc.IncorrectCredentialsException
 import org.apache.shiro.authc.UnknownAccountException
 import org.apache.shiro.authc.SimpleAccount
 import org.apache.shiro.authz.permission.WildcardPermission
+import org.chai.memms.security.User;
+import org.chai.memms.util.Utils;
 
 class DbRealm {
     static authTokenClass = org.apache.shiro.authc.UsernamePasswordToken
@@ -33,11 +34,21 @@ class DbRealm {
 
         // Now check the user's password against the hashed value stored
         // in the database.
-        def account = new SimpleAccount(username, user.passwordHash, "DbRealm")
+        def account = new SimpleAccount(user.uuid, user.passwordHash, "DbRealm")
         if (!credentialMatcher.doCredentialsMatch(authToken, account)) {
             log.info "Invalid password (DB realm)"
             throw new IncorrectCredentialsException("Invalid password for user '${username}'")
         }
+		
+		// Now check if the account is confirmed and active
+		if (!user.confirmed) {
+			log.info "User ${user.username} tried to login but his account has not been confirmed yet"
+			throw new UnconfirmedAccountException("This account hasn't been confirmed yet.")
+		}
+		if (!user.active) {
+			log.info "User ${user.username} tried to login but his account is inactive"
+			throw new InactiveAccountException("This account hasn't been activated yet.")
+		}
 
         return account
     }
@@ -70,8 +81,9 @@ class DbRealm {
         //
         // First find all the permissions that the user has that match
         // the required permission's type and project code.
-		//log.info "Principla is : " + principal
-        def user = User.findByUsername(principal)
+        def user = User.findByUuid(principal, [cache: true])
+		if (user == null || !user.active || !user.confirmed) return false
+		
         def permissions = user.permissions
 
         // Try each of the permissions found and see whether any of
@@ -106,20 +118,24 @@ class DbRealm {
         // at this stage it is not worth trying to remove them. Now,
         // create a real permission from each result and check it
         // against the required one.
-        retval = results.find { permString ->
-            // Create a real permission instance from the database
-            // permission.
-            def perm = shiroPermissionResolver.resolvePermission(permString)
-
-            // Now check whether this permission implies the required
-            // one.
-            if (perm.implies(requiredPermission)) {
-                // User has the permission!
-                return true
-            }
-            else {
-                return false
-            }
+        results.each { permissionString ->
+			if (retval == null) {
+				retval = Utils.split(permissionString, User.PERMISSION_DELIMITER).find { permission ->
+		            // Create a real permission instance from the database
+		            // permission.
+		            def perm = shiroPermissionResolver.resolvePermission(permission)
+		
+		            // Now check whether this permission implies the required
+		            // one.
+		            if (perm.implies(requiredPermission)) {
+		                // User has the permission!
+		                return true
+		            }
+		            else {
+		                return false
+		            }
+				}
+			}
         }
 
         if (retval != null) {

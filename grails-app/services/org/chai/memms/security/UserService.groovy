@@ -31,7 +31,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils
 import org.hibernate.Criteria;
-import org.chai.memms.util.UtilsService
+import org.chai.memms.util.Utils
 import org.hibernate.criterion.MatchMode
 import org.hibernate.criterion.Order
 import org.hibernate.criterion.Projections
@@ -44,9 +44,9 @@ import org.hibernate.criterion.Restrictions
 class UserService {
 	static transactional = true
 	def sessionFactory;
-	def utilsService
 	
 	List<User> searchUser(String text, Map<String, String> params) {
+		if(log.isDebugEnabled()) log.debug("searchUser params=" + params)
 		def criteria = User.createCriteria()
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			or{

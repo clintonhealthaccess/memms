@@ -37,8 +37,8 @@ class InventoryServiceSpec extends IntegrationTests{
 	def inventoryService
 	def "can retrieve all location levels to skip"() {
 		setup:
-		Initializer.createUsers()
 		Initializer.createDummyStructure()
+		Initializer.createUsers()
 		Initializer.createInventoryStructure()
 		when:
 		def skipLevels = inventoryService.getSkipLocationLevels()
@@ -49,9 +49,10 @@ class InventoryServiceSpec extends IntegrationTests{
 	
 	def "can retrieve inventories from a location, given an EquipmentType to filter on"() {
 		setup:
-		Initializer.createUsers()
 		Initializer.createDummyStructure()
+		Initializer.createUsers()
 		Initializer.createInventoryStructure()
+		
 		def types = grailsApplication.config.site.datalocationtype.checked.collect{ DataLocationType.findByCode(it) }.toSet()
 		when:
 		def inventories = inventoryService.getInventoryByLocation(Location.findByCode('Burera'),types,adaptParamsForList())

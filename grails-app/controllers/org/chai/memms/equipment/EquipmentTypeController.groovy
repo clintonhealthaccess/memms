@@ -28,6 +28,7 @@
 package org.chai.memms.equipment
 
 import org.chai.memms.AbstractEntityController;
+import org.chai.memms.task.EquipmentTypeExportFilter;
 
 /**
  * @author Eugene Munyaneza
@@ -138,8 +139,11 @@ class EquipmentTypeController extends AbstractEntityController{
 	
 	}
 	
-	def exporter = {
-	
+	def export = {
+		def equipmentTypeExportTask = new EquipmentTypeExportFilter().save(failOnError: true,flush: true)
+		params.exportFilterId = equipmentTypeExportTask.id
+		params.class = "EquipmentTypeExportTask"
+		redirect(controller: "task", action: "create", params: params)
 	}
 
 }

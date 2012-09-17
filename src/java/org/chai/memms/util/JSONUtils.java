@@ -1,5 +1,7 @@
-/**
- * Copyright (c) 2012, Clinton Health Access Initiative.
+package org.chai.memms.util;
+
+/* 
+ * Copyright (c) 2011, Clinton Health Access Initiative.
  *
  * All rights reserved.
  *
@@ -25,24 +27,56 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.exports
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
-import org.chai.memms.task.DataExportTask
-import org.chai.location.LanguageService;
-import org.chai.location.LocationService;
-import org.chai.memms.util.Utils;
-import org.hibernate.SessionFactory
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
 
-public abstract class Exporter {
+public class JSONUtils {
 
-	public LanguageService languageService;
-	public SessionFactory sessionFactory;
+	public static String getJSONFromMap(Map<String, ? extends Object> map) {
+		String result = null;
+		if (map != null) {
+			try {
+				JSONObject jsonObject = (JSONObject)JSONSerializer.toJSON(map);
+				result = jsonObject.toString();
+			} catch (JSONException e) {
+				// log
+			}
+		}
+		return result;
+	}
 	
-	public abstract List<String> getExportDataHeaders();
-	public abstract File exportData(DataExportTask task) throws IOException;
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> getMapFromJSON(String jsonString) {
+		Map<String, Object> descriptions = new HashMap<String, Object>();
+		if (jsonString != null) {
+			try {
+				JSONObject jsonObject = JSONObject.fromObject(jsonString);
+				return (Map<String, Object>)getObjectFromJSONObject(jsonObject);
+			} catch (JSONException e) {
+				// log
+			}
+		}
+		return descriptions;
+	}
+	
+	private static Object getObjectFromJSONObject(Object object) {
+		if (object instanceof JSONObject) {
+			Map<String, Object> descriptions = new HashMap<String, Object>();
+			@SuppressWarnings("unchecked")
+			Iterator<String> keyIterator = ((JSONObject)object).keys();
+			while (keyIterator.hasNext()) {
+				String type = (String) keyIterator.next();
+				descriptions.put(type, getObjectFromJSONObject(((JSONObject)object).get(type)));
+			}
+			return descriptions;
+		}
+		else return object;
+	}
+	
 }

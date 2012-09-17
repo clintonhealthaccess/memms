@@ -33,7 +33,7 @@
   				<td>${user.active?'\u2713':''}</td>
   				<td>
   					<g:if test="${user.canActivate()}">
-  						<a href="${createLinkWithTargetURI(controller:'auth', action:'activate', params:[id:user.id])}">activate</a>
+  						<a href="${createLinkWithTargetURI(controller:'auth', action:'activate', params:[id:user.id,targetUri:'/user/list'])}">activate</a>
   					</g:if>
   				</td>
 			</tr>

@@ -34,12 +34,14 @@ import org.chai.memms.Initializer;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
+import org.chai.memms.task.EquipmentExportFilter;
 import org.chai.memms.equipment.Provider
 import org.chai.location.DataLocation;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.location.Location
 import org.chai.location.LocationLevel
+import org.apache.commons.lang.math.NumberUtils
 
 import java.util.HashSet;
 import java.util.Set
@@ -216,6 +218,91 @@ class EquipmentController extends AbstractEntityController{
 
 
 	}
+	
+	def getCalculationLocationAjaxData = {
+		List<CalculationLocation> calculationLocations = locationService.searchLocation(CalculationLocation.class, params['term'], [:])
+		render(contentType:"text/json") {
+			elements = array {
+				calculationLocations.each { calculationLocation ->
+					elem (
+						key: calculationLocation.id,
+						value: calculationLocation.getNames(languageService.getCurrentLanguage())
+					)
+				}
+			}
+		}
+		
+	}
+	
+	
+	def generalExport={ExportFilterCommand cmd ->
+
+		// we do this because automatic data binding does not work with polymorphic elements
+		Set<CalculationLocation> calculationLocations = new HashSet<CalculationLocation>()
+		params.list('calculationLocationids').each { id ->
+			if (NumberUtils.isDigits(id)) {
+				def calculationLocation = CalculationLocation.get(id)
+				if (calculationLocation != null && !calculationLocations.contains(calculationLocation)) calculationLocations.add(calculationLocation);
+			}
+		}
+		cmd.calculationLocations = calculationLocations
+
+		Set<DataLocationType> dataLocationTypes = new HashSet<DataLocationType>()
+		params.list('dataLocationTypeids').each { id ->
+			if (NumberUtils.isDigits(id)) {
+				def dataLocationType = DataLocationType.get(id)
+				if (dataLocationType != null && !dataLocationTypes.contains(dataLocationType)) dataLocationTypes.add(dataLocationType);
+			}
+		}
+		cmd.dataLocationTypes = dataLocationTypes
+
+		Set<EquipmentType> equipmentTypes = new HashSet<EquipmentType>()
+		params.list('equipmentTypeids').each { id ->
+			if (NumberUtils.isDigits(id)) {
+				def equipmentType = EquipmentType.get(id)
+				if (equipmentType != null && !equipmentTypes.contains(equipmentType)) equipmentTypes.add(equipmentType);
+			}
+		}
+		cmd.equipmentTypes = equipmentTypes
+
+		Set<Provider> manufacturers = new HashSet<Provider>()
+		params.list('manufacturerids').each { id ->
+			if (NumberUtils.isDigits(id)) {
+				def manufacturer = Provider.get(id)
+				if (manufacturer != null && !manufacturers.contains(manufacturer)) manufacturers.add(manufacturer);
+			}
+		}
+		cmd.manufacturers = manufacturers
+
+		Set<Provider> suppliers = new HashSet<Provider>()
+		params.list('supplierids').each { id ->
+			if (NumberUtils.isDigits(id)) {
+				def supplier = Provider.get(id)
+				if (supplier != null && !suppliers.contains(supplier)) suppliers.add(supplier);
+			}
+		}
+		cmd.suppliers = suppliers
+
+		if (log.isDebugEnabled()) log.debug("equipments.export, command="+cmd+", params"+params)
+
+		
+		if(params.exported != null){
+			def equipmentExportTask = new EquipmentExportFilter(calculationLocations:cmd.calculationLocations,dataLocationTypes:cmd.dataLocationTypes,
+				equipmentTypes:cmd.equipmentTypes,manufacturers:cmd.manufacturers,suppliers:cmd.suppliers,equipmentStatus:cmd.equipmentStatus,
+				donated:cmd.donated,obsolete:cmd.obsolete).save(failOnError: true,flush: true)
+			params.exportFilterId = equipmentExportTask.id
+			params.class = "EquipmentExportTask"
+			params.targetURI = "/equipment/generalExport"
+			redirect(controller: "task", action: "create", params: params)
+		}
+		adaptParamsForList()
+		render(view:"/entity/equipment/equipmentExportPage", model:[
+				template:"/entity/equipment/equipmentExportFilter",
+				filterCmd:cmd,
+				dataLocationTypes:DataLocationType.list(),
+				code: getLabel()
+				])
+	}
 
 	def filter = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("equipments.filter, command "+cmd)
@@ -335,6 +422,46 @@ class FilterCommand {
 	String toString() {
 		return "FilterCommand[DataLocation="+dataLocation+", EquipmentType="+equipmentType+
 		", Manufacturer="+manufacturer+", Supplier="+supplier+", Status="+status+", donated="+donated+", obsolete="+obsolete+
+		", Absolote status=" + getObsoleteStatus() + ", Donation status=" + getDonationStatus() + "]"
+	}
+}
+
+class ExportFilterCommand {
+	Set<CalculationLocation> calculationLocations
+	Set<DataLocationType> dataLocationTypes
+	Set<EquipmentType> equipmentTypes
+	Set<Provider> manufacturers
+	Set<Provider> suppliers
+	Status equipmentStatus
+	String donated
+	String obsolete
+	
+	public boolean getDonationStatus(){
+		if(donated) return null
+		else if(donated.equals("true")) return true
+		else if(donated.equals("false")) return false
+	}
+	
+	public boolean getObsoleteStatus(){
+		if(obsolete) return null
+		else if(obsolete.equals("true")) return true
+		else if(obsolete.equals("false")) return false
+	}
+
+	static constraints = {
+		calculationLocations nullable:true
+		dataLocationTypes nullable:true
+		equipmentTypes nullable:true
+		manufacturers nullable:true
+		suppliers nullable:true
+		equipmentStatus nullable:true
+		donated nullable:true
+		obsolete nullable:true
+	}
+	
+	String toString() {
+		return "ExportFilterCommand[ CalculationLocations="+calculationLocations+", DataLocationTypes="+dataLocationTypes+" , EquipmentTypes="+equipmentTypes+
+		", Manufacturers="+manufacturers+", Suppliers="+suppliers+", Status="+equipmentStatus+", donated="+donated+", obsolete="+obsolete+
 		", Absolote status=" + getObsoleteStatus() + ", Donation status=" + getDonationStatus() + "]"
 	}
 }

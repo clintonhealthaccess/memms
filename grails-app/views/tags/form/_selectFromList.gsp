@@ -8,7 +8,7 @@
 		<g:if test="${!multiple}"><option value="">-- Please select from the list --</option></g:if>
 		<g:each in="${from}" var="item" status="i">
 			<g:set value="${optionKey!=null?item[optionKey]:item}" var="option"/>
-			<option value="${option}" ${(multiple?value?.contains(option):option.equals(value))?'selected':''}>
+			<option value="${option}" ${(multiple ? value?.contains(option) : option.equals(value))?'selected':''}>
 				<g:if test="${values!=null}">
 					${values[i]}
 				</g:if>
