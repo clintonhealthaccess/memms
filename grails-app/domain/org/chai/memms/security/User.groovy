@@ -117,6 +117,7 @@ class User {
     }
 	
 	static mapping = {
+		permissionString type: 'text'
 		table "memms_user"
 		cache true
 		version false

@@ -22,7 +22,8 @@
 			<g:input name="organisation" label="${message(code:'user.organisation.label')}" bean="${user}" field="organisation"/>
 			<g:input name="email" label="${message(code:'user.email.label')}" bean="${user}" field="email"/>
 			<g:input name="phoneNumber" label="${message(code:'user.phonenumber.label')}" bean="${user}" field="phoneNumber"/>
-			<g:input name="permissionString" label="${message(code:'user.permission.label')}" bean="${user}" field="permissionString"/>
+			<g:textarea name="permissionString"  label="${message(code:'user.permission.label')}" rows="5" bean="${user}" value="${user.permissionString}" field="permissionString" />
+			
 			<g:input name="password" label="${message(code:'user.password.label')}" type="password" bean="${cmd}" field="password"/>
 			<g:input name="repeat" label="${message(code:'user.repeat.password.label')}" type="password" bean="${cmd}"  field="repeat"/>
 			

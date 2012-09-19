@@ -27,66 +27,73 @@
  */
 package org.chai.memms.security
 
-import org.chai.memms.util.Utils
+import org.chai.memms.AbstractEntityController;
 
-class Role {
-    String name
-	String permissionString
+/**
+ * @author Eugene Munyaneza
+ *
+ */
+class RoleController extends AbstractEntityController{
 	
-	static belongsTo = User
-    static hasMany = [ users: User ]
-
-	def getPermissions() {
-		return Utils.split(permissionString, User.PERMISSION_DELIMITER)
-	}
+	def roleService
 	
-	def setPermissions(def permissions) {
-		this.permissionString = Utils.unsplit(permissions, User.PERMISSION_DELIMITER)
-	}
-	
-	def addToPermissions(def permission) {
-		def permissions = getPermissions()
-		permissions << permission
-		this.permissionString = Utils.unsplit(permissions, User.PERMISSION_DELIMITER)
-	}
-	
-    static constraints = {
-        name nullable: false, blank: false, unique: true
-		permissionString nullable: false, blank: false
-    }
-	static mapping = {
-		permissionString type: 'text'
-		table "memms_user_role"
-		cache true
-		version false
-	}
-	
-	String toString() {
-		return name;
+	def getEntity(def id) {
+		return Role.get(id);
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+	def createEntity() {
+		return new Role();
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof Role))
-			return false;
-		Role other = (Role) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+	def getTemplate() {
+		return "/entity/role/createRole"
+	}
+	
+	def getLabel() {
+		return "role.label";
+	}
+
+	def getEntityClass() {
+		return Role.class;
+	}
+	def deleteEntity(def entity) {
+		if (entity.users.size() != 0)
+			flash.message = message(code: 'role.haseusers', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated users.')
+		else
+			super.deleteEntity(entity);
+	}
+	
+	def bindParams(def entity) {		
+		entity.properties = params		
+	}
+	
+	def getModel(def entity) {
+		[
+			role: entity,
+		]
+	}
+	def list = {
+		adaptParamsForList()
+		def roles = Role.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
+		render(view:"/entity/list",model:[
+			template: "role/roleList",
+			entities: roles,
+			entityCount: roles.totalCount,
+			code: getLabel(),
+			entityClass: getEntityClass()
+			])
+	}
+	
+	def search = {
+		adaptParamsForList()
+		List<Role> filteredRoles = roleService.searchRole(params['q'], params)
+		render (view: '/entity/list', model:[
+			template:"role/roleList",
+			entities: filteredRoles,
+			entityClass: getEntityClass(),
+			entityCount: filteredRoles.totalCount,
+			code: getLabel(),
+			q:params['q']
+		])
 	}
 }

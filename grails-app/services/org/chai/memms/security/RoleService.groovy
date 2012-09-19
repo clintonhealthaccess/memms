@@ -27,66 +27,31 @@
  */
 package org.chai.memms.security
 
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils
+import org.hibernate.Criteria;
 import org.chai.memms.util.Utils
+import org.hibernate.criterion.MatchMode
+import org.hibernate.criterion.Order
+import org.hibernate.criterion.Projections
+import org.hibernate.criterion.Restrictions
 
-class Role {
-    String name
-	String permissionString
+/**
+ * @author Jean Kahigiso M.
+ *
+ */
+class RoleService {
+	static transactional = true
+	def sessionFactory;
 	
-	static belongsTo = User
-    static hasMany = [ users: User ]
-
-	def getPermissions() {
-		return Utils.split(permissionString, User.PERMISSION_DELIMITER)
-	}
-	
-	def setPermissions(def permissions) {
-		this.permissionString = Utils.unsplit(permissions, User.PERMISSION_DELIMITER)
-	}
-	
-	def addToPermissions(def permission) {
-		def permissions = getPermissions()
-		permissions << permission
-		this.permissionString = Utils.unsplit(permissions, User.PERMISSION_DELIMITER)
-	}
-	
-    static constraints = {
-        name nullable: false, blank: false, unique: true
-		permissionString nullable: false, blank: false
-    }
-	static mapping = {
-		permissionString type: 'text'
-		table "memms_user_role"
-		cache true
-		version false
-	}
-	
-	String toString() {
-		return name;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof Role))
-			return false;
-		Role other = (Role) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+	List<Role> searchRole(String text, Map<String, String> params) {
+		if(log.isDebugEnabled()) log.debug("searchRole params=" + params)
+		def criteria = Role.createCriteria()
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			or{
+				ilike("name","%"+text+"%")
+			}
+		}
 	}
 }

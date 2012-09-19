@@ -73,6 +73,8 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 		// because of GRAILS-6147, this dependency is in lib instead of here
 		//compile group: "net.sf.json-lib", name: "json-lib", version: "2.4", classifier: "jdk15"
+		
+		compile 'net.sf.ezmorph:ezmorph:1.0.6'
 		runtime 'mysql:mysql-connector-java:5.1.5'
 		compile 'org.supercsv:SuperCSV:1.52'
     }
