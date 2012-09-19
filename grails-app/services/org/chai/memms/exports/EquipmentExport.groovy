@@ -119,7 +119,7 @@ class EquipmentExport implements Exporter{
 		headers.add(ImportExportConstant.EQUIPMENT_MANUFACTURE_DATE)
 		headers.add(ImportExportConstant.SUPPLIER_CODE)
 		headers.add(ImportExportConstant.SUPPLIER_CONTACT_NAME)
-		headers.add(ImportExportConstant.SUPPLIER_DATE)
+		headers.add(ImportExportConstant.SUPPLIER_DATE)//
 		headers.add(ImportExportConstant.EQUIPMENT_PURCHASE_COST)
 		headers.add(ImportExportConstant.EQUIPMENT_PURCHASE_COST_CURRENCY)
 		headers.add(ImportExportConstant.EQUIPMENT_DONATION)

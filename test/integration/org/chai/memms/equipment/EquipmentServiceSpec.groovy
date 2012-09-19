@@ -28,6 +28,7 @@
 
 package org.chai.memms.equipment
 
+import java.util.List;
 import java.util.Map;
 
 import org.chai.memms.Initializer;
@@ -39,6 +40,7 @@ import org.chai.memms.security.User;
 import org.chai.memms.IntegrationTests
 import org.chai.location.DataLocation;
 import org.chai.memms.equipment.Provider.Type;
+import java.io.File;
 
 class EquipmentServiceSpec extends IntegrationTests{
 
@@ -165,5 +167,51 @@ class EquipmentServiceSpec extends IntegrationTests{
 		equipmentsThree.size() == 0
 		equipmentsTwo[0].getDescriptions(new Locale("en")).equals('Equipment Descriptions one')
 		equipmentsTwo[0].status.size() == 2
+	}
+
+	def "can export equipments"(){
+		setup:
+		setupLocationTree()
+
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
+		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
+		def warrantyContact = Initializer.newContact(['fr':'Warranty Address Descriptions One'],"Warranty","jk@yahoo.com","0768-888-787","Street 654","8988")
+		def warranty = Initializer.newWarranty(warrantyContact,Initializer.getDate(10, 12, 2010),22,false,[:])
+		
+		def user  = newUser("user", "user", true, true)
+		setupSecurityManager(user)
+		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+
+		def equipmentOne = Initializer.newEquipment("SERIAL10",false,true,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"",new Date(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
+		def equipmentTwo = Initializer.newEquipment("SERIAL11",false,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"EUR",new Date(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
+		def equipmentThree = Initializer.newEquipment("SERIAL12",false,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+			,Initializer.getDate(10,10,2010),"EUR",new Date(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
+		def equipmentFour = Initializer.newEquipment("SERIAL13",false,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+			,Initializer.getDate(10,10,2010),"EUR",new Date(),"equipmentModel",DataLocation.findByCode(BUTARO),department,equipmentType,manufacture,supplier)
+	
+		
+		def List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree
+		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.INSTOCK,equipmentOne,false)
+		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.OPERATIONAL,equipmentOne,true)
+		
+		equipmentOne.warranty=warranty
+		equipmentOne.addToStatus(equipmentStatusOneActive).save(failOnError:true,flush: true)
+		equipmentTwo.warranty=warranty
+		equipmentTwo.addToStatus(equipmentStatusOneActive).save(failOnError:true,flush: true)
+		equipmentThree.warranty=warranty
+		equipmentThree.addToStatus(equipmentStatusOneActive).save(failOnError:true,flush: true)
+		List<Equipment> equipments = [equipmentOne,equipmentTwo,equipmentThree]
+
+		when:
+		File csvFile = equipmentService.exporter(DataLocation.findByCode(KIVUYE),equipments)
+		
+		then:
+		csvFile != null
 	}
 }

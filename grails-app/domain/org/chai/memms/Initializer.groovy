@@ -104,8 +104,8 @@ public class Initializer {
 			
 			def testRole = new Role(name: "Test")
 			testRole.addToPermissions("home:*;menu:home;menu:inventory;account:*;equipment:summaryPage;equipment:index;equipment:list;equipment:save;equipment:create")
-			testRole.addToPermissions("equipment:filter;equipmentType:getAjaxData;provider:getAjaxData;department:getAjaxData;equipmentStatus:create")
-			testRole.addToPermissions("equipmentStatus:list;equipmentStatus:save;equipmentStatus:delete;equipmentStatus:edit")
+			testRole.addToPermissions("equipment:filter;equipment:export;equipmentType:getAjaxData;provider:getAjaxData;department:getAjaxData;equipmentStatus:create")
+			testRole.addToPermissions("equipmentStatus:list;equipmentStatus:save;equipmentStatus:delete;equipmentStatus:edit;equipment:updateObsolete")
 			testRole.save(failOnError: true, flush:true)
 
 			def userAdmin = new User(userType: UserType.ADMIN,code:"admin", location: CalculationLocation.findByCode(RWANDA), username: "admin", 

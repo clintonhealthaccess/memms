@@ -317,4 +317,65 @@ class EquipmentControllerSpec extends IntegrationTests{
 		then:
 		equipmentTwo.obsolete == true		
 	}
+	
+	def "can export equipments"(){
+		setup:
+		setupLocationTree()
+
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
+		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
+		def warrantyContact = Initializer.newContact(['fr':'Warranty Address Descriptions One'],"Warranty","jk@yahoo.com","0768-888-787","Street 654","8988")
+		def warranty = Initializer.newWarranty(warrantyContact,Initializer.getDate(10, 12, 2010),22,false,[:])
+		
+		def user  = newUser("user", "user", true, true)
+		setupSecurityManager(user)
+		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+
+		def equipmentOne = Initializer.newEquipment("SERIAL10",false,true,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"",new Date(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
+		def equipmentTwo = Initializer.newEquipment("SERIAL11",false,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"EUR",new Date(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
+		def equipmentThree = Initializer.newEquipment("SERIAL12",false,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+			,Initializer.getDate(10,10,2010),"EUR",new Date(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
+		def equipmentFour = Initializer.newEquipment("SERIAL13",false,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+			,Initializer.getDate(10,10,2010),"EUR",new Date(),"equipmentModel",DataLocation.findByCode(BUTARO),department,equipmentType,manufacture,supplier)
+	
+		
+		def List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree
+		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.INSTOCK,equipmentOne,false)
+		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.OPERATIONAL,equipmentOne,true)
+		def equipmentStatusTwo = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.DISPOSED,equipmentOne,false)
+		
+		equipmentOne.warranty=warranty
+		equipmentOne.addToStatus(equipmentStatusOneActive).save(failOnError:true,flush: true)
+		equipmentTwo.warranty=warranty
+		equipmentTwo.addToStatus(equipmentStatusOneActive).save(failOnError:true,flush: true)
+		equipmentThree.warranty=warranty
+		equipmentThree.addToStatus(equipmentStatusOneActive).save(failOnError:true,flush: true)
+		equipmentFour.warranty=warranty
+		equipmentFour.addToStatus(equipmentStatusTwo).save(failOnError:true,flush: true)
+		
+		
+
+		equipmentController = new EquipmentController();
+		when:
+		equipmentController.params.dataLocation = DataLocation.findByCode(KIVUYE)
+		equipmentController.params.location = DataLocation.findByCode(KIVUYE).id
+		equipmentController.params.equipmentType = equipmentType
+		equipmentController.params.manufacturer = manufacture
+		equipmentController.params.supplier = supplier
+		equipmentController.params.obsolete = "true"
+		equipmentController.params.donated = "fasle"
+		equipmentController.params.status = Status.OPERATIONAL
+		equipmentController.export()
+		
+		then:
+		equipmentController.flash.message == null
+		equipmentController.response.outputStream != null
+		equipmentController.response.contentType == "text/csv";
+	}
 }
