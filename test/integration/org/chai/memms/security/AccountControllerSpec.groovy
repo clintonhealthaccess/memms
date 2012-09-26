@@ -9,7 +9,7 @@ class AccountControllerSpec extends IntegrationTests {
 	
 	def "test not logged-in user has no access to page"() {
 		setup:
-		def user = newUser('test@test.com', false, true)
+		def user = newUser('test', false, true)
 		setupSecurityManager(user)
 		accountController = new AccountController()
 		when:
@@ -23,7 +23,7 @@ class AccountControllerSpec extends IntegrationTests {
 	
 	def "test not logged-in user cannot save"() {
 		setup:
-		def user = newUser('test@test.com', false, true)
+		def user = newUser('test', false, true)
 		setupSecurityManager(user)
 		accountController = new AccountController()
 		
@@ -39,7 +39,7 @@ class AccountControllerSpec extends IntegrationTests {
 	def "logged-in user sees own information on page"() {
 		setup:
 		setupLocationTree()
-		def user = newUser('test@test.com', true, true)
+		def user = newUser('test', true, true)
 		setupSecurityManager(user)
 		accountController = new AccountController()
 		
@@ -53,7 +53,7 @@ class AccountControllerSpec extends IntegrationTests {
 	def "error messages are displayed properly"() {
 		setup:
 		setupLocationTree()
-		def user = newUser('test@test.com', true, true)
+		def user = newUser('test', true, true)
 		setupSecurityManager(user)
 		accountController = new AccountController()
 		
@@ -75,7 +75,7 @@ class AccountControllerSpec extends IntegrationTests {
 	def "fields are properly saved"() {
 		setup:
 		setupLocationTree()
-		def user = newUser('test@test.com', true, true)
+		def user = newUser('test', true, true)
 		setupSecurityManager(user)
 		accountController = new AccountController()
 		
@@ -98,7 +98,7 @@ class AccountControllerSpec extends IntegrationTests {
 	def "non assignable fields cannot be modified"() {
 		setup:
 		setupLocationTree()
-		def user = newUser('test@test.com', true, true)
+		def user = newUser('test', true, true)
 		setupSecurityManager(user)
 		accountController = new AccountController()
 		

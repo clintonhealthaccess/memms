@@ -171,7 +171,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 
 		Initializer.createDummyStructure()
 		Initializer.createUsers()
-		setupSecurityManager(User.findByUsername('user1'))//data location
+		setupSecurityManager(User.findByUsername('user1'))
 
 		equipmentController = new EquipmentController();
 		when:

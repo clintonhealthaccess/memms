@@ -31,6 +31,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils
 import org.hibernate.Criteria;
+import org.chai.location.CalculationLocation;
+import org.chai.memms.security.User.UserType;
 import org.chai.memms.util.Utils
 import org.hibernate.criterion.MatchMode
 import org.hibernate.criterion.Order
@@ -56,6 +58,18 @@ class UserService {
 				ilike("lastname","%"+text+"%")
 				ilike("organisation","%"+text+"%")
 				ilike("phoneNumber","%"+text+"%")				
+			}
+		}
+	}
+	
+	List<User> filterByCriterias(UserType userType, CalculationLocation location, Map<String, String> params){
+		def criteria = User.createCriteria();
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			eq ("active", true)
+			if(location != null)
+				eq('location',location)
+			if(userType != null){
+					eq ("userType", userType)
 			}
 		}
 	}

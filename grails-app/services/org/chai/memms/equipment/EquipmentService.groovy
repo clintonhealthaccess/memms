@@ -111,7 +111,6 @@ class EquipmentService {
 					eq ("t.current", true)
 				}
 			}
-				
 		}
 	}
 	

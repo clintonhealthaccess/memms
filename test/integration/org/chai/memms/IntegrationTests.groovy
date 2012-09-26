@@ -44,6 +44,8 @@ import org.chai.memms.equipment.Department
 import org.chai.memms.equipment.Equipment
 import org.chai.memms.equipment.EquipmentModel
 import org.chai.memms.equipment.EquipmentType
+import org.chai.memms.equipment.EquipmentType.Observation;
+import org.chai.memms.equipment.Provider.Type;
 import org.chai.location.DataLocation;
 import org.chai.location.DataLocationType;
 import org.chai.location.Location;
@@ -106,6 +108,32 @@ abstract class IntegrationTests extends IntegrationSpec {
 		def kivuye = Initializer.newDataLocation(['en':KIVUYE], KIVUYE, burera, hc)
 	}
 	
+	static def setupEquipment(){
+		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+		
+		def equipment = new Equipment(serialNumber:CODE(123),manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
+			registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,dataLocation:DataLocation.findByCode(KIVUYE),
+			donation:true,obsolete:false,expectedLifeTime:20,descriptions:['en':'Equipment Descriptions'], type:equipmentType)
+
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		
+		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
+		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+		
+		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
+		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),4,false,[:])
+
+		equipment.manufacturer=manufacture
+		equipment.supplier=supplier
+		
+		equipment.warranty=warranty
+
+		equipment.save(failOnError: true)
+	}
+	
 	static def getLocationLevels(def levels) {
 		def result = []
 		for (def level : levels) {
@@ -150,8 +178,8 @@ abstract class IntegrationTests extends IntegrationSpec {
 	}
 
 	static def newUser(def username, def active, def confirmed) {
-		return new User(userType: UserType.OTHER, username: username, email: username,permissionString:'*:*',
-			passwordHash: '', active: active, confirmed: confirmed, uuid: 'uuid', firstname: 'user', lastname: 'last',
+		return new User(userType: UserType.OTHER, username: username, email: "$username@memms.org",permissionString:'*:*',
+			passwordHash: '', active: active, confirmed: confirmed, uuid: username, firstname: 'user', lastname: 'last',
 			organisation: 'org', phoneNumber: '+250 11 111 11 11', location:DataLocation.findByCode(KIVUYE)).save(failOnError: true)
 	}
 	

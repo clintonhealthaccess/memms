@@ -38,6 +38,9 @@ class User {
 		
 		ADMIN("admin"),
 		SYSTEM("system"),
+		DATACLERK("dataclerk"),
+		TECHNICIANFACILITY("technician.facility"),
+		TECHNICIANMOH("technician.moh"),
 		OTHER("other");
 		
 		String messageCode = "user.type";

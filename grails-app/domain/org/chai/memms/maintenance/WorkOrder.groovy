@@ -120,6 +120,13 @@ class WorkOrder {
 		version false
 	}
 	
+	def getNotificationsForUser(def user){
+		notifications.findAll{it.sender == user}
+	}
+	
+	def getUnReadNotificationsForUser(def user){
+		getNotificationsForUser(user).findAll{!it.read}
+	}
 
 	@Override
 	public String toString() {

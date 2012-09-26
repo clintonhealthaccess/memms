@@ -27,12 +27,59 @@
  */
 package org.chai.memms.maintenance
 
+import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests;
+import org.chai.memms.equipment.Equipment;
+import org.chai.memms.maintenance.WorkOrder.Criticality;
+import org.chai.memms.maintenance.WorkOrder.OrderStatus;
+import org.chai.memms.security.User;
 
-/**
- * @author Jean Kahigiso M.
- *
- */
+
 class WorkOrderSpec extends IntegrationTests{
-
+	def "can create a workOrder"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		newUser("user", "user")
+		when:
+		new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "test work order",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
+			addedBy:User.findByUsername("user"),openOn: new Date(),assistaceRequested:false).save(failOnError:true)
+		then:
+		WorkOrder.count() == 1
+	}
+	
+	def "retrieve notifications for a user"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def senderOne = newUser("senderOne", true,true)
+		def senderTwo = newUser("senderTwo", true,true)
+		def receiver = newUser("receiver", true,true)
+		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("senderOne"), new Date())
+		when:
+		workOrder.addToNotifications(Initializer.newNotification(workOrder, senderOne, receiver,new Date(), "test one"))
+		workOrder.addToNotifications(Initializer.newNotification(workOrder, senderTwo, receiver,new Date(), "test one"))
+		workOrder.save(failOnError:true)
+		then:
+		workOrder.notifications.size() == 2
+		workOrder.getNotificationsForUser(senderOne).size() == 1
+	}
+	
+	def "retrieve unread notifications for a user"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def sender = newUser("sender", true,true)
+		def receiver = newUser("receiver", true,true)
+		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("sender"), new Date())
+		when:
+		workOrder.notifications = [
+			Initializer.newNotification(workOrder, sender, receiver,new Date(), "test one"),
+			Initializer.newNotification(workOrder, sender, receiver,new Date(), "test one")
+		]
+		workOrder.save(failOnError:true)
+		then:
+		workOrder.notifications.size() == 2
+		workOrder.getUnReadNotificationsForUser(sender).size() == 2
+	}
 }
