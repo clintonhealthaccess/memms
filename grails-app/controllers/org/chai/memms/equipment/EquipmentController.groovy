@@ -126,8 +126,7 @@ class EquipmentController extends AbstractEntityController{
 		validWarranty = (!params.cmdMonths.hasErrors())
 		if(log.isDebugEnabled()) log.debug("Rejecting expectedLifeTime: "+params.cmdLifeTime.errors)		
 		if(validLifeTime) entity.expectedLifeTime = params.cmdLifeTime.expectedLifeTime
-		if(validWarranty) entity.warranty.numberOfMonth = params.cmdMonths.numberOfMonths
-		log.debug("params after injecting in new warranty information " + params)
+		if(validWarranty) bindData(entity,["warranty.numberOfMonth":params.cmdMonths.numberOfMonths])
 		entity.genarateAndSetEquipmentCode()
 		return (validStatus & validLifeTime & entity.validate())
 	}

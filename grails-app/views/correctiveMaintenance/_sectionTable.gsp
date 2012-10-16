@@ -22,7 +22,7 @@
 						</td>
 						<td>
 							<shiro:hasPermission permission="workOrder:list">
-								<a href="${createLink(controller: 'workOrder', action: 'list', params:[location: correctiveMaintenance.dataLocation.id] )}"><g:message code="correctiveMaintenance.manage.workOrder.label" /></a>
+								<a href="${createLink(controller: 'workOrder', action: 'list', params:['dataLocation.id': correctiveMaintenance.dataLocation.id] )}"><g:message code="correctiveMaintenance.manage.workOrder.label" /></a>
 							</shiro:hasPermission>
 						</td>
 					</tr>

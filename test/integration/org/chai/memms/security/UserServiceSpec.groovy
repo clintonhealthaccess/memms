@@ -100,8 +100,8 @@ class UserServiceSpec extends IntegrationTests{
 		Initializer.createInventoryStructure()
 
 		when:
-		def usersOne = userService.filterByCriterias(UserType.TECHNICIANFACILITY, CalculationLocation.findByCode(KIVUYE), [:])
-		def usersTwo = userService.filterByCriterias(UserType.TECHNICIANMOH, null, [:])
+		def usersOne = userService.getActiveUserByTypeAndLocation(UserType.TECHNICIANFACILITY, CalculationLocation.findByCode(KIVUYE), [:])
+		def usersTwo = userService.getActiveUserByTypeAndLocation(UserType.TECHNICIANMOH, null, [:])
 		then:
 		usersOne.size()==1
 		usersTwo.size()==1
@@ -139,9 +139,6 @@ class UserServiceSpec extends IntegrationTests{
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		def userGroupOne,userGroupTwo,userGroupThree,userGroupFour
-//		notificationService.newNotification(workOrderOne, "Send for rapair, one",sender,false)
-//		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacilityOne,false)
-//		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacilityTwo,true)
 
 		when:
 		userGroupOne = userService.getNotificationGroup(workOrder,sender,false)

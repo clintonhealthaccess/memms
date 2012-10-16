@@ -2,6 +2,7 @@ package org.chai.memms.util
 
 import java.util.Date;
 
+import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests
 
 class UtilSpec extends IntegrationTests{
@@ -20,8 +21,8 @@ class UtilSpec extends IntegrationTests{
 		def newDate = Initializer.getDate(1, 1, 2010)
 		Date cleanedMaximumDate
 		when:
-		cleanedMaximumDate = Utils.getMaxDateFromDateTime(now)
+		cleanedMaximumDate = Utils.getMaxDateFromDateTime(newDate)
 		then:
-		cleanedMaximumDate >= now
+		cleanedMaximumDate > newDate
 	}
 }

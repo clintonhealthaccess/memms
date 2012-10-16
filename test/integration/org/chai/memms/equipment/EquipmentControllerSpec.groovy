@@ -37,7 +37,6 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.currency = "USD"
 		equipmentController.params.model = "model one"
 		equipmentController.params.room = "ROOM A1"
-		equipmentController.params.expectedLifeTime = 32
 		equipmentController.params.purchaser = PurchasedBy.BYFACILITY
 		equipmentController.params.obsolete = false
 		equipmentController.params.descriptions_en = "test_english_descriptions"
@@ -46,6 +45,14 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.registeredOn = Initializer.now()
 		equipmentController.params.department = department
 		equipmentController.params.type = equipmentType
+		
+		equipmentController.params."warranty.startDate" = Initializer.getDate(1,1,2012)
+		equipmentController.params."warranty.sameAsSupplier" = true
+		equipmentController.params."warranty.descriptions_en" = "new warranty for testing"
+		
+		equipmentController.params.numberOfMonths_years = 1
+		equipmentController.params.numberOfMonths_months = 3
+		
 		equipmentController.params.manufacturer = manufacture
 		equipmentController.params.supplier = supplier
 		equipmentController.params.expectedLifeTime_years = 1
@@ -83,9 +90,19 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.currency = ""
 		equipmentController.params.model = "model one"
 		equipmentController.params.room = "ROOM A1"
-		equipmentController.params.expectedLifeTime = 32
 		equipmentController.params.purchaser = PurchasedBy.BYFACILITY
 		equipmentController.params.obsolete = false
+		
+		equipmentController.params."warranty.startDate" = Initializer.getDate(1,1,2012)
+		equipmentController.params."warranty.sameAsSupplier" = true
+		
+		grailsApplication.config.i18nFields.locales.each{
+			equipmentController.params."warranty.descriptions_$it" = "new warranty for testing $it"
+		}
+		
+		equipmentController.params.numberOfMonths_years = 1
+		equipmentController.params.numberOfMonths_months = 3
+		
 		grailsApplication.config.i18nFields.locales.each{
 			equipmentController.params."descriptions_$it" = "test descriptions $it"
 		}

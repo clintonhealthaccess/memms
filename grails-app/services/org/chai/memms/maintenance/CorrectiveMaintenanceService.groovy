@@ -56,7 +56,7 @@ class CorrectiveMaintenanceService {
 			levels.add(locationService.findLocationLevelByCode(skipLevel));
 		}
 		return levels;
-	}
+	}   
 	
 	public CorrectiveMaintenances getCorrectiveMaintenancesByLocation(Location location,Set<DataLocationType> types,Map<String, String> params) {
 		if(log.isDebugEnabled()) log.debug("getCorrectiveMaintenancesByLocation url params: "+params)
@@ -68,8 +68,8 @@ class CorrectiveMaintenanceService {
 		
 		CorrectiveMaintenances correctiveMaintenance = new CorrectiveMaintenances()
 		//If user tries to access elements outside the range, return empty list
-		if(params.offset != null && params.max != null && params.max > params.offset) return correctiveMaintenance
-		
+		//TODO this is ideally supposed to avoid trying to access out of range data, but could be a bite
+		if(params.offset != null && params.max != null && params.offset > params.max) return correctiveMaintenance
 		//If user specifies the pagination params, use them. Else return the whole list
 		if(params.offset != null && params.offset > 0  && params.max != null && params.max > 0) correctiveMaintenance.correctiveMaintenanceList = correctiveMaintenances[(params.offset) .. ((params.offset + params.max) > correctiveMaintenances.size() ? correctiveMaintenances.size() - 1 : (params.offset + params.max))]
 		else correctiveMaintenance.correctiveMaintenanceList = correctiveMaintenances

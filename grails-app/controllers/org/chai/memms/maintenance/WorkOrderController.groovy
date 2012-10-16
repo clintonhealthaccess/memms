@@ -43,6 +43,7 @@ import org.chai.memms.maintenance.WorkOrder.Criticality;
 import org.chai.memms.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User;
+import org.chai.memms.security.User.UserType;
 import org.chai.memms.maintenance.WorkOrderStatus
 import org.chai.memms.maintenance.WorkOrder
 
@@ -79,7 +80,8 @@ class WorkOrderController extends AbstractEntityController{
 			order:entity,
 			equipments: equipments,
 			currencies: grailsApplication.config.site.possible.currency,
-			orderClosed:(entity.currentStatus == OrderStatus.CLOSEDFIXED || entity.currentStatus == OrderStatus.CLOSEDFORDISPOSAL)? true:false
+			orderClosed:(entity.currentStatus == OrderStatus.CLOSEDFIXED || entity.currentStatus == OrderStatus.CLOSEDFORDISPOSAL)? true:false,
+			technicians : userService.getActiveByTypeAndLocation(UserType.TECHNICIANFACILITY,entity.equipment.dataLocation, [:])
 		]
 	}
 
@@ -188,12 +190,10 @@ class WorkOrderController extends AbstractEntityController{
 
 		def locationSkipLevels = correctiveMaintenanceService.getSkipLocationLevels()
 
-
 		if (location != null) {
 			template = '/correctiveMaintenance/sectionTable'
 			correctiveMaintenances = correctiveMaintenanceService.getCorrectiveMaintenancesByLocation(location,dataLocationTypesFilter,params)
 		}
-
 		render (view: '/correctiveMaintenance/summaryPage', model: [
 					correctiveMaintenances:correctiveMaintenances?.correctiveMaintenanceList,
 					currentLocation: location,

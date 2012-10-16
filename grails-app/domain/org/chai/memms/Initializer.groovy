@@ -116,7 +116,7 @@ public class Initializer {
 			
 			def defaultTechnicianMoHRole = new Role(name: "Technician MoH")
 			defaultTechnicianMoHRole.addToPermissions(defaultDataClerkRole.permissionString)
-			defaultTechnicianMoHRole.addToPermissions("menu:preventivemaintenance,admin;equipment:*")
+			defaultTechnicianMoHRole.addToPermissions("menu:preventivemaintenance,admin,advanced;equipment:*")
 			defaultTechnicianMoHRole.addToPermissions("department:*;equipmentType:*;provider:*;equipment:*")
 			defaultTechnicianMoHRole.save(failOnError: true, flush:true)
 			//End default roles

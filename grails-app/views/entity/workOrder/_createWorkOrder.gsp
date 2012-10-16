@@ -109,10 +109,10 @@
 	        </h4>
 	        <g:selectFromList name="fixedBy.id" readonly="${(closed)? true:false}" label="${message(code:'work.order.equipment.fixed.by.label')}" bean="${order}" field="fixedBy" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'user', action:'getAjaxData')}"
-  			from="${techniciens}" value="${order?.fixedBy?.id}" values="${techniciens.collect{it.firstName  it.lastName}}" />	
+  			from="${technicians}" value="${order?.fixedBy?.id}" values="${technicians.collect{it.firstname + " " + it.lastname}}" />	
   			<g:selectFromList name="receivedBy.id" readonly="${(closed)? true:false}" label="${message(code:'work.order.equipment.received.by.label')}" bean="${order}" field="receivedBy" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'user', action:'getAjaxData')}"
-  			from="${techniciens}" value="${order?.receivedBy?.id}" values="${techniciens.collect{it.firstName  it.lastName}}" />	
+  			from="${technicians}" value="${order?.receivedBy?.id}" values="${technicians.collect{it.firstname + " " + it.lastname}}" />	
   			<g:input name="returnedOn" dateClass="date-picker" label="${message(code:'work.order.returned.on.label')}" bean="${order}" field="returnedOn"/>
   			<g:input name="returnedTo" label="${message(code:'work.order.returned.to.label')}" bean="${order}" field="returnedTo"/>
 	        </fieldset>

@@ -152,7 +152,6 @@ class NotificationServiceSpec  extends IntegrationTests{
 		def notificationsByreceiver = notificationService.filterNotifications(null,receiverMoH,null,null,null, [:])
 		def jointFilter = notificationService.filterNotifications(workOrderOne,receiverFacility,null,null,true, [:])
 		def madeAfterToday = notificationService.filterNotifications(null,null, Initializer.now()+1,null,null, [:])
-		//TODO getting those made before today not working
 		def madeBeforeToday = notificationService.filterNotifications(null,null, null,Initializer.now()+1,null, [:])
 		def madeBetweenYesterdayAndTomorrow = notificationService.filterNotifications(null,null, Initializer.now()-1,Initializer.now()+1,null, [:])
 		def unreadNotifications = notificationService.filterNotifications(null,null, null,null,false, [:])

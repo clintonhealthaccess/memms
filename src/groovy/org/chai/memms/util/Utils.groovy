@@ -185,7 +185,7 @@ public class Utils {
 		Integer.metaClass.mixin TimeCategory
 		Date.metaClass.mixin TimeCategory
 		Date cleanedDate = date.clearTime()
-		cleanedDate + 23.hours + 59.minutes + 59.minutes
+		cleanedDate = cleanedDate + 23.hours + 59.minutes + 59.seconds
 		return cleanedDate
 	}
 	public static Date getMinDateFromDateTime(Date date){
@@ -205,7 +205,6 @@ public class Utils {
 	 */
 	public static def setLocaleValueInMap(def object, def map, def fieldName){
 	   def methodName = 'set'+fieldName
-	   //TODO replace with CONF variable if this fails
 	   def grailsApplication = new User().domainClass.grailsApplication
 	   grailsApplication.config.i18nFields.locales.each{ loc ->
 		   if(map.get(loc) != null)

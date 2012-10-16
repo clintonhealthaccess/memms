@@ -89,7 +89,7 @@ class NotificationService {
 			if(workOrder) 
 				eq("workOrder",workOrder)
 			if(from) 
-				between("writtenOn",Utils.getMinDateFromDateTime(from),Utils.getMaxDateFromDateTime(from))
+				ge("writtenOn",Utils.getMinDateFromDateTime(from))
 			if(to) 
 				le("writtenOn",Utils.getMaxDateFromDateTime(to))
 			if(receiver) 
