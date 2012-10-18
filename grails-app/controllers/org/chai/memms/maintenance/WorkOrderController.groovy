@@ -168,8 +168,8 @@ class WorkOrderController extends AbstractEntityController{
 		 	orders= workOrderService.getWorkOrdersByEquipment(equipment,params)
 
 		render(view:"/entity/list", model:[
-					template:"workorder/workOrderList",
-					filterTemplate:"workorder/workOrderFilter",
+					template:"workOrder/workOrderList",
+					filterTemplate:"workOrder/workOrderFilter",
 					entities: orders,
 					entityCount: orders.totalCount,
 					code: getLabel(),
@@ -321,8 +321,8 @@ class WorkOrderController extends AbstractEntityController{
 		}
 		List<WorkOrder> workOrders = workOrderService.searchWorkOrder(params['q'],dataLocation,equipment,params)
 		render (view: '/entity/list', model:[
-					template:"workorder/workOrderList",
-					filterTemplate:"workorder/workOrderFilter",
+					template:"workOrder/workOrderList",
+					filterTemplate:"workOrder/workOrderFilter",
 					entities: workOrders,
 					entityCount: workOrders.totalCount,
 					code: getLabel(),
@@ -338,8 +338,8 @@ class WorkOrderController extends AbstractEntityController{
 		List<WorkOrder> orders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.criticality,cmd.currentStatus,params)
 
 		render(view:"/entity/list", model:[
-					template:"workorder/workOrderList",
-					filterTemplate:"workorder/workOrderFilter",
+					template:"workOrder/workOrderList",
+					filterTemplate:"workOrder/workOrderFilter",
 					entities: orders,
 					entityCount: orders.totalCount,
 					code: getLabel(),
