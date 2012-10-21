@@ -67,6 +67,8 @@ public class Utils {
 	public final static String CODE_PATTERN = 
 			CODE_DELIMITER + "[^" + CODE_DELIMITER + "]+" + CODE_DELIMITER;
 	public final static String VALUE_NOT_EXPORTABLE = "VALUE_NOT_EXPORTABLE";	
+	private final static Integer MAX_YEAR = now().year+1900;
+	private final static Integer MIN_YEAR = 1970;
 
 	public static Set<String> split(String string, String delimiter) {
 		Set<String> result = new HashSet<String>();
@@ -190,6 +192,16 @@ public class Utils {
 	}
 	public static Date getMinDateFromDateTime(Date date){
 		return date.clearTime()
+	}
+	
+	public static List<Integer> getYearRange(){
+		def yearsRange = []
+		int i= MAX_YEAR
+		while(i>=MIN_YEAR){
+			yearsRange.add(i)
+			i--
+		}
+		return yearsRange
 	}
 	
 	public static Date now(){

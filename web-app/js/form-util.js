@@ -211,17 +211,26 @@ function refreshList(html,cssClass){
 /**
  * Hide set of fields if an option is selected (purchaser==donor - supplier==warranty provider)
  */
-function getToHide(){
-	if($("select[name=purchaser]").val()!="BYDONOR") $(".donor-information").hide()	
+function getToHide(parchaseCost,estimatedCost){
+	//supplier==warranty provider
 	if($("input[name='warranty.sameAsSupplier']").is(":checked")) $("#address").hide()		
 	$("input[name='warranty.sameAsSupplier']").change(function(e){
 		if($(this).is(":checked")) $("#address").slideUp()
 		else $("#address").slideDown()
 	})
+	
+	//purchaser==donor 
+	if($("select[name=purchaser]").val()!="BYDONOR") $(".donor-information").hide()	
+	else{
+		$("label[for=purchaseCost]").html(estimatedCost)
+	}
 	$("select[name=purchaser]").change(function(e){
-		if($(this).val()=="BYDONOR") $(".donor-information").slideDown()
-		else{
-			if($(".donor-information").is(":visible")) $(".donor-information").slideUp()
+		if($(this).val()=="BYDONOR"){ 
+			$("label[for=purchaseCost]").html(estimatedCost)
+			$(".donor-information").slideDown()
+		}else{
+			$("label[for=purchaseCost]").html(parchaseCost)
+			$(".donor-information").slideUp()
 		}
 	})
 }

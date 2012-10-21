@@ -1,11 +1,13 @@
 package org.chai.memms
 
 import java.nio.charset.Charset;
+import org.chai.memms.util.Utils;
 
 class FormTagLib {
 
 	def languageService
 	def grailsApplication
+	def now = Utils.now()
 		
 	def file = { attrs, body ->
 		attrs["requestCharset"] = request?.characterEncoding==null?Charset.defaultCharset():Charset.forName(request.characterEncoding)
@@ -16,6 +18,8 @@ class FormTagLib {
 	
 	def inputYearMonth = { attrs, body ->
 		if (attrs["type"] == null) attrs["type"] = 'text'
+		//TODO find why this is not working
+		if (attrs["yearsRange"] == null) attrs["yearsRange"] = Utils.getYearRange()
 		out << render(template:"/tags/form/inputYearMonth", model: attrs)
 	}
 	

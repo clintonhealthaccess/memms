@@ -183,7 +183,7 @@ select
 	color: #444
 	font: normal 12px Arial, sans-serif
 	padding: 3px
-	+box-shadow($filler - #111, 1px, 1px, 3px, 0, inset)
+	+box-shadow($filler - #111 1px 1px 3px 0 inset)
 	&:hover, &:focus
 		background: $filler + #030303
 		border-color: $primary
@@ -204,7 +204,7 @@ select
 	padding: 4px
 	text-align: center
 	width: 154px
-	+box-shadow($filler - #111, 1px, 1px, 3px, 0, inset)
+	+box-shadow($filler - #111 1px 1px 3px 0 inset)
 	&:hover, &:focus
 		background: $filler + #030303
 		border-color: $primary
@@ -313,7 +313,7 @@ form.search-form
 		font: normal 12px Arial, sans-serif
 		margin: 0
 		padding: 3px 5px 4px
-		+box-shadow($filler - #111, 1px, 1px, 3px, 0, inset)
+		+box-shadow($filler - #111 1px 1px 3px 0 inset)
 		&:hover, &:focus
 			background: $filler + #030303
 			border-color: $primary
@@ -363,7 +363,7 @@ form.search-form
 		font-size: 14px
 		padding: 4px
 		margin-bottom: 0px
-		+box-shadow($filler - #111, 1px, 1px, 3px, 0, inset)
+		+box-shadow($filler - #111 1px 1px 3px 0 inset)
 		&:hover, &:focus
 			background: $filler + #030303
 			border-color: $primary
@@ -494,6 +494,8 @@ form.search-form
 		padding-top: 5px
 		vertical-align: top
 		width: 100px
+		&.top
+			padding-top: 0
 	.row
 		margin-bottom: 7px
 		vertical-align: middle
@@ -711,3 +713,14 @@ a.delete-row
 	top: 4px
 .ui-datepicker-title, .ui-datepicker-calendar
 	font-size: 12px !important
+
+//expected life time aligned in one row
+
+.period-month-year
+	display: inline-block
+	width: 20%
+	input[type=text]
+		float: left
+		width: 55px
+	label
+		width: auto

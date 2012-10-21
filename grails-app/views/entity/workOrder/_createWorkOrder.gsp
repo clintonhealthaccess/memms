@@ -30,11 +30,11 @@
   			from="${equipments}" value="${order?.equipment?.id}" values="${equipments.collect{it.code}}" />	
   		<g:if test="${order.id != null}">
 	  		<div class="row">
-		  		 <label><g:message code="work.order.reported.by.label"/> :</label>
+		  		 <label class="top"><g:message code="work.order.reported.by.label"/> :</label>
 		  		 ${order.addedBy.firstname} ${order.addedBy.lastname}  - ${Utils.formatDateWithTime(order?.openOn)}
 	  		</div>
 	  		<div class="row">
-		  		 <label><g:message code="work.order.last.modified.by.label"/> :</label>
+		  		 <label class="top"><g:message code="work.order.last.modified.by.label"/> :</label>
 		  		 ${order.lastModifiedBy?.firstname} ${order.lastModifiedBy?.lastname} - ${Utils.formatDateWithTime(order?.lastModifiedOn)}
 	  		</div>
   		</g:if>						

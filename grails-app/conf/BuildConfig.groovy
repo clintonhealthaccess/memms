@@ -94,7 +94,7 @@ grails.project.dependency.resolution = {
 		compile ":yui-minify-resources:0.1.5"
         build ":tomcat:$grailsVersion"
 		compile ":rabbitmq:1.0.0.RC1"
-		compile ":chai-locations:0.2.3-CHAI"
+		compile ":chai-locations:0.3-CHAI"
 		compile ":build-info-tag:0.3.1"
 		//compile ':cloud-foundry:1.2.3'
 		

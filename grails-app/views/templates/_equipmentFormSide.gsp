@@ -14,6 +14,8 @@
 					<span class="text">${equipment.code}</span>
 					<span class="label"><g:message code="equipment.serial.number.label" /></span>
 					<span class="text">${equipment.serialNumber}</span>
+					<span class="label"><g:message code="equipment.model.label" /></span>
+					<span class="text">${equipment.model}</span>
 					<span class="label"><g:message code="datalocation.label"/>:</span>
 					<span class="text">${equipment.dataLocation.names}</span>
 					<span class="label"><g:message code="department.label"/>:</span>

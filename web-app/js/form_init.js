@@ -42,3 +42,11 @@ $(document).delegate('.togglable a.toggle-link', 'click', function(){
 	return false;
 });
 
+/**
+ * Show/Hide Filters
+ */
+$(document).ready(function() {
+	$('#showhide').click(function(){
+  	$('.filters-box').toggle(500);
+  });
+});

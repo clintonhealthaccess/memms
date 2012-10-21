@@ -9,7 +9,7 @@
 		<select name="${currencyName}">
 			<g:each in="${values}" var="enume">
 				<option value="${enume.key}" ${enume.key+''==fieldValue(bean:bean, field:currencyField)+''?'selected="selected"':''}>
-					${enume.value}
+					${message(code:'currency.'+enume.value)}
 				</option>
 			</g:each>
 		</select>

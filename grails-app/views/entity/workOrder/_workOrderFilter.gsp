@@ -2,12 +2,7 @@
 <%@ page import="org.chai.memms.maintenance.WorkOrderStatus.OrderStatus"%>
 <%@ page import="java.util.Date" %>
 <div class="filters main">
-	<h2>
-		Filter work orders<a href="#" class="right"><img
-			src="${resource(dir:'images/icons',file:'icon_close_flash.png')}"
-			alt="Section" /></a>
-	</h2>
-
+	<h2><g:message code="work.order.filter.label" /><a href="#" id="showhide" class="right"><g:message code="entity.show.hide.filter.label" /></a></h2>
 	<g:hasErrors bean="${filterCmd}">
 		<ul>
 			<g:eachError var="err" bean="${filterCmd}">

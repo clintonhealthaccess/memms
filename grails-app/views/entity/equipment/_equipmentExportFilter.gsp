@@ -2,7 +2,7 @@
 <%@ page import="org.chai.memms.equipment.Equipment.PurchasedBy" %>
 <%@ page import="org.chai.memms.equipment.Equipment.Donor" %>
 <div class="filters main">
-		  <h2>Filter equipments<a href="#" class="right"><img src="${resource(dir:'images/icons',file:'icon_close_flash.png')}" alt="Section"/></a></h2>
+		  <h2><g:message code="equipment.filter.label" /><a href="#" id="showhide" class="right"><g:message code="entity.show.hide.filter.label" /></a></h2>
 
 			<g:hasErrors bean="${filterCmd}">
 				<ul>
