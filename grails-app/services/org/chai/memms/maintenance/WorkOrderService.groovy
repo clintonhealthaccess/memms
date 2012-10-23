@@ -51,7 +51,7 @@ class WorkOrderService {
 	def locationService
 	static transactional = true
 	def languageService;
-	def notificationService
+	def workOrderNotificationService
 	/**
 	 * Searches for a WorkOrder that contains the search term
 	 * Pass a null value for the criteria you want to be ignored in the search other than the search text
@@ -132,7 +132,7 @@ class WorkOrderService {
 		workOrder.addToStatus(status)
 		workOrder.save(failOnError:true)
 		if(status)
-			notificationService.newNotification(workOrder,content,escalatedBy,true)
+			workOrderNotificationService.newNotification(workOrder,content,escalatedBy,true)
 	}
 	
 	List<WorkOrder> getWorkOrdersByEquipment(Equipment equipment, Map<String, String> params){

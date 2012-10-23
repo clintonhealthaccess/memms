@@ -62,7 +62,7 @@ class WorkOrderController extends AbstractEntityController{
 	def workOrderStatusService
 	def commentService
 	def maintenanceProcessService
-	def notificationService
+	def workOrderNotificationService
 	def userService
 
 	def getEntity(def id) {
@@ -135,7 +135,7 @@ class WorkOrderController extends AbstractEntityController{
 		if(log.isDebugEnabled()) log.debug("Created WorkOrder: "+entity)
 		if(newEntity || escalation){ //TODO define default message
 			users = userService.getNotificationGroup(entity,user,escalation)
-			notificationService.sendNotifications(entity,message(code:"workorder.creation.default.message"),user,users)
+			workOrderNotificationService.sendNotifications(entity,message(code:"workorder.creation.default.message"),user,users)
 		}
 		(!currentEquipmentStatus)?:currentEquipmentStatus.save(flush:true)
 		(!currentWorkOrderStatus)?:currentWorkOrderStatus.save(flush:true)

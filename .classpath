@@ -54,6 +54,7 @@
 	<classpathentry kind="src" path=".plugin-src-cached-resources-1.0-src-groovy"/>
 	<classpathentry kind="src" path=".plugin-src-cache-headers-1.1.5-grails-app-i18n"/>
 	<classpathentry kind="src" path=".plugin-src-cache-headers-1.1.5-grails-app-services"/>
+	<classpathentry kind="src" path="grails-app/realms"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.codehaus.groovy/groovy-all/jars/groovy-all-1.8.6.jar"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/commons-beanutils/commons-beanutils/jars/commons-beanutils-1.8.3.jar"/>

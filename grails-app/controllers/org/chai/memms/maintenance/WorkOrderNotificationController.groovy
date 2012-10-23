@@ -40,23 +40,23 @@ import org.chai.memms.security.User;
  * @author Jean Kahigiso M.
  *
  */
-class NotificationController extends AbstractEntityController{
-	def notificationService
+class WorkOrderNotificationController extends AbstractEntityController{
+	def workOrderNotificationService
 	
 	def getEntity(def id) {
-		return Notification.get(id);
+		return WorkOrder.get(id);
 	}
 
 	def createEntity() {
-		return new Notification();
+		return new WorkOrder();
 	}
 
 	def getTemplate() {
-		return "/entity/notification/createNotification";
+		return "/entity/notification/createWorkOrderNotification";
 	}
 
 	def getLabel() {
-		return "notification.label";
+		return "workOrderNotification.label";
 	}
 	
 	def deleteEntity(def entity) {
@@ -64,7 +64,7 @@ class NotificationController extends AbstractEntityController{
 	}
 	
 	def getEntityClass() {
-		return Notification.class;
+		return WorkOrderNotification.class;
 	}
 	def bindParams(def entity) {
 		entity.properties = params
@@ -72,25 +72,25 @@ class NotificationController extends AbstractEntityController{
 	
 	def getModel(def entity) {
 		[
-			notification:entity
+			workOrderNotification:entity
 		]
 	}
 	
 	def read={
 		adaptParamsForList()
-		def notificationId
+		def workOrderNotificationId
 		if(!params.id) redirect(uri: getTargetURI())
 		else{
 			
-			def notification = notificationService.setNotificationRead(Notification.get(params.int('id')))
-			if (log.isInfoEnabled()) log.info("reading notification: "+notification)
+			def workOrderNotification = workOrderNotificationService.setNotificationRead(Notification.get(params.int('id')))
+			if (log.isInfoEnabled()) log.info("reading notification: "+workOrderNotification)
 
-			if (notification == null) {
-				flash.message = message(code: 'default.not.found.message', args: [message(code: getLabel(), default: 'notification'), params.id])
+			if (workOrderNotification == null) {
+				flash.message = message(code: 'default.not.found.message', args: [message(code: getLabel(), default: 'workOrderNotification'), params.id])
 				redirect(uri: getTargetURI())
 			}
 			else {
-				render(view: '/entity/notification/readNotification', model:[notification:notification, entityName:getLabel()])
+				render(view: '/entity/notification/readWorkOrderNotification', model:[workOrderNotification:workOrderNotification, entityName:getLabel()])
 			}
 		}
 	}
@@ -99,13 +99,12 @@ class NotificationController extends AbstractEntityController{
 		adaptParamsForList()
 		Boolean read = (params.read) ? params.boolean("read") : null;
 		WorkOrder workOrder = WorkOrder.get(params.id)
-		List<Notification> notifications = notificationService.filterNotifications(workOrder, user, null,null,read, params)
-		
+		List<WorkOrderNotification> workOrderNotifications = workOrderNotificationService.filterNotifications(workOrder, user, null,null,read, params)
 		render(view:"/entity/list", model:[
-			template:"notification/notificationList",
-			filterTemplate:"notification/notificationFilter",
-			entities: notifications,
-			entityCount: notifications.totalCount,
+			template:"notification/workOrderNotificationList",
+			filterTemplate:"notification/workOrderNotificationFilter",
+			entities: workOrderNotifications,
+			entityCount: workOrderNotifications.totalCount,
 			workOrder:workOrder,
 			code: getLabel(),
 			entityClass: getEntityClass()
@@ -116,13 +115,13 @@ class NotificationController extends AbstractEntityController{
 		adaptParamsForList()
 		Boolean read = (params.read) ? params.boolean("read") : null;
 		WorkOrder workOrder = WorkOrder.get(params.workOrder)
-		List<Notification> notifications = notificationService.searchNotificition(params['q'],user,workOrder, read,params)
+		List<WorkOrderNotification> workOrderNotifications = workOrderNotificationService.searchNotificition(params['q'],user,workOrder, read,params)
 		
 		render(view:"/entity/list", model:[
-			template:"notification/notificationList",
-			filterTemplate:"notification/notificationFilter",
-			entities: notifications,
-			entityCount: notifications.totalCount,
+			template:"notification/workOrderNotificationList",
+			filterTemplate:"notification/workOrderNotificationFilter",
+			entities: workOrderNotifications,
+			entityCount: workOrderNotifications.totalCount,
 			workOrder:workOrder,
 			code: getLabel(),
 			entityClass: getEntityClass(),
@@ -133,8 +132,8 @@ class NotificationController extends AbstractEntityController{
 		//TODO will be used fetch new notifications using ajax and update page
 	}
 	
-	def save = {CreateNotificationCommand cmd ->
-		if (log.isDebugEnabled()) log.debug ('creating notifications with params:'+params+", Cmd:"+cmd)
+	def save = {CreateWorkOrderNotificationCommand cmd ->
+		if (log.isDebugEnabled()) log.debug ('creating workOrderNotifications with params:'+params+", Cmd:"+cmd)
 		
 		adaptParamsForList()
 					
@@ -148,7 +147,7 @@ class NotificationController extends AbstractEntityController{
 			render(view: '/entity/edit', model: model)
 		}
 		else {
-			def sent = notificationService.newNotification(cmd.workOrder,cmd.content, user,false)
+			def sent = workOrderNotificationService.newNotification(cmd.workOrder,cmd.content, user,false)
 			flash.message = message(code: 'default.saved.message', args: [message(code: getLabel(), default: 'entity')],sent.toString())
 			redirect(action: "list", id: cmd.workOrder.id)
 		}
@@ -170,14 +169,14 @@ class NotificationController extends AbstractEntityController{
 		}
 	}
 	
-	def filter = {FilterNotificationCommand cmd ->
+	def filter = {FilterWorkOrderNotificationCommand cmd ->
 		adaptParamsForList()
-		List<Notification> notifications = notificationService.filterNotifications(cmd.workOrder, user, cmd.from,cmd.to,cmd.getReadStatus(), params)
+		List<WorkOrderNotification> workOrderNotifications = workOrderNotificationService.filterNotifications(cmd.workOrder, user, cmd.from,cmd.to,cmd.getReadStatus(), params)
 		render(view:"/entity/list", model:[
-			template:"notification/notificationList",
-			filterTemplate:"notification/notificationFilter",
-			entities: notifications,
-			entityCount: notifications.totalCount,
+			template:"notification/workOrderNotificationList",
+			filterTemplate:"notification/workOrderNotificationFilter",
+			entities: workOrderNotifications,
+			entityCount: workOrderNotifications.totalCount,
 			workOrder:cmd.workOrder,
 			code: getLabel(),
 			entityClass: getEntityClass(),
@@ -186,7 +185,7 @@ class NotificationController extends AbstractEntityController{
 	}
 }
 
-class CreateNotificationCommand{
+class CreateWorkOrderNotificationCommand{
 	WorkOrder workOrder
 	String content
 	
@@ -196,11 +195,11 @@ class CreateNotificationCommand{
 	}
 	
 	String toString() {
-		return "CreateNotificationCommand[WorkOrder="+workOrder+", Content="+content+"]"
+		return "CreateWorkOrderNotificationCommand[WorkOrder="+workOrder+", Content="+content+"]"
 	}
 }
 
-class FilterNotificationCommand {
+class FilterWorkOrderNotificationCommand {
 	Date from
 	Date to
 	String read
@@ -220,7 +219,7 @@ class FilterNotificationCommand {
 	}
 
 	String toString() {
-		return "FilterCommand[From="+from+", To="+to+", Read="+read+", WorkOrder="+workOrder+", Read Status="+ getReadStatus() + "]"
+		return "FilterWorkOrderNotificationCommand[From="+from+", To="+to+", Read="+read+", WorkOrder="+workOrder+", Read Status="+ getReadStatus() + "]"
 	}
 }
 

@@ -20,7 +20,7 @@ import org.chai.memms.security.User.UserType;
 class WorkOrderServiceSpec  extends IntegrationTests{
 	
 	def workOrderService
-	def notificationService
+	def workOrderNotificationService
 	
 	def "can search a work order"(){
 		setup:
@@ -116,7 +116,7 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		clerk.save(failOnError:true)
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,clerk,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		notificationService.newNotification(workOrder, "Send for rapair",clerk,false)
+		workOrderNotificationService.newNotification(workOrder, "Send for rapair",clerk,false)
 		when:
 		def equipments = workOrderService.getWorkOrdersByEquipment(equipment,[:])
 		then:

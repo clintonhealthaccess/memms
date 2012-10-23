@@ -38,7 +38,7 @@ import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType;
 import org.chai.memms.util.Utils;
 
-class NotificationService {
+class WorkOrderNotificationService {
 	def userService
 	
     public int sendNotifications(WorkOrder workOrder, String content,User sender,List<User> receivers) {
@@ -46,7 +46,7 @@ class NotificationService {
 		int numberOfNotificationSent = 0
 		receivers.each{ receiver ->
 			if(receiver.active){
-					def notification = new Notification(workOrder:workOrder,sender:sender,receiver:receiver,writtenOn:Utils.now(),content:content,read:false).save(failOnError: true)
+					def notification = new WorkOrderNotification(workOrder:workOrder,sender:sender,receiver:receiver,writtenOn:Utils.now(),content:content,read:false).save(failOnError: true)
 					if(notification)
 						numberOfNotificationSent++
 				}
@@ -60,7 +60,7 @@ class NotificationService {
 	}
 	
 	public int getUnreadNotifications(User user){
-		def criteria = Notification.createCriteria()
+		def criteria = WorkOrderNotification.createCriteria()
 		return  criteria.get{
 			and { 
 				eq('receiver',user)
@@ -69,8 +69,8 @@ class NotificationService {
 			projections{rowCount()}
 		}
 	}
-	public List<Notification> searchNotificition(String text,User user,WorkOrder workOrder, Boolean read,Map<String, String> params) {
-		def criteria = Notification.createCriteria()
+	public List<WorkOrderNotification> searchNotificition(String text,User user,WorkOrder workOrder, Boolean read,Map<String, String> params) {
+		def criteria = WorkOrderNotification.createCriteria()
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(user)
 				eq('receiver',user)
@@ -84,7 +84,7 @@ class NotificationService {
 	}
 	
 	public List<Notification> filterNotifications(WorkOrder workOrder,User receiver,Date from, Date to,Boolean read, Map<String, String> params){
-		def criteria = Notification.createCriteria();
+		def criteria = WorkOrderNotification.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(workOrder) 
 				eq("workOrder",workOrder)
@@ -99,7 +99,7 @@ class NotificationService {
 		}
 	}
 	
-	public Notification setNotificationRead(Notification notification){
+	public Notification setNotificationRead(WorkOrderNotification notification){
 		notification.read = true
 		notification.save(failOnError:true)
 		return notification

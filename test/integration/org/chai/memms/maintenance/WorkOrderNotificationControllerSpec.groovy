@@ -13,12 +13,12 @@ import org.chai.memms.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
-import org.chai.memms.maintenance.NotificationController
+import org.chai.memms.maintenance.WorkOrderNotificationController
 
-class NotificationControllerSpec  extends IntegrationTests{
+class WorkOrderNotificationControllerSpec  extends IntegrationTests{
 	
-	def notificationController
-	def notificationService
+	def workOrderNotificationController
+	def workOrderNotificationService
 	
 	def "can save a notification"(){
 		setup:
@@ -35,13 +35,13 @@ class NotificationControllerSpec  extends IntegrationTests{
 		receiverOne.save(failOnError:true)
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,sender, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		notificationController = new NotificationController()
+		workOrderNotificationController = new WorkOrderNotificationController()
 		when:
-		notificationController.params.content = " check this out"
-		notificationController.params.workOrder = workOrder
-		notificationController.save()
+		workOrderNotificationController.params.content = " check this out"
+		workOrderNotificationController.params.workOrder = workOrder
+		workOrderNotificationController.save()
 		then:
-		notificationController.response.redirectUrl == "/notification/list/${workOrder.id}"
+		workOrderNotificationController.response.redirectUrl == "/workOrderNotification/list/${workOrder.id}"
 		Notification.count() == 1
 	}
 	
@@ -59,13 +59,13 @@ class NotificationControllerSpec  extends IntegrationTests{
 		receiverOne.location = DataLocation.findByCode(KIVUYE)
 		receiverOne.save(failOnError:true)
 
-		notificationController = new NotificationController()
+		workOrderNotificationController = new WorkOrderNotificationController()
 		setupSecurityManager(sender)
 		when:
-		notificationController.params.content = " check this out"
-		notificationController.save()
+		workOrderNotificationController.params.content = " check this out"
+		workOrderNotificationController.save()
 		then:
-		notificationController.modelAndView.viewName == "/entity/edit"
+		workOrderNotificationController.modelAndView.viewName == "/entity/edit"
 		Notification.count() == 0
 	}
 	
@@ -97,17 +97,17 @@ class NotificationControllerSpec  extends IntegrationTests{
 		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderTwo,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
-		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
-		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,false)
-		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
+		workOrderNotificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
+		workOrderNotificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,false)
+		workOrderNotificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
 		setupSecurityManager(receiverFacility)
-		def notification = notificationService.searchNotificition("one",receiverFacility,workOrderOne,null,[:])[0]
-		notificationController = new NotificationController()
+		def notification = workOrderNotificationService.searchNotificition("one",receiverFacility,workOrderOne,null,[:])[0]
+		workOrderNotificationController = new WorkOrderNotificationController()
 		expect:
 		notification.read == false
 		when://Get only those that are unread
-		notificationController.params.id = notification.id
-		notificationController.read()
+		workOrderNotificationController.params.id = notification.id
+		workOrderNotificationController.read()
 		
 		then:
 		notification.read == true
@@ -141,21 +141,21 @@ class NotificationControllerSpec  extends IntegrationTests{
 		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderTwo,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
-		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
-		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,true)
-		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
+		workOrderNotificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
+		workOrderNotificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,true)
+		workOrderNotificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
 		setupSecurityManager(receiverFacility)
-		def notifications = notificationService.searchNotificition("one",receiverFacility,workOrderOne,null,[:])
-		notificationService.setNotificationRead(notifications[0])
-		notificationController = new NotificationController()
+		def notifications = workOrderNotificationService.searchNotificition("one",receiverFacility,workOrderOne,null,[:])
+		workOrderNotificationService.setNotificationRead(notifications[0])
+		workOrderNotificationController = new WorkOrderNotificationController()
 		
 		when://Get only those that are unread
-		notificationController.params.read = "false"
-		notificationController.params.id = workOrderTwo.id
-		notificationController.list()
+		workOrderNotificationController.params.read = "false"
+		workOrderNotificationController.params.id = workOrderTwo.id
+		workOrderNotificationController.list()
 		
 		then:
-		notificationController.modelAndView.model.entities.size() == 1
+		workOrderNotificationController.modelAndView.model.entities.size() == 1
 		Notification.count() == 4
 	}
 	
@@ -187,20 +187,20 @@ class NotificationControllerSpec  extends IntegrationTests{
 		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderTwo,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
-		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
-		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility, false)
-		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
+		workOrderNotificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
+		workOrderNotificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility, false)
+		workOrderNotificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
 		setupSecurityManager(receiverFacility)
-		def notifications = notificationService.searchNotificition("one",receiverFacility,workOrderOne,null,[:])
-		notificationService.setNotificationRead(notifications[0])
-		notificationController = new NotificationController()
+		def notifications = workOrderNotificationService.searchNotificition("one",receiverFacility,workOrderOne,null,[:])
+		workOrderNotificationService.setNotificationRead(notifications[0])
+		workOrderNotificationController = new WorkOrderNotificationController()
 		
 		when://list all for a given user
-		notificationController = new NotificationController()
-		notificationController.list()
+		workOrderNotificationController = new WorkOrderNotificationController()
+		workOrderNotificationController.list()
 		
 		then:
-		notificationController.modelAndView.model.entities.size() == 2
+		workOrderNotificationController.modelAndView.model.entities.size() == 2
 		Notification.count() == 3
 	}
 	
@@ -232,21 +232,21 @@ class NotificationControllerSpec  extends IntegrationTests{
 		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
-		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
-		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,false)
-		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
+		workOrderNotificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
+		workOrderNotificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,false)
+		workOrderNotificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
 		setupSecurityManager(receiverFacility)
-		notificationController = new NotificationController()
+		workOrderNotificationController = new WorkOrderNotificationController()
 		
 		when://Get only those that are unread
-		notificationController.params.read = "false"
-		notificationController.params.to = Initializer.now()+1
-		notificationController.filter()
+		workOrderNotificationController.params.read = "false"
+		workOrderNotificationController.params.to = Initializer.now()+1
+		workOrderNotificationController.filter()
 		
 		then:
 		//There are 4 notifications because the creator of a workorder always gets a copy
 		Notification.count() == 4
-		notificationController.modelAndView.model.entities.size() == 2
+		workOrderNotificationController.modelAndView.model.entities.size() == 2
 	}
 	
 	def "can search notifications"(){
@@ -277,17 +277,17 @@ class NotificationControllerSpec  extends IntegrationTests{
 		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
-		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
-		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,false)
-		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
+		workOrderNotificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
+		workOrderNotificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,false)
+		workOrderNotificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
 		setupSecurityManager(receiverFacility)
-		notificationController = new NotificationController()
+		workOrderNotificationController = new WorkOrderNotificationController()
 		
 		when://Get only those that are unread
-		notificationController.params.q = "one"
-		notificationController.search()
+		workOrderNotificationController.params.q = "one"
+		workOrderNotificationController.search()
 		
 		then:
-		notificationController.modelAndView.model.entities.size() == 1
+		workOrderNotificationController.modelAndView.model.entities.size() == 1
 	}
 }

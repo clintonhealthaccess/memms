@@ -47,6 +47,8 @@ import org.chai.location.Location;
 import org.chai.location.LocationLevel;
 import org.chai.memms.maintenance.Comment;
 import org.chai.memms.maintenance.MaintenanceProcess;
+import org.chai.memms.maintenance.NewEquipmentNotification
+import org.chai.memms.maintenance.WorkOrderNotification
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.maintenance.Notification;
 import org.chai.memms.maintenance.WorkOrder;
@@ -500,9 +502,9 @@ public class Initializer {
 		def workOrderOne =  newWorkOrder(equipment01,"First order",Criticality.NORMAL,user,now()-1,FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		def statusOne =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATFOSA,now()-1,user,false)
 		def statusTwo =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATMMC,now(),user,true)
-		def notifationOne = newNotification(workOrderOne, user, techFac,now(), "notifationOne")
-		def notifationTwo = newNotification(workOrderOne, techFac, user,now(), "I am currentlly working on this, but needs further review. Am making this long to see how it fits when reading it.")
-		def notifationThree = newNotification(workOrderOne, techFac, techMoH,now(), "notifationThree")
+		def notifationOne = newWorkOrderNotification(workOrderOne, user, techFac,now(), "notifationOne")
+		def notifationTwo = newWorkOrderNotification(workOrderOne, techFac, user,now(), "I am currentlly working on this, but needs further review. Am making this long to see how it fits when reading it.")
+		def notifationThree = newWorkOrderNotification(workOrderOne, techFac, techMoH,now(), "notifationThree")
 		workOrderOne.addToStatus(statusOne)
 		workOrderOne.addToStatus(statusTwo)
 		workOrderOne.save(failOnError:true)
@@ -518,8 +520,8 @@ public class Initializer {
 		def statusSeven =  newWorkOrderStatus(workOrderFive,OrderStatus.CLOSEDFIXED,now(),user,false)
 		workOrderFive.closedOn = now()
 		workOrderTwo.save(failOnError:true)
-		def notifationFour = newNotification(workOrderOne, user, techFac,now(), "Solve this for me")
-		def notifationFive = newNotification(workOrderOne, techFac, user,now(), "More information needed")
+		def notifationFour = newWorkOrderNotification(workOrderOne, user, techFac,now(), "Solve this for me")
+		def notifationFive = newWorkOrderNotification(workOrderOne, techFac, user,now(), "More information needed")
 		workOrderFive.addToStatus(statusFour)
 		workOrderFive.addToStatus(statusFive)
 		workOrderFive.addToStatus(statusSix)
@@ -573,9 +575,14 @@ public class Initializer {
 	public static def newWorkOrder(def equipment, def description, def criticality,def addedBy, def openOn, def closedOn, def failureReason,def currentStatus){
 		return new WorkOrder(equipment:equipment, description:description, criticality:criticality,addedBy:addedBy, openOn: openOn, closedOn:closedOn, currentStatus:currentStatus,failureReason:failureReason).save(failOnError:true)
 	}
-	public static newNotification(def workOrder, def sender, def receiver,def writtenOn, def content){
-		return new Notification(workOrder: workOrder, sender: sender, receiver: receiver, writtenOn: writtenOn, content: content).save(failOnError: true)
+	public static newWorkOrderNotification(def workOrder, def sender, def receiver,def writtenOn, def content){
+		return new WorkOrderNotification(workOrder: workOrder, sender: sender, receiver: receiver, writtenOn: writtenOn, content: content).save(failOnError: true)
 	}
+	
+	public static newNewEquipmentNotification(def dataLocation, def department, def sender, def receiver,def writtenOn, def content){
+		return new NewEquipmentNotification(dataLocation:dataLocation, department:department, sender: sender, receiver: receiver, writtenOn: writtenOn, content: content).save(failOnError: true)
+	}
+	
 	public static newComment(def workOrder, def writtenBy, def writtenOn, def content){
 		return new Comment(workOrder: workOrder, writtenBy: writtenBy, writtenOn: writtenOn, content: content ).save(failOnError: true)
 	}

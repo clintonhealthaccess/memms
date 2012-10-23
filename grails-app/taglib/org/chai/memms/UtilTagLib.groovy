@@ -37,12 +37,12 @@ class UtilTagLib {
 	
 	def languageService
 	
-	def notificationService
+	def workOrderNotificationService
 	
 	def notificationCount = { attrs, body ->
 		//TODO find if a user object can be passed form the view
 		def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])
-		out << notificationService.getUnreadNotifications(user)
+		out << workOrderNotificationService.getUnreadNotifications(user)
 	}
 	def createLinkWithTargetURI = {attrs, body ->
 		if (attrs['params'] == null) attrs['params'] = [:]

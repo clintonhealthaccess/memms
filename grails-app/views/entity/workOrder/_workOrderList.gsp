@@ -60,7 +60,7 @@
 		  			</g:if>
 				</td>
 				<td>
-					<a href="${createLinkWithTargetURI(controller:'notification', action:'list', params:[id: order.id, read:false])}">${order.getUnReadNotificationsForUser(User.findByUuid(SecurityUtils.subject.principal, [cache: true])).size()}</a>
+					<a href="${createLinkWithTargetURI(controller:'workOrderNotification', action:'list', params:[id: order.id, read:false])}">${order.getUnReadNotificationsForUser(User.findByUuid(SecurityUtils.subject.principal, [cache: true])).size()}</a>
 				</td>
 			</tr>
 		</g:each>

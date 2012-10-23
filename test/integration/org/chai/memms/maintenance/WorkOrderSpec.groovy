@@ -91,8 +91,8 @@ class WorkOrderSpec extends IntegrationTests{
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment,"Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		when:
-		workOrder.addToNotifications(Initializer.newNotification(workOrder, senderOne, receiver,Initializer.now(), "test one"))
-		workOrder.addToNotifications(Initializer.newNotification(workOrder, senderTwo, receiver,Initializer.now(), "test one"))
+		workOrder.addToNotifications(Initializer.newWorkOrderNotification(workOrder, senderOne, receiver,Initializer.now(), "test one"))
+		workOrder.addToNotifications(Initializer.newWorkOrderNotification(workOrder, senderTwo, receiver,Initializer.now(), "test one"))
 		workOrder.save(failOnError:true)
 		then:
 		workOrder.notifications.size() == 2
@@ -108,8 +108,8 @@ class WorkOrderSpec extends IntegrationTests{
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment,"Nothing yet",Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		when:
-		def notificationOne = Initializer.newNotification(workOrder, sender, receiver,Initializer.now(), "test one")
-		def notificationTwo = Initializer.newNotification(workOrder, sender, receiver,Initializer.now(), "test Two")
+		def notificationOne = Initializer.newWorkOrderNotification(workOrder, sender, receiver,Initializer.now(), "test one")
+		def notificationTwo = Initializer.newWorkOrderNotification(workOrder, sender, receiver,Initializer.now(), "test Two")
 		
 		workOrder.addToNotifications(notificationOne)
 		workOrder.addToNotifications(notificationTwo)
@@ -131,8 +131,8 @@ class WorkOrderSpec extends IntegrationTests{
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment,"Nothing yet",Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		when:
-		def notificationOne = Initializer.newNotification(workOrder, sender, receiver,Initializer.now(), "test one")
-		def notificationTwo = Initializer.newNotification(workOrder, receiver, sender,Initializer.now(), "test Two")
+		def notificationOne = Initializer.newWorkOrderNotification(workOrder, sender, receiver,Initializer.now(), "test one")
+		def notificationTwo = Initializer.newWorkOrderNotification(workOrder, receiver, sender,Initializer.now(), "test Two")
 		
 		workOrder.addToNotifications(notificationOne)
 		workOrder.addToNotifications(notificationTwo)
