@@ -33,6 +33,7 @@ import org.apache.commons.lang.math.NumberUtils
 import org.apache.shiro.SecurityUtils;
 import org.chai.location.DataLocationType;
 import org.chai.memms.security.User
+import org.chai.location.CalculationLocation;
 import org.chai.location.Location
 import org.chai.location.LocationLevel
 
@@ -77,5 +78,9 @@ public abstract class AbstractController {
 		}
 		
 		return dataLocationTypes.sort()
+	}
+	
+	def hasAccess(CalculationLocation location){
+		if(!user.canAccessCalculationLocation(location)) response.sendError(403)
 	}
 }

@@ -30,7 +30,8 @@ package org.chai.memms.task
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import org.chai.memms.task.DataExportTask
+
+import org.chai.task.DataExportTask;
 
 public  interface Exporter {
 	public abstract List<String> getExportDataHeaders();

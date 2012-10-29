@@ -45,6 +45,7 @@ class FilterTagLib {
 		
 	def locationFilter = {attrs, body ->
 		def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])
+		log.debug("user : ${user}, at location: ${user.location}")
 		Location.withTransaction {
 			def model = new HashMap(attrs)
 			def location = null
@@ -52,8 +53,9 @@ class FilterTagLib {
 			def locationFilterTree = null
 			if(user.location instanceof Location){
 				location = attrs['selected']
-				locationFilterRoot = user.location//locationService.getRootLocation()
+				locationFilterRoot = user.location
 				locationFilterTree = locationFilterRoot.collectTreeWithDataLocations(attrs['skipLevels'], attrs['selectedTypes'])
+				log.debug("location tree : " + locationFilterTree.each{it} + " , with attributes : " + attrs)
 			}
 			model << 
 				[

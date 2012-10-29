@@ -40,7 +40,7 @@ import java.util.zip.ZipInputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.chai.memms.task.ImportTask
+import org.chai.task.ImportTask
 import org.supercsv.exception.SuperCSVException;
 import org.supercsv.io.CsvMapReader;
 import org.supercsv.io.ICsvMapReader;

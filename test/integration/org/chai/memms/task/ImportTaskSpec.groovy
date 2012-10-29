@@ -4,7 +4,11 @@ import grails.validation.ValidationException;
 
 import org.apache.commons.io.FileUtils;
 import org.chai.memms.IntegrationTests;
-import org.chai.memms.task.Task.TaskStatus;
+import org.chai.task.Task.TaskStatus
+import org.chai.task.EquipmentTypeImportTask;
+import org.chai.task.FileType;
+import org.chai.task.ImportTask;
+import org.chai.task.Task
 import org.codehaus.groovy.grails.plugins.testing.GrailsMockMultipartFile;
 
 class ImportTaskSpec extends IntegrationTests {

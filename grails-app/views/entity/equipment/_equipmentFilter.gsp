@@ -46,8 +46,8 @@
 						<label><g:message code="equipment.obsolete.label" /></label> 
 						<select name="obsolete">
 								<option value=""><g:message code="default.please.select" /></option>
-								<option value="true" ${filterCmd?.obsolete?.equals("true")? 'selected' : ''} ><g:message code="default.boolean.true" /></option>
-								<option value="false" ${filterCmd?.obsolete?.equals("false")? 'selected' : ''}><g:message code="default.boolean.false" /></option>
+								<option value="true" ${filterCmd?.obsolete?.equals("true")? 'selected' : ''} ><g:message code="obsolete.boolean.true" /></option>
+								<option value="false" ${filterCmd?.obsolete?.equals("false")? 'selected' : ''}><g:message code="obsolete.boolean.false" /></option>
 						</select>
 					</li>
 					<li><g:selectFromEnum name="status" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}" /></li>

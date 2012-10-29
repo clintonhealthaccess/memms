@@ -2,15 +2,15 @@
 	<thead>
 		<tr>
 			<th></th>
-			<g:sortableColumn property="type" defaultOrder="asc" title="${message(code: 'equipment.type.label')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
 			<g:sortableColumn property="code" defaultOrder="asc" title="${message(code: 'equipment.code.label')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
+			<g:sortableColumn property="type" defaultOrder="asc" title="${message(code: 'equipment.type.label')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
 			<g:sortableColumn property="model" defaultOrder="asc" title="${message(code: 'equipment.model.label')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
-			<g:sortableColumn property="manufacturer" defaultOrder="asc" title="${message(code: 'provider.type.manufacturer')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
-			<g:sortableColumn property="supplier" defaultOrder="asc" title="${message(code: 'provider.type.supplier')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
 			<th><g:message code="location.label"/></th>
 			<th><g:message code="equipment.status.label"/></th>
-			<g:sortableColumn property="purchaser" defaultOrder="asc" title="${message(code: 'equipment.purchaser.label')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
 			<g:sortableColumn property="obsolete" defaultOrder="asc" title="${message(code: 'equipment.obsolete.label')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
+			<g:sortableColumn property="manufacturer" defaultOrder="asc" title="${message(code: 'provider.type.manufacturer')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
+			<g:sortableColumn property="supplier" defaultOrder="asc" title="${message(code: 'provider.type.supplier')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
+			<g:sortableColumn property="purchaser" defaultOrder="asc" title="${message(code: 'equipment.purchaser.label')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
 			<th><g:message code="work.order.label"/></th>
 		</tr>
 	</thead>
@@ -31,11 +31,9 @@
 						</li>
 					</ul>
 				</td>
-				<td>${equipment.type.names}</td>
 				<td>${equipment.code}</td>
+				<td>${equipment.type.names}</td>
 				<td>${equipment.model}</td>
-				<td>${equipment.manufacturer.contact.contactName}</td>
-				<td>${equipment.supplier.contact.contactName}</td>
 				<td>
 					<g:message code="datalocation.label"/>: ${equipment.dataLocation.names}<br/>
 					<g:message code="department.label"/>: ${equipment.department.names}<br/>
@@ -46,10 +44,15 @@
   	    				${message(code: equipment.currentState?.status?.messageCode+'.'+equipment.currentState?.status?.name)}
   	    			</a>
 				</td>
-				<td>${message(code: equipment.purchaser?.messageCode+'.'+equipment.purchaser?.name)}</td>
 				<td>
 					<g:listCheckBox name="obsolete" id="${equipment.id}" checked="${(!equipment.obsolete)?:'checked'}"/>
 				</td>
+				<td>${equipment.manufacturer.contact.contactName}</td>
+				<td>${equipment.supplier.contact.contactName}</td>
+				
+				
+				<td>${message(code: equipment.purchaser?.messageCode+'.'+equipment.purchaser?.name)}</td>
+				
 				<td>
 					<a href="${createLinkWithTargetURI(controller:'workOrderView', action:'list', params:['equipment.id': equipment?.id])}" title="${message(code: 'work.order.see.list.label')}" class="tooltip">
   	    				${equipment.workOrders.size()}

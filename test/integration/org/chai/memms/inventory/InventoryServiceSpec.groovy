@@ -53,7 +53,7 @@ class InventoryServiceSpec extends IntegrationTests{
 		when:
 		def inventories = inventoryService.getInventoryByLocation(Location.findByCode('Burera'),types,adaptParamsForList())
 		then:
-		inventories.totalCount == 1
-		inventories.inventoryList.size() == 1
+		inventories.totalCount == 2
+		inventories.inventoryList.size() == 2
 	}
 }

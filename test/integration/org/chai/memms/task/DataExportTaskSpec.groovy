@@ -14,7 +14,11 @@ import org.chai.location.Location
 import org.chai.location.LocationLevel
 import org.chai.memms.security.Role;
 import org.chai.memms.security.User
-import org.chai.memms.task.Task.TaskStatus
+import org.chai.task.Task.TaskStatus
+import org.chai.task.EquipmentExportFilter;
+import org.chai.task.EquipmentExportTask;
+import org.chai.task.ExportFilter;
+import org.chai.task.Task
 
 class DataExportTaskSpec extends IntegrationTests {
 

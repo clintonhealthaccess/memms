@@ -26,7 +26,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.chai.memms.task
+package org.chai.task
 
 import java.util.Map;
 import java.util.Set;

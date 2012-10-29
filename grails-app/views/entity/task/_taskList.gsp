@@ -1,4 +1,5 @@
-<%@ page import="org.chai.memms.task.Task.TaskStatus" %>
+<%@ page import="org.chai.task.Task.TaskStatus" %>
+<%@ page import="org.chai.memms.security.User" %>
 <table class="items spaced">
 	<thead>
 		<tr>
@@ -26,7 +27,7 @@
 						</li>
 					</ul>
 				</td>
-				<td>${task.user==null?'-':task.user.username}</td>  				
+				<td>${task.principal!=null?User.findByUuid(task.principal)?.username:''}</td>   				
 				<td>${task.class.simpleName}</td>
 				<td>${task.information}</td>
 				<td>${task.sentToQueue}</td>

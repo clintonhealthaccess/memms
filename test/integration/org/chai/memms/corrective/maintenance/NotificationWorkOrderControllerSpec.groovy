@@ -27,11 +27,11 @@ class NotificationWorkOrderControllerSpec  extends IntegrationTests{
 		setupEquipment()
 		def sender = newUser("sender", true,true)
 		setupSecurityManager(sender)
-		sender.userType = UserType.DATACLERK
+		sender.userType = UserType.TITULAIREHC
 		sender.location = DataLocation.findByCode(KIVUYE)
 		sender.save(failOnError:true)
 		def receiverOne = newUser("receiverOne", true,true)
-		receiverOne.userType = UserType.TECHNICIANFACILITY
+		receiverOne.userType = UserType.TECHNICIANDH
 		receiverOne.location = DataLocation.findByCode(KIVUYE)
 		receiverOne.save(failOnError:true)
 		def equipment = Equipment.findBySerialNumber(CODE(123))
@@ -51,12 +51,12 @@ class NotificationWorkOrderControllerSpec  extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def sender = newUser("sender", true,true)
-		sender.userType = UserType.DATACLERK
+		sender.userType = UserType.HOSPITALDEPARTMENT
 		sender.location = DataLocation.findByCode(KIVUYE)
 		sender.save(failOnError:true)
 		
 		def receiverOne = newUser("receiverOne", true,true)
-		receiverOne.userType = UserType.TECHNICIANFACILITY
+		receiverOne.userType = UserType.TECHNICIANDH
 		receiverOne.location = DataLocation.findByCode(KIVUYE)
 		receiverOne.save(failOnError:true)
 
@@ -75,22 +75,22 @@ class NotificationWorkOrderControllerSpec  extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def senderOne = newUser("senderOne", true,true)
-		senderOne.userType = UserType.DATACLERK
+		senderOne.userType = UserType.TITULAIREHC
 		senderOne.location = DataLocation.findByCode(KIVUYE)
 		senderOne.save(failOnError:true)
 		
 		def senderTwo = newUser("senderTwo", true,true)
-		senderTwo.userType = UserType.DATACLERK
+		senderTwo.userType = UserType.TITULAIREHC
 		senderTwo.location = DataLocation.findByCode(KIVUYE)
 		senderTwo.save(failOnError:true)
 		
 		def receiverFacility = newUser("receiverFacility", true,true)
-		receiverFacility.userType = UserType.TECHNICIANFACILITY
+		receiverFacility.userType = UserType.TECHNICIANDH
 		receiverFacility.location = DataLocation.findByCode(KIVUYE)
 		receiverFacility.save(failOnError:true)
 		
 		def receiverMoH = newUser("receiverMoH", true,true)
-		receiverMoH.userType = UserType.TECHNICIANMOH
+		receiverMoH.userType = UserType.TECHNICIANDH
 		receiverMoH.location = Location.findByCode(RWANDA)
 		receiverMoH.save(failOnError:true)
 		def equipment = Equipment.findBySerialNumber(CODE(123))
@@ -119,22 +119,22 @@ class NotificationWorkOrderControllerSpec  extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def senderOne = newUser("senderOne", true,true)
-		senderOne.userType = UserType.DATACLERK
+		senderOne.userType = UserType.TITULAIREHC
 		senderOne.location = DataLocation.findByCode(KIVUYE)
 		senderOne.save(failOnError:true)
 		
 		def senderTwo = newUser("senderTwo", true,true)
-		senderTwo.userType = UserType.DATACLERK
+		senderTwo.userType = UserType.TITULAIREHC
 		senderTwo.location = DataLocation.findByCode(KIVUYE)
 		senderTwo.save(failOnError:true)
 		
 		def receiverFacility = newUser("receiverFacility", true,true)
-		receiverFacility.userType = UserType.TECHNICIANFACILITY
+		receiverFacility.userType = UserType.TECHNICIANDH
 		receiverFacility.location = DataLocation.findByCode(KIVUYE)
 		receiverFacility.save(failOnError:true)
 		
 		def receiverMoH = newUser("receiverMoH", true,true)
-		receiverMoH.userType = UserType.TECHNICIANMOH
+		receiverMoH.userType = UserType.TECHNICIANDH
 		receiverMoH.location = Location.findByCode(RWANDA)
 		receiverMoH.save(failOnError:true)
 		def equipment = Equipment.findBySerialNumber(CODE(123))
@@ -157,7 +157,7 @@ class NotificationWorkOrderControllerSpec  extends IntegrationTests{
 		
 		then:
 		notificationWorkOrderController.modelAndView.model.entities.size() == 1
-		Notification.count() == 4
+		Notification.count() == 3
 	}
 	
 	def "can list notification - all of them for the current user"(){
@@ -165,22 +165,22 @@ class NotificationWorkOrderControllerSpec  extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def senderOne = newUser("senderOne", true,true)
-		senderOne.userType = UserType.DATACLERK
+		senderOne.userType = UserType.TITULAIREHC
 		senderOne.location = DataLocation.findByCode(KIVUYE)
 		senderOne.save(failOnError:true)
 		
 		def senderTwo = newUser("senderTwo", true,true)
-		senderTwo.userType = UserType.DATACLERK
+		senderTwo.userType = UserType.TITULAIREHC
 		senderTwo.location = DataLocation.findByCode(KIVUYE)
 		senderTwo.save(failOnError:true)
 		
 		def receiverFacility = newUser("receiverFacility", true,true)
-		receiverFacility.userType = UserType.TECHNICIANFACILITY
+		receiverFacility.userType = UserType.TECHNICIANDH
 		receiverFacility.location = DataLocation.findByCode(KIVUYE)
 		receiverFacility.save(failOnError:true)
 		
 		def receiverMoH = newUser("receiverMoH", true,true)
-		receiverMoH.userType = UserType.TECHNICIANMOH
+		receiverMoH.userType = UserType.TECHNICIANDH
 		receiverMoH.location = Location.findByCode(RWANDA)
 		receiverMoH.save(failOnError:true)
 		def equipment = Equipment.findBySerialNumber(CODE(123))
@@ -210,22 +210,22 @@ class NotificationWorkOrderControllerSpec  extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def senderOne = newUser("senderOne", true,true)
-		senderOne.userType = UserType.DATACLERK
+		senderOne.userType = UserType.TITULAIREHC
 		senderOne.location = DataLocation.findByCode(KIVUYE)
 		senderOne.save(failOnError:true)
 		
 		def senderTwo = newUser("senderTwo", true,true)
-		senderTwo.userType = UserType.DATACLERK
+		senderTwo.userType = UserType.TITULAIREHC
 		senderTwo.location = DataLocation.findByCode(KIVUYE)
 		senderTwo.save(failOnError:true)
 		
 		def receiverFacility = newUser("receiverFacility", true,true)
-		receiverFacility.userType = UserType.TECHNICIANFACILITY
+		receiverFacility.userType = UserType.TECHNICIANDH
 		receiverFacility.location = DataLocation.findByCode(KIVUYE)
 		receiverFacility.save(failOnError:true)
 		
 		def receiverMoH = newUser("receiverMoH", true,true)
-		receiverMoH.userType = UserType.TECHNICIANMOH
+		receiverMoH.userType = UserType.TECHNICIANDH
 		receiverMoH.location = Location.findByCode(RWANDA)
 		receiverMoH.save(failOnError:true)
 		def equipment = Equipment.findBySerialNumber(CODE(123))
@@ -255,22 +255,22 @@ class NotificationWorkOrderControllerSpec  extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def senderOne = newUser("senderOne", true,true)
-		senderOne.userType = UserType.DATACLERK
+		senderOne.userType = UserType.TITULAIREHC
 		senderOne.location = DataLocation.findByCode(KIVUYE)
 		senderOne.save(failOnError:true)
 		
 		def senderTwo = newUser("senderTwo", true,true)
-		senderTwo.userType = UserType.DATACLERK
+		senderTwo.userType = UserType.TITULAIREHC
 		senderTwo.location = DataLocation.findByCode(KIVUYE)
 		senderTwo.save(failOnError:true)
 		
 		def receiverFacility = newUser("receiverFacility", true,true)
-		receiverFacility.userType = UserType.TECHNICIANFACILITY
+		receiverFacility.userType = UserType.TECHNICIANDH
 		receiverFacility.location = DataLocation.findByCode(KIVUYE)
 		receiverFacility.save(failOnError:true)
 		
 		def receiverMoH = newUser("receiverMoH", true,true)
-		receiverMoH.userType = UserType.TECHNICIANMOH
+		receiverMoH.userType = UserType.TECHNICIANDH
 		receiverMoH.location = Location.findByCode(RWANDA)
 		receiverMoH.save(failOnError:true)
 		def equipment = Equipment.findBySerialNumber(CODE(123))

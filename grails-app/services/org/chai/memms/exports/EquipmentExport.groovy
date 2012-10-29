@@ -38,13 +38,13 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.chai.task.DataExportTask;
+import org.chai.task.EquipmentExportFilter;
+import org.chai.task.Progress;
+import org.chai.task.Task;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.EquipmentType
-import org.chai.memms.task.DataExportTask;
-import org.chai.memms.task.EquipmentExportFilter;
-import org.chai.memms.task.Progress;
-import org.chai.memms.task.Task;
 import org.chai.memms.util.ImportExportConstant;
 import org.chai.memms.util.Utils;
 import org.supercsv.io.CsvListWriter;
@@ -86,7 +86,7 @@ class EquipmentExport implements Exporter{
 					equipment.getCurrentState()?.status,equipment.dataLocation?.code,equipment.dataLocation?.getNames(new Locale("en")),equipment.dataLocation?.getNames(new Locale("fr")),
 					equipment.department?.code,equipment.department?.getNames(new Locale("en")),equipment.department?.getNames(new Locale("fr")),equipment.room,
 					equipment.manufacturer?.code,equipment.manufacturer?.contact?.contactName,equipment.manufactureDate,equipment.supplier?.code,equipment.supplier?.contact?.contactName,
-					equipment.purchaseDate,equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",equipment.donation,equipment.obsolete,equipment.warranty?.startDate,equipment.warranty?.numberOfMonth]
+					equipment.purchaseDate,equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",equipment.donorName?:"n/a",equipment.obsolete,equipment.warranty?.startDate,equipment.warranty?.numberOfMonth]
 				log.debug("exporting line=" + line)
 				writer.write(line)
 				progress.incrementProgress()

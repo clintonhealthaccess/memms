@@ -44,7 +44,7 @@ import org.chai.location.Location
 import org.chai.location.LocationLevel
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
-import org.chai.memms.task.EquipmentExportFilter;
+import org.chai.task.EquipmentExportFilter;
 
 /**
  * @author Jean Kahigiso M.

@@ -32,7 +32,7 @@ import org.chai.memms.inventory.EquipmentType
 import org.chai.memms.inventory.EquipmentTypeService;
 import org.chai.memms.imports.ImporterErrorManager
 import org.chai.memms.imports.ImporterError
-import org.chai.memms.task.ImportTask
+import org.chai.task.ImportTask
 import org.chai.memms.util.ImportExportConstant;
 import org.chai.memms.util.Utils
 import org.hibernate.SessionFactory;
@@ -85,8 +85,8 @@ class EquipmentTypeImporter extends FileImporter {
 			def equipmentType = EquipmentType.findByCode(newDeviceCode)
 			if(equipmentType != null){
 				equipmentType.lastModifiedOn = new Date()
-				UtilsService.setLocaleValueInMap(equipmentType,["en":newDeviceNameEn,"fr":newDeviceNameFr],"Names")
-				UtilsService.setLocaleValueInMap(equipmentType,["en":newDescriptionEn,"fr":newDescriptionFr],"Descriptions")
+				Utils.setLocaleValueInMap(equipmentType,["en":newDeviceNameEn,"fr":newDeviceNameFr],"Names")
+				Utils.setLocaleValueInMap(equipmentType,["en":newDescriptionEn,"fr":newDescriptionFr],"Descriptions")
 				if(equipmentType.save(flush: true) == null){
 					manager.numberOfUnsavedRows++
 					manager.getErrors().add(new ImporterError(fileName,lineNumber, Arrays.asList(headers).toString(),"import.error.message.not.saved"))
@@ -95,9 +95,9 @@ class EquipmentTypeImporter extends FileImporter {
 				}
 			}else{
 				equipmentType = new EquipmentType(code:newDeviceCode,addedOn:new Date(),lastModifiedOn:new Date())
-				UtilsService.setLocaleValueInMap(equipmentType,["en":newDeviceNameEn,"fr":newDeviceNameFr],"Names")
+				Utils.setLocaleValueInMap(equipmentType,["en":newDeviceNameEn,"fr":newDeviceNameFr],"Names")
 				equipmentType.observation = equipmentTypeService.importToObservation( newDeviceObservation )
-				UtilsService.setLocaleValueInMap(equipmentType,["en":newDescriptionEn,"fr":newDescriptionFr],"Descriptions")
+				Utils.setLocaleValueInMap(equipmentType,["en":newDescriptionEn,"fr":newDescriptionFr],"Descriptions")
 				if(equipmentType.save(flush: true) == null){
 					manager.numberOfUnsavedRows++
 					manager.getErrors().add(new ImporterError(fileName,lineNumber, Arrays.asList(headers).toString(),"import.error.message.not.saved"))

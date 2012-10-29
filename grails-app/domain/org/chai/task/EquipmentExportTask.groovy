@@ -26,23 +26,28 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.chai.memms.task
+package org.chai.task
 
 import java.util.Map;
+import java.util.Set;
 
+import org.chai.memms.inventory.EquipmentType;
+import org.chai.memms.inventory.Provider;
+import org.chai.memms.inventory.EquipmentStatus.Status;
+import org.chai.memms.exports.EquipmentExport;
 import org.chai.memms.exports.EquipmentTypeExport;
 import org.chai.memms.task.Exporter;
+import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocationType;
 import org.chai.memms.util.Utils;
 
-class EquipmentTypeExportTask extends DataExportTask {
-	
+class EquipmentExportTask extends DataExportTask{
 	String getInformation() {
 		//TODO find out why the message is not working
-		return "EquipmentTypeExport"//message(code: 'equipment.type.label') + '<br/>'+message(code:'import.file.label')+': '+getOutputFilename()
+		return "export equipment"//message(code: 'equipment.type.label') + '<br/>'+message(code:'import.file.label')+': '+getOutputFilename()
 	}
-	
 	Exporter getExporter() {
-		return new EquipmentTypeExport()
+		return new EquipmentExport()
 	}
 	
 	

@@ -26,7 +26,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.chai.memms.task
+package org.chai.task
 
 import java.util.Map;
 import java.util.Set;
@@ -41,19 +41,31 @@ import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.memms.util.Utils;
 
-class ExportFilter {
-
-	static hasMany = [calculationLocations:CalculationLocation,dataLocationTypes:DataLocationType]
+/**
+ * @author Jean Kahigiso M.
+ *
+ */
+class EquipmentExportFilter extends ExportFilter{
+	Status equipmentStatus
+	String donated
+	String obsolete
 	
+	static hasMany = [equipmentTypes:EquipmentType,manufacturers:Provider,suppliers:Provider,serviceProviders:Provider]
 	static constraints = {
-		calculationLocations nullable: true, blank: true
-		dataLocationTypes nullable: true, blank: true
-		
+		equipmentTypes nullable: true, blank: true
+		manufacturers nullable: true, blank: true
+		suppliers nullable: true, blank: true
+		serviceProviders nullable: true, blank: true
+		equipmentStatus nullable: true
+		donated nullable: true, blank: true
+		obsolete nullable: true, blank: true
 	}
 	static mapping = {
 		table "memms_equipment_export_filter"
 		version false
-		calculationLocations joinTable:[name:"memms_equipment_calc_location_export_filter",key:"calc_location_id",column:"export_filter_id"]
-		dataLocationTypes joinTable:[name:"memms_equipment_location_type_export_filter",key:"location_type_id",column:"export_filter_id"]
+		equipmentTypes joinTable:[name:"memms_equipment_equipment_type_export_filter",key:"type_id",column:"equipment_export_filter_id"]
+		manufacturers joinTable:[name:"memms_equipment_manufacturer_export_filter",key:"manufacturer_id",column:"equipment_export_filter_id"]
+		suppliers joinTable:[name:"memms_equipment_supplier_export_filter",key:"supplier_id",column:"equipment_export_filter_id"]
+		serviceProviders joinTable:[name:"memms_equipment_service_provider_export_filter",key:"service_provider_id",column:"equipment_export_filter_id"]
 	}
 }

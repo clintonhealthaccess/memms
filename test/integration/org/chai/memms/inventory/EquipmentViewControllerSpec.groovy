@@ -28,6 +28,9 @@ class EquipmentViewControllerSpec extends IntegrationTests{
 		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
 		
 		def user  = newUser("admin", "Admin UID")
+		user.location = DataLocation.findByCode('Butaro DH')
+		user.save(failOnError:true)
+		setupSecurityManager(user)
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
@@ -66,14 +69,14 @@ class EquipmentViewControllerSpec extends IntegrationTests{
 
 		Initializer.createDummyStructure()
 		Initializer.createUsers()
-		setupSecurityManager(User.findByUsername('user'))//data location
+		setupSecurityManager(User.findByUsername('titulaireHC'))//data location
 
 		equipmentViewController = new EquipmentViewController();
 		when:
 		equipmentViewController.summaryPage()
 		
 		then:
-		equipmentViewController.response.redirectedUrl == '/equipmentView/list?dataLocation.id=' + User.findByUsername('user').location.id
+		equipmentViewController.response.redirectedUrl == '/equipmentView/list?dataLocation.id=' + User.findByUsername('titulaireHC').location.id
 	}
 	
 	def "does not redirects to listing when accessing summary page by a user with a location"(){

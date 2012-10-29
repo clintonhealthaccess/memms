@@ -32,9 +32,9 @@ import java.util.Set;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.memms.AbstractEntityController;
+import org.chai.task.EquipmentTypeExportFilter;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.EquipmentType;
-import org.chai.memms.task.EquipmentTypeExportFilter;
 
 /**
  * @author Eugene Munyaneza

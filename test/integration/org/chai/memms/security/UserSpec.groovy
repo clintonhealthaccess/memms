@@ -35,6 +35,12 @@ import org.chai.memms.security.User.UserType;
 import org.chai.memms.security.User
 import grails.validation.ValidationException
 
+import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocation
+import org.chai.location.DataLocationType
+import org.chai.location.Location
+import org.chai.location.LocationLevel
+
 class UserSpec  extends IntegrationTests {
 
 	def "can create and save a user"() {
@@ -181,4 +187,40 @@ class UserSpec  extends IntegrationTests {
 		then:
 		User.count() == 1
 	}
+	
+	def "find if a user has access to a given calculationlocation"() {
+		setup:
+		setupLocationTree()
+		def dataLocationKivuye = DataLocation.findByCode(KIVUYE)
+		def locationGitarama = Location.findByCode(GITARAMA)
+		
+		def userDataLocationKivuye = newOtherUser("kivuyeUser", "kivuyeUser", DataLocation.findByCode(KIVUYE))
+		def userDataLocationButaro = newOtherUser("butaroUser", "butaroUser", DataLocation.findByCode(BUTARO))
+		
+		def userLocationGitarama = newOtherUser("gitaramaUser", "gitaramaUser", Location.findByCode(GITARAMA))
+		def userLocationBurera = newOtherUser("bureraUser", "bureraUser", Location.findByCode(BURERA))
+		
+		def userLocationNorth = newOtherUser("northUser", "northUser", Location.findByCode(NORTH))
+		def userLocationSouth = newOtherUser("southUser", "southUser", Location.findByCode(SOUTH))
+		
+		expect:
+		!userLocationSouth.canAccessCalculationLocation(dataLocationKivuye)
+		userLocationSouth.canAccessCalculationLocation(locationGitarama)
+		
+		userLocationNorth.canAccessCalculationLocation(dataLocationKivuye)
+		!userLocationNorth.canAccessCalculationLocation(locationGitarama)
+		
+		!userLocationGitarama.canAccessCalculationLocation(dataLocationKivuye)
+		userLocationGitarama.canAccessCalculationLocation(locationGitarama)
+		
+		userLocationBurera.canAccessCalculationLocation(dataLocationKivuye)
+		!userLocationBurera.canAccessCalculationLocation(locationGitarama)
+		
+		userDataLocationKivuye.canAccessCalculationLocation(dataLocationKivuye)
+		!userDataLocationKivuye.canAccessCalculationLocation(locationGitarama)
+		
+		!userDataLocationButaro.canAccessCalculationLocation(dataLocationKivuye)
+		!userDataLocationButaro.canAccessCalculationLocation(locationGitarama)
+	}
 }
+

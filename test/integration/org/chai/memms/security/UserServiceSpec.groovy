@@ -100,8 +100,8 @@ class UserServiceSpec extends IntegrationTests{
 		Initializer.createInventoryStructure()
 
 		when:
-		def usersOne = userService.getActiveUserByTypeAndLocation(UserType.TECHNICIANFACILITY, CalculationLocation.findByCode(KIVUYE), [:])
-		def usersTwo = userService.getActiveUserByTypeAndLocation(UserType.TECHNICIANMOH, null, [:])
+		def usersOne = userService.getActiveUserByTypeAndLocation(UserType.TECHNICIANDH, CalculationLocation.findByCode(Initializer.NYANZA), [:])
+		def usersTwo = userService.getActiveUserByTypeAndLocation(UserType.TECHNICIANMMC, null, [:])
 		then:
 		usersOne.size()==1
 		usersTwo.size()==1
@@ -112,27 +112,27 @@ class UserServiceSpec extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def sender = newUser("sender", true,true)
-		sender.userType = UserType.DATACLERK
+		sender.userType = UserType.TITULAIREHC
 		sender.location = DataLocation.findByCode(KIVUYE)
 		sender.save(failOnError:true)
 		
 		def receiverFacilityOne = newUser("receiverFacilityOne", true,true)
-		receiverFacilityOne.userType = UserType.TECHNICIANFACILITY
+		receiverFacilityOne.userType = UserType.TECHNICIANDH
 		receiverFacilityOne.location = DataLocation.findByCode(KIVUYE)
 		receiverFacilityOne.save(failOnError:true)
 		
 		def receiverFacilityTwo = newUser("receiverFacilityTwo", true,true)
-		receiverFacilityTwo.userType = UserType.TECHNICIANFACILITY
+		receiverFacilityTwo.userType = UserType.TECHNICIANDH
 		receiverFacilityTwo.location = DataLocation.findByCode(KIVUYE)
 		receiverFacilityTwo.save(failOnError:true)
 		
 		def receiverMoHOne = newUser("receiverMoHOne", true,true)
-		receiverMoHOne.userType = UserType.TECHNICIANMOH
+		receiverMoHOne.userType = UserType.TECHNICIANMMC
 		receiverMoHOne.location = Location.findByCode(RWANDA)
 		receiverMoHOne.save(failOnError:true)
 		
 		def receiverMoHTwo = newUser("receiverMoHTwo", true,true)
-		receiverMoHTwo.userType = UserType.TECHNICIANMOH
+		receiverMoHTwo.userType = UserType.TECHNICIANMMC
 		receiverMoHTwo.location = Location.findByCode(RWANDA)
 		receiverMoHTwo.save(failOnError:true)
 		

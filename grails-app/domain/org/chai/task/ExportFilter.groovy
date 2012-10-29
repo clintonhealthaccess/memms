@@ -1,5 +1,5 @@
 /**
-	 * Copyright (c) 2012, Clinton Health Access Initiative.
+ * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
  *
@@ -26,38 +26,34 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.chai.memms.task
+package org.chai.task
 
 import java.util.Map;
+import java.util.Set;
 
-import org.chai.memms.imports.EquipmentTypeImporter
-import org.chai.memms.inventory.EquipmentTypeService;
+import org.chai.memms.inventory.EquipmentType;
+import org.chai.memms.inventory.Provider;
+import org.chai.memms.inventory.EquipmentStatus.Status;
+import org.chai.memms.exports.EquipmentExport;
 import org.chai.memms.exports.EquipmentTypeExport;
-import org.chai.memms.imports.FileImporter;
-import org.chai.memms.imports.ImporterErrorManager;
+import org.chai.memms.task.Exporter;
+import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocationType;
 import org.chai.memms.util.Utils;
 
-class EquipmentTypeImportTask extends ImportTask {
+class ExportFilter {
 
-	def equipmentTypeService
-	def sessionFactory;
+	static hasMany = [calculationLocations:CalculationLocation,dataLocationTypes:DataLocationType]
 	
-	String getInformation() {
-		return "equipmentTypeImport"//message(code: 'equipment.type.label') + '<br/>'+ message(code:'import.file.label')+': '+getInputFilename()
-	}
-	
-	FileImporter getImporter(ImporterErrorManager errorManager) {
+	static constraints = {
+		calculationLocations nullable: true, blank: true
+		dataLocationTypes nullable: true, blank: true
 		
-		return new EquipmentTypeImporter(sessionFactory,equipmentTypeService,errorManager)
 	}
-	
-	String getFormView() {
-		return 'equipmentTypeImport'	
-	}
-	
-	Map getFormModel() {
-		return [
-			task: this
-		]
+	static mapping = {
+		table "memms_equipment_export_filter"
+		version false
+		calculationLocations joinTable:[name:"memms_equipment_calc_location_export_filter",key:"calc_location_id",column:"export_filter_id"]
+		dataLocationTypes joinTable:[name:"memms_equipment_location_type_export_filter",key:"location_type_id",column:"export_filter_id"]
 	}
 }

@@ -1,7 +1,8 @@
-package org.chai.memms.task;
+package org.chai.task;
 
-import java.util.Map;
-import org.chai.memms.task.Task.TaskStatus;
+import java.util.Map
+import org.chai.task.Task
+import org.chai.task.Task.TaskStatus;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.chai.memms.exports.EquipmentTypeExport;

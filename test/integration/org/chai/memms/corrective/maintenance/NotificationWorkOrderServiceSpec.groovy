@@ -25,17 +25,17 @@ class NotificationWorkOrderServiceSpec  extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def sender = newUser("sender", true,true)
-		sender.userType = UserType.DATACLERK
+		sender.userType = UserType.TITULAIREHC
 		sender.location = DataLocation.findByCode(KIVUYE)
 		sender.save(failOnError:true)
 		
 		def receiverOne = newUser("receiverOne", true,true)
-		receiverOne.userType = UserType.TECHNICIANFACILITY
+		receiverOne.userType = UserType.TECHNICIANDH
 		receiverOne.location = DataLocation.findByCode(KIVUYE)
 		receiverOne.save(failOnError:true)
 		
 		def receiverTwo = newUser("receiverTwo", true,true)
-		receiverTwo.userType = UserType.TECHNICIANFACILITY
+		receiverTwo.userType = UserType.TECHNICIANDH
 		receiverTwo.location = DataLocation.findByCode(KIVUYE)
 		receiverTwo.save(failOnError:true)
 		def equipment = Equipment.findBySerialNumber(CODE(123))
@@ -51,27 +51,27 @@ class NotificationWorkOrderServiceSpec  extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def sender = newUser("sender", true,true)
-		sender.userType = UserType.DATACLERK
+		sender.userType = UserType.TITULAIREHC
 		sender.location = DataLocation.findByCode(KIVUYE)
 		sender.save(failOnError:true)
 		
 		def receiverFacilityOne = newUser("receiverFacilityOne", true,true)
-		receiverFacilityOne.userType = UserType.TECHNICIANFACILITY
+		receiverFacilityOne.userType = UserType.TECHNICIANDH
 		receiverFacilityOne.location = DataLocation.findByCode(KIVUYE)
 		receiverFacilityOne.save(failOnError:true)
 		
 		def receiverFacilityTwo = newUser("receiverFacilityTwo", true,true)
-		receiverFacilityTwo.userType = UserType.TECHNICIANFACILITY
+		receiverFacilityTwo.userType = UserType.TECHNICIANDH
 		receiverFacilityTwo.location = DataLocation.findByCode(KIVUYE)
 		receiverFacilityTwo.save(failOnError:true)
 		
 		def receiverMoHOne = newUser("receiverMoHOne", true,true)
-		receiverMoHOne.userType = UserType.TECHNICIANMOH
+		receiverMoHOne.userType = UserType.TECHNICIANMMC
 		receiverMoHOne.location = Location.findByCode(RWANDA)
 		receiverMoHOne.save(failOnError:true)
 		
 		def receiverMoHTwo = newUser("receiverMoHTwo", true,true)
-		receiverMoHTwo.userType = UserType.TECHNICIANMOH
+		receiverMoHTwo.userType = UserType.TECHNICIANMMC
 		receiverMoHTwo.location = Location.findByCode(RWANDA)
 		receiverMoHTwo.save(failOnError:true)
 		
@@ -89,17 +89,17 @@ class NotificationWorkOrderServiceSpec  extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def sender = newUser("sender", true,true)
-		sender.userType = UserType.DATACLERK
+		sender.userType = UserType.HOSPITALDEPARTMENT
 		sender.location = DataLocation.findByCode(KIVUYE)
 		sender.save(failOnError:true)
 		
 		def receiverOne = newUser("receiverOne", true,true)
-		receiverOne.userType = UserType.TECHNICIANFACILITY
+		receiverOne.userType = UserType.TECHNICIANDH
 		receiverOne.location = DataLocation.findByCode(KIVUYE)
 		receiverOne.save(failOnError:true)
 		
 		def receiverTwo = newUser("receiverTwo", true,true)
-		receiverTwo.userType = UserType.TECHNICIANFACILITY
+		receiverTwo.userType = UserType.TECHNICIANDH
 		receiverTwo.location = DataLocation.findByCode(KIVUYE)
 		receiverTwo.save(failOnError:true)
 		def equipment = Equipment.findBySerialNumber(CODE(123))
@@ -118,22 +118,22 @@ class NotificationWorkOrderServiceSpec  extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def senderOne = newUser("senderOne", true,true)
-		senderOne.userType = UserType.DATACLERK
+		senderOne.userType = UserType.HOSPITALDEPARTMENT
 		senderOne.location = DataLocation.findByCode(KIVUYE)
 		senderOne.save(failOnError:true)
 		
 		def senderTwo = newUser("senderTwo", true,true)
-		senderTwo.userType = UserType.DATACLERK
+		senderTwo.userType = UserType.HOSPITALDEPARTMENT
 		senderTwo.location = DataLocation.findByCode(KIVUYE)
 		senderTwo.save(failOnError:true)
 		
 		def receiverFacility = newUser("receiverFacility", true,true)
-		receiverFacility.userType = UserType.TECHNICIANFACILITY
+		receiverFacility.userType = UserType.TECHNICIANDH
 		receiverFacility.location = DataLocation.findByCode(KIVUYE)
 		receiverFacility.save(failOnError:true)
 		
 		def receiverMoH = newUser("receiverMoH", true,true)
-		receiverMoH.userType = UserType.TECHNICIANMOH
+		receiverMoH.userType = UserType.TECHNICIANMMC
 		receiverMoH.location = Location.findByCode(RWANDA)
 		receiverMoH.save(failOnError:true)
 		def equipment = Equipment.findBySerialNumber(CODE(123))
@@ -175,22 +175,22 @@ class NotificationWorkOrderServiceSpec  extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def senderOne = newUser("senderOne", true,true)
-		senderOne.userType = UserType.DATACLERK
+		senderOne.userType = UserType.HOSPITALDEPARTMENT
 		senderOne.location = DataLocation.findByCode(KIVUYE)
 		senderOne.save(failOnError:true)
 		
 		def senderTwo = newUser("senderTwo", true,true)
-		senderTwo.userType = UserType.DATACLERK
+		senderTwo.userType = UserType.HOSPITALDEPARTMENT
 		senderTwo.location = DataLocation.findByCode(KIVUYE)
 		senderTwo.save(failOnError:true)
 		
 		def receiverFacility = newUser("receiverFacility", true,true)
-		receiverFacility.userType = UserType.TECHNICIANFACILITY
+		receiverFacility.userType = UserType.TECHNICIANDH
 		receiverFacility.location = DataLocation.findByCode(KIVUYE)
 		receiverFacility.save(failOnError:true)
 		
 		def receiverMoH = newUser("receiverMoH", true,true)
-		receiverMoH.userType = UserType.TECHNICIANMOH
+		receiverMoH.userType = UserType.TECHNICIANMMC
 		receiverMoH.location = Location.findByCode(RWANDA)
 		receiverMoH.save(failOnError:true)
 		
@@ -213,17 +213,17 @@ class NotificationWorkOrderServiceSpec  extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def senderOne = newUser("senderOne", true,true)
-		senderOne.userType = UserType.DATACLERK
+		senderOne.userType = UserType.HOSPITALDEPARTMENT
 		senderOne.location = DataLocation.findByCode(KIVUYE)
 		senderOne.save(failOnError:true)
 		
 		def senderTwo = newUser("senderTwo", true,true)
-		senderTwo.userType = UserType.DATACLERK
+		senderTwo.userType = UserType.HOSPITALDEPARTMENT
 		senderTwo.location = DataLocation.findByCode(KIVUYE)
 		senderTwo.save(failOnError:true)
 		
 		def receiverFacility = newUser("receiverFacility", true,true)
-		receiverFacility.userType = UserType.TECHNICIANFACILITY
+		receiverFacility.userType = UserType.TECHNICIANDH
 		receiverFacility.location = DataLocation.findByCode(KIVUYE)
 		receiverFacility.save(failOnError:true)
 		

@@ -111,7 +111,7 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def clerk = newUser("clerk", true,true)
-		clerk.userType = UserType.DATACLERK
+		clerk.userType = UserType.TITULAIREHC
 		clerk.location = DataLocation.findByCode(KIVUYE)
 		clerk.save(failOnError:true)
 		def equipment = Equipment.findBySerialNumber(CODE(123))

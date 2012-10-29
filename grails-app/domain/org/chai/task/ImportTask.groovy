@@ -26,13 +26,14 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.chai.memms.task
+package org.chai.task
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.chai.memms.imports.FileImporter;
 import org.chai.memms.imports.ImporterErrorManager
 import org.chai.memms.util.Utils;
+import org.chai.task.Task
 import org.springframework.web.multipart.MultipartFile;
 
 abstract class ImportTask extends Task {

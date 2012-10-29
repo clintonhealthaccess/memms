@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, Clinton Health Access Initiative.
+	 * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
  *
@@ -26,46 +26,39 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.chai.memms.task
+package org.chai.task
 
 import java.util.Map;
-import java.util.Set;
 
-import org.chai.memms.inventory.EquipmentType;
-import org.chai.memms.inventory.Provider;
-import org.chai.memms.inventory.EquipmentStatus.Status;
-import org.chai.memms.exports.EquipmentExport;
+import org.chai.memms.imports.EquipmentTypeImporter
+import org.chai.memms.inventory.EquipmentTypeService;
 import org.chai.memms.exports.EquipmentTypeExport;
-import org.chai.memms.task.Exporter;
-import org.chai.location.CalculationLocation;
-import org.chai.location.DataLocationType;
+import org.chai.memms.imports.FileImporter;
+import org.chai.memms.imports.ImporterErrorManager;
 import org.chai.memms.util.Utils;
 
-/**
- * @author Jean Kahigiso M.
- *
- */
-class EquipmentExportFilter extends ExportFilter{
-	Status equipmentStatus
-	String donated
-	String obsolete
+class EquipmentTypeImportTask extends ImportTask {
+
+	def equipmentTypeService
+	def sessionFactory;
+	def messageSource
 	
-	static hasMany = [equipmentTypes:EquipmentType,manufacturers:Provider,suppliers:Provider,serviceProviders:Provider]
-	static constraints = {
-		equipmentTypes nullable: true, blank: true
-		manufacturers nullable: true, blank: true
-		suppliers nullable: true, blank: true
-		serviceProviders nullable: true, blank: true
-		equipmentStatus nullable: true
-		donated nullable: true, blank: true
-		obsolete nullable: true, blank: true
+	String getInformation() {
+		return messageSource.getMessage(code: 'equipment.type.label') + '<br/>'+ message(code:'import.file.label')+': '+getInputFilename()
 	}
-	static mapping = {
-		table "memms_equipment_export_filter"
-		version false
-		equipmentTypes joinTable:[name:"memms_equipment_equipment_type_export_filter",key:"type_id",column:"equipment_export_filter_id"]
-		manufacturers joinTable:[name:"memms_equipment_manufacturer_export_filter",key:"manufacturer_id",column:"equipment_export_filter_id"]
-		suppliers joinTable:[name:"memms_equipment_supplier_export_filter",key:"supplier_id",column:"equipment_export_filter_id"]
-		serviceProviders joinTable:[name:"memms_equipment_service_provider_export_filter",key:"service_provider_id",column:"equipment_export_filter_id"]
+	
+	FileImporter getImporter(ImporterErrorManager errorManager) {
+		
+		return new EquipmentTypeImporter(sessionFactory,equipmentTypeService,errorManager)
+	}
+	
+	String getFormView() {
+		return 'equipmentTypeImport'	
+	}
+	
+	Map getFormModel() {
+		return [
+			task: this
+		]
 	}
 }
