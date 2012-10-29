@@ -91,6 +91,7 @@ class LocationController extends AbstractEntityController {
 		List<Location> locations = Location.list(offset:params.offset,max:params.max,sort:params.sort ?:"level",order: params.order ?:"asc");
 		render (view: '/entity/list', model:[
 			template:"location/locationList",
+			actionButtonsTemplate:"location/locationActionButtons",
 			entities: locations,
 			entityCount: locations.totalCount,
 			code: getLabel(),

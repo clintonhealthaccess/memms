@@ -94,6 +94,7 @@ class EquipmentTypeController extends AbstractEntityController{
 		List<EquipmentType> types = EquipmentType.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
 		render(view:"/entity/list",model:[
 					template: "equipmentType/equipmentTypeList",
+					actionButtonsTemplate:"equipmentType/equipmentTypeActionButtons",
 					entities: types,
 					entityCount: types.totalCount,
 					code: getLabel(),

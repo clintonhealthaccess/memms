@@ -80,6 +80,7 @@ class LocationLevelController extends AbstractEntityController {
 
 		render (view: '/entity/list', model:[
 			template:"location/locationLevelList",
+			actionButtonsTemplate:"location/locationLevelActionButtons",
 			entities: locationLevels,
 			entityCount: LocationLevel.count(),
 			code: getLabel(),

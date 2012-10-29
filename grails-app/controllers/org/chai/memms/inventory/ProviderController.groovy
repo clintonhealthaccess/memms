@@ -79,6 +79,7 @@ class ProviderController  extends AbstractEntityController {
 		List<Provider> providers = Provider.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc")
 		render(view:"/entity/list", model:[
 			template:"provider/providerList",
+			actionButtonsTemplate:"provider/providerActionButtons",
 			entities: providers,
 			entityCount: Provider.count(),
 			code: getLabel(),

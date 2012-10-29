@@ -105,6 +105,7 @@ class NotificationWorkOrderController extends AbstractEntityController{
 		render(view:"/entity/list", model:[
 			template:"notification/notificationWorkOrderList",
 			filterTemplate:"notification/notificationWorkOrderFilter",
+			actionButtonsTemplate:"notification/notificationWorkOrderActionButtons",
 			entities: notifications,
 			entityCount: notifications.totalCount,
 			workOrder:workOrder,

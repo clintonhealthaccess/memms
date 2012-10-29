@@ -77,6 +77,7 @@ class RoleController extends AbstractEntityController{
 		def roles = Role.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
 		render(view:"/entity/list",model:[
 			template: "role/roleList",
+			actionButtonsTemplate:"role/roleActionButtons",
 			entities: roles,
 			entityCount: roles.totalCount,
 			code: getLabel(),

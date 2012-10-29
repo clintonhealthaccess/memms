@@ -80,6 +80,7 @@ class DepartmentController extends AbstractEntityController{
 		List<Department> departments = Department.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc")
 		render(view:"/entity/list", model:[
 			template:"department/departmentList",
+			actionButtonsTemplate:"department/departmentActionButtons",
 			entities: departments,
 			entityCount: departments.totalCount,
 			code: getLabel(),

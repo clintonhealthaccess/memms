@@ -86,6 +86,7 @@ class WorkOrderViewController extends AbstractController{
 		render(view:"/entity/list", model:[
 					template:"workOrder/workOrderList",
 					filterTemplate:"workOrder/workOrderFilter",
+					actionButtonsTemplate:"workOrder/workOrderActionButtons",
 					entities: orders,
 					entityCount: orders.totalCount,
 					code: getLabel(),
