@@ -39,8 +39,16 @@ class UtilTagLib {
 	
 	def workOrderNotificationService
 	
+	def userService
+	
+	def equipmentRegistration = { attrs, body ->
+		if(userService.canRequestEquipmentRegistration(User.findByUuid(SecurityUtils.subject.principal, [cache: true])))
+			out << '<a href=' + createLinkWithTargetURI(controller: "notificationEquipment", action: "create", params:["dataLocation.id": attrs["dataLocation"] ]) + ' class="next medium left push-r">' + message(code:"equipment.new.request.label") + '</a>'
+		else
+			out << '<a href=' + createLinkWithTargetURI(controller: "equipment", action: "create", params:["dataLocation.id": attrs["dataLocation"] ]) + ' class="next medium left push-r">' + message(code:"default.new.label" , args: attrs["entityName"] ) + '</a>'
+	}
+	
 	def notificationCount = { attrs, body ->
-		//TODO find if a user object can be passed form the view
 		def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])
 		out << workOrderNotificationService.getUnreadNotifications(user)
 	}

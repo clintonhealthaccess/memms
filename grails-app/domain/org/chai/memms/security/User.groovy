@@ -102,6 +102,8 @@ class User {
 		if(calculationLocation instanceof DataLocation && location instanceof DataLocation) return calculationLocation == location
 		if(calculationLocation instanceof Location && location instanceof Location && calculationLocation.level == location.level) return calculationLocation == location
 		if(calculationLocation instanceof DataLocation && location instanceof Location && calculationLocation.location.level == location.level) return calculationLocation.location == location
+		//This takes care of technicians to be able to access the dataLocations that they manage
+		if(userType == UserType.TECHNICIANDH && location instanceof DataLocation && calculationLocation instanceof DataLocation && ((DataLocation)calculationLocation).managedBy != null) return ((DataLocation)calculationLocation).managedBy == location
 		return locationService.getParentOfLevel(calculationLocation instanceof Location ? calculationLocation : calculationLocation.location, location.level) == location
 	}
 	

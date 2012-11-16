@@ -4,7 +4,9 @@
 	     	<h1><g:message code="default.list.label" args="[entityName]" /></h1>
 	     	<g:if test="${!search}">
 		     	<span class="right">
+		     	<g:if test="${actionButtonsTemplate != null}">
 		     		<g:render template="${ '/entity/' + actionButtonsTemplate}" />
+		     		</g:if>
 	  				<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('search')}">
         				<g:searchBox action="search" params="${workOrder?[workOrder:workOrder.id,read:params.read]:'' }"/>
         			</g:if>

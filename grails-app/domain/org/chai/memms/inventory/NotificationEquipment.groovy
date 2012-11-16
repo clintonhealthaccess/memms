@@ -35,6 +35,10 @@ public class NotificationEquipment extends Notification {
 	
 	static belongsTo = [dataLocation: DataLocation, department: Department]
 	
+	static constraints = {
+		department nullable: true
+	}
+	
 	static mapping = {
 		table "memms_notification_new_equipment"
 	}

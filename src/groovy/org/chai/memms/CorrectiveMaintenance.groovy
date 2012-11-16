@@ -32,4 +32,8 @@ import org.chai.location.DataLocation
 class CorrectiveMaintenance {
 	DataLocation dataLocation
 	Integer workOrderCount
+	
+	String toString() {
+		return "DataLocation = " + dataLocation + " , WorkOrder Count = " + workOrderCount
+	}
 }

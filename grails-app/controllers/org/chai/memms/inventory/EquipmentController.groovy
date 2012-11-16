@@ -60,7 +60,7 @@ class EquipmentController extends AbstractEntityController{
 
 
 	def index = {
-		redirect(action: "summaryPage", params: params)
+		redirect(controller: "equipmentView", action: "summaryPage", params: params)
 	}
 
 	def getEntity(def id) {

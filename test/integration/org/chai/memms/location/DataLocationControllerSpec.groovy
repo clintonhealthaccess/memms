@@ -43,8 +43,12 @@ class DataLocationControllerSpec extends IntegrationTests{
 	
 	def "can create save a dataLocation"(){
 		setup:
-		setupLocationTree()
 		dataLocationController =  new DataLocationController()
+		when:
+		setupLocationTree()
+		then:
+		DataLocation.count() == 5
+		
 		when:
 		def type = DataLocationType.findByCode("Health Center")
 		def location = Location.findByCode("Burera")
@@ -54,22 +58,23 @@ class DataLocationControllerSpec extends IntegrationTests{
 		dataLocationController.params."location.id" = location.id
 		dataLocationController.save()
 		then:
-		DataLocation.count() == 5
-		DataLocation.list()[4].code == CODE("123")
+		DataLocation.count() == 6
 	}
-	
+	/**
+	 * When you call the save method, all the past managed objects are removed
+	 * and only those objects which appear in the managesIds list are persisted
+	 * @return
+	 */
 	def "can edit a dataLocation add/remove manages "(){
 		setup:
 		setupLocationTree()
-		def gitwe = DataLocation.findByCode(GITWE)
-		def muvuna = DataLocation.findByCode(MUVUNA)
-		def burera =  Location.findByCode(BURERA)
+		
+		def gitarama =  Location.findByCode(GITARAMA)
 		def butaro =  DataLocation.findByCode(BUTARO)
-		butaro.addToManages(gitwe)
-		butaro.addToManages(muvuna)
-		butaro.save()
+		def muvuna = DataLocation.findByCode(MUVUNA)
 		def type = DataLocationType.findByCode("Health Center")
-		def ruli = Initializer.newDataLocation(['en':"ruli"], CODE("900"), burera, type)
+		def ruliOne = Initializer.newDataLocation(['en':"ruliOne"], CODE("901"), gitarama, type)
+		def ruliTwo = Initializer.newDataLocation(['en':"ruliTwo"], CODE("902"), gitarama, type)
 		dataLocationController =  new DataLocationController()
 		when:
 		dataLocationController.params."id" = butaro.id
@@ -77,17 +82,16 @@ class DataLocationControllerSpec extends IntegrationTests{
 		dataLocationController.params.names_en = "Test data location"
 		dataLocationController.params."type.id" =  butaro.type.id
 		dataLocationController.params."location.id" = butaro.location.id
-		dataLocationController.params."managesIds" = [ruli.id+'',gitwe.id+'']
+		dataLocationController.params."managesIds" = [ruliOne.id+'',ruliTwo.id+'']
 		dataLocationController.save()
 		then:
-		DataLocation.count() == 5
+		DataLocation.count() == 7
 		butaro.manages.size() == 2
-		butaro.manages.contains(ruli)
-		butaro.manages.contains(gitwe)
+		butaro.manages.contains(ruliOne)
+		butaro.manages.contains(ruliTwo)
 		!butaro.manages.contains(muvuna)
-		gitwe.managedBy == butaro
-		muvuna.managedBy == null
-		ruli.managedBy == butaro
+		ruliOne.managedBy == butaro
+		ruliTwo.managedBy == butaro
 		
 	}
 

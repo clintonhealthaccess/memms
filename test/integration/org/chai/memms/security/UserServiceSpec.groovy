@@ -107,7 +107,7 @@ class UserServiceSpec extends IntegrationTests{
 		usersTwo.size()==1
 	}
 	
-	def "get notification group"(){
+	def "get notificationWorkOrder group"(){
 		setup:
 		setupLocationTree()
 		setupEquipment()
@@ -141,14 +141,69 @@ class UserServiceSpec extends IntegrationTests{
 		def userGroupOne,userGroupTwo,userGroupThree,userGroupFour
 
 		when:
-		userGroupOne = userService.getNotificationGroup(workOrder,sender,false)
-		userGroupTwo = userService.getNotificationGroup(workOrder,receiverFacilityOne,false)
-		userGroupThree = userService.getNotificationGroup(workOrder,receiverFacilityTwo,true)
-		userGroupFour = userService.getNotificationGroup(workOrder,receiverMoHTwo,false)
+		userGroupOne = userService.getNotificationWorkOrderGroup(workOrder,sender,false)
+		userGroupTwo = userService.getNotificationWorkOrderGroup(workOrder,receiverFacilityOne,false)
+		userGroupThree = userService.getNotificationWorkOrderGroup(workOrder,receiverFacilityTwo,true)
+		userGroupFour = userService.getNotificationWorkOrderGroup(workOrder,receiverMoHTwo,false)
 		then:
 		userGroupOne.size() == 2
 		userGroupTwo.size() == 2
 		userGroupThree.size() == 4
 		userGroupFour.size() == 3
+	}
+	
+	def "get notificationEquipment group"(){
+		setup:
+		setupLocationTree()
+		
+		def sender = newOtherUser("sender", "sender", DataLocation.findByCode(KIVUYE))
+		sender.userType = UserType.TITULAIREHC
+		sender.save(failOnError:true)
+		
+		def receiverOne = newOtherUser("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO))
+		receiverOne.userType = UserType.TECHNICIANDH
+		receiverOne.save(failOnError:true)
+		
+		def receiverTwo = newOtherUser("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO))
+		receiverTwo.userType = UserType.TECHNICIANDH
+		receiverTwo.save(failOnError:true)
+		
+		def userGroup
+
+		when:
+		userGroup = userService.getNotificationEquipmentGroup(sender.location)
+		then:
+		userGroup.size() == 2
+	}
+	
+	def "check if a user can request for equipment registration"(){
+		setup:
+		setupLocationTree()
+		def userOne = newOtherUser("userOne", "userOne", DataLocation.findByCode(KIVUYE))
+		userOne.userType = UserType.TITULAIREHC
+		userOne.save(failOnError:true)
+		
+		def userTwo = newOtherUser("userTwo", "userTwo", DataLocation.findByCode(BUTARO))
+		userTwo.userType = UserType.HOSPITALDEPARTMENT
+		userTwo.save(failOnError:true)
+		
+		def techDh = newOtherUser("techDh", "techDh", DataLocation.findByCode(BUTARO))
+		techDh.userType = UserType.TECHNICIANDH
+		techDh.save(failOnError:true)
+		
+		def techMMC = newOtherUser("techMMC", "techMMC", DataLocation.findByCode(BUTARO))
+		techMMC.userType = UserType.TECHNICIANMMC
+		techMMC.save(failOnError:true)
+		
+		def admin = newOtherUser("admin", "admin", DataLocation.findByCode(RWANDA))
+		admin.userType = UserType.ADMIN
+		admin.save(failOnError:true)
+
+		expect:
+		userService.canRequestEquipmentRegistration(userOne)
+		userService.canRequestEquipmentRegistration(userTwo)
+		!userService.canRequestEquipmentRegistration(techDh)
+		!userService.canRequestEquipmentRegistration(techMMC)
+		!userService.canRequestEquipmentRegistration(admin)
 	}
 }

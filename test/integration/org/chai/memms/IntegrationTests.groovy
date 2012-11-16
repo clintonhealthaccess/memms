@@ -75,6 +75,7 @@ abstract class IntegrationTests extends IntegrationSpec {
 	static final String GITARAMA = "Gitarama"
 	static final String BURERA = "Burera"
 	static final String BUTARO = "Butaro DH"
+	static final String MUSANZE = "Musanze DH"
 	static final String KIVUYE = "Kivuye HC"
 	static final String GITWE ="Gitwe HC"
 	static final String MUVUNA ="Muvuna HC"
@@ -113,10 +114,16 @@ abstract class IntegrationTests extends IntegrationSpec {
 		def gitarama = Initializer.newLocation(['en':GITARAMA], GITARAMA, south, district)
 
 		def butaro = Initializer.newDataLocation(['en':BUTARO], BUTARO, gitarama, dh)
-		def kivuye = Initializer.newDataLocation(['en':KIVUYE], KIVUYE, burera, hc)
+		def kivuye = Initializer.newDataLocation(['en':KIVUYE], KIVUYE, gitarama, hc)
+		butaro.addToManages(kivuye)
+		butaro.save(failOnError:true)
 		
+		def musanze = Initializer.newDataLocation(['en':MUSANZE], MUSANZE, burera, dh)
 		def gitwe = Initializer.newDataLocation(['en':GITWE], GITWE, burera, hc)
 		def muvuna = Initializer.newDataLocation(['en':MUVUNA], MUVUNA, burera, hc)
+		musanze.addToManages(gitwe)
+		musanze.addToManages(muvuna)
+		musanze.save(failOnError:true)
 	}
 
 	static def setupEquipment(){
@@ -205,7 +212,7 @@ abstract class IntegrationTests extends IntegrationSpec {
 	}
 
 	static def newOtherUser(def username, def uuid, def location) {
-		return new User(userType: UserType.OTHER, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, location: location, firstname: 'other', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+		return new User(userType: UserType.OTHER, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, location: location, firstname: 'other', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11',active:true).save(failOnError: true)
 	}
 
 	static def newSystemUser(def username, def uuid, def location) {

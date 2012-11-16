@@ -194,26 +194,30 @@ class UserSpec  extends IntegrationTests {
 		def dataLocationKivuye = DataLocation.findByCode(KIVUYE)
 		def locationGitarama = Location.findByCode(GITARAMA)
 		
+		def dataLocationGitwe = DataLocation.findByCode(GITWE)
+		def locationBurera = Location.findByCode(BURERA)
+		
 		def userDataLocationKivuye = newOtherUser("kivuyeUser", "kivuyeUser", DataLocation.findByCode(KIVUYE))
 		def userDataLocationButaro = newOtherUser("butaroUser", "butaroUser", DataLocation.findByCode(BUTARO))
 		
 		def userLocationGitarama = newOtherUser("gitaramaUser", "gitaramaUser", Location.findByCode(GITARAMA))
-		def userLocationBurera = newOtherUser("bureraUser", "bureraUser", Location.findByCode(BURERA))
+		def userLocationBurera = newOtherUser("bureraUser", "bureraUser", locationBurera)
 		
 		def userLocationNorth = newOtherUser("northUser", "northUser", Location.findByCode(NORTH))
 		def userLocationSouth = newOtherUser("southUser", "southUser", Location.findByCode(SOUTH))
 		
 		expect:
-		!userLocationSouth.canAccessCalculationLocation(dataLocationKivuye)
+		!userLocationSouth.canAccessCalculationLocation(dataLocationGitwe)
+		userLocationSouth.canAccessCalculationLocation(dataLocationKivuye)
 		userLocationSouth.canAccessCalculationLocation(locationGitarama)
 		
-		userLocationNorth.canAccessCalculationLocation(dataLocationKivuye)
+		!userLocationNorth.canAccessCalculationLocation(dataLocationKivuye)
 		!userLocationNorth.canAccessCalculationLocation(locationGitarama)
 		
-		!userLocationGitarama.canAccessCalculationLocation(dataLocationKivuye)
+		userLocationGitarama.canAccessCalculationLocation(dataLocationKivuye)
 		userLocationGitarama.canAccessCalculationLocation(locationGitarama)
 		
-		userLocationBurera.canAccessCalculationLocation(dataLocationKivuye)
+		!userLocationBurera.canAccessCalculationLocation(dataLocationKivuye)
 		!userLocationBurera.canAccessCalculationLocation(locationGitarama)
 		
 		userDataLocationKivuye.canAccessCalculationLocation(dataLocationKivuye)
