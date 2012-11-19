@@ -206,4 +206,35 @@ class UserServiceSpec extends IntegrationTests{
 		!userService.canRequestEquipmentRegistration(techMMC)
 		!userService.canRequestEquipmentRegistration(admin)
 	}
+	
+	def "check if a user can view managed equipments"(){
+		setup:
+		setupLocationTree()
+		def userOne = newOtherUser("userOne", "userOne", DataLocation.findByCode(KIVUYE))
+		userOne.userType = UserType.TITULAIREHC
+		userOne.save(failOnError:true)
+		
+		def userTwo = newOtherUser("userTwo", "userTwo", DataLocation.findByCode(BUTARO))
+		userTwo.userType = UserType.HOSPITALDEPARTMENT
+		userTwo.save(failOnError:true)
+		
+		def techDh = newOtherUser("techDh", "techDh", DataLocation.findByCode(BUTARO))
+		techDh.userType = UserType.TECHNICIANDH
+		techDh.save(failOnError:true)
+		
+		def techMMC = newOtherUser("techMMC", "techMMC", DataLocation.findByCode(BUTARO))
+		techMMC.userType = UserType.TECHNICIANMMC
+		techMMC.save(failOnError:true)
+		
+		def admin = newOtherUser("admin", "admin", DataLocation.findByCode(RWANDA))
+		admin.userType = UserType.ADMIN
+		admin.save(failOnError:true)
+
+		expect:
+		!userService.canViewManagedEquipments(userOne)
+		!userService.canViewManagedEquipments(userTwo)
+		userService.canViewManagedEquipments(techDh)
+		!userService.canViewManagedEquipments(techMMC)
+		!userService.canViewManagedEquipments(admin)
+	}
 }

@@ -46,6 +46,7 @@ import org.hibernate.criterion.Order
 import org.hibernate.criterion.Projections
 import org.hibernate.criterion.Restrictions
 import org.apache.commons.lang.StringUtils
+import org.chai.memms.security.User
 import org.chai.memms.util.ImportExportConstant;
 import org.chai.memms.util.Utils;
 
@@ -64,6 +65,7 @@ class EquipmentService {
 	
 	static transactional = true
 	def languageService;
+	def userService
 	
 	public void updateCurrentEquipmentStatus(Equipment equipment,EquipmentStatus status){
 		if(status!=null){
@@ -95,10 +97,16 @@ class EquipmentService {
 		}
 	}
 		
-	public def getEquipmentsByDataLocation(DataLocation dataLocation,Map<String, String> params) {
+	public List<Equipment> getMyEquipments(User user,Map<String, String> params) {
+		def dataLocations = []
+		dataLocations.add(user.location)
+		if(userService.canViewManagedEquipments(user) && user.location instanceof DataLocation && ((DataLocation)user.location).manages ){
+			dataLocations.addAll(((DataLocation)user.location).manages)
+		}
+		if(log.isDebugEnabled()) log.debug("Current user = " + user + " , Current user's managed dataLocations = " + dataLocations)
 		def criteria = Equipment.createCriteria();
 			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				eq('dataLocation',dataLocation)
+				inList('dataLocation',dataLocations)
 			}
 	}
 	

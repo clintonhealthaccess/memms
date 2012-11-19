@@ -53,6 +53,11 @@ class UserService {
 	boolean canRequestEquipmentRegistration(User user){
 		return user.userType == UserType.TITULAIREHC || user.userType == UserType.HOSPITALDEPARTMENT
 	}
+	
+	boolean canViewManagedEquipments(User user){
+		return user.userType == UserType.TECHNICIANDH
+	}
+	
 	List<User> searchUser(String text, Map<String, String> params) {
 		if(log.isDebugEnabled()) log.debug("searchUser params=" + params)
 		def criteria = User.createCriteria()

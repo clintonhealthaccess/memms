@@ -39,6 +39,7 @@ import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.EquipmentType.Observation;
 import org.chai.location.DataLocation;
 import org.chai.memms.security.User;
+import org.chai.memms.security.User.UserType
 import org.chai.memms.IntegrationTests
 import org.chai.location.DataLocation;
 import org.chai.memms.inventory.Provider.Type;
@@ -95,16 +96,22 @@ class EquipmentServiceSpec extends IntegrationTests{
 		equipments[0].getDescriptions(new Locale("en")).equals('Equipment Descriptions two')
 	}
 
-	def "get equipment by datalocation"() {
+	def "user can only view his equipments, if a technician at dh they can also view for the locations they manage"() {
 		setup:
 		setupLocationTree()
-
+		def user = newOtherUser("user", "user", DataLocation.findByCode(KIVUYE))
+		user.userType = UserType.TITULAIREHC
+		user.save(failOnError:true)
+		
+		def techDh = newOtherUser("techDh", "techDh", DataLocation.findByCode(BUTARO))
+		techDh.userType = UserType.TECHNICIANDH
+		techDh.save(failOnError:true)
+		
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 
 		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
-		def user  = newUser("admin", "Admin UID")
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
@@ -112,14 +119,14 @@ class EquipmentServiceSpec extends IntegrationTests{
 				,Initializer.getDate(10,10,2010),"",Initializer.now(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier,Status.OPERATIONAL)
 		Initializer.newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,false,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"USD",Initializer.now(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier,Status.OPERATIONAL)
-		def List<Equipment> equipments
+		def equipmentsTech, equipmentsUser
 
 		when:
-		equipments = equipmentService.getEquipmentsByDataLocation(DataLocation.findByCode('Kivuye HC'), [:])
-
+		equipmentsTech = equipmentService.getMyEquipments(techDh,[:])
+		equipmentsUser = equipmentService.getMyEquipments(user,[:])
 		then:
-		equipments.size() == 1
-		equipments[0].getDescriptions(new Locale("en")).equals('Equipment Descriptions one')
+		equipmentsTech.size() == 2
+		equipmentsUser.size() == 1
 	}
 
 	def "filter equipments"() {

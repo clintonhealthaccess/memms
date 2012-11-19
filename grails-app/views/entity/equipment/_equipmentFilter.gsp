@@ -54,7 +54,7 @@
 					<li><g:selectFromEnum name="purchaser" values="${PurchasedBy.values()}" field="purchaser" label="${message(code:'equipment.purchaser.label')}" /></li>
 					<li><g:selectFromEnum name="donor" values="${Donor.values()}" field="donor" label="${message(code:'equipment.donor.label')}" /></li>
 				</ul>
-				<input type="hidden" name="dataLocation.id" value="${dataLocation.id}"/>
+				<input type="hidden" name="dataLocation.id" value="${dataLocation?.id}"/>
 				<button type="submit"><g:message code="entity.filter.label" /></button>
 				<a href="#" class="clear-form"><g:message code="default.link.clear.form.label"/></a>
 		  </g:form>

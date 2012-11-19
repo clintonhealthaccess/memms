@@ -328,8 +328,8 @@ public class Initializer {
 			def serviceProTwo = newProvider("Ten",Type.SERVICEPROVIDER,contactTen)
 		}
 		if(!NotificationEquipment.count()){
-			newNotificationEquipment(User.findByUsername("titulaireHC"), User.findByUsername("techMMC"), now(), "I have a new equipment in my health center, am not sure of it't type but has a serial number of 9084320oidbfd. Could you come register it please? thanks", false, User.findByUsername("titulaireHC").location, null)
-			newNotificationEquipment(User.findByUsername("hospitalDepartment"), User.findByUsername("techMMC"), now(), "I have a new equipment in my department, am not sure of it't type but has a serial number of 9084320oidbfd. Could you come register it please? thanks", false, User.findByUsername("hospitalDepartment").location, null)
+			newNotificationEquipment(User.findByUsername("titulaireHC"), User.findByUsername("techDH"), now(), "I have a new equipment in my health center, am not sure of it't type but has a serial number of 9084320oidbfd. Could you come register it please? thanks", false, User.findByUsername("titulaireHC").location, null)
+			newNotificationEquipment(User.findByUsername("hospitalDepartment"), User.findByUsername("techDH"), now(), "I have a new equipment in my department, am not sure of it't type but has a serial number of 9084320oidbfd. Could you come register it please? thanks", false, User.findByUsername("hospitalDepartment").location, null)
 		}
 		
 		if(!Equipment.count()){
