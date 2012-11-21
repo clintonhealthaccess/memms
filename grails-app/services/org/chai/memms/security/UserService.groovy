@@ -55,7 +55,7 @@ class UserService {
 	}
 	
 	boolean canViewManagedEquipments(User user){
-		return user.userType == UserType.TECHNICIANDH
+		return user.userType == UserType.TECHNICIANDH && user.location instanceof DataLocation && (user.location as DataLocation).manages
 	}
 	
 	List<User> searchUser(String text, Map<String, String> params) {
@@ -87,10 +87,14 @@ class UserService {
 	}
 	
 	List<User> getNotificationWorkOrderGroup(WorkOrder workOrder,User sender,Boolean escalate){
-		def users =  getActiveUserByTypeAndLocation(UserType.TECHNICIANDH,workOrder.equipment.dataLocation, [:])
+		def users = []
 		if(escalate) users.addAll(getActiveUserByTypeAndLocation(UserType.TECHNICIANMMC,null, [:]))
+		else if(sender.userType != UserType.TECHNICIANDH){
+				if(workOrder.equipment.dataLocation.managedBy instanceof DataLocation) users =  getActiveUserByTypeAndLocation(UserType.TECHNICIANDH,workOrder.equipment.dataLocation.managedBy, [:])
+				else users =  getActiveUserByTypeAndLocation(UserType.TECHNICIANDH,workOrder.equipment.dataLocation, [:])
+		}
 		if(!users.contains( workOrder.addedBy )) users.add(workOrder.addedBy)
-		users.remove(sender)
+		if(users.contains( sender )) users.remove(sender)
 		if(log.isDebugEnabled()) log.debug("Users in notificationWorkOrder group: " + users)
 		return users
 	}

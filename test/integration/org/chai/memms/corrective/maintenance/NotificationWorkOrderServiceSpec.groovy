@@ -23,22 +23,21 @@ class NotificationWorkOrderServiceSpec  extends IntegrationTests{
 	def "can send notifications"() {
 		setup:
 		setupLocationTree()
-		setupEquipment()
-		def sender = newUser("sender", true,true)
+		
+		def sender = newOtherUser("sender", "sender", DataLocation.findByCode(KIVUYE))
 		sender.userType = UserType.TITULAIREHC
-		sender.location = DataLocation.findByCode(KIVUYE)
 		sender.save(failOnError:true)
 		
-		def receiverOne = newUser("receiverOne", true,true)
+		def receiverOne = newOtherUser("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO))
 		receiverOne.userType = UserType.TECHNICIANDH
-		receiverOne.location = DataLocation.findByCode(KIVUYE)
 		receiverOne.save(failOnError:true)
 		
-		def receiverTwo = newUser("receiverTwo", true,true)
+		def receiverTwo = newOtherUser("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO))
 		receiverTwo.userType = UserType.TECHNICIANDH
-		receiverTwo.location = DataLocation.findByCode(KIVUYE)
 		receiverTwo.save(failOnError:true)
-		def equipment = Equipment.findBySerialNumber(CODE(123))
+		
+		def equipment = newEquipment(CODE(123),DataLocation.findByCode(KIVUYE))
+		
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED, OrderStatus.OPENATFOSA)
 		when:
 		notificationWorkOrderService.newNotification(workOrder, "Send for rapair",sender,false)
@@ -49,20 +48,25 @@ class NotificationWorkOrderServiceSpec  extends IntegrationTests{
 	def "can escalate notifications"() {
 		setup:
 		setupLocationTree()
-		setupEquipment()
-		def sender = newUser("sender", true,true)
-		sender.userType = UserType.TITULAIREHC
-		sender.location = DataLocation.findByCode(KIVUYE)
-		sender.save(failOnError:true)
+		
+		def senderTitulaire = newUser("senderTitulaire", true,true)
+		senderTitulaire.userType = UserType.TITULAIREHC
+		senderTitulaire.location = DataLocation.findByCode(KIVUYE)
+		senderTitulaire.save(failOnError:true)
+		
+		def senderDepartment = newUser("senderDepartment", true,true)
+		senderDepartment.userType = UserType.HOSPITALDEPARTMENT
+		senderDepartment.location = DataLocation.findByCode(KIVUYE)
+		senderDepartment.save(failOnError:true)
 		
 		def receiverFacilityOne = newUser("receiverFacilityOne", true,true)
 		receiverFacilityOne.userType = UserType.TECHNICIANDH
-		receiverFacilityOne.location = DataLocation.findByCode(KIVUYE)
+		receiverFacilityOne.location = DataLocation.findByCode(BUTARO)
 		receiverFacilityOne.save(failOnError:true)
 		
 		def receiverFacilityTwo = newUser("receiverFacilityTwo", true,true)
 		receiverFacilityTwo.userType = UserType.TECHNICIANDH
-		receiverFacilityTwo.location = DataLocation.findByCode(KIVUYE)
+		receiverFacilityTwo.location = DataLocation.findByCode(BUTARO)
 		receiverFacilityTwo.save(failOnError:true)
 		
 		def receiverMoHOne = newUser("receiverMoHOne", true,true)
@@ -75,37 +79,44 @@ class NotificationWorkOrderServiceSpec  extends IntegrationTests{
 		receiverMoHTwo.location = Location.findByCode(RWANDA)
 		receiverMoHTwo.save(failOnError:true)
 		
-		def equipment = Equipment.findBySerialNumber(CODE(123))
-		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		notificationWorkOrderService.newNotification(workOrder, "Send for rapair",sender,false)
+		def equipmentManaged = newEquipment(CODE(123),DataLocation.findByCode(KIVUYE))
+		def equipmentNotManaged = newEquipment(CODE(133),DataLocation.findByCode(BUTARO))
+		
+		def workOrderManaged = Initializer.newWorkOrder(equipmentManaged, "Nothing yet", Criticality.NORMAL,senderTitulaire,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderNotManaged = Initializer.newWorkOrder(equipmentNotManaged, "Nothing yet", Criticality.NORMAL,senderDepartment,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		
+		def sentNotificationsOne, sentNotificationsTwo
 		when:
-		notificationWorkOrderService.newNotification(workOrder, "Send for rapair, higher",receiverFacilityOne,true)
+		sentNotificationsOne = notificationWorkOrderService.newNotification(workOrderManaged, "Send for rapair, higher",receiverFacilityOne,true)
+		sentNotificationsTwo = notificationWorkOrderService.newNotification(workOrderNotManaged, "Send for rapair, higher",receiverFacilityTwo,true)
 		then:
+		sentNotificationsOne == 3
+		sentNotificationsTwo == 3
 		Notification.count() == 6
 	}
 	
 	def "reading a notification sets it's read status to true"() {
 		setup:
 		setupLocationTree()
-		setupEquipment()
-		def sender = newUser("sender", true,true)
-		sender.userType = UserType.HOSPITALDEPARTMENT
-		sender.location = DataLocation.findByCode(KIVUYE)
+		
+		def sender = newOtherUser("sender", "sender", DataLocation.findByCode(KIVUYE))
+		sender.userType = UserType.TITULAIREHC
 		sender.save(failOnError:true)
 		
-		def receiverOne = newUser("receiverOne", true,true)
+		def receiverOne = newOtherUser("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO))
 		receiverOne.userType = UserType.TECHNICIANDH
-		receiverOne.location = DataLocation.findByCode(KIVUYE)
 		receiverOne.save(failOnError:true)
 		
-		def receiverTwo = newUser("receiverTwo", true,true)
+		def receiverTwo = newOtherUser("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO))
 		receiverTwo.userType = UserType.TECHNICIANDH
-		receiverTwo.location = DataLocation.findByCode(KIVUYE)
 		receiverTwo.save(failOnError:true)
-		def equipment = Equipment.findBySerialNumber(CODE(123))
 		
-		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def equipment = newEquipment(CODE(123),DataLocation.findByCode(KIVUYE))
+		
+		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED, OrderStatus.OPENATFOSA)
+		
 		notificationWorkOrderService.newNotification(workOrder, "Send for rapair",sender,false)
+		
 		def notificationToRead = Notification.list()[0]
 		when:
 		notificationWorkOrderService.setNotificationRead(notificationToRead)
@@ -113,132 +124,155 @@ class NotificationWorkOrderServiceSpec  extends IntegrationTests{
 		NotificationWorkOrder.count() == 2
 		NotificationWorkOrder.get(notificationToRead.id).read == true
 	}
+	
 	def "can filter notifications"() {
 		setup:
 		setupLocationTree()
-		setupEquipment()
-		def senderOne = newUser("senderOne", true,true)
-		senderOne.userType = UserType.HOSPITALDEPARTMENT
-		senderOne.location = DataLocation.findByCode(KIVUYE)
-		senderOne.save(failOnError:true)
 		
-		def senderTwo = newUser("senderTwo", true,true)
-		senderTwo.userType = UserType.HOSPITALDEPARTMENT
-		senderTwo.location = DataLocation.findByCode(KIVUYE)
-		senderTwo.save(failOnError:true)
+		def senderTitulaire = newUser("senderTitulaire", true,true)
+		senderTitulaire.userType = UserType.TITULAIREHC
+		senderTitulaire.location = DataLocation.findByCode(KIVUYE)
+		senderTitulaire.save(failOnError:true)
 		
-		def receiverFacility = newUser("receiverFacility", true,true)
-		receiverFacility.userType = UserType.TECHNICIANDH
-		receiverFacility.location = DataLocation.findByCode(KIVUYE)
-		receiverFacility.save(failOnError:true)
+		def senderDepartment = newUser("senderDepartment", true,true)
+		senderDepartment.userType = UserType.HOSPITALDEPARTMENT
+		senderDepartment.location = DataLocation.findByCode(KIVUYE)
+		senderDepartment.save(failOnError:true)
 		
-		def receiverMoH = newUser("receiverMoH", true,true)
-		receiverMoH.userType = UserType.TECHNICIANMMC
-		receiverMoH.location = Location.findByCode(RWANDA)
-		receiverMoH.save(failOnError:true)
-		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def receiverFacilityOne = newUser("receiverFacilityOne", true,true)
+		receiverFacilityOne.userType = UserType.TECHNICIANDH
+		receiverFacilityOne.location = DataLocation.findByCode(BUTARO)
+		receiverFacilityOne.save(failOnError:true)
 		
-		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderTwo,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def receiverFacilityTwo = newUser("receiverFacilityTwo", true,true)
+		receiverFacilityTwo.userType = UserType.TECHNICIANDH
+		receiverFacilityTwo.location = DataLocation.findByCode(BUTARO)
+		receiverFacilityTwo.save(failOnError:true)
 		
-		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
-		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,true)
-		notificationWorkOrderService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
+		def receiverMoHOne = newUser("receiverMoHOne", true,true)
+		receiverMoHOne.userType = UserType.TECHNICIANMMC
+		receiverMoHOne.location = Location.findByCode(RWANDA)
+		receiverMoHOne.save(failOnError:true)
+		
+		def receiverMoHTwo = newUser("receiverMoHTwo", true,true)
+		receiverMoHTwo.userType = UserType.TECHNICIANMMC
+		receiverMoHTwo.location = Location.findByCode(RWANDA)
+		receiverMoHTwo.save(failOnError:true)
+		
+		def equipmentManaged = newEquipment(CODE(123),DataLocation.findByCode(KIVUYE))
+		def equipmentNotManaged = newEquipment(CODE(133),DataLocation.findByCode(BUTARO))
+		
+		def workOrderManaged = Initializer.newWorkOrder(equipmentManaged, "Nothing yet", Criticality.NORMAL,senderTitulaire,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderNotManaged = Initializer.newWorkOrder(equipmentNotManaged, "Nothing yet", Criticality.NORMAL,senderDepartment,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		
+		notificationWorkOrderService.newNotification(workOrderManaged, "Send for rapair, one",senderTitulaire,false)
+		notificationWorkOrderService.newNotification(workOrderManaged, "Send for rapair, higher",receiverFacilityOne,true)
+		notificationWorkOrderService.newNotification(workOrderNotManaged, "Send for rapair, two",senderDepartment,false)
 		
 		def workOrderNotifications = NotificationWorkOrder.list()
+		
 		notificationWorkOrderService.setNotificationRead(workOrderNotifications[0])
 		notificationWorkOrderService.setNotificationRead(workOrderNotifications[1])
-		when://(WorkOrder workOrder,User receiver,Date from, Date to,Boolean read, Map<String, String> params)
+		
+		when:
 		def allNotifications = notificationWorkOrderService.filterNotifications(null,null, null,null,null, [:])
 		def readNotifications = notificationWorkOrderService.filterNotifications(null,null, null,null,true, [:])
-		def notificationsByWorkOrder = notificationWorkOrderService.filterNotifications(workOrderOne,null, null,null,null, [:])
-		def notificationsByreceiver = notificationWorkOrderService.filterNotifications(null,receiverMoH,null,null,null, [:])
-		def jointFilter = notificationWorkOrderService.filterNotifications(workOrderOne,receiverFacility,null,null,true, [:])
+		def notificationsByWorkOrder = notificationWorkOrderService.filterNotifications(workOrderManaged,null, null,null,null, [:])
+		def notificationsByWorkOrderTwo = notificationWorkOrderService.filterNotifications(workOrderNotManaged,null, null,null,null, [:])
+		def notificationsByreceiverMoH = notificationWorkOrderService.filterNotifications(null,receiverMoHOne,null,null,null, [:])
+		def notificationsByreceiverTechDhOne = notificationWorkOrderService.filterNotifications(null,receiverFacilityOne,null,null,null, [:])
+		def notificationsByreceiverTechDhTwo = notificationWorkOrderService.filterNotifications(null,receiverFacilityTwo,null,null,null, [:])
+		def jointFilter = notificationWorkOrderService.filterNotifications(workOrderManaged,receiverFacilityTwo,null,null,true, [:])
 		def madeAfterToday = notificationWorkOrderService.filterNotifications(null,null, Initializer.now()+1,null,null, [:])
 		def madeBeforeToday = notificationWorkOrderService.filterNotifications(null,null, null,Initializer.now()+1,null, [:])
 		def madeBetweenYesterdayAndTomorrow = notificationWorkOrderService.filterNotifications(null,null, Initializer.now()-1,Initializer.now()+1,null, [:])
 		def unreadNotifications = notificationWorkOrderService.filterNotifications(null,null, null,null,false, [:])
+		
 		then:
-		allNotifications.size() == 4
+		allNotifications.size() == 7
+		notificationsByreceiverTechDhOne.size() == 2
+		notificationsByreceiverTechDhTwo.size() == 2
 		readNotifications.size() == 2
-		notificationsByWorkOrder.size() == 3
-		notificationsByreceiver.size() == 1
+		notificationsByWorkOrder.size() == 5
+		notificationsByWorkOrderTwo.size() == 2
+		notificationsByreceiverMoH.size() == 1
 		jointFilter.size() == 1
 		madeAfterToday.size() == 0
-		madeBeforeToday.size() == 4
-		madeBetweenYesterdayAndTomorrow.size() == 4
-		unreadNotifications.size() == 2
+		madeBeforeToday.size() == 7
+		madeBetweenYesterdayAndTomorrow.size() == 7
+		unreadNotifications.size() == 5
 	}
 	
 	def "can search notifications"() {
 		setup:
 		setupLocationTree()
-		setupEquipment()
-		def senderOne = newUser("senderOne", true,true)
-		senderOne.userType = UserType.HOSPITALDEPARTMENT
-		senderOne.location = DataLocation.findByCode(KIVUYE)
-		senderOne.save(failOnError:true)
 		
-		def senderTwo = newUser("senderTwo", true,true)
-		senderTwo.userType = UserType.HOSPITALDEPARTMENT
-		senderTwo.location = DataLocation.findByCode(KIVUYE)
-		senderTwo.save(failOnError:true)
+		def senderDepartment = newUser("senderDepartment", true,true)
+		senderDepartment.userType = UserType.HOSPITALDEPARTMENT
+		senderDepartment.location = DataLocation.findByCode(KIVUYE)
+		senderDepartment.save(failOnError:true)
 		
-		def receiverFacility = newUser("receiverFacility", true,true)
-		receiverFacility.userType = UserType.TECHNICIANDH
-		receiverFacility.location = DataLocation.findByCode(KIVUYE)
-		receiverFacility.save(failOnError:true)
+		def receiverFacilityOne = newUser("receiverFacilityOne", true,true)
+		receiverFacilityOne.userType = UserType.TECHNICIANDH
+		receiverFacilityOne.location = DataLocation.findByCode(BUTARO)
+		receiverFacilityOne.save(failOnError:true)
 		
-		def receiverMoH = newUser("receiverMoH", true,true)
-		receiverMoH.userType = UserType.TECHNICIANMMC
-		receiverMoH.location = Location.findByCode(RWANDA)
-		receiverMoH.save(failOnError:true)
+		def receiverFacilityTwo = newUser("receiverFacilityTwo", true,true)
+		receiverFacilityTwo.userType = UserType.TECHNICIANDH
+		receiverFacilityTwo.location = DataLocation.findByCode(BUTARO)
+		receiverFacilityTwo.save(failOnError:true)
 		
-		def equipment = Equipment.findBySerialNumber(CODE(123))
-		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderTwo,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def equipmentManaged = newEquipment(CODE(123),DataLocation.findByCode(KIVUYE))
+		def equipmentNotManaged = newEquipment(CODE(133),DataLocation.findByCode(BUTARO))
 		
-		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
-		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, follow up",senderOne,false)
+		def workOrderManaged = Initializer.newWorkOrder(equipmentManaged, "Nothing yet", Criticality.NORMAL,senderDepartment,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderNotManaged = Initializer.newWorkOrder(equipmentNotManaged, "Nothing yet", Criticality.NORMAL,senderDepartment,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		
+		
+		notificationWorkOrderService.newNotification(workOrderManaged, "Send for rapair, one",senderDepartment,false)
+		notificationWorkOrderService.newNotification(workOrderNotManaged, "Send for rapair, follow up",senderDepartment,false)
 		
 		when:
-		def found = notificationWorkOrderService.searchNotificition("one",receiverFacility,workOrderOne, null,[:])
+		def found = notificationWorkOrderService.searchNotificition("one",receiverFacilityTwo,workOrderManaged, null,[:])
 		then:
-		NotificationWorkOrder.count() == 2
+		NotificationWorkOrder.count() == 4
 		found.size() == 1
 	}
 	
 	def "get unread notifications count"() {
 		setup:
 		setupLocationTree()
-		setupEquipment()
-		def senderOne = newUser("senderOne", true,true)
-		senderOne.userType = UserType.HOSPITALDEPARTMENT
-		senderOne.location = DataLocation.findByCode(KIVUYE)
-		senderOne.save(failOnError:true)
+		def senderDepartment = newUser("senderDepartment", true,true)
+		senderDepartment.userType = UserType.HOSPITALDEPARTMENT
+		senderDepartment.location = DataLocation.findByCode(KIVUYE)
+		senderDepartment.save(failOnError:true)
 		
-		def senderTwo = newUser("senderTwo", true,true)
-		senderTwo.userType = UserType.HOSPITALDEPARTMENT
-		senderTwo.location = DataLocation.findByCode(KIVUYE)
-		senderTwo.save(failOnError:true)
+		def receiverFacilityOne = newUser("receiverFacilityOne", true,true)
+		receiverFacilityOne.userType = UserType.TECHNICIANDH
+		receiverFacilityOne.location = DataLocation.findByCode(BUTARO)
+		receiverFacilityOne.save(failOnError:true)
 		
-		def receiverFacility = newUser("receiverFacility", true,true)
-		receiverFacility.userType = UserType.TECHNICIANDH
-		receiverFacility.location = DataLocation.findByCode(KIVUYE)
-		receiverFacility.save(failOnError:true)
+		def receiverFacilityTwo = newUser("receiverFacilityTwo", true,true)
+		receiverFacilityTwo.userType = UserType.TECHNICIANDH
+		receiverFacilityTwo.location = DataLocation.findByCode(BUTARO)
+		receiverFacilityTwo.save(failOnError:true)
 		
-		def equipment = Equipment.findBySerialNumber(CODE(123))
-		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderTwo,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def equipmentManaged = newEquipment(CODE(123),DataLocation.findByCode(KIVUYE))
+		def equipmentNotManaged = newEquipment(CODE(133),DataLocation.findByCode(BUTARO))
 		
-		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
-		notificationWorkOrderService.newNotification(workOrderTwo, "Send for rapair, follow up",senderTwo,false)
+		def workOrderManaged = Initializer.newWorkOrder(equipmentManaged, "Nothing yet", Criticality.NORMAL,senderDepartment,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderNotManaged = Initializer.newWorkOrder(equipmentNotManaged, "Nothing yet", Criticality.NORMAL,senderDepartment,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		
+		
+		notificationWorkOrderService.newNotification(workOrderManaged, "Send for rapair, one",senderDepartment,false)
+		notificationWorkOrderService.newNotification(workOrderNotManaged, "Send for rapair, follow up",senderDepartment,false)
+		
 		def unreadNotifications = 0
 		
 		when:
-		unreadNotifications = notificationWorkOrderService.getUnreadNotifications(receiverFacility)
+		unreadNotifications = notificationWorkOrderService.getUnreadNotifications(receiverFacilityOne)
 		then:
-		NotificationWorkOrder.count() == 2
+		NotificationWorkOrder.count() == 4
 		unreadNotifications == 2
 	}
 }

@@ -92,7 +92,7 @@ class NotificationWorkOrderController extends AbstractEntityController{
 				redirect(uri: getTargetURI())
 			}
 			else {
-				render(view: '/entity/notification/readNotificationWorkOrder', model:[notificationWorkOrder:notification, entityName:getLabel()])
+				render(view: '/entity/notification/readNotificationWorkOrder', model:[notification:notification, entityName:getLabel()])
 			}
 		}
 	}

@@ -37,7 +37,8 @@ import org.chai.memms.inventory.Equipment.Donor;
 import org.chai.memms.inventory.Equipment.PurchasedBy;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.EquipmentType.Observation;
-import org.chai.location.DataLocation;
+import org.chai.location.Location
+import org.chai.location.DataLocation
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType
 import org.chai.memms.IntegrationTests
@@ -64,7 +65,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 
 		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
-		def user  = newUser("admin", "Admin UID")
+		def user  = newOtherUser("admin", "admin", Location.findByCode(RWANDA))
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
@@ -76,21 +77,21 @@ class EquipmentServiceSpec extends IntegrationTests{
 
 		when://Searching by serial number
 
-		equipments = equipmentService.searchEquipment("SERIAL11",DataLocation.list().first(), [:])
+		equipments = equipmentService.searchEquipment("SERIAL11",user, [:])
 		then:
 		equipments.size() == 1
 		equipments[0].serialNumber.equals("SERIAL11")
 
 		when://Searching by observation
 
-		equipments = equipmentService.searchEquipment("one",DataLocation.list().first(), [:])
+		equipments = equipmentService.searchEquipment("one",user, [:])
 		then:
 		equipments.size() == 1
 		equipments[0].getDescriptions(new Locale("en")).equals('Equipment Descriptions one')
 
 		when://Searching by description
 
-		equipments = equipmentService.searchEquipment("Two",DataLocation.list().first(), [:])
+		equipments = equipmentService.searchEquipment("Two",user, [:])
 		then:
 		equipments.size() == 1
 		equipments[0].getDescriptions(new Locale("en")).equals('Equipment Descriptions two')

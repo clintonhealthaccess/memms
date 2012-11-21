@@ -30,6 +30,8 @@ package org.chai.memms.inventory
 import grails.gorm.DetachedCriteria
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import org.chai.memms.inventory.Equipment.Donor;
 import org.chai.memms.inventory.Equipment.PurchasedBy;
 import org.chai.memms.inventory.EquipmentStatus.Status;
@@ -37,7 +39,9 @@ import org.chai.memms.exports.EquipmentExport;
 import org.chai.memms.inventory.Equipment;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation
+import org.chai.location.DataLocationType;
 import org.chai.location.Location
+import org.chai.location.LocationLevel;
 
 import org.chai.memms.util.Utils;
 import org.hibernate.Criteria;
@@ -78,15 +82,23 @@ class EquipmentService {
 		if(log.isDebugEnabled()) log.debug("Updating Equipment status params: "+equipment)
 		equipment.save(failOnError:true)
 	}
-	public def searchEquipment(String text,DataLocation dataLocation,Map<String, String> params) {
+	public def searchEquipment(String text,User user,Map<String, String> params) {
+		def dataLocations = []
+		if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([].toSet(), [].toSet()))
+		else{
+			dataLocations = []
+			dataLocations.add(user.location as DataLocation)
+			if(userService.canViewManagedEquipments(user)) dataLocations.addAll(((DataLocation)user.location).manages)
+		}
+		
 		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = Equipment.createCriteria();
 		
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			    createAlias("type","t")
-				if(dataLocation!=null)
-					eq('dataLocation',dataLocation)
+				if(dataLocations)
+					inList('dataLocation',dataLocations)
 				or{
 					ilike("code","%"+text+"%")
 					ilike("serialNumber","%"+text+"%")
@@ -99,11 +111,14 @@ class EquipmentService {
 		
 	public List<Equipment> getMyEquipments(User user,Map<String, String> params) {
 		def dataLocations = []
-		dataLocations.add(user.location)
-		if(userService.canViewManagedEquipments(user) && user.location instanceof DataLocation && ((DataLocation)user.location).manages ){
-			dataLocations.addAll(((DataLocation)user.location).manages)
+		if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([:], [:]))
+		else{
+			dataLocations.add((DataLocation)user.location)
+			if(userService.canViewManagedEquipments(user)) dataLocations.addAll((user.location as DataLocation).manages)
 		}
+		
 		if(log.isDebugEnabled()) log.debug("Current user = " + user + " , Current user's managed dataLocations = " + dataLocations)
+		
 		def criteria = Equipment.createCriteria();
 			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				inList('dataLocation',dataLocations)

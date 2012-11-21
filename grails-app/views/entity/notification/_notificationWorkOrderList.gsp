@@ -19,11 +19,9 @@
 				</td>
 				<td><g:stripHtml field="${notification?.content}" chars="30"/></td>
 				<td>
-					<g:if test="${!notification.read}">
-						<a href="${createLinkWithTargetURI(controller:'notification', action:'read', params:[id: notification.id])}">
+					<a href="${createLinkWithTargetURI(controller:'notificationWorkOrder', action:'read', params:[id: notification.id])}">
 							<g:message code="notification.read.label" />
 						</a>
-					</g:if>
 				</td>
 			</tr>
 		</g:each>
