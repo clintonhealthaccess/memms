@@ -91,7 +91,21 @@ class EquipmentViewController extends AbstractController {
 					code: getLabel()
 					])
 	}
-
+	
+	def selectFacility = {
+		adaptParamsForList()
+		def dataLocations = []
+		dataLocations.add(user.location as DataLocation)
+		if((user.location as DataLocation).manages)
+			dataLocations.addAll((user.location as DataLocation).manages)
+			
+		render(view:"/entity/list", model:[
+					listTop:"equipment/listTop",
+					template:"equipment/selectFacility",
+					dataLocations:dataLocations
+				])
+	}
+	
 	def search = {
 		DataLocation dataLocation = DataLocation.get(params.int("dataLocation.id"));
 		if (dataLocation == null)

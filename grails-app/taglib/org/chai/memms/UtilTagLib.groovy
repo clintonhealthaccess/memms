@@ -42,10 +42,14 @@ class UtilTagLib {
 	def userService
 	
 	def equipmentRegistration = { attrs, body ->
-		if(userService.canRequestEquipmentRegistration(User.findByUuid(SecurityUtils.subject.principal, [cache: true])))
-			out << '<a href=' + createLinkWithTargetURI(controller: "notificationEquipment", action: "create", params:["dataLocation.id": attrs["dataLocation"] ]) + ' class="next medium left push-r">' + message(code:"equipment.new.request.label") + '</a>'
-		else
+		def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])
+		if(userService.canRequestEquipmentRegistration(user))
+			out << '<a href=' + createLinkWithTargetURI(controller: "notificationEquipment", action: "create") + ' class="next medium left push-r">' + message(code:"equipment.new.request.label") + '</a>'
+		else if(attrs["dataLocation"])
 			out << '<a href=' + createLinkWithTargetURI(controller: "equipment", action: "create", params:["dataLocation.id": attrs["dataLocation"] ]) + ' class="next medium left push-r">' + message(code:"default.new.label" , args: attrs["entityName"] ) + '</a>'
+		else
+			out << '<a href=' + createLinkWithTargetURI(controller: "equipmentView", action: "selectFacility") + ' class="next medium left push-r">' + message(code:"default.new.label" , args: attrs["entityName"] ) + '</a>'
+
 	}
 	
 	def notificationCount = { attrs, body ->
