@@ -3,7 +3,9 @@ package org.chai.memms.corrective.maintenance
 import java.util.Date;
 import java.util.Map;
 
-import org.chai.location.DataLocation;
+import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocation
+import org.chai.location.Location
 import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests
 import org.chai.memms.inventory.Equipment;
@@ -72,10 +74,10 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.LOW,senderOne, Initializer.getDate(12, 9,2012),Initializer.getDate(18, 9,2012),FailureReason.NOTSPECIFIED,OrderStatus.CLOSEDFIXED)		
 		when:
 		def kivuye = DataLocation.findByCode(KIVUYE)
-		def butaro = DataLocation.findByCode(BUTARO)
+		def musanze = DataLocation.findByCode(MUSANZE)
 		//Filter by DataLocation
 		def workOrdersPassesDataLocation = workOrderService.filterWorkOrders(kivuye,null,null,null,null,null,[:])
-		def workOrdersFailsDataLocation = workOrderService.filterWorkOrders(butaro,null,null,null,null,null,[:])
+		def workOrdersFailsDataLocation = workOrderService.filterWorkOrders(musanze,null,null,null,null,null,[:])
 		//Filter by Equipment
 		def workOrdersEquipment = workOrderService.filterWorkOrders(null,equipment,null,null,null,null,[:])
 		
@@ -121,5 +123,21 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		def equipments = workOrderService.getWorkOrdersByEquipment(equipment,[:])
 		then:
 		equipments.size() == 1
+	}
+	
+	def "can get workOrders by calculationLocation"(){
+		setup:
+		setupLocationTree()
+		def equipment = newEquipment(CODE(123),DataLocation.findByCode(KIVUYE))
+		def senderOne = newUser("senderOne", true,true)
+		Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderOne, Initializer.getDate(12, 9,2012),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.LOW,senderOne, Initializer.getDate(12, 9,2012),Initializer.getDate(18, 9,2012),FailureReason.NOTSPECIFIED,OrderStatus.CLOSEDFIXED)
+		when:
+		def workOrdersPassesDataLocation = workOrderService.getWorkOrdersByCalculationLocation(DataLocation.findByCode(KIVUYE),[:])
+		def workOrdersFailsDataLocation = workOrderService.getWorkOrdersByCalculationLocation(CalculationLocation.findByCode(BURERA),[:])
+		
+		then:
+		workOrdersPassesDataLocation.size() == 2
+		workOrdersFailsDataLocation.size() == 0
 	}
 }

@@ -36,7 +36,10 @@ import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
 import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.corrective.maintenance.WorkOrderController;
-import org.chai.memms.security.User;
+import org.chai.memms.security.User
+import org.chai.memms.security.User.UserType
+import org.chai.location.DataLocation
+import org.chai.location.Location
 
 /**
  * @author Jean Kahigiso M.
@@ -105,7 +108,6 @@ class WorkOrderViewControllerSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		setupEquipment()
-		setupSystemUser()
 		def user = newUser("user","user")
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
@@ -119,4 +121,83 @@ class WorkOrderViewControllerSpec extends IntegrationTests{
 		then:
 		workOrder.comments.size() == 0
 	}
+	
+	
+	def "can list workOrders - only those that a user at a dataLocation can access"(){
+		setup:
+		setupLocationTree()
+		
+		def techdh = newOtherUser("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO))
+		techdh.userType = UserType.TECHNICIANDH
+		techdh.save(failOnError:true)
+		
+		def sender = newOtherUser("sender", "sender", DataLocation.findByCode(KIVUYE))
+		sender.userType = UserType.TITULAIREHC
+		sender.save(failOnError:true)
+		
+		def equipmentOne = newEquipment(CODE(123),DataLocation.findByCode(BUTARO))
+		def equipmentTwo = newEquipment(CODE(124),DataLocation.findByCode(KIVUYE))
+		def workOrderOne = Initializer.newWorkOrder(equipmentOne, "Nothing yet", Criticality.NORMAL,techdh,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrder = Initializer.newWorkOrder(equipmentTwo, "Nothing yet, not even after escalations", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		setupSecurityManager( techdh)
+		workOrderViewController = new WorkOrderViewController()
+		when:
+		workOrderViewController.params."dataLocation.id" = techdh.location.id
+		workOrderViewController.list()
+		then:
+		WorkOrder.count() == 2
+		workOrderViewController.modelAndView.model.entities.size() == 2
+	}
+	
+	def "cannot list workOrders - only those that a user at a dataLocation cannot access"(){
+		setup:
+		setupLocationTree()
+		
+		def techdh = newOtherUser("techdh", "techdh", DataLocation.findByCode(MUSANZE))
+		techdh.userType = UserType.TECHNICIANDH
+		techdh.save(failOnError:true)
+		
+		def sender = newOtherUser("sender", "sender", DataLocation.findByCode(KIVUYE))
+		sender.userType = UserType.TITULAIREHC
+		sender.save(failOnError:true)
+		
+		def equipmentOne = newEquipment(CODE(123),DataLocation.findByCode(BUTARO))
+		def equipmentTwo = newEquipment(CODE(124),DataLocation.findByCode(KIVUYE))
+		def workOrderOne = Initializer.newWorkOrder(equipmentOne, "Nothing yet", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrder = Initializer.newWorkOrder(equipmentTwo, "Nothing yet, not even after escalations", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		setupSecurityManager( techdh)
+		workOrderViewController = new WorkOrderViewController()
+		when:
+		workOrderViewController.params."dataLocation.id" = techdh.location.id
+		workOrderViewController.list()
+		then:
+		WorkOrder.count() == 2
+		workOrderViewController.response.status == 404
+	}
+	def "can list workOrders - by admin"(){
+		setup:
+		setupLocationTree()
+		
+		def admin = newOtherUser("admin", "admin", Location.findByCode(RWANDA))
+		admin.userType = UserType.TECHNICIANDH
+		admin.save(failOnError:true)
+		
+		def sender = newOtherUser("sender", "sender", DataLocation.findByCode(KIVUYE))
+		sender.userType = UserType.TITULAIREHC
+		sender.save(failOnError:true)
+		
+		def equipmentOne = newEquipment(CODE(123),DataLocation.findByCode(BUTARO))
+		def equipmentTwo = newEquipment(CODE(124),DataLocation.findByCode(KIVUYE))
+		def workOrderOne = Initializer.newWorkOrder(equipmentOne, "Nothing yet", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrder = Initializer.newWorkOrder(equipmentTwo, "Nothing yet, not even after escalations", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		setupSecurityManager( admin)
+		workOrderViewController = new WorkOrderViewController()
+		when:
+		workOrderViewController.params."dataLocation.id" = admin.location.id
+		workOrderViewController.list()
+		then:
+		WorkOrder.count() == 2
+		workOrderViewController.modelAndView.model.entities.size() == 2
+	}
+
 }

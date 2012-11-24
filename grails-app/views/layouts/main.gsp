@@ -102,6 +102,7 @@
 					<shiro:hasPermission permission="menu:preventivemaintenance">
 						<li><a class="${controllerName=='preventiveOrderView'?'active':''}" href="#"><g:message code="header.navigation.preventive.maintenance"/></a></li>
 					</shiro:hasPermission>
+					<li><a class="${controllerName=='workOrderView' && actionName == 'escalated' ?'active':''}" href="${createLink(controller: 'workOrderView', action:'escalated')}"><g:message code="notification.work.order.escalated.label"/> ()</a></li>
 					<li><a class="${controllerName=='notificationWorkOrder'?'active':''}" href="${createLink(controller: 'notificationWorkOrder', action:'list')}"><g:message code="notification.work.order.label"/> ()</a></li>
 	         	</ul>
          	</li>

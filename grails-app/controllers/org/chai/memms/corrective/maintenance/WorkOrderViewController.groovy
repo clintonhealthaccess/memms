@@ -83,7 +83,7 @@ class WorkOrderViewController extends AbstractController{
 		def html = g.render(template:"/templates/workOrderClueTip",model:[workOrder:workOrder])
 		render(contentType:"text/plain", text:html)
 	}
-
+	
 	def list = {
 		List<WorkOrder> orders= []
 		Equipment equipment = null
@@ -91,6 +91,9 @@ class WorkOrderViewController extends AbstractController{
 		if(params["dataLocation.id"]) dataLocation = CalculationLocation.get(params.int("dataLocation.id"))
 		if(params["equipment.id"]) equipment = Equipment.get(params.int("equipment.id"))
 		
+		if(dataLocation && !user.canAccessCalculationLocation(dataLocation)) response.sendError(404)
+		else if(equipment && !user.canAccessCalculationLocation(equipment.dataLocation)) response.sendError(404)
+		else response.sendError(404)
 		adaptParamsForList()
 		if(dataLocation)
 			orders = workOrderService.getWorkOrdersByCalculationLocation(dataLocation,params)	

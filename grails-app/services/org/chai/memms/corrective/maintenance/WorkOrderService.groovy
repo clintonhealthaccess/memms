@@ -31,10 +31,13 @@ import org.chai.location.DataLocation
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality
 
 import java.util.Map;
+import java.util.Set;
+
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation;
 import org.chai.location.DataLocationType;
 import org.chai.location.Location;
+import org.chai.location.LocationLevel;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.corrective.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
@@ -46,13 +49,13 @@ import org.chai.memms.util.Utils;
  * @author Jean Kahigiso M.
  *
  */
-class WorkOrderService {	
+class WorkOrderService {
 	def equipmentService
 	def locationService
 	static transactional = true
 	def languageService;
-	def workOrderNotificationService
-	
+	def notificationWorkOrderService
+
 	/**
 	 * Searches for a WorkOrder that contains the search term
 	 * Pass a null value for the criteria you want to be ignored in the search other than the search text
@@ -67,11 +70,11 @@ class WorkOrderService {
 		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = WorkOrder.createCriteria()
-		
+
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(workOrdersEquipment)  
+			if(workOrdersEquipment)
 				eq('equipment',workOrdersEquipment)
-			if(dataLocation) 
+			if(dataLocation)
 				equipment{eq('dataLocation',dataLocation)}
 			or{
 				ilike("description","%"+text+"%")
@@ -91,8 +94,8 @@ class WorkOrderService {
 			}
 		}
 	}
-	
-				
+
+
 
 	/**
 	 * Returns a filtered list of WorkOrders according to the passed criteria
@@ -126,41 +129,47 @@ class WorkOrderService {
 				eq("currentStatus",currentStatus)
 		}
 	}
-	
+
 	def escalateWorkOrder(WorkOrder workOrder,String content, User escalatedBy){
 		workOrder.currentStatus = OrderStatus.OPENATMMC
 		WorkOrderStatus status = new WorkOrderStatus(workOrder:workOrder,status:OrderStatus.OPENATMMC,escalation:true,changedBy:escalatedBy,changeOn:new Date())
 		workOrder.addToStatus(status)
 		workOrder.save(failOnError:true)
 		if(status)
-			workOrderNotificationService.newNotification(workOrder,content,escalatedBy,true)
+			notificationWorkOrderService.newNotification(workOrder,content,escalatedBy,true)
 		return workOrder
 	}
 	
+	//TODO we can get this using the filter methode
 	List<WorkOrder> getWorkOrdersByEquipment(Equipment equipment, Map<String, String> params){
 		def criteria = WorkOrder.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			eq("equipment",equipment)
 		}
 	}
-	
+
 	List<WorkOrder> getWorkOrdersByCalculationLocation(CalculationLocation location, Map<String, String> params){
-		def equipments =[]
 		def criteria = WorkOrder.createCriteria();
 		
+		def dataLocations = []
 		if(location instanceof DataLocation)
-			equipments = equipmentService.filterEquipment(location,null,null,null,null,null,null,null,null,[:])
-		else{
-			def dataLocations = location.getDataLocations(null,null)
-			for(DataLocation dataLocation: dataLocations)
-				equipments.addAll( equipmentService.getMyEquipments(dataLocation, [:]))
+		{
+			dataLocations.add(location as DataLocation)
+			if((location as DataLocation).manages) dataLocations.addAll((location as DataLocation).manages)
+		}
+		else
+		{
+			location.collectDataLocations(null, null).each{
+				dataLocations.add(it)
+				if(it.manages) dataLocations.addAll(it.manages)
+			}
 		}
 		
+		if(log.isDebugEnabled()) log.debug("getting workordes in DataLocations = " + dataLocations)
+		
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			or{
-				equipments.each { equipment ->
-					eq("equipment",equipment)
-				}
+			equipment{
+				inList("dataLocation", dataLocations)
 			}
 		}
 	}
