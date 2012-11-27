@@ -25,13 +25,9 @@ class NotificationEquipmentControllerSpec  extends IntegrationTests{
 		setup:
 		setupLocationTree()
 
-		def sender = newOtherUser("sender", "sender", DataLocation.findByCode(KIVUYE))
-		sender.userType = UserType.TITULAIREHC
-		sender.save(failOnError:true)
+		def sender = newOtherUserWithType("sender", "sender", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
 
-		def receiverOne = newOtherUser("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO))
-		receiverOne.userType = UserType.TECHNICIANDH
-		receiverOne.save(failOnError:true)
+		def receiverOne = newOtherUserWithType("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 
 		setupSecurityManager(sender)
 
@@ -47,21 +43,13 @@ class NotificationEquipmentControllerSpec  extends IntegrationTests{
 	def "reading a notification sets it's read status to true"(){
 		setup:
 		setupLocationTree()
-		def senderOne = newOtherUser("senderOne", "senderOne", DataLocation.findByCode(KIVUYE))
-		senderOne.userType = UserType.TITULAIREHC
-		senderOne.save(failOnError:true)
+		def senderOne = newOtherUserWithType("senderOne", "senderOne", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
 
-		def senderTwo = newOtherUser("senderTwo", "senderTwo", DataLocation.findByCode(BUTARO))
-		senderTwo.userType = UserType.HOSPITALDEPARTMENT
-		senderTwo.save(failOnError:true)
+		def senderTwo = newOtherUserWithType("senderTwo", "senderTwo", DataLocation.findByCode(BUTARO),UserType.HOSPITALDEPARTMENT)
 
-		def receiverOne = newOtherUser("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO))
-		receiverOne.userType = UserType.TECHNICIANDH
-		receiverOne.save(failOnError:true)
+		def receiverOne = newOtherUserWithType("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 
-		def receiverTwo = newOtherUser("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO))
-		receiverTwo.userType = UserType.TECHNICIANDH
-		receiverTwo.save(failOnError:true)
+		def receiverTwo = newOtherUserWithType("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO), UserType.TECHNICIANDH)
 
 		notificationEquipmentService.newNotification(null, "Send for rapair, one",senderOne)
 		notificationEquipmentService.newNotification(null, "Send for rapair, two",senderTwo)
@@ -82,21 +70,13 @@ class NotificationEquipmentControllerSpec  extends IntegrationTests{
 	def "can list notification"(){
 		setup:
 		setupLocationTree()
-		def senderOne = newOtherUser("senderOne", "senderOne", DataLocation.findByCode(KIVUYE))
-		senderOne.userType = UserType.TITULAIREHC
-		senderOne.save(failOnError:true)
+		def senderOne = newOtherUserWithType("senderOne", "senderOne", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
 
-		def senderTwo = newOtherUser("senderTwo", "senderTwo", DataLocation.findByCode(BUTARO))
-		senderTwo.userType = UserType.HOSPITALDEPARTMENT
-		senderTwo.save(failOnError:true)
+		def senderTwo = newOtherUserWithType("senderTwo", "senderTwo", DataLocation.findByCode(BUTARO),UserType.HOSPITALDEPARTMENT)
 
-		def receiverOne = newOtherUser("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO))
-		receiverOne.userType = UserType.TECHNICIANDH
-		receiverOne.save(failOnError:true)
+		def receiverOne = newOtherUserWithType("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 
-		def receiverTwo = newOtherUser("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO))
-		receiverTwo.userType = UserType.TECHNICIANDH
-		receiverTwo.save(failOnError:true)
+		def receiverTwo = newOtherUserWithType("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 
 		notificationEquipmentService.newNotification(null, "Send for rapair, one",senderOne)
 		notificationEquipmentService.newNotification(null, "Send for rapair, two",senderTwo)
@@ -115,62 +95,54 @@ class NotificationEquipmentControllerSpec  extends IntegrationTests{
 		NotificationEquipment.count() == 4
 	}
 
+	//TODO find a way to parse returned json to check the content
 //	def "can filter notifications"(){
 //		setup:
 //		setupLocationTree()
-//		def senderOne = newOtherUser("senderOne", "senderOne", DataLocation.findByCode(KIVUYE))
-//		senderOne.userType = UserType.TITULAIREHC
-//		senderOne.save(failOnError:true)
+//		def senderOne = newOtherUserWithType("senderOne", "senderOne", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
 //
-//		def senderTwo = newOtherUser("senderTwo", "senderTwo", DataLocation.findByCode(BUTARO))
-//		senderTwo.userType = UserType.HOSPITALDEPARTMENT
-//		senderTwo.save(failOnError:true)
+//		def senderTwo = newOtherUserWithType("senderTwo", "senderTwo", DataLocation.findByCode(BUTARO),UserType.HOSPITALDEPARTMENT)
 //
-//		def receiverOne = newOtherUser("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO))
-//		receiverOne.userType = UserType.TECHNICIANDH
-//		receiverOne.save(failOnError:true)
+//		def receiverOne = newOtherUserWithType("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 //
-//		def receiverTwo = newOtherUser("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO))
-//		receiverTwo.userType = UserType.TECHNICIANDH
-//		receiverTwo.save(failOnError:true)
+//		def receiverTwo = newOtherUserWithType("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 //
-//		notificationEquipmentService.newNotification(null, "Send for rapair, one",senderOne)
+//		notificationEquipmentService.newNotification(null, "Send for rapair, oneOld",senderOne)
+//		notificationEquipmentService.newNotification(null, "Send for rapair, oneTwo",senderOne)
 //		notificationEquipmentService.newNotification(null, "Send for rapair, two",senderTwo)
 //
-//		setupSecurityManager(receiverTwo)
+//		setupSecurityManager(receiverOne)
 //
+//		def notification = notificationEquipmentService.searchNotificition("oneOld",receiverOne,[:])
+//		notificationEquipmentService.setNotificationRead(notification)
 //		notificationEquipmentController = new NotificationEquipmentController()
 //
 //		when:
 //		notificationEquipmentController.params.read = "false"
-//		notificationEquipmentController.params.to = Initializer.now()+1
+//		notificationEquipmentController.params.dataLocation = DataLocation.findByCode(BUTARO)
+//		notificationEquipmentController.params.from = Initializer.now() - 1
+//		notificationEquipmentController.params.to = Initializer.now() + 1
+//		notificationEquipmentController.request.makeAjaxRequest()
 //		notificationEquipmentController.filter()
 //
 //		then:
-//		NotificationEquipment.count() == 4
-//		notificationEquipmentController.modelAndView.model.entities.size() == 2
+//		notificationEquipmentController.response.json.results == notificationEquipmentController.ajaxModel(notificationEquipmentService.filterNotifications(DataLocation.findByCode(BUTARO),null, receiverOne, Initializer.now() - 1,Initializer.now() + 1,false, [:]),"")
+//		NotificationEquipment.count() == 6
 //	}
 
 //	def "can search notifications"(){
 //		setup:
 //		setupLocationTree()
-//		def senderOne = newOtherUser("senderOne", "senderOne", DataLocation.findByCode(KIVUYE))
-//		senderOne.userType = UserType.TITULAIREHC
-//		senderOne.save(failOnError:true)
+//		def senderOne = newOtherUserWithType("senderOne", "senderOne", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
 //
-//		def senderTwo = newOtherUser("senderTwo", "senderTwo", DataLocation.findByCode(BUTARO))
-//		senderTwo.userType = UserType.HOSPITALDEPARTMENT
-//		senderTwo.save(failOnError:true)
+//		def senderTwo = newOtherUserWithType("senderTwo", "senderTwo", DataLocation.findByCode(BUTARO),UserType.HOSPITALDEPARTMENT)
 //
-//		def receiverOne = newOtherUser("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO))
-//		receiverOne.userType = UserType.TECHNICIANDH
-//		receiverOne.save(failOnError:true)
+//		def receiverOne = newOtherUserWithType("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 //
-//		def receiverTwo = newOtherUser("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO))
-//		receiverTwo.userType = UserType.TECHNICIANDH
-//		receiverTwo.save(failOnError:true)
+//		def receiverTwo = newOtherUserWithType("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 //
 //		notificationEquipmentService.newNotification(null, "Send for rapair, one",senderOne)
+//		notificationEquipmentService.newNotification(null, "Send for rapair, oneTwo",senderOne)
 //		notificationEquipmentService.newNotification(null, "Send for rapair, two",senderTwo)
 //
 //		setupSecurityManager(receiverTwo)
@@ -178,9 +150,11 @@ class NotificationEquipmentControllerSpec  extends IntegrationTests{
 //
 //		when:
 //		notificationEquipmentController.params.q = "one"
+//		notificationEquipmentController.request.makeAjaxRequest()
 //		notificationEquipmentController.search()
 //
 //		then:
 //		notificationEquipmentController.modelAndView.model.entities.size() == 1
+//		NotificationEquipment.count() == 6
 //	}
 }

@@ -61,6 +61,7 @@ class WorkOrderViewController extends AbstractController{
 	def correctiveMaintenanceService
 	def commentService
 	def maintenanceProcessService
+	def userService
 
 	def getLabel() {
 		return "work.order.label";

@@ -71,6 +71,7 @@ class NotificationEquipmentService {
 			projections{rowCount()}
 		}
 	}
+	//TODO refactor and rename
 	public List<NotificationEquipment> searchNotificition(String text,User user,Map<String, String> params) {
 		def criteria = NotificationEquipment.createCriteria()
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){

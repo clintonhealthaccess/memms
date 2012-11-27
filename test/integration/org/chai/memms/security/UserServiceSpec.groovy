@@ -110,36 +110,17 @@ class UserServiceSpec extends IntegrationTests{
 	def "get notificationWorkOrder group"(){
 		setup:
 		setupLocationTree()
+		def senderTitulaire = newOtherUserWithType("senderTitulaire", "senderTitulaire",DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
 		
-		def senderTitulaire = newUser("senderTitulaire", true,true)
-		senderTitulaire.userType = UserType.TITULAIREHC
-		senderTitulaire.location = DataLocation.findByCode(KIVUYE)
-		senderTitulaire.save(failOnError:true)
+		def senderDepartment = newOtherUserWithType("senderDepartment", "senderDepartment",DataLocation.findByCode(KIVUYE),UserType.HOSPITALDEPARTMENT)
 		
-		def senderDepartment = newUser("senderDepartment", true,true)
-		senderDepartment.userType = UserType.HOSPITALDEPARTMENT
-		senderDepartment.location = DataLocation.findByCode(KIVUYE)
-		senderDepartment.save(failOnError:true)
+		def receiverFacilityOne = newOtherUserWithType("receiverFacilityOne", "receiverFacilityOne",DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 		
-		def receiverFacilityOne = newUser("receiverFacilityOne", true,true)
-		receiverFacilityOne.userType = UserType.TECHNICIANDH
-		receiverFacilityOne.location = DataLocation.findByCode(BUTARO)
-		receiverFacilityOne.save(failOnError:true)
+		def receiverFacilityTwo = newOtherUserWithType("receiverFacilityTwo", "receiverFacilityTwo",DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 		
-		def receiverFacilityTwo = newUser("receiverFacilityTwo", true,true)
-		receiverFacilityTwo.userType = UserType.TECHNICIANDH
-		receiverFacilityTwo.location = DataLocation.findByCode(BUTARO)
-		receiverFacilityTwo.save(failOnError:true)
+		def receiverMoHOne = newOtherUserWithType("receiverMoHOne", "receiverMoHOne",Location.findByCode(RWANDA),UserType.TECHNICIANMMC)
 		
-		def receiverMoHOne = newUser("receiverMoHOne", true,true)
-		receiverMoHOne.userType = UserType.TECHNICIANMMC
-		receiverMoHOne.location = Location.findByCode(RWANDA)
-		receiverMoHOne.save(failOnError:true)
-		
-		def receiverMoHTwo = newUser("receiverMoHTwo", true,true)
-		receiverMoHTwo.userType = UserType.TECHNICIANMMC
-		receiverMoHTwo.location = Location.findByCode(RWANDA)
-		receiverMoHTwo.save(failOnError:true)
+		def receiverMoHTwo = newOtherUserWithType("receiverMoHTwo", "receiverMoHTwo",Location.findByCode(RWANDA),UserType.TECHNICIANMMC)
 		
 		def equipmentManaged = newEquipment(CODE(123),DataLocation.findByCode(KIVUYE))
 		def equipmentNotManaged = newEquipment(CODE(133),DataLocation.findByCode(BUTARO))
@@ -166,17 +147,11 @@ class UserServiceSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		
-		def sender = newOtherUser("sender", "sender", DataLocation.findByCode(KIVUYE))
-		sender.userType = UserType.TITULAIREHC
-		sender.save(failOnError:true)
+		def sender = newOtherUserWithType("sender", "sender", DataLocation.findByCode(KIVUYE), UserType.TITULAIREHC)
 		
-		def receiverOne = newOtherUser("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO))
-		receiverOne.userType = UserType.TECHNICIANDH
-		receiverOne.save(failOnError:true)
+		def receiverOne = newOtherUserWithType("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO), UserType.TECHNICIANDH)
 		
-		def receiverTwo = newOtherUser("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO))
-		receiverTwo.userType = UserType.TECHNICIANDH
-		receiverTwo.save(failOnError:true)
+		def receiverTwo = newOtherUserWithType("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO), UserType.TECHNICIANDH)
 		
 		def userGroup
 
@@ -189,25 +164,15 @@ class UserServiceSpec extends IntegrationTests{
 	def "check if a user can request for equipment registration"(){
 		setup:
 		setupLocationTree()
-		def userOne = newOtherUser("userOne", "userOne", DataLocation.findByCode(KIVUYE))
-		userOne.userType = UserType.TITULAIREHC
-		userOne.save(failOnError:true)
+		def userOne = newOtherUserWithType("userOne", "userOne", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
 		
-		def userTwo = newOtherUser("userTwo", "userTwo", DataLocation.findByCode(BUTARO))
-		userTwo.userType = UserType.HOSPITALDEPARTMENT
-		userTwo.save(failOnError:true)
+		def userTwo = newOtherUserWithType("userTwo", "userTwo", DataLocation.findByCode(BUTARO),UserType.HOSPITALDEPARTMENT)
 		
-		def techDh = newOtherUser("techDh", "techDh", DataLocation.findByCode(BUTARO))
-		techDh.userType = UserType.TECHNICIANDH
-		techDh.save(failOnError:true)
+		def techDh = newOtherUserWithType("techDh", "techDh", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 		
-		def techMMC = newOtherUser("techMMC", "techMMC", DataLocation.findByCode(BUTARO))
-		techMMC.userType = UserType.TECHNICIANMMC
-		techMMC.save(failOnError:true)
+		def techMMC = newOtherUserWithType("techMMC", "techMMC", DataLocation.findByCode(BUTARO),UserType.TECHNICIANMMC)
 		
-		def admin = newOtherUser("admin", "admin", DataLocation.findByCode(RWANDA))
-		admin.userType = UserType.ADMIN
-		admin.save(failOnError:true)
+		def admin = newOtherUserWithType("admin", "admin", DataLocation.findByCode(RWANDA),UserType.ADMIN)
 
 		expect:
 		userService.canRequestEquipmentRegistration(userOne)
@@ -220,25 +185,15 @@ class UserServiceSpec extends IntegrationTests{
 	def "check if a user can view managed equipments"(){
 		setup:
 		setupLocationTree()
-		def userOne = newOtherUser("userOne", "userOne", DataLocation.findByCode(KIVUYE))
-		userOne.userType = UserType.TITULAIREHC
-		userOne.save(failOnError:true)
+		def userOne = newOtherUserWithType("userOne", "userOne", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
 		
-		def userTwo = newOtherUser("userTwo", "userTwo", DataLocation.findByCode(BUTARO))
-		userTwo.userType = UserType.HOSPITALDEPARTMENT
-		userTwo.save(failOnError:true)
+		def userTwo = newOtherUserWithType("userTwo", "userTwo", DataLocation.findByCode(BUTARO),UserType.HOSPITALDEPARTMENT)
 		
-		def techDh = newOtherUser("techDh", "techDh", DataLocation.findByCode(BUTARO))
-		techDh.userType = UserType.TECHNICIANDH
-		techDh.save(failOnError:true)
+		def techDh = newOtherUserWithType("techDh", "techDh", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 		
-		def techMMC = newOtherUser("techMMC", "techMMC", DataLocation.findByCode(BUTARO))
-		techMMC.userType = UserType.TECHNICIANMMC
-		techMMC.save(failOnError:true)
+		def techMMC = newOtherUserWithType("techMMC", "techMMC", DataLocation.findByCode(BUTARO),UserType.TECHNICIANMMC)
 		
-		def admin = newOtherUser("admin", "admin", DataLocation.findByCode(RWANDA))
-		admin.userType = UserType.ADMIN
-		admin.save(failOnError:true)
+		def admin = newOtherUserWithType("admin", "admin", DataLocation.findByCode(RWANDA),UserType.ADMIN)
 
 		expect:
 		!userService.canViewManagedEquipments(userOne)
