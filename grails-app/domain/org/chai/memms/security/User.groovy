@@ -105,14 +105,16 @@ class User {
 	}
 	
 	public boolean canAccessCalculationLocation(CalculationLocation calculationLocation){
+		if(log.isDebugEnabled()) log.debug("User = " + this + ", of type = " +this.username + "	, of CalculationLocation = " + location + " , is trying to access CalculationLocation = " + calculationLocation)
 		if(calculationLocation instanceof Location && location instanceof DataLocation) return false
-		if(calculationLocation instanceof DataLocation && location instanceof DataLocation) return calculationLocation == location
-		if(calculationLocation instanceof Location && location instanceof Location && calculationLocation.level == location.level) return calculationLocation == location
-		if(calculationLocation instanceof DataLocation && location instanceof Location && calculationLocation.location.level == location.level) return calculationLocation.location == location
+		if(calculationLocation == location) return true
 		//This takes care of technicians to be able to access the dataLocations that they manage
-		if(userType == UserType.TECHNICIANDH && location instanceof DataLocation && calculationLocation instanceof DataLocation && ((DataLocation)calculationLocation).managedBy != null) return ((DataLocation)calculationLocation).managedBy == location
-		return calculationLocation.getParentOfLevel(location.level) == location
-		}
+		if(userType == UserType.TECHNICIANDH && location instanceof DataLocation && calculationLocation instanceof DataLocation && (calculationLocation as DataLocation).managedBy != null) return ((DataLocation)calculationLocation).managedBy == location
+		
+		return location.instanceOf(Location) ? calculationLocation.getParentOfLevel(location.level) == location : calculationLocation.getParentOfLevel(location.location.level) == location
+		
+		return false
+	}
 	
 	def canActivate() {
 		return confirmed == true && active == false

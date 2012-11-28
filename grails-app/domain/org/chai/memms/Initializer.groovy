@@ -154,31 +154,31 @@ public class Initializer {
 			
 			//Defining User
 			//Default users
-			def admin = new User(userType: UserType.ADMIN, location: CalculationLocation.findByCode(RWANDA), username: "admin", 
+			def admin = new User(userType: UserType.ADMIN, location: Location.findByCode(RWANDA), username: "admin", 
 				firstname: "admin", lastname: "admin", email:'memms@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true, 
 				confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			admin.addToRoles(defaultAdminRole)
 			admin.save(failOnError: true)
 			
-			def techDH= new User(userType: UserType.TECHNICIANDH, location: CalculationLocation.findByCode(NYANZA), username: "techDH", 
+			def techDH= new User(userType: UserType.TECHNICIANDH, location: DataLocation.findByCode(NYANZA), username: "techDH", 
 				firstname: "Technician", lastname: "DH", email:'techDH@memms.org', passwordHash: new Sha256Hash("techDH").toHex(), active: true, 
 				confirmed: true, uuid:'techDH', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			techDH.addToRoles(defaultTechnicianDHRole)
 			techDH.save(failOnError: true, flush:true)
 			
-			def techMMC= new User(userType: UserType.TECHNICIANMMC, location: Location.findByCode(RWANDA), username: "techMMC",
+			def techMMC= new User(userType: UserType.TECHNICIANMMC, location: Location.findByCode(HUYE), username: "techMMC",
 				firstname: "Technician", lastname: "MMC", email:'techMMC@memms.org', passwordHash: new Sha256Hash("techMMC").toHex(), active: true,
 				confirmed: true, uuid:'techMMC', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			techMMC.addToRoles(defaultTechnicianMMCRole)
 			techMMC.save(failOnError: true, flush:true)
 			
-			def titulaireHC= new User(userType: UserType.TITULAIREHC, location: CalculationLocation.findByCode(KIVUYE), username: "titulaireHC",
+			def titulaireHC= new User(userType: UserType.TITULAIREHC, location: DataLocation.findByCode(KIVUYE), username: "titulaireHC",
 				firstname: "Titulaire", lastname: "HC", email:'titulaireHC@memms.org', passwordHash: new Sha256Hash("titulaireHC").toHex(), active: true,
 				confirmed: true, uuid:'techMoH', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			titulaireHC.addToRoles(defaultTitulaireHCRole)
 			titulaireHC.save(failOnError: true, flush:true)
 			
-			def hospitalDepartment= new User(userType: UserType.HOSPITALDEPARTMENT, location: CalculationLocation.findByCode(NYANZA), username: "hospitalDepartment",
+			def hospitalDepartment= new User(userType: UserType.HOSPITALDEPARTMENT, location: DataLocation.findByCode(NYANZA), username: "hospitalDepartment",
 				firstname: "Hospital", lastname: "Department", email:'hospitalDepartment@memms.org', passwordHash: new Sha256Hash("hospitalDepartment").toHex(), active: true,
 				confirmed: true, uuid:'hospitalDepartment', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			hospitalDepartment.addToRoles(defaultHospitalDepartmentRole)
@@ -186,7 +186,7 @@ public class Initializer {
 			//End default users
 			
 			//User with default clerk role
-			def userClerkOne= new User(userType: UserType.OTHER,location: CalculationLocation.findByCode(KIVUYE), username: "userOne", 
+			def userClerkOne= new User(userType: UserType.OTHER,location: DataLocation.findByCode(KIVUYE), username: "userOne", 
 				firstname: "user", lastname: "user", email:'user@memms.com', passwordHash: new Sha256Hash("user").toHex(), active: true, 
 				confirmed: true, uuid:'userOne', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			userClerkOne.addToRoles(defaultClercRole)

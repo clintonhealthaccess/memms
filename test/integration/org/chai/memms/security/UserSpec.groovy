@@ -191,40 +191,78 @@ class UserSpec  extends IntegrationTests {
 	def "find if a user has access to a given calculationlocation"() {
 		setup:
 		setupLocationTree()
-		def dataLocationKivuye = DataLocation.findByCode(KIVUYE)
-		def locationGitarama = Location.findByCode(GITARAMA)
 		
-		def dataLocationGitwe = DataLocation.findByCode(GITWE)
-		def locationBurera = Location.findByCode(BURERA)
+		def rwanda = Location.findByCode(RWANDA)
 		
-		def userDataLocationKivuye = newOtherUser("kivuyeUser", "kivuyeUser", DataLocation.findByCode(KIVUYE))
-		def userDataLocationButaro = newOtherUser("butaroUser", "butaroUser", DataLocation.findByCode(BUTARO))
+		def gitaramaDistrict = Location.findByCode(GITARAMA)
+		def butaroDh = DataLocation.findByCode(BUTARO)
+		def kivuyeHc = DataLocation.findByCode(KIVUYE)
 		
-		def userLocationGitarama = newOtherUser("gitaramaUser", "gitaramaUser", Location.findByCode(GITARAMA))
-		def userLocationBurera = newOtherUser("bureraUser", "bureraUser", locationBurera)
+		def bureraDistrict = Location.findByCode(BURERA)
+		def musanzeDh = DataLocation.findByCode(MUSANZE)
+		def gitweHc = DataLocation.findByCode(GITWE)
 		
-		def userLocationNorth = newOtherUser("northUser", "northUser", Location.findByCode(NORTH))
-		def userLocationSouth = newOtherUser("southUser", "southUser", Location.findByCode(SOUTH))
+		when:
+		def titulaireKivuye = newOtherUserWithType("titulaireKivuye", "titulaireKivuye", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
+
+		def departmentButaro = newOtherUserWithType("departmentButaro", "departmentButaro", DataLocation.findByCode(BUTARO),UserType.HOSPITALDEPARTMENT)
+
+		def techDhButaro = newOtherUserWithType("techDhButaro", "techDhButaro", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 		
-		expect:
-		!userLocationSouth.canAccessCalculationLocation(dataLocationGitwe)
-		userLocationSouth.canAccessCalculationLocation(dataLocationKivuye)
-		userLocationSouth.canAccessCalculationLocation(locationGitarama)
+		def ditrictGitarama = newOtherUserWithType("ditrictGitarama", "ditrictGitarama", Location.findByCode(GITARAMA),UserType.ADMIN)
 		
-		!userLocationNorth.canAccessCalculationLocation(dataLocationKivuye)
-		!userLocationNorth.canAccessCalculationLocation(locationGitarama)
+		def techMMC = newOtherUserWithType("techMMC", "techMMC", Location.findByCode(RWANDA), UserType.TECHNICIANMMC )
 		
-		userLocationGitarama.canAccessCalculationLocation(dataLocationKivuye)
-		userLocationGitarama.canAccessCalculationLocation(locationGitarama)
+		def admin = newOtherUserWithType("admin", "admin", Location.findByCode(RWANDA),UserType.ADMIN)
 		
-		!userLocationBurera.canAccessCalculationLocation(dataLocationKivuye)
-		!userLocationBurera.canAccessCalculationLocation(locationGitarama)
+		then:
+		titulaireKivuye.canAccessCalculationLocation(kivuyeHc)
+		!titulaireKivuye.canAccessCalculationLocation(gitweHc)
+		!titulaireKivuye.canAccessCalculationLocation(musanzeDh)
+		!titulaireKivuye.canAccessCalculationLocation(bureraDistrict)
+		!titulaireKivuye.canAccessCalculationLocation(butaroDh)
+		!titulaireKivuye.canAccessCalculationLocation(gitaramaDistrict)
+		!titulaireKivuye.canAccessCalculationLocation(rwanda)
 		
-		userDataLocationKivuye.canAccessCalculationLocation(dataLocationKivuye)
-		!userDataLocationKivuye.canAccessCalculationLocation(locationGitarama)
+		departmentButaro.canAccessCalculationLocation(butaroDh)
+		!departmentButaro.canAccessCalculationLocation(gitweHc)
+		!departmentButaro.canAccessCalculationLocation(musanzeDh)
+		!departmentButaro.canAccessCalculationLocation(bureraDistrict)
+		!departmentButaro.canAccessCalculationLocation(kivuyeHc)
+		!departmentButaro.canAccessCalculationLocation(gitaramaDistrict)
+		!departmentButaro.canAccessCalculationLocation(rwanda)
 		
-		!userDataLocationButaro.canAccessCalculationLocation(dataLocationKivuye)
-		!userDataLocationButaro.canAccessCalculationLocation(locationGitarama)
+		techDhButaro.canAccessCalculationLocation(butaroDh)
+		!techDhButaro.canAccessCalculationLocation(gitweHc)
+		!techDhButaro.canAccessCalculationLocation(musanzeDh)
+		!techDhButaro.canAccessCalculationLocation(bureraDistrict)
+		techDhButaro.canAccessCalculationLocation(kivuyeHc)
+		!techDhButaro.canAccessCalculationLocation(gitaramaDistrict)
+		!techDhButaro.canAccessCalculationLocation(rwanda)
+		
+		ditrictGitarama.canAccessCalculationLocation(butaroDh)
+		!ditrictGitarama.canAccessCalculationLocation(gitweHc)
+		!ditrictGitarama.canAccessCalculationLocation(musanzeDh)
+		!ditrictGitarama.canAccessCalculationLocation(bureraDistrict)
+		ditrictGitarama.canAccessCalculationLocation(kivuyeHc)
+		ditrictGitarama.canAccessCalculationLocation(gitaramaDistrict)
+		!ditrictGitarama.canAccessCalculationLocation(rwanda)
+		
+		techMMC.canAccessCalculationLocation(butaroDh)
+		techMMC.canAccessCalculationLocation(gitweHc)
+		techMMC.canAccessCalculationLocation(musanzeDh)
+		techMMC.canAccessCalculationLocation(bureraDistrict)
+		techMMC.canAccessCalculationLocation(kivuyeHc)
+		techMMC.canAccessCalculationLocation(gitaramaDistrict)
+		techMMC.canAccessCalculationLocation(rwanda)
+		
+		admin.canAccessCalculationLocation(butaroDh)
+		admin.canAccessCalculationLocation(gitweHc)
+		admin.canAccessCalculationLocation(musanzeDh)
+		admin.canAccessCalculationLocation(bureraDistrict)
+		admin.canAccessCalculationLocation(kivuyeHc)
+		admin.canAccessCalculationLocation(gitaramaDistrict)
+		admin.canAccessCalculationLocation(rwanda)
 	}
 }
 

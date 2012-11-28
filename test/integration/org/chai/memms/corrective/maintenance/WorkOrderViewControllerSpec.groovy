@@ -172,19 +172,15 @@ class WorkOrderViewControllerSpec extends IntegrationTests{
 		workOrderViewController.list()
 		then:
 		WorkOrder.count() == 2
-		workOrderViewController.response.status == 404
+		workOrderViewController.modelAndView.model.entities.size() == 0
 	}
 	def "can list workOrders - by admin"(){
 		setup:
 		setupLocationTree()
 		
-		def admin = newOtherUser("admin", "admin", Location.findByCode(RWANDA))
-		admin.userType = UserType.TECHNICIANDH
-		admin.save(failOnError:true)
+		def admin = newOtherUserWithType("admin", "admin", Location.findByCode(RWANDA),UserType.ADMIN)
 		
-		def sender = newOtherUser("sender", "sender", DataLocation.findByCode(KIVUYE))
-		sender.userType = UserType.TITULAIREHC
-		sender.save(failOnError:true)
+		def sender = newOtherUserWithType("sender", "sender", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
 		
 		def equipmentOne = newEquipment(CODE(123),DataLocation.findByCode(BUTARO))
 		def equipmentTwo = newEquipment(CODE(124),DataLocation.findByCode(KIVUYE))
@@ -193,7 +189,7 @@ class WorkOrderViewControllerSpec extends IntegrationTests{
 		setupSecurityManager( admin)
 		workOrderViewController = new WorkOrderViewController()
 		when:
-		workOrderViewController.params."dataLocation.id" = admin.location.id
+		workOrderViewController.params."dataLocation.id" = DataLocation.findByCode(BUTARO).id
 		workOrderViewController.list()
 		then:
 		WorkOrder.count() == 2
