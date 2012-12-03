@@ -25,13 +25,9 @@ class NotificationWorkOrderControllerSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		
-		def sender = newOtherUser("sender", "sender", DataLocation.findByCode(KIVUYE))
-		sender.userType = UserType.TITULAIREHC
-		sender.save(failOnError:true)
+		def sender = newOtherUserWithType("sender", "sender", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
 		
-		def receiverOne = newOtherUser("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO))
-		receiverOne.userType = UserType.TECHNICIANDH
-		receiverOne.save(failOnError:true)
+		def receiverOne = newOtherUserWithType("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 		
 		def equipment = newEquipment(CODE(123),DataLocation.findByCode(KIVUYE))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED, OrderStatus.OPENATFOSA)
@@ -49,13 +45,9 @@ class NotificationWorkOrderControllerSpec extends IntegrationTests{
 	def "can't save a notification without a work order"(){
 		setup:
 		setupLocationTree()
-		def sender = newOtherUser("sender", "sender", DataLocation.findByCode(KIVUYE))
-		sender.userType = UserType.TITULAIREHC
-		sender.save(failOnError:true)
+		def sender = newOtherUserWithType("sender", "sender", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
 		
-		def receiverOne = newOtherUser("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO))
-		receiverOne.userType = UserType.TECHNICIANDH
-		receiverOne.save(failOnError:true)
+		def receiverOne = newOtherUserWithType("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 
 		notificationWorkOrderController = new NotificationWorkOrderController()
 		setupSecurityManager(sender)
@@ -71,25 +63,13 @@ class NotificationWorkOrderControllerSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		
-		def senderTitulaire = newUser("senderTitulaire", true,true)
-		senderTitulaire.userType = UserType.TITULAIREHC
-		senderTitulaire.location = DataLocation.findByCode(KIVUYE)
-		senderTitulaire.save(failOnError:true)
+		def senderTitulaire = newOtherUserWithType("senderTitulaire", "senderTitulaire", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
 		
-		def senderDepartment = newUser("senderDepartment", true,true)
-		senderDepartment.userType = UserType.HOSPITALDEPARTMENT
-		senderDepartment.location = DataLocation.findByCode(KIVUYE)
-		senderDepartment.save(failOnError:true)
+		def senderDepartment = newOtherUserWithType("senderDepartment", "senderDepartment", DataLocation.findByCode(KIVUYE), UserType.HOSPITALDEPARTMENT)
 		
-		def receiverFacilityOne = newUser("receiverFacilityOne", true,true)
-		receiverFacilityOne.userType = UserType.TECHNICIANDH
-		receiverFacilityOne.location = DataLocation.findByCode(BUTARO)
-		receiverFacilityOne.save(failOnError:true)
+		def receiverFacilityOne = newOtherUserWithType("receiverFacilityOne", "receiverFacilityOne",DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 		
-		def receiverFacilityTwo = newUser("receiverFacilityTwo", true,true)
-		receiverFacilityTwo.userType = UserType.TECHNICIANDH
-		receiverFacilityTwo.location = DataLocation.findByCode(BUTARO)
-		receiverFacilityTwo.save(failOnError:true)
+		def receiverFacilityTwo = newOtherUserWithType("receiverFacilityTwo", "receiverFacilityTwo",DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 		
 		def equipmentManaged = newEquipment(CODE(123),DataLocation.findByCode(KIVUYE))
 		def equipmentNotManaged = newEquipment(CODE(133),DataLocation.findByCode(BUTARO))
@@ -118,25 +98,13 @@ class NotificationWorkOrderControllerSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		
-		def senderTitulaire = newUser("senderTitulaire", true,true)
-		senderTitulaire.userType = UserType.TITULAIREHC
-		senderTitulaire.location = DataLocation.findByCode(KIVUYE)
-		senderTitulaire.save(failOnError:true)
+		def senderTitulaire = newOtherUserWithType("senderTitulaire", "senderTitulaire",DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
 		
-		def senderDepartment = newUser("senderDepartment", true,true)
-		senderDepartment.userType = UserType.HOSPITALDEPARTMENT
-		senderDepartment.location = DataLocation.findByCode(KIVUYE)
-		senderDepartment.save(failOnError:true)
+		def senderDepartment = newOtherUserWithType("senderDepartment", "senderDepartment",DataLocation.findByCode(KIVUYE), UserType.HOSPITALDEPARTMENT)
 		
-		def receiverFacilityOne = newUser("receiverFacilityOne", true,true)
-		receiverFacilityOne.userType = UserType.TECHNICIANDH
-		receiverFacilityOne.location = DataLocation.findByCode(BUTARO)
-		receiverFacilityOne.save(failOnError:true)
+		def receiverFacilityOne = newOtherUserWithType("receiverFacilityOne", "receiverFacilityOne",DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 		
-		def receiverFacilityTwo = newUser("receiverFacilityTwo", true,true)
-		receiverFacilityTwo.userType = UserType.TECHNICIANDH
-		receiverFacilityTwo.location = DataLocation.findByCode(BUTARO)
-		receiverFacilityTwo.save(failOnError:true)
+		def receiverFacilityTwo = newOtherUserWithType("receiverFacilityTwo", "receiverFacilityTwo",DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 		
 		def equipmentManaged = newEquipment(CODE(123),DataLocation.findByCode(KIVUYE))
 		def equipmentNotManaged = newEquipment(CODE(133),DataLocation.findByCode(BUTARO))
@@ -168,25 +136,13 @@ class NotificationWorkOrderControllerSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		
-		def senderTitulaire = newUser("senderTitulaire", true,true)
-		senderTitulaire.userType = UserType.TITULAIREHC
-		senderTitulaire.location = DataLocation.findByCode(KIVUYE)
-		senderTitulaire.save(failOnError:true)
+		def senderTitulaire = newOtherUserWithType("senderTitulaire", "senderTitulaire",DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
 		
-		def senderDepartment = newUser("senderDepartment", true,true)
-		senderDepartment.userType = UserType.HOSPITALDEPARTMENT
-		senderDepartment.location = DataLocation.findByCode(KIVUYE)
-		senderDepartment.save(failOnError:true)
+		def senderDepartment = newOtherUserWithType("senderDepartment", "senderDepartment",DataLocation.findByCode(KIVUYE), UserType.HOSPITALDEPARTMENT)
 		
-		def receiverFacilityOne = newUser("receiverFacilityOne", true,true)
-		receiverFacilityOne.userType = UserType.TECHNICIANDH
-		receiverFacilityOne.location = DataLocation.findByCode(BUTARO)
-		receiverFacilityOne.save(failOnError:true)
+		def receiverFacilityOne = newOtherUserWithType("receiverFacilityOne", "receiverFacilityOne",DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 		
-		def receiverFacilityTwo = newUser("receiverFacilityTwo", true,true)
-		receiverFacilityTwo.userType = UserType.TECHNICIANDH
-		receiverFacilityTwo.location = DataLocation.findByCode(BUTARO)
-		receiverFacilityTwo.save(failOnError:true)
+		def receiverFacilityTwo = newOtherUserWithType("receiverFacilityTwo", "receiverFacilityTwo",DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 		
 		def equipmentManaged = newEquipment(CODE(123),DataLocation.findByCode(KIVUYE))
 		def equipmentNotManaged = newEquipment(CODE(133),DataLocation.findByCode(BUTARO))
@@ -213,90 +169,145 @@ class NotificationWorkOrderControllerSpec extends IntegrationTests{
 		Notification.count() == 5
 	}
 	
-//	def "can filter notifications"(){
-//		setup:
-//		setupLocationTree()
-//		setupEquipment()
-//		def senderOne = newUser("senderOne", true,true)
-//		senderOne.userType = UserType.TITULAIREHC
-//		senderOne.location = DataLocation.findByCode(KIVUYE)
-//		senderOne.save(failOnError:true)
-//		
-//		def senderTwo = newUser("senderTwo", true,true)
-//		senderTwo.userType = UserType.TITULAIREHC
-//		senderTwo.location = DataLocation.findByCode(KIVUYE)
-//		senderTwo.save(failOnError:true)
-//		
-//		def receiverFacility = newUser("receiverFacility", true,true)
-//		receiverFacility.userType = UserType.TECHNICIANDH
-//		receiverFacility.location = DataLocation.findByCode(KIVUYE)
-//		receiverFacility.save(failOnError:true)
-//		
-//		def receiverMoH = newUser("receiverMoH", true,true)
-//		receiverMoH.userType = UserType.TECHNICIANDH
-//		receiverMoH.location = Location.findByCode(RWANDA)
-//		receiverMoH.save(failOnError:true)
-//		def equipment = Equipment.findBySerialNumber(CODE(123))
-//		
-//		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-//		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-//		
-//		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
-//		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,false)
-//		notificationWorkOrderService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
-//		setupSecurityManager(receiverFacility)
-//		notificationWorkOrderController = new NotificationWorkOrderController()
-//		
-//		when://Get only those that are unread
-//		notificationWorkOrderController.params.read = "false"
-//		notificationWorkOrderController.params.to = Initializer.now()+1
-//		notificationWorkOrderController.filter()
-//		
-//		then:
-//		//There are 4 notifications because the creator of a workorder always gets a copy
-//		Notification.count() == 4
-//		notificationWorkOrderController.modelAndView.model.entities.size() == 2
-//	}
+	def "can list notification - all of them for the current user using ajax"(){
+		setup:
+		setupLocationTree()
+		
+		def senderTitulaire = newOtherUserWithType("senderTitulaire", "senderTitulaire",DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
+		
+		def senderDepartment = newOtherUserWithType("senderDepartment", "senderDepartment",DataLocation.findByCode(KIVUYE), UserType.HOSPITALDEPARTMENT)
+		
+		def receiverFacilityOne = newOtherUserWithType("receiverFacilityOne", "receiverFacilityOne",DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
+		
+		def receiverFacilityTwo = newOtherUserWithType("receiverFacilityTwo", "receiverFacilityTwo",DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
+		
+		def equipmentManaged = newEquipment(CODE(123),DataLocation.findByCode(KIVUYE))
+		def equipmentNotManaged = newEquipment(CODE(133),DataLocation.findByCode(BUTARO))
+		
+		def workOrderOne = Initializer.newWorkOrder(equipmentManaged, "Nothing yet", Criticality.NORMAL,senderTitulaire,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderTwo = Initializer.newWorkOrder(equipmentNotManaged, "Nothing yet", Criticality.NORMAL,senderDepartment,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		
+		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, one",senderTitulaire,false)
+		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacilityOne,false)
+		notificationWorkOrderService.newNotification(workOrderTwo, "Send for rapair, two",senderDepartment,false)
+		
+		setupSecurityManager(receiverFacilityOne)
+		
+		notificationWorkOrderController = new NotificationWorkOrderController()
+		
+		when://list all for a given user
+		notificationWorkOrderController = new NotificationWorkOrderController()
+		notificationWorkOrderController.request.makeAjaxRequest()
+		notificationWorkOrderController.list()
+		
+		then:
+		NotificationWorkOrder.count() == 5
+		notificationWorkOrderController.response.json.results[0].contains("Send for rapair, one")
+		!notificationWorkOrderController.response.json.results[0].contains("Send for rapair, higher")
+		notificationWorkOrderController.response.json.results[0].contains("Send for rapair, two")
+	}
 	
-//	def "can search notifications"(){
-//		setup:
-//		setupLocationTree()
-//		setupEquipment()
-//		def senderOne = newUser("senderOne", true,true)
-//		senderOne.userType = UserType.TITULAIREHC
-//		senderOne.location = DataLocation.findByCode(KIVUYE)
-//		senderOne.save(failOnError:true)
-//		
-//		def senderTwo = newUser("senderTwo", true,true)
-//		senderTwo.userType = UserType.TITULAIREHC
-//		senderTwo.location = DataLocation.findByCode(KIVUYE)
-//		senderTwo.save(failOnError:true)
-//		
-//		def receiverFacility = newUser("receiverFacility", true,true)
-//		receiverFacility.userType = UserType.TECHNICIANDH
-//		receiverFacility.location = DataLocation.findByCode(KIVUYE)
-//		receiverFacility.save(failOnError:true)
-//		
-//		def receiverMoH = newUser("receiverMoH", true,true)
-//		receiverMoH.userType = UserType.TECHNICIANDH
-//		receiverMoH.location = Location.findByCode(RWANDA)
-//		receiverMoH.save(failOnError:true)
-//		def equipment = Equipment.findBySerialNumber(CODE(123))
-//		
-//		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-//		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-//		
-//		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
-//		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,false)
-//		notificationWorkOrderService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
-//		setupSecurityManager(receiverFacility)
-//		notificationWorkOrderController = new NotificationWorkOrderController()
-//		
-//		when://Get only those that are unread
-//		notificationWorkOrderController.params.q = "one"
-//		notificationWorkOrderController.search()
-//		
-//		then:
-//		notificationWorkOrderController.modelAndView.model.entities.size() == 1
-//	}
+	def "can filter notifications"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def senderOne = newOtherUserWithType("senderOne", "senderOne",DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
+		
+		def senderTwo = newOtherUserWithType("senderTwo", "senderTwo",DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
+		
+		def receiverFacility = newOtherUserWithType("receiverFacility", "receiverFacility",DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
+		
+		def techMMC = newOtherUserWithType("techMMC", "techMMC",Location.findByCode(RWANDA),UserType.TECHNICIANMMC)
+		
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		
+		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		
+		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
+		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,true)
+		notificationWorkOrderService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
+		
+		setupSecurityManager(receiverFacility)
+		notificationWorkOrderController = new NotificationWorkOrderController()
+		
+		when://Get only those that are unread
+		notificationWorkOrderController.params.read = "false"
+		notificationWorkOrderController.params.to = Initializer.now()+1
+		notificationWorkOrderController.filter()
+		
+		then:
+		NotificationWorkOrder.count() == 5
+		notificationWorkOrderController.response.json.results[0].contains("Send for rapair, one")
+		!notificationWorkOrderController.response.json.results[0].contains("Send for rapair, higher")
+		notificationWorkOrderController.response.json.results[0].contains("Send for rapair, two")
+	}
+	
+	def "cannot filter notifications without using ajax"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		
+		def senderOne = newOtherUserWithType("senderOne", "senderOne",DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
+		
+		def senderTwo = newOtherUserWithType("senderTwo", "senderTwo",DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
+		
+		def receiverFacility = newOtherUserWithType("receiverFacility", "receiverFacility",DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
+		
+		def techMMC = newOtherUserWithType("techMMC", "techMMC",Location.findByCode(RWANDA),UserType.TECHNICIANMMC)
+		
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		
+		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		
+		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
+		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,true)
+		notificationWorkOrderService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
+		setupSecurityManager(receiverFacility)
+		notificationWorkOrderController = new NotificationWorkOrderController()
+		
+		when://Get only those that are unread
+		notificationWorkOrderController.params.read = "false"
+		notificationWorkOrderController.params.to = Initializer.now()+1
+		notificationWorkOrderController.filter()
+		
+		then:
+		NotificationWorkOrder.count() == 5
+		notificationWorkOrderController.response.status == 404
+	}
+	
+	def "can search notifications"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def senderOne = newOtherUserWithType("senderOne", "senderOne",DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
+		
+		def senderTwo = newOtherUserWithType("senderTwo", "senderTwo",DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
+		
+		def receiverFacility = newOtherUserWithType("receiverFacility", "receiverFacility",DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
+		
+		def techMMC = newOtherUserWithType("techMMC", "techMMC",Location.findByCode(RWANDA),UserType.TECHNICIANMMC)
+		
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		
+		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		
+		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
+		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,true)
+		notificationWorkOrderService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
+		setupSecurityManager(receiverFacility)
+		notificationWorkOrderController = new NotificationWorkOrderController()
+		
+		when://Get only those that are unread
+		notificationWorkOrderController.params.q = "one"
+		notificationWorkOrderController.search()
+		
+		then:
+		NotificationWorkOrder.count() == 5
+		notificationWorkOrderController.response.json.results[0].contains("Send for rapair, one")
+		!notificationWorkOrderController.response.json.results[0].contains("Send for rapair, higher")
+		!notificationWorkOrderController.response.json.results[0].contains("Send for rapair, two")
+	}
 }

@@ -12,9 +12,7 @@
 			<g:sortableColumn property="openOn" defaultOrder="asc" title="${message(code: 'work.order.openOn.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="closedOn" defaultOrder="asc" title="${message(code: 'work.order.closedOn.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<th><g:message code="work.order.description.label"/></th>
-			<shiro:hasPermission permission="WorkOrderStatus:escalate">
 				<th><g:message code="work.order.status.escalation.label"/></th>
-			</shiro:hasPermission>
 			<th><g:message code="work.order.messages.label"/></th>
 		</tr>
 	</thead>
@@ -55,14 +53,12 @@
 				<td>
 					<g:stripHtml field="${order.description}" chars="30"/>
 				</td>
-				<shiro:hasPermission permission="WorkOrderStatus:escalate">
 					<td>
 						<g:if test="${order.currentStatus==OrderStatus.OPENATFOSA}">
 			  				<button class="escalate next medium gray" id="${order.id}"><g:message code="work.order.escalate.issue.link.label"/></button>
 			  				<img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
 			  			</g:if>
 					</td>
-				</shiro:hasPermission>
 				<td>
 					<a href="${createLinkWithTargetURI(controller:'notificationWorkOrder', action:'list', params:[id: order.id, read:false])}">${order.getUnReadNotificationsForUser(User.findByUuid(SecurityUtils.subject.principal, [cache: true])).size()}</a>
 				</td>

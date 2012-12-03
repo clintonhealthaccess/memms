@@ -27,16 +27,17 @@
  */
 package org.chai.memms.inventory
 
+import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests;
 import org.chai.memms.inventory.DepartmentController;
 import org.chai.memms.inventory.Department;
 
 class DepartmentControllerSpec extends IntegrationTests{
-	
+
 	def departmentController
-	
+
 	def "create department with correct required data in fields - for english input"(){
-		
+
 		setup:
 		departmentController = new DepartmentController();
 		when:
@@ -44,16 +45,16 @@ class DepartmentControllerSpec extends IntegrationTests{
 		departmentController.params.names_en = "testNames"
 		departmentController.params.descriptions_en = "test description"
 		departmentController.save()
-		
+
 		then:
 		Department.count() == 1;
 		Department.findByCode(CODE(123)).code.equals(CODE(123))
 		Department.findByNames_en("testNames").getNames(new Locale("en")).equals("testNames")
 		Department.findByDescriptions_en("test description").getDescriptions(new Locale("en")).equals("test description")
 	}
-	
+
 	def "create department with correct required data in fields - for all locales"(){
-		
+
 		setup:
 		departmentController = new DepartmentController();
 		when:
@@ -62,18 +63,80 @@ class DepartmentControllerSpec extends IntegrationTests{
 			departmentController.params."names_$it" = "testNames "+it
 			departmentController.params."descriptions_$it" = "test description "+it
 		}
-		
+
 		departmentController.save()
-		
+
 		then:
 		log.debug("locales " + grailsApplication.config.i18nFields.locales.each{it})
 		Department.count() == 1;
 		Department.findByCode(CODE(123)).code.equals(CODE(123))
-		
+
 		grailsApplication.config.i18nFields.locales.each{
-			
+
 			Department."findByNames_$it"("testNames $it").getNames(new Locale("$it")).equals("testNames $it")
 			Department."findByDescriptions_$it"("test description $it").getDescriptions(new Locale("$it")).equals("test description $it")
 		}
+	}
+	
+	def "list department"(){
+		setup:
+		departmentController = new DepartmentController();
+		Initializer.newDepartment(["en":"department test one"],CODE(123),["en":"description department one"])
+		Initializer.newDepartment(["en":"department test two"],CODE(124),["en":"description department two"])
+		Initializer.newDepartment(["en":"department test three"],CODE(125),["en":"description department three"])
+		Initializer.newDepartment(["en":"department test four"],CODE(126),["en":"description department four"])
+		
+		when: "none ajax"
+		departmentController.list()
+		then:
+		Department.count() == 4;
+		departmentController.modelAndView.model.entities.size() == 4
+		
+		when: "with ajax"
+		departmentController.request.content = '{"sort":"code"}'.getBytes()
+		departmentController.request.makeAjaxRequest()
+		departmentController.list()
+		then:
+		Department.count() == 4;
+		departmentController.response.json.results[0].contains(Department.findByCode(CODE(123)).code)
+		departmentController.response.json.results[0].contains(Department.findByCode(CODE(124)).code)
+		departmentController.response.json.results[0].contains(Department.findByCode(CODE(125)).code)
+		departmentController.response.json.results[0].contains(Department.findByCode(CODE(126)).code)
+	}
+		
+	def "search department"(){
+		setup:
+		departmentController = new DepartmentController();
+		Initializer.newDepartment(["en":"department test one"],CODE(123),["en":"description department one"])
+		Initializer.newDepartment(["en":"department test two"],CODE(124),["en":"description department two"])
+		Initializer.newDepartment(["en":"department test three"],CODE(125),["en":"description department three"])
+		Initializer.newDepartment(["en":"department test four"],CODE(126),["en":"description department four"])
+
+		when:
+		departmentController.params.q = "three"
+		departmentController.request.makeAjaxRequest()
+		departmentController.search()
+		then:
+		Department.count() == 4;
+		!departmentController.response.json.results[0].contains(Department.findByCode(CODE(124)).code)
+		!departmentController.response.json.results[0].contains(Department.findByCode(CODE(123)).code)
+		departmentController.response.json.results[0].contains(Department.findByCode(CODE(125)).code)
+		!departmentController.response.json.results[0].contains(Department.findByCode(CODE(126)).code)
+	}
+	
+	def "none ajax search fails"(){
+		setup:
+		departmentController = new DepartmentController();
+		Initializer.newDepartment(["en":"department test one"],CODE(123),["en":"description department one"])
+		Initializer.newDepartment(["en":"department test two"],CODE(124),["en":"description department two"])
+		Initializer.newDepartment(["en":"department test three"],CODE(125),["en":"description department three"])
+		Initializer.newDepartment(["en":"department test four"],CODE(126),["en":"description department four"])
+
+		when: "none ajax search fails"
+		departmentController.params.q = "one"
+		departmentController.search()
+		then:
+		Department.count() == 4
+		departmentController.response.status == 404
 	}
 }

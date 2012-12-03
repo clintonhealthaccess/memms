@@ -92,9 +92,63 @@ class DataLocationControllerSpec extends IntegrationTests{
 		!butaro.manages.contains(muvuna)
 		ruliOne.managedBy == butaro
 		ruliTwo.managedBy == butaro
-		
 	}
+	
+	def "list dataLocations"(){
+		setup:
+		setupLocationTree()
+		dataLocationController =  new DataLocationController()
+		
+		when: "none ajax"
+		dataLocationController.list()
+		
+		then:
+		DataLocation.count() == 5
+		dataLocationController.modelAndView.model.entities.size() == 5
+		
+		when: "with ajax"
+		dataLocationController.request.makeAjaxRequest()
+		dataLocationController.list()
+		
+		then:
+		DataLocation.count() == 5
+		dataLocationController.response.json.results[0].contains(DataLocation.findByCode(BUTARO).code)
+		dataLocationController.response.json.results[0].contains(DataLocation.findByCode(KIVUYE).code)
+		dataLocationController.response.json.results[0].contains(DataLocation.findByCode(MUSANZE).code)
+		dataLocationController.response.json.results[0].contains(DataLocation.findByCode(GITWE).code)
+		dataLocationController.response.json.results[0].contains(DataLocation.findByCode(MUVUNA).code)
+		!dataLocationController.response.json.results[0].contains(Location.findByCode(NORTH).code)
+	}
+	
+	def "search dataLocation"(){
+		setup:
+		setupLocationTree()
+		dataLocationController =  new DataLocationController()
 
+		when:
+		dataLocationController.params.q = BUTARO
+		dataLocationController.request.makeAjaxRequest()
+		dataLocationController.search()
+		then:
+		DataLocation.count() == 5
+		dataLocationController.response.json.results[0].contains(DataLocation.findByCode(BUTARO).code)
+		!dataLocationController.response.json.results[0].contains(DataLocation.findByCode(KIVUYE).code)
+		!dataLocationController.response.json.results[0].contains(DataLocation.findByCode(MUSANZE).code)
+		!dataLocationController.response.json.results[0].contains(DataLocation.findByCode(GITWE).code)
+		!dataLocationController.response.json.results[0].contains(DataLocation.findByCode(MUVUNA).code)
+		!dataLocationController.response.json.results[0].contains(Location.findByCode(NORTH).code)
+	}
+	
+	def "cannot search without using ajax dataLocation"(){
+		setup:
+		setupLocationTree()
+		dataLocationController =  new DataLocationController()
 
-
+		when:
+		dataLocationController.params.q = BUTARO
+		dataLocationController.search()
+		then:
+		DataLocation.count() == 5
+		dataLocationController.response.status == 404
+	}
 }

@@ -67,7 +67,103 @@ class NotificationEquipmentControllerSpec  extends IntegrationTests{
 		notification.read == true
 	}
 
-	def "can list notification"(){
+	def "can list notification none ajax"(){
+		setup:
+		setupLocationTree()
+		def sender = newOtherUserWithType("sender", "sender", DataLocation.findByCode(MUVUNA),UserType.TITULAIREHC)
+		def receiver = newOtherUserWithType("receiver", "receiver", DataLocation.findByCode(MUSANZE),UserType.TECHNICIANDH)
+		
+		def senderOne = newOtherUserWithType("senderOne", "senderOne", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
+
+		def senderTwo = newOtherUserWithType("senderTwo", "senderTwo", DataLocation.findByCode(BUTARO),UserType.HOSPITALDEPARTMENT)
+
+		def receiverOne = newOtherUserWithType("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
+
+		def receiverTwo = newOtherUserWithType("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
+
+		notificationEquipmentService.newNotification(null, "Send for rapair, unknown",sender)
+		notificationEquipmentService.newNotification(null, "Send for rapair, one",senderOne)
+		notificationEquipmentService.newNotification(null, "Send for rapair, two",senderTwo)
+
+		setupSecurityManager(receiverOne)
+		notificationEquipmentController = new NotificationEquipmentController()
+
+		when:
+		notificationEquipmentController.list()
+
+		then:
+		NotificationEquipment.count() == 5
+		notificationEquipmentController.modelAndView.model.entities.size() == 2
+	}
+	
+	def "can list notification with ajax"(){
+		setup:
+		setupLocationTree()
+		def sender = newOtherUserWithType("sender", "sender", DataLocation.findByCode(MUVUNA),UserType.TITULAIREHC)
+		def receiver = newOtherUserWithType("receiver", "receiver", DataLocation.findByCode(MUSANZE),UserType.TECHNICIANDH)
+		
+		def senderOne = newOtherUserWithType("senderOne", "senderOne", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
+
+		def senderTwo = newOtherUserWithType("senderTwo", "senderTwo", DataLocation.findByCode(BUTARO),UserType.HOSPITALDEPARTMENT)
+
+		def receiverOne = newOtherUserWithType("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
+
+		def receiverTwo = newOtherUserWithType("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
+
+		notificationEquipmentService.newNotification(null, "Send for rapair, unknown",sender)
+		notificationEquipmentService.newNotification(null, "Send for rapair, one",senderOne)
+		notificationEquipmentService.newNotification(null, "Send for rapair, two",senderTwo)
+
+		setupSecurityManager(receiverOne)
+		notificationEquipmentController = new NotificationEquipmentController()
+
+		when:
+		notificationEquipmentController.request.makeAjaxRequest()
+		notificationEquipmentController.list()
+		then:
+		NotificationEquipment.count() == 5
+		notificationEquipmentController.response.json.results[0].contains("Send for rapair, two")
+		notificationEquipmentController.response.json.results[0].contains("Send for rapair, two")
+		!notificationEquipmentController.response.json.results[0].contains("Send for rapair, unknown")
+	}
+
+	def "can filter notifications"(){
+		setup:
+		setupLocationTree()
+		def senderOne = newOtherUserWithType("senderOne", "senderOne", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
+
+		def senderTwo = newOtherUserWithType("senderTwo", "senderTwo", DataLocation.findByCode(BUTARO),UserType.HOSPITALDEPARTMENT)
+
+		def receiverOne = newOtherUserWithType("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
+
+		def receiverTwo = newOtherUserWithType("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
+
+		notificationEquipmentService.newNotification(null, "Send for rapair, oneOld",senderOne)
+		notificationEquipmentService.newNotification(null, "Send for rapair, oneTwo",senderOne)
+		notificationEquipmentService.newNotification(null, "Send for rapair, two",senderTwo)
+
+		setupSecurityManager(receiverOne)
+
+		def notification = notificationEquipmentService.searchNotificition("oneOld",receiverOne,[:])
+		notificationEquipmentService.setNotificationRead(notification)
+		notificationEquipmentController = new NotificationEquipmentController()
+
+		when:
+		notificationEquipmentController.params.read = "false"
+		notificationEquipmentController.params.dataLocation = DataLocation.findByCode(BUTARO)
+		notificationEquipmentController.params.from = Initializer.now() - 1
+		notificationEquipmentController.params.to = Initializer.now() + 1
+		notificationEquipmentController.request.makeAjaxRequest()
+		notificationEquipmentController.filter()
+
+		then:
+		!notificationEquipmentController.response.json.results[0].contains("Send for rapair, oneTwo")
+		notificationEquipmentController.response.json.results[0].contains("Send for rapair, two")
+		!notificationEquipmentController.response.json.results[0].contains("Send for rapair, oneOld")
+		NotificationEquipment.count() == 6
+	}
+
+	def "cannot search notifications without using ajax"(){
 		setup:
 		setupLocationTree()
 		def senderOne = newOtherUserWithType("senderOne", "senderOne", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
@@ -79,82 +175,48 @@ class NotificationEquipmentControllerSpec  extends IntegrationTests{
 		def receiverTwo = newOtherUserWithType("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 
 		notificationEquipmentService.newNotification(null, "Send for rapair, one",senderOne)
+		notificationEquipmentService.newNotification(null, "Send for rapair, oneTwo",senderOne)
 		notificationEquipmentService.newNotification(null, "Send for rapair, two",senderTwo)
 
-		setupSecurityManager(receiverOne)
-
-		def notification = notificationEquipmentService.searchNotificition("one",receiverOne,[:])
-		notificationEquipmentService.setNotificationRead(notification)
+		setupSecurityManager(receiverTwo)
 		notificationEquipmentController = new NotificationEquipmentController()
 
 		when:
-		notificationEquipmentController.list()
+		notificationEquipmentController.params.q = "one"
+		notificationEquipmentController.search()
 
 		then:
-		notificationEquipmentController.modelAndView.model.entities.size() == 2
-		NotificationEquipment.count() == 4
+		notificationEquipmentController.response.status == 404
+		NotificationEquipment.count() == 6
 	}
+	
+	def "can search notifications"(){
+		setup:
+		setupLocationTree()
+		def senderOne = newOtherUserWithType("senderOne", "senderOne", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
 
-	//TODO find a way to parse returned json to check the content
-//	def "can filter notifications"(){
-//		setup:
-//		setupLocationTree()
-//		def senderOne = newOtherUserWithType("senderOne", "senderOne", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
-//
-//		def senderTwo = newOtherUserWithType("senderTwo", "senderTwo", DataLocation.findByCode(BUTARO),UserType.HOSPITALDEPARTMENT)
-//
-//		def receiverOne = newOtherUserWithType("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
-//
-//		def receiverTwo = newOtherUserWithType("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
-//
-//		notificationEquipmentService.newNotification(null, "Send for rapair, oneOld",senderOne)
-//		notificationEquipmentService.newNotification(null, "Send for rapair, oneTwo",senderOne)
-//		notificationEquipmentService.newNotification(null, "Send for rapair, two",senderTwo)
-//
-//		setupSecurityManager(receiverOne)
-//
-//		def notification = notificationEquipmentService.searchNotificition("oneOld",receiverOne,[:])
-//		notificationEquipmentService.setNotificationRead(notification)
-//		notificationEquipmentController = new NotificationEquipmentController()
-//
-//		when:
-//		notificationEquipmentController.params.read = "false"
-//		notificationEquipmentController.params.dataLocation = DataLocation.findByCode(BUTARO)
-//		notificationEquipmentController.params.from = Initializer.now() - 1
-//		notificationEquipmentController.params.to = Initializer.now() + 1
-//		notificationEquipmentController.request.makeAjaxRequest()
-//		notificationEquipmentController.filter()
-//
-//		then:
-//		notificationEquipmentController.response.json.results == notificationEquipmentController.ajaxModel(notificationEquipmentService.filterNotifications(DataLocation.findByCode(BUTARO),null, receiverOne, Initializer.now() - 1,Initializer.now() + 1,false, [:]),"")
-//		NotificationEquipment.count() == 6
-//	}
+		def senderTwo = newOtherUserWithType("senderTwo", "senderTwo", DataLocation.findByCode(BUTARO),UserType.HOSPITALDEPARTMENT)
 
-//	def "can search notifications"(){
-//		setup:
-//		setupLocationTree()
-//		def senderOne = newOtherUserWithType("senderOne", "senderOne", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
-//
-//		def senderTwo = newOtherUserWithType("senderTwo", "senderTwo", DataLocation.findByCode(BUTARO),UserType.HOSPITALDEPARTMENT)
-//
-//		def receiverOne = newOtherUserWithType("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
-//
-//		def receiverTwo = newOtherUserWithType("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
-//
-//		notificationEquipmentService.newNotification(null, "Send for rapair, one",senderOne)
-//		notificationEquipmentService.newNotification(null, "Send for rapair, oneTwo",senderOne)
-//		notificationEquipmentService.newNotification(null, "Send for rapair, two",senderTwo)
-//
-//		setupSecurityManager(receiverTwo)
-//		notificationEquipmentController = new NotificationEquipmentController()
-//
-//		when:
-//		notificationEquipmentController.params.q = "one"
-//		notificationEquipmentController.request.makeAjaxRequest()
-//		notificationEquipmentController.search()
-//
-//		then:
-//		notificationEquipmentController.modelAndView.model.entities.size() == 1
-//		NotificationEquipment.count() == 6
-//	}
+		def receiverOne = newOtherUserWithType("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
+
+		def receiverTwo = newOtherUserWithType("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
+
+		notificationEquipmentService.newNotification(null, "Send for rapair, one",senderOne)
+		notificationEquipmentService.newNotification(null, "Send for rapair, oneTwo",senderOne)
+		notificationEquipmentService.newNotification(null, "Send for rapair, two",senderTwo)
+
+		setupSecurityManager(receiverTwo)
+		notificationEquipmentController = new NotificationEquipmentController()
+
+		when:
+		notificationEquipmentController.params.q = "one"
+		notificationEquipmentController.request.makeAjaxRequest()
+		notificationEquipmentController.search()
+
+		then:
+		notificationEquipmentController.response.json.results[0].contains("Send for rapair, one")
+		notificationEquipmentController.response.json.results[0].contains("Send for rapair, oneTwo")
+		!notificationEquipmentController.response.json.results[0].contains("Send for rapair, two")
+		NotificationEquipment.count() == 6
+	}
 }

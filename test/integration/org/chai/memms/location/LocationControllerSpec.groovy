@@ -27,6 +27,7 @@
  */
 package org.chai.memms.location
 
+import org.chai.location.DataLocation;
 import org.chai.location.Location;
 import org.chai.location.LocationLevel;
 import org.chai.memms.IntegrationTests;
@@ -56,4 +57,60 @@ class LocationControllerSpec extends IntegrationTests{
 		Location.list()[5].parent == parent
 	}
 
+	def "list Locations"(){
+		setup:
+		setupLocationTree()
+		locationController =  new LocationController()
+		
+		when: "none ajax"
+		locationController.list()
+		
+		then:
+		Location.count() == 5
+		locationController.modelAndView.model.entities.size() == 5
+		
+		when: "with ajax"
+		locationController.request.makeAjaxRequest()
+		locationController.list()
+		
+		then:
+		Location.count() == 5
+		locationController.response.json.results[0].contains(Location.findByCode(RWANDA).code)
+		locationController.response.json.results[0].contains(Location.findByCode(NORTH).code)
+		locationController.response.json.results[0].contains(Location.findByCode(SOUTH).code)
+		locationController.response.json.results[0].contains(Location.findByCode(BURERA).code)
+		locationController.response.json.results[0].contains(Location.findByCode(GITARAMA).code)
+		!locationController.response.json.results[0].contains(DataLocation.findByCode(BUTARO).code)
+	}
+	
+	def "search Location"(){
+		setup:
+		setupLocationTree()
+		locationController =  new LocationController()
+
+		when:
+		locationController.params.q = NORTH
+		locationController.request.makeAjaxRequest()
+		locationController.search()
+		then:
+		Location.count() == 5
+		locationController.response.json.results[0].contains(Location.findByCode(NORTH).code)
+		!locationController.response.json.results[0].contains(Location.findByCode(SOUTH).code)
+		!locationController.response.json.results[0].contains(Location.findByCode(BURERA).code)
+		!locationController.response.json.results[0].contains(Location.findByCode(GITARAMA).code)
+		!locationController.response.json.results[0].contains(DataLocation.findByCode(BUTARO).code)
+	}
+	
+	def "cannot search without using ajax Location"(){
+		setup:
+		setupLocationTree()
+		locationController =  new LocationController()
+
+		when:
+		locationController.params.q = BUTARO
+		locationController.search()
+		then:
+		Location.count() == 5
+		locationController.response.status == 404
+	}
 }

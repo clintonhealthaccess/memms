@@ -96,6 +96,7 @@ class EquipmentViewController extends AbstractController {
 		}
 	}
 	
+	//TODO don't think we need ajax for this
 	def selectFacility = {
 		adaptParamsForList()
 		def dataLocations = []
@@ -111,15 +112,18 @@ class EquipmentViewController extends AbstractController {
 	}
 	
 	def search = {
-		DataLocation dataLocation = DataLocation.get(params.int("dataLocation.id"));
-		if (dataLocation == null)
+		DataLocation dataLocation = DataLocation.get(params.int("dataLocation.id"))
+		
+		if (dataLocation == null || !user.canAccessCalculationLocation(dataLocation))
 			response.sendError(404)
-
-		adaptParamsForList()
-		def equipments = equipmentService.searchEquipment(params['q'],user,params)
-		if(!request.xhr)
-			response.sendError(404)
-		this.ajaxModel(equipments,dataLocation,params['q'])
+		else{
+			adaptParamsForList()
+			def equipments = equipmentService.searchEquipment(params['q'],user,params)
+			if(!request.xhr)
+				response.sendError(404)
+			else
+				this.ajaxModel(equipments,dataLocation,params['q'])
+		}
 	}
 	
 	def filter = { FilterCommand cmd ->

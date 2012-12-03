@@ -58,7 +58,7 @@ class LocationLevelControllerSpec extends IntegrationTests{
 	
 	def "can't create save a location level without order"(){
 		setup:
-		locationLevelController =  new LocationController()
+		locationLevelController =  new LocationLevelController()
 		when:
 		locationLevelController.params.code = CODE("123")
 		locationLevelController.params.names_en = "Test Sector location en"
@@ -70,7 +70,7 @@ class LocationLevelControllerSpec extends IntegrationTests{
 	}
 	def "can't create save a location level without code"(){
 		setup:
-		locationLevelController =  new LocationController()
+		locationLevelController =  new LocationLevelController()
 		when:
 		locationLevelController.params.order = "1"
 		locationLevelController.params.names_en = "Test Sector location en"
@@ -83,7 +83,7 @@ class LocationLevelControllerSpec extends IntegrationTests{
 	def "can't create save a location level with duplicate code"(){
 		setup:
 		Initializer.newLocationLevel(['en':SECTOR], SECTOR,4)
-		locationLevelController =  new LocationController()
+		locationLevelController =  new LocationLevelController()
 		when:
 		locationLevelController.params.order = "1"
 		locationLevelController.params.code = SECTOR
@@ -92,6 +92,29 @@ class LocationLevelControllerSpec extends IntegrationTests{
 		locationLevelController.save()
 		then:
 		LocationLevel.count() == 1
+	}
+	
+	def "list LocationLevel"(){
+		setup:
+		setupLocationTree()
+		locationLevelController =  new LocationLevelController()
 		
+		when: "none ajax"
+		locationLevelController.list()
+		
+		then:
+		LocationLevel.count() == 4
+		locationLevelController.modelAndView.model.entities.size() == 4
+		
+		when: "with ajax"
+		locationLevelController.request.makeAjaxRequest()
+		locationLevelController.list()
+		
+		then:
+		LocationLevel.count() == 4
+		locationLevelController.response.json.results[0].contains(LocationLevel.findByCode(NATIONAL).code)
+		locationLevelController.response.json.results[0].contains(LocationLevel.findByCode(PROVINCE).code)
+		locationLevelController.response.json.results[0].contains(LocationLevel.findByCode(DISTRICT).code)
+		locationLevelController.response.json.results[0].contains(LocationLevel.findByCode(SECTOR).code)
 	}
 }

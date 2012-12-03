@@ -195,5 +195,74 @@ class WorkOrderViewControllerSpec extends IntegrationTests{
 		WorkOrder.count() == 2
 		workOrderViewController.modelAndView.model.entities.size() == 2
 	}
-
+	
+	def "can list workOrders - by admin using ajax"(){
+		setup:
+		setupLocationTree()
+		
+		def admin = newOtherUserWithType("admin", "admin", Location.findByCode(RWANDA),UserType.ADMIN)
+		
+		def sender = newOtherUserWithType("sender", "sender", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
+		
+		def equipmentOne = newEquipment(CODE(123),DataLocation.findByCode(BUTARO))
+		def equipmentTwo = newEquipment(CODE(124),DataLocation.findByCode(KIVUYE))
+		def workOrderOne = Initializer.newWorkOrder(equipmentOne, "Nothing yet", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrder = Initializer.newWorkOrder(equipmentTwo, "Nothing yet, not even after escalations", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		setupSecurityManager( admin)
+		workOrderViewController = new WorkOrderViewController()
+		when:
+		workOrderViewController.params."dataLocation.id" = DataLocation.findByCode(BUTARO).id
+		workOrderViewController.request.makeAjaxRequest()
+		workOrderViewController.list()
+		then:
+		WorkOrder.count() == 2
+		workOrderViewController.response.json.results[0].contains("Nothing yet")
+		workOrderViewController.response.json.results[0].contains("Nothing yet, not even after escalations")
+	}
+	
+	def "can search notifications workorder"(){
+		setup:
+		setupLocationTree()
+		
+		def admin = newOtherUserWithType("admin", "admin", Location.findByCode(RWANDA),UserType.ADMIN)
+		
+		def sender = newOtherUserWithType("sender", "sender", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
+		
+		def equipmentOne = newEquipment(CODE(123),DataLocation.findByCode(BUTARO))
+		def equipmentTwo = newEquipment(CODE(124),DataLocation.findByCode(KIVUYE))
+		def workOrderOne = Initializer.newWorkOrder(equipmentOne, "Nothing yet, before", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrder = Initializer.newWorkOrder(equipmentTwo, "Nothing yet, not even after escalations", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		setupSecurityManager( admin)
+		workOrderViewController = new WorkOrderViewController()
+		when:
+		workOrderViewController.params."q" = "escalations"
+		workOrderViewController.request.makeAjaxRequest()
+		workOrderViewController.search()
+		then:
+		WorkOrder.count() == 2
+		!workOrderViewController.response.json.results[0].contains("before")
+		workOrderViewController.response.json.results[0].contains("Nothing yet, not even after escalations")
+	}
+	
+	def "cannot search notifications workorder without using ajax"(){
+		setup:
+		setupLocationTree()
+		
+		def admin = newOtherUserWithType("admin", "admin", Location.findByCode(RWANDA),UserType.ADMIN)
+		
+		def sender = newOtherUserWithType("sender", "sender", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
+		
+		def equipmentOne = newEquipment(CODE(123),DataLocation.findByCode(BUTARO))
+		def equipmentTwo = newEquipment(CODE(124),DataLocation.findByCode(KIVUYE))
+		def workOrderOne = Initializer.newWorkOrder(equipmentOne, "Nothing yet, before", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrder = Initializer.newWorkOrder(equipmentTwo, "Nothing yet, not even after escalations", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		setupSecurityManager( admin)
+		workOrderViewController = new WorkOrderViewController()
+		when:
+		workOrderViewController.params."q" = "escalations"
+		workOrderViewController.search()
+		then:
+		WorkOrder.count() == 2
+		workOrderViewController.response.status == 404
+	}
 }
