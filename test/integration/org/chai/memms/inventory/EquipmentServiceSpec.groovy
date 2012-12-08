@@ -167,7 +167,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 		
 		when://Search by defaults
 		
-		equipmentsOne = equipmentService.filterEquipment(butaroDH,supplier,manufacture,servicePro,equipmentType,PurchasedBy.NONE,Donor.NONE,'true',Status.OPERATIONAL,[:])
+		equipmentsOne = equipmentService.filterEquipment(null,butaroDH,supplier,manufacture,servicePro,equipmentType,PurchasedBy.NONE,Donor.NONE,'true',Status.OPERATIONAL,[:])
 
 		then:
 		Equipment.count() == 2
@@ -178,8 +178,8 @@ class EquipmentServiceSpec extends IntegrationTests{
 		
 		when://Search by currentStatus
 		
-		equipmentsTwo = equipmentService.filterEquipment(kivuyeHC,supplier, manufacture,servicePro,equipmentType,PurchasedBy.BYDONOR,Donor.MOHPARTNER,'false',Status.DISPOSED,[:])
-		equipmentsThree = equipmentService.filterEquipment(kivuyeHC,supplier, manufacture,servicePro,equipmentType,PurchasedBy.BYDONOR,Donor.NONE,'false',Status.INSTOCK,[:])
+		equipmentsTwo = equipmentService.filterEquipment(null,kivuyeHC,supplier, manufacture,servicePro,equipmentType,PurchasedBy.BYDONOR,Donor.MOHPARTNER,'false',Status.DISPOSED,[:])
+		equipmentsThree = equipmentService.filterEquipment(null,kivuyeHC,supplier, manufacture,servicePro,equipmentType,PurchasedBy.BYDONOR,Donor.NONE,'false',Status.INSTOCK,[:])
 
 		then:
 		Equipment.count() == 2
@@ -189,7 +189,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 		equipmentsTwo[0].status.size() == 3
 		
 		when://Search by donor only
-		equipmentsTwo = equipmentService.filterEquipment(kivuyeHC,supplier, manufacture,servicePro,equipmentType,null,Donor.MOHPARTNER,'false',Status.DISPOSED,[:])
+		equipmentsTwo = equipmentService.filterEquipment(null,kivuyeHC,supplier, manufacture,servicePro,equipmentType,null,Donor.MOHPARTNER,'false',Status.DISPOSED,[:])
 
 		then:
 		Equipment.count() == 2

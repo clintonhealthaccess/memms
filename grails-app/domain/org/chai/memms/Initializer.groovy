@@ -166,7 +166,7 @@ public class Initializer {
 			techDH.addToRoles(defaultTechnicianDHRole)
 			techDH.save(failOnError: true, flush:true)
 			
-			def techMMC= new User(userType: UserType.TECHNICIANMMC, location: Location.findByCode(HUYE), username: "techMMC",
+			def techMMC= new User(userType: UserType.TECHNICIANMMC, location: Location.findByCode(RWANDA), username: "techMMC",
 				firstname: "Technician", lastname: "MMC", email:'techMMC@memms.org', passwordHash: new Sha256Hash("techMMC").toHex(), active: true,
 				confirmed: true, uuid:'techMMC', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			techMMC.addToRoles(defaultTechnicianMMCRole)

@@ -60,7 +60,7 @@ class InventoryService {
 		List<Inventory> inventories = []
 		Set<LocationLevel> skipLevels = getSkipLocationLevels()
 		for(DataLocation dataLocation : location.collectDataLocations(skipLevels,types)){
-			inventories.add(new Inventory(dataLocation:dataLocation,equipmentCount:equipmentService.filterEquipment(dataLocation,null,null,null,null,null,null,null,null,[:]).size()))
+			inventories.add(new Inventory(dataLocation:dataLocation,equipmentCount:equipmentService.filterEquipment(null,dataLocation,null,null,null,null,null,null,null,null,[:]).size()))
 		}
 		
 		Inventories inventory = new Inventories()
