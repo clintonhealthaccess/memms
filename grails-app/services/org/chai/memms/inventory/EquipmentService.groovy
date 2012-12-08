@@ -82,9 +82,10 @@ class EquipmentService {
 		if(log.isDebugEnabled()) log.debug("Updating Equipment status params: "+equipment)
 		equipment.save(failOnError:true)
 	}
-	public def searchEquipment(String text,User user,Map<String, String> params) {
+	public def searchEquipment(String text,User user,DataLocation currentDataLocation,Map<String, String> params) {
 		def dataLocations = []
-		if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([].toSet(), [].toSet()))
+		if(currentDataLocation) dataLocations.add(currentDataLocation)
+		else if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([].toSet(), [].toSet()))
 		else{
 			dataLocations = []
 			dataLocations.add(user.location as DataLocation)

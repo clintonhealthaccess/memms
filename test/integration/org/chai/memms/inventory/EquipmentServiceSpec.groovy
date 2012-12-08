@@ -65,36 +65,67 @@ class EquipmentServiceSpec extends IntegrationTests{
 
 		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
-		def user  = newOtherUser("admin", "admin", Location.findByCode(RWANDA))
+		def userHc = newOtherUserWithType("userHc", "userHc", DataLocation.findByCode(KIVUYE), UserType.TITULAIREHC)
+		def techDH = newOtherUserWithType("techDH", "techDH", DataLocation.findByCode(BUTARO), UserType.TECHNICIANDH)
+		def techMMC = newOtherUserWithType("techMMC", "techMMC", DataLocation.findByCode(RWANDA), UserType.TECHNICIANMMC)
+		
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
-		Initializer.newEquipment("SERIAL10",PurchasedBy.BYDONOR,Donor.OTHERNGO,"Internews",false,Initializer.newPeriod(32),"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),'',Initializer.now(),"equipmentModel",DataLocation.list().first(),department,equipmentType,manufacture,supplier,Status.OPERATIONAL)
-		Initializer.newEquipment("SERIAL11",PurchasedBy.BYMOH,null,null,false,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"RWF",Initializer.now(),"equipmentModel",DataLocation.list().first(),department,equipmentType,manufacture,supplier,Status.OPERATIONAL)
+		Initializer.newEquipment(CODE(123),PurchasedBy.BYDONOR,Donor.OTHERNGO,"Internews",false,Initializer.newPeriod(32),"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),'',Initializer.now(),"equipmentModelOne",DataLocation.findByCode(BUTARO),department,equipmentType,manufacture,supplier,Status.OPERATIONAL)
+		def equipmentCodeToFind = Initializer.newEquipment(CODE(124),PurchasedBy.BYMOH,null,null,false,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"RWF",Initializer.now(),"equipmentModelTwo",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier,Status.OPERATIONAL)
 		def List<Equipment> equipments
 
-		when://Searching by serial number
-
-		equipments = equipmentService.searchEquipment("SERIAL11",user, [:])
+		when: "user can view all those he manages"
+		equipments = equipmentService.searchEquipment("Descriptions",techDH,null, [:])
+		then:
+		equipments.size() == 2
+		equipments[0] != equipments[1]
+		
+		when: "user cannot see those he doesn't manage"
+		equipments = equipmentService.searchEquipment("Descriptions",userHc,null, [:])
 		then:
 		equipments.size() == 1
-		equipments[0].serialNumber.equals("SERIAL11")
+		equipments[0].serialNumber.equals(CODE(124))
+		
+		when: "user can search by dataLocaiton only if specified"
+		equipments = equipmentService.searchEquipment("Descriptions",techMMC,DataLocation.findByCode(BUTARO), [:])
+		then:
+		equipments.size() == 1
+		equipments[0].serialNumber.equals(CODE(123))
 
-		when://Searching by observation
+		when: "Searching by description"
 
-		equipments = equipmentService.searchEquipment("one",user, [:])
+		equipments = equipmentService.searchEquipment("one",techDH,null, [:])
 		then:
 		equipments.size() == 1
 		equipments[0].getDescriptions(new Locale("en")).equals('Equipment Descriptions one')
 
-		when://Searching by description
-
-		equipments = equipmentService.searchEquipment("Two",user, [:])
+		when: "Searching by type name"
+		equipments = equipmentService.searchEquipment("Accelerometers",techDH,null, [:])
+		then:
+		equipments.size() == 2
+		equipments[0] != equipments[1]
+		
+		when: "Searching by code"
+		equipments = equipmentService.searchEquipment(equipmentCodeToFind.code,techDH,null, [:])
 		then:
 		equipments.size() == 1
-		equipments[0].getDescriptions(new Locale("en")).equals('Equipment Descriptions two')
+		equipments[0].code.equals(equipmentCodeToFind.code)
+		
+		when: "Searching by serial number"
+		equipments = equipmentService.searchEquipment(CODE(124),techDH,null, [:])
+		then:
+		equipments.size() == 1
+		equipments[0].serialNumber.equals(CODE(124))
+		
+		when: "Searching by model"
+		equipments = equipmentService.searchEquipment("equipmentModelOne",techDH,null, [:])
+		then:
+		equipments.size() == 1
+		equipments[0].serialNumber.equals(CODE(123))
 	}
 
 	def "user can only view his equipments, if a technician at dh they can also view for the locations they manage"() {

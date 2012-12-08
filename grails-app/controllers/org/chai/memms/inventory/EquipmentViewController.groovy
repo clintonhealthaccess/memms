@@ -118,7 +118,7 @@ class EquipmentViewController extends AbstractController {
 			response.sendError(404)
 		else{
 			adaptParamsForList()
-			def equipments = equipmentService.searchEquipment(params['q'],user,params)
+			def equipments = equipmentService.searchEquipment(params['q'],user,dataLocation,params)
 			if(!request.xhr)
 				response.sendError(404)
 			else
