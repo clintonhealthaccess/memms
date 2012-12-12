@@ -10,6 +10,7 @@ import org.chai.memms.inventory.Equipment.PurchasedBy;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.EquipmentType.Observation;
 import org.chai.location.DataLocation;
+import org.chai.location.Location;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType
 import org.chai.memms.inventory.Provider.Type;
@@ -355,50 +356,47 @@ class EquipmentViewControllerSpec extends IntegrationTests{
 		equipmentViewController.response.json.results[0].contains(Equipment.findBySerialNumber(CODE(124)).code)
 	}
 	//TODO throwing a json parsing exception
-//	def "can search equipments "(){
-//		setup:
-//		setupLocationTree()
-//		def user = newOtherUser("user", "user", DataLocation.findByCode(KIVUYE))
-//		user.userType = UserType.TITULAIREHC
-//		user.save(failOnError:true)
-//		
-//		def techDh = newOtherUser("techDh", "techDh", DataLocation.findByCode(BUTARO))
-//		techDh.userType = UserType.TECHNICIANDH
-//		techDh.save(failOnError:true)
-//		
-//		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
-//		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
-//		def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
-//		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
-//		
-//		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-//		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
-//
-//		def equipmentOne = Initializer.newEquipment(CODE(123),PurchasedBy.BYFACILITY,null,null,false,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
-//				,Initializer.getDate(10,10,2010),"USD",Initializer.now(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier,Status.INSTOCK)
-//		def equipmentTwo = Initializer.newEquipment(CODE(124),PurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-//				,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode(BUTARO),department,equipmentType,manufacture,supplier,Status.INSTOCK)
-//		
-//		Initializer.newEquipment(CODE(125),PurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-//			,Initializer.getDate(10,10,2010),"RWF",Initializer.now(),"equipmentModel",DataLocation.findByCode(MUSANZE),department,equipmentType,manufacture,supplier,Status.INSTOCK)
-//		Initializer.newEquipment(CODE(126),PurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-//			,Initializer.getDate(10,10,2010),"RWF",Initializer.now(),"equipmentModel",DataLocation.findByCode(GITWE),department,equipmentType,manufacture,supplier,Status.INSTOCK)
-//	
-//		equipmentViewController = new EquipmentViewController()
-//		setupSecurityManager(techDh)
-//
-//		when:
-//		equipmentViewController.params.q = Equipment.findBySerialNumber(CODE(123)).code
-//		equipmentViewController.request.makeAjaxRequest()
-//		equipmentViewController.search()
-//		
-//		then:
+	def "can search equipments "(){
+		setup:
+		setupLocationTree()
+		def user = newOtherUserWithType("sender", "sender", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
+		
+		def techDh = newOtherUserWithType("techDh", "techDh", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
+		
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
+		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
+		
+		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+
+		def equipmentOne = Initializer.newEquipment(CODE(123),PurchasedBy.BYFACILITY,null,null,false,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"USD",Initializer.now(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier,Status.INSTOCK)
+		def equipmentTwo = Initializer.newEquipment(CODE(124),PurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode(BUTARO),department,equipmentType,manufacture,supplier,Status.INSTOCK)
+		
+		Initializer.newEquipment(CODE(125),PurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+			,Initializer.getDate(10,10,2010),"RWF",Initializer.now(),"equipmentModel",DataLocation.findByCode(MUSANZE),department,equipmentType,manufacture,supplier,Status.INSTOCK)
+		Initializer.newEquipment(CODE(126),PurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+			,Initializer.getDate(10,10,2010),"RWF",Initializer.now(),"equipmentModel",DataLocation.findByCode(GITWE),department,equipmentType,manufacture,supplier,Status.INSTOCK)
+	
+		equipmentViewController = new EquipmentViewController()
+		setupSecurityManager(techDh)
+
+		when:
+		equipmentViewController.params.q = Equipment.findBySerialNumber(CODE(123)).code
+		equipmentViewController.request.makeAjaxRequest()
+		equipmentViewController.search()
+		
+		then:
+//		equipmentViewController.response.status != 404
 //		equipmentViewController.response.json == null
-//		equipmentViewController.response.json.results[0].contains(Equipment.findBySerialNumber(CODE(123)).code)
-//		!equipmentViewController.response.json.results[0].contains(Equipment.findBySerialNumber(CODE(124)).code)
-//		!equipmentViewController.response.json.results[0].contains(Equipment.findBySerialNumber(CODE(125)).code)
-//		!equipmentViewController.response.json.results[0].contains(Equipment.findBySerialNumber(CODE(126)).code)
-//	}
+		equipmentViewController.response.json.results[0].contains(Equipment.findBySerialNumber(CODE(123)).code)
+		!equipmentViewController.response.json.results[0].contains(Equipment.findBySerialNumber(CODE(124)).code)
+		!equipmentViewController.response.json.results[0].contains(Equipment.findBySerialNumber(CODE(125)).code)
+		!equipmentViewController.response.json.results[0].contains(Equipment.findBySerialNumber(CODE(126)).code)
+	}
 	
 	def "cannot search equipments without using ajax "(){
 		setup:
@@ -445,13 +443,9 @@ class EquipmentViewControllerSpec extends IntegrationTests{
 	def "can't search for equipments in a a location a user is not permited to access"(){
 		setup:
 		setupLocationTree()
-		def user = newOtherUser("user", "user", DataLocation.findByCode(KIVUYE))
-		user.userType = UserType.TITULAIREHC
-		user.save(failOnError:true)
+		def user = newOtherUserWithType("user", "user", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
 		
-		def techDh = newOtherUser("techDh", "techDh", DataLocation.findByCode(BUTARO))
-		techDh.userType = UserType.TECHNICIANDH
-		techDh.save(failOnError:true)
+		def techDh = newOtherUserWithType("techDh", "techDh", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 		
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
@@ -476,7 +470,7 @@ class EquipmentViewControllerSpec extends IntegrationTests{
 		
 		when:
 		equipmentViewController.params.q = CODE(123)
-		equipmentViewController.params."dataLocation.id" == DataLocation.findByCode(MUSANZE).id
+		equipmentViewController.params."dataLocation.id" = DataLocation.findByCode(MUSANZE).id+''
 		equipmentViewController.request.makeAjaxRequest()
 		equipmentViewController.search()
 		
@@ -527,7 +521,8 @@ class EquipmentViewControllerSpec extends IntegrationTests{
 		def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
 		
-		def user  = newUser("admin", "Admin UID")
+		def user = newOtherUserWithType("user", "user", Location.findByCode(RWANDA),UserType.ADMIN)
+		def techDHKivuye = newOtherUserWithType("techDHKivuye", "techDHKivuye", DataLocation.findByCode(KIVUYE),UserType.TECHNICIANDH )
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
@@ -542,9 +537,11 @@ class EquipmentViewControllerSpec extends IntegrationTests{
 			,Initializer.getDate(10,10,2010),"RWF",Initializer.now(),"equipmentModel",DataLocation.findByCode(GITWE),department,equipmentType,manufacture,supplier,Status.INSTOCK)
 	
 		def List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree
-		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,[:])
-		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.DISPOSED,equipmentOne,[:])
-		def equipmentStatusTwo = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentOne,[:])
+		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),techDHKivuye,Status.INSTOCK,equipmentOne,[:])
+		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),techDHKivuye,Status.DISPOSED,equipmentOne,[:])
+		def equipmentStatusTwo = Initializer.newEquipmentStatus(Initializer.now(),techDHKivuye,Status.OPERATIONAL,equipmentOne,[:])
+		
+		setupSecurityManager(user)
 		
 		equipmentViewController = new EquipmentViewController();
 		
@@ -576,7 +573,9 @@ class EquipmentViewControllerSpec extends IntegrationTests{
 		def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
 		
-		def user  = newUser("admin", "Admin UID")
+		def user  = newOtherUserWithType("user", "user", Location.findByCode(RWANDA),UserType.ADMIN)
+		def techDHKivuye = newOtherUserWithType("techDHKivuye", "techDHKivuye", DataLocation.findByCode(KIVUYE),UserType.TECHNICIANDH )
+		
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
@@ -591,13 +590,15 @@ class EquipmentViewControllerSpec extends IntegrationTests{
 			,Initializer.getDate(10,10,2010),"RWF",Initializer.now(),"equipmentModel",DataLocation.findByCode(GITWE),department,equipmentType,manufacture,supplier,Status.INSTOCK)
 	
 		def List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree
-		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,[:])
-		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.DISPOSED,equipmentOne,[:])
-		def equipmentStatusTwo = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentOne,[:])
+		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),techDHKivuye,Status.INSTOCK,equipmentOne,[:])
+		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),techDHKivuye,Status.DISPOSED,equipmentOne,[:])
+		def equipmentStatusTwo = Initializer.newEquipmentStatus(Initializer.now(),techDHKivuye,Status.OPERATIONAL,equipmentOne,[:])
+		
+		setupSecurityManager(user)
 		
 		equipmentViewController = new EquipmentViewController();
 		
-		when: "fails if not using ajax"
+		when:
 		equipmentViewController.params.'dataLocation.id' = kivuyeHC.id+''
 		equipmentViewController.params.'equipmentType.id' = equipmentType.id+''
 		equipmentViewController.params."manufacturer.id" = manufacture.id+''

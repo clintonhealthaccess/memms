@@ -113,8 +113,7 @@ class EquipmentViewController extends AbstractController {
 	
 	def search = {
 		DataLocation dataLocation = DataLocation.get(params.int("dataLocation.id"))
-		
-		if (dataLocation == null || !user.canAccessCalculationLocation(dataLocation))
+		if (dataLocation != null && !user.canAccessCalculationLocation(dataLocation))
 			response.sendError(404)
 		else{
 			adaptParamsForList()
@@ -128,14 +127,15 @@ class EquipmentViewController extends AbstractController {
 	
 	def filter = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("equipments.filter, command "+cmd)
-		if (cmd.dataLocation == null)
+		if (cmd.dataLocation != null && !user.canAccessCalculationLocation(cmd.dataLocation))
 			response.sendError(404)
-
-		adaptParamsForList()
-		def equipments = equipmentService.filterEquipment(user,cmd.dataLocation,cmd.supplier,cmd.manufacturer,cmd.serviceProvider,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,params)
-		if(!request.xhr)
-			response.sendError(404)
-		this.ajaxModel(equipments,cmd.dataLocation,"")
+		else{
+			adaptParamsForList()
+			def equipments = equipmentService.filterEquipment(user,cmd.dataLocation,cmd.supplier,cmd.manufacturer,cmd.serviceProvider,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,params)
+			if(!request.xhr)
+				response.sendError(404)
+			else this.ajaxModel(equipments,cmd.dataLocation,"")
+		}
 	}
 	
 	def ajaxModel(def entities,def dataLocation,def searchTerm) {
@@ -283,7 +283,7 @@ class EquipmentViewController extends AbstractController {
 	}
 
 	def getAjaxData = {
-		List<Equipment> equipments = equipmentService.searchEquipment(params['term'],user, [:])
+		List<Equipment> equipments = equipmentService.searchEquipment(params['term'],user,null,[:])
 		render(contentType:"text/json") {
 			elements = array {
 				equipments.each { equipment ->
