@@ -52,6 +52,9 @@ import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.chai.memms.security.User
+import org.joda.time.DateTime
+import org.joda.time.Days;
+import org.joda.time.Weeks;
 
 /**
  * @author Jean Kahigiso M.
@@ -60,12 +63,12 @@ import org.chai.memms.security.User
 public class Utils {
 	
 	private final static String DATE_FORMAT = "dd/MM/yyyy";
-	private final static String DATE_FORMAT_TIME = "dd/MM/yyyy hh:mm:ss";
+	private final static String DATE_FORMAT_TIME = "dd/MM/yyyy HH:mm:ss";
+	private final static String TIME_FORMAT = "HH:mm:ss"
 	public final static String ZIP_FILE_EXTENSION = ".zip";
 	
 	public final static String CODE_DELIMITER = "~";
-	public final static String CODE_PATTERN = 
-			CODE_DELIMITER + "[^" + CODE_DELIMITER + "]+" + CODE_DELIMITER;
+	public final static String CODE_PATTERN = CODE_DELIMITER + "[^" + CODE_DELIMITER + "]+" + CODE_DELIMITER;
 	public final static String VALUE_NOT_EXPORTABLE = "VALUE_NOT_EXPORTABLE";	
 	private final static Integer MAX_YEAR = now().year+1900;
 	private final static Integer MIN_YEAR = 1970;
@@ -147,6 +150,10 @@ public class Utils {
 	public static Date parseDate(String string) throws ParseException {
 		return new SimpleDateFormat(DATE_FORMAT).parse(string);
 	}
+
+	public static Date parseTime(String string) throws ParseException {
+		return new SimpleDateFormat(TIME_FORMAT).parse(string);
+	}
 	
 	//TODO implement reg expressions in groovy
 	public static boolean containsId(String word, Long id) {
@@ -187,7 +194,7 @@ public class Utils {
 		Integer.metaClass.mixin TimeCategory
 		Date.metaClass.mixin TimeCategory
 		Date cleanedDate = date.clearTime()
-		cleanedDate = cleanedDate + 23.hours + 59.minutes + 59.seconds
+		cleanedDate = cleanedDate + 0.hours + 59.minutes + 59.seconds
 		return cleanedDate
 	}
 	public static Date getMinDateFromDateTime(Date date){
@@ -196,6 +203,18 @@ public class Utils {
 	
 	public static Date now(){
 		return new Date()
+	}
+	
+	public static Boolean isInSameWeek(Date firstDate, Date secondDate) {
+		DateTime firstDateTime = new DateTime(firstDate)
+		DateTime secondDateTime = new DateTime(secondDate)
+		return ((Weeks.weeksBetween(firstDateTime, secondDateTime)).weeks == 0)
+	}
+
+	public static Boolean isOnSameDay(Date firstDate, Date secondDate) {
+		DateTime firstDateTime = new DateTime(firstDate)
+		DateTime secondDateTime = new DateTime(secondDate)
+		return ((Days.daysBetween(firstDateTime, secondDateTime)).days == 0)
 	}
 	/**
 	 * fieldName has to start with capital letter as
@@ -215,6 +234,18 @@ public class Utils {
 			   object."$methodName"("",new Locale(loc))
 	   }
    }
+	
+	
+	public static Date getDate( int day, int month, int year) {
+		final Calendar calendar = Calendar.getInstance();
+ 
+		calendar.clear();
+		calendar.set( Calendar.YEAR, year );
+		calendar.set( Calendar.MONTH, month - 1 );
+		calendar.set( Calendar.DAY_OF_MONTH, day );
+ 
+		return calendar.getTime();
+	}
 	
 	
 }

@@ -67,8 +67,8 @@
 	<classpathentry kind="src" path=".plugin-src-compass-sass-0.7-grails-app-i18n"/>
 	<classpathentry kind="src" path=".plugin-src-compass-sass-0.7-grails-app-resourceMappers"/>
 	<classpathentry kind="src" path=".plugin-src-compass-sass-0.7-src-groovy"/>
-	<classpathentry kind="src" path=".plugin-src-chai-locations-0.3-CHAI-grails-app-domain"/>
-	<classpathentry kind="src" path=".plugin-src-chai-locations-0.3-CHAI-grails-app-services"/>
+	<classpathentry kind="src" path=".plugin-src-chai-locations-0.4-CHAI-grails-app-domain"/>
+	<classpathentry kind="src" path=".plugin-src-chai-locations-0.4-CHAI-grails-app-services"/>
 	<classpathentry kind="src" path=".plugin-src-cached-resources-1.0-grails-app-i18n"/>
 	<classpathentry kind="src" path=".plugin-src-cached-resources-1.0-grails-app-resourceMappers"/>
 	<classpathentry kind="src" path=".plugin-src-cached-resources-1.0-grails-app-views"/>
@@ -77,7 +77,6 @@
 	<classpathentry kind="src" path=".plugin-src-cache-headers-1.1.5-grails-app-services"/>
 	<classpathentry kind="src" path=".plugin-src-build-info-tag-0.3.1-grails-app-taglib"/>
 	<classpathentry kind="src" path=".plugin-src-build-info-tag-0.3.1-grails-app-views"/>
-	<classpathentry kind="src" path="grails-app/realms"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.codehaus.groovy/groovy-all/jars/groovy-all-1.8.6.jar"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/commons-beanutils/commons-beanutils/jars/commons-beanutils-1.8.3.jar"/>
@@ -301,6 +300,7 @@
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.spockframework/spock-core/jars/spock-core-0.6-groovy-1.8.jar"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/junit/junit-dep/jars/junit-dep-4.9.jar"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.hamcrest/hamcrest-core/jars/hamcrest-core-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/joda-time-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/json-lib-2.4-jdk15.jar"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.apache.tomcat.embed/tomcat-embed-core/jars/tomcat-embed-core-7.0.27.jar"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.apache.tomcat.embed/tomcat-embed-jasper/jars/tomcat-embed-jasper-7.0.27.jar"/>

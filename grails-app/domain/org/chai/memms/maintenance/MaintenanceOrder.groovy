@@ -24,50 +24,57 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * 
  */
-package org.chai.memms.corrective.maintenance
+package org.chai.memms.maintenance
 
 import groovy.transform.EqualsAndHashCode;
 
+import java.util.Date;
+
+import org.chai.memms.corrective.maintenance.CorrectiveProcess;
+import org.chai.memms.inventory.Equipment;
 import org.chai.memms.security.User;
+
 
 /**
  * @author Jean Kahigiso M.
- *
+ * 
  */
+
 @EqualsAndHashCode
-class MaintenanceProcess {
+public abstract class MaintenanceOrder {
 	
-	enum ProcessType{
-		ACTION("action"),
-		MATERIAL("material"),
-		String messageCode = "maintenance.process"
-		String name
-		ProcessType(String name){this.name=name}
-		String getKey(){ return name() }
-	}
+	Date closedOn
+	Date dateCreated
+	Date lastUpdated
 	
-	String name
-	Date addedOn
 	User addedBy
-	ProcessType type
+	User lastModifiedBy
+	String description
 	
-	static belongsTo =[workOrder: WorkOrder]
-	
+		
 	static constraints = {
-		name nullable:false, blank: false
-		addedOn nullable:false, validator:{it <= new Date()}
-		addedBy nullable:false
-		type nullable:false, inList:[ProcessType.ACTION,ProcessType.MATERIAL]
+		
+		closedOn nullable: true
+		addedBy nullable: false
+		
+		lastModifiedBy nullable: true, validator:{ val, obj ->
+			if(val!=null) return (obj.lastUpdated!=null)
+		}
+		description nullable:false, blank: false
+		
+	}
+
+	def beforeUpdate(){
+		lastUpdated = new Date();
 	}
 	
 	static mapping = {
-		table "memms_work_order_maintenance_process"
-		version  false
+		table "memms_maintenance_order_abstract"
+		description type:"text"
+		tablePerHierarchy false
+		version false
+		cache true
 	}
-
-	@Override
-	public String toString() {
-		return "MaintenanceProcess [id=" + id + ", name=" + name + ", workOrder="+ workOrder +"]";
-	}	
 }

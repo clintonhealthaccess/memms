@@ -31,7 +31,7 @@ import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.inventory.Equipment;
-import org.chai.memms.corrective.maintenance.MaintenanceProcess.ProcessType;
+import org.chai.memms.corrective.maintenance.CorrectiveProcess.ProcessType;
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
 import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
@@ -58,7 +58,7 @@ class WorkOrderViewControllerSpec extends IntegrationTests{
 		def user = newUser("user","user")
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def process = Initializer.newMaintenanceProcess(workOrder, ProcessType.ACTION, "Process", Initializer.now(),user)
+		def process = Initializer.newCorrectiveProcess(workOrder, ProcessType.ACTION, "Process",user)
 		workOrder.addToProcesses(process)
 		workOrder.save(flush:true)
 		workOrderViewController = new WorkOrderViewController()
@@ -108,10 +108,11 @@ class WorkOrderViewControllerSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		setupEquipment()
+		setupSystemUser()
 		def user = newUser("user","user")
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def comment = Initializer.newComment(workOrder,user, Initializer.now(), "Test comment")
+		def comment = Initializer.newComment(workOrder,user,"Test comment")
 		workOrder.addToComments(comment)
 		workOrder.save(flush:true)
 		workOrderViewController = new WorkOrderViewController()
@@ -121,12 +122,11 @@ class WorkOrderViewControllerSpec extends IntegrationTests{
 		then:
 		workOrder.comments.size() == 0
 	}
-	
-	
+		
 	def "can list workOrders - only those that a user at a dataLocation can access"(){
 		setup:
 		setupLocationTree()
-		
+		setupSystemUser()
 		def techdh = newOtherUser("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO))
 		techdh.userType = UserType.TECHNICIANDH
 		techdh.save(failOnError:true)
@@ -152,12 +152,13 @@ class WorkOrderViewControllerSpec extends IntegrationTests{
 	def "cannot list workOrders - only those that a user at a dataLocation cannot access"(){
 		setup:
 		setupLocationTree()
+		setupSystemUser()
 		
 		def techdh = newOtherUser("techdh", "techdh", DataLocation.findByCode(MUSANZE))
 		techdh.userType = UserType.TECHNICIANDH
 		techdh.save(failOnError:true)
 		
-		def sender = newOtherUser("sender", "sender", DataLocation.findByCode(KIVUYE))
+		def sender = newOtherUser("sender", "sender", DataLocation.findByCode(GITWE))
 		sender.userType = UserType.TITULAIREHC
 		sender.save(failOnError:true)
 		
@@ -177,6 +178,7 @@ class WorkOrderViewControllerSpec extends IntegrationTests{
 	def "can list workOrders - by admin"(){
 		setup:
 		setupLocationTree()
+		setupSystemUser()
 		
 		def admin = newOtherUserWithType("admin", "admin", Location.findByCode(RWANDA),UserType.ADMIN)
 		

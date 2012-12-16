@@ -58,8 +58,5 @@ public class Contact {
 		addressDescriptions blank: true, nullable: true 
 		
 	}
-	static mapping = {
-		version false
-	}
 	
 }

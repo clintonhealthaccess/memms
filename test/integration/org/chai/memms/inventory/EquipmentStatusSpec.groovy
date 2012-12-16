@@ -25,7 +25,7 @@ class EquipmentStatusSpec extends IntegrationTests{
 		
 		def user  = newUser("admin", "Admin UID")
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now())
 		def equipment = Initializer.newEquipment(
 					"SERIAL10",PurchasedBy.BYFACILITY,null,null
 					,false,Initializer.newPeriod(32),"ROOM A1"
@@ -34,17 +34,19 @@ class EquipmentStatusSpec extends IntegrationTests{
 					Initializer.getDate(22,07,2010),
 					Initializer.getDate(10,10,2010),
 					"RWF",
-					new Date(),
 					"equipmentModel",
 					DataLocation.list().first(),
 					department,
 					equipmentType,manufacture,supplier,
-					Status.INSTOCK
+					Status.INSTOCK,
+					user,
+					null,
+					null
 					)
 		
 		when:
 		def statusOne = Initializer.newEquipmentStatus(new Date(),User.findByUsername("admin"),Status.INSTOCK,equipment,[:])
-		def statusTwo = new EquipmentStatus(statusChangeDate:new Date(),changedBy:User.findByUsername("admin"),status:Status.INSTOCK,equipment:equipment,current:true,dateOfEvent:Initializer.getDate(10, 07,2012)).save(failOnError: true)
+		def statusTwo = new EquipmentStatus(changedBy:User.findByUsername("admin"),status:Status.INSTOCK,equipment:equipment,dateOfEvent:Initializer.getDate(10, 07,2012)).save(failOnError: true)
 		then:
 		EquipmentStatus.count() == 2
 	}

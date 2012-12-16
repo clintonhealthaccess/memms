@@ -10,6 +10,7 @@ import org.chai.memms.inventory.EquipmentStatus;
 class EquipmentStatusServiceSpec extends IntegrationTests{
 	
   def equipmentStatusService
+  
   def "can create and save an equipment status"(){
 		setup:
 		setupLocationTree()
@@ -18,7 +19,7 @@ class EquipmentStatusServiceSpec extends IntegrationTests{
 		when:
 		def user  = newUser("admin", "Admin UID")
 		def equipment = Equipment.findBySerialNumber(CODE(123))
-		def status = equipmentStatusService.createEquipmentStatus(Initializer.now(),user,Status.OPERATIONAL,equipment,Initializer.now(),[:])
+		equipmentStatusService.createEquipmentStatus(user,Status.OPERATIONAL,equipment,Initializer.now(),[:])
 		then:
 		EquipmentStatus.count()==1
 	}
@@ -30,12 +31,12 @@ class EquipmentStatusServiceSpec extends IntegrationTests{
 	  setupSystemUser()
 	  def user  = newUser("admin", "Admin UID")
 	  def equipment = Equipment.findBySerialNumber(CODE(123))
-	  def status = equipmentStatusService.createEquipmentStatus(Initializer.now(),user,Status.OPERATIONAL,equipment,Initializer.now(),[:])
+	  equipmentStatusService.createEquipmentStatus(user,Status.OPERATIONAL,equipment,Initializer.now(),[:])
 	  when:
 	  def stats = equipmentStatusService.getEquipmentStatusByEquipment(equipment,[:])
 	  then:
 	  EquipmentStatus.count()==1
-	  stats.equals(equipment.status.asList())
+	  EquipmentStatus.list().equals(equipment.status.asList())
 	  
   }
 }

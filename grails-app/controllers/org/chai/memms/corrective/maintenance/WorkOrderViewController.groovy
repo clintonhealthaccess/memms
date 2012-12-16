@@ -35,7 +35,8 @@ import org.chai.location.Location;
 import org.chai.memms.AbstractController;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.corrective.maintenance.Comment;
-import org.chai.memms.corrective.maintenance.MaintenanceProcess;
+import org.chai.memms.corrective.maintenance.CorrectiveProcess;
+import org.chai.memms.corrective.maintenance.CorrectiveProcess.ProcessType;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus;
 import org.chai.memms.inventory.Equipment;
@@ -43,7 +44,6 @@ import org.chai.memms.inventory.EquipmentStatus;
 import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.inventory.Provider;
 import org.chai.memms.inventory.EquipmentStatus.Status;
-import org.chai.memms.corrective.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
 import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
@@ -58,7 +58,7 @@ import org.chai.memms.security.User.UserType;
 class WorkOrderViewController extends AbstractController{
 	
 	def workOrderService
-	def correctiveMaintenanceService
+	def maintenanceService
 	def commentService
 	def maintenanceProcessService
 	def userService
@@ -70,14 +70,6 @@ class WorkOrderViewController extends AbstractController{
 	def getEntityClass() {
 		return WorkOrder.class;
 	}
-	def view  = {
-		WorkOrder workOrder = WorkOrder.get(params.int('workOrder'))
-		if(workOrder==null)
-			response.sendError(404)
-		else{
-			render(view:"/entity/summary", model:[entities: workOrder])
-		}
-	}
 	
 	def getWorkOrderClueTipsAjaxData = {
 		def workOrder = WorkOrder.get(params.long("id"))
@@ -86,10 +78,10 @@ class WorkOrderViewController extends AbstractController{
 	}
 	
 	def list = {
-		List<WorkOrder> orders= []
-		Equipment equipment = null
-		CalculationLocation  dataLocation = null
-		if(params["dataLocation.id"]) dataLocation = DataLocation.get(params.int("dataLocation.id"))
+		def orders= []
+		def equipment = null
+		def  dataLocation = null
+		if(params["dataLocation.id"]) dataLocation = CalculationLocation.get(params.int("dataLocation.id"))
 		if(params["equipment.id"]) equipment = Equipment.get(params.int("equipment.id"))
 		
 		if(dataLocation && !user.canAccessCalculationLocation(dataLocation)) response.sendError(404)
@@ -97,9 +89,9 @@ class WorkOrderViewController extends AbstractController{
 		else{
 			adaptParamsForList()
 			if(dataLocation)
-				orders = workOrderService.getWorkOrdersByCalculationLocation(dataLocation,params)
+				orders = maintenanceService.getMaintenanceOrderByCalculationLocation(WorkOrder.class,dataLocation,params)
 			if(equipment)
-				orders= workOrderService.getWorkOrdersByEquipment(equipment,params)
+				orders= maintenanceService.getMaintenanceOrderByEquipment(WorkOrder.class,equipment,params)
 			if(request.xhr){
 				this.ajaxModel(orders,dataLocation,equipment,"")
 			}else{
@@ -118,15 +110,15 @@ class WorkOrderViewController extends AbstractController{
 	}
 	
 	def search = {
-		Equipment equipment = null
-		DataLocation dataLocation = null
+		def equipment = null
+		def dataLocation = null
 		if(params["equipment.id"])
 			equipment = Equipment.get(params.long("equipment.id"))
 		else if(params["dataLocation.id"])
 			dataLocation = DataLocation.get(params.long('dataLocation.id'))
 			
 		adaptParamsForList()
-		List<WorkOrder> orders = workOrderService.searchWorkOrder(params['q'],dataLocation,equipment,params)
+		def orders = maintenanceService.searchOrder(WorkOrder.class,params['q'],dataLocation,equipment,params)
 		if(!request.xhr)
 			response.sendError(404)
 		this.ajaxModel(orders,dataLocation,equipment,params['q'])
@@ -144,7 +136,7 @@ class WorkOrderViewController extends AbstractController{
 			def content = "Please review work order on equipment serial number: ${order.equipment.code}"
 			workOrderService.escalateWorkOrder(order, content, user)
 			result=true
-			def orders= workOrderService.getWorkOrdersByEquipment(equipment,[:])
+			def orders= maintenanceService.getMaintenanceOrderByEquipment(WorkOrder.class,equipment,[:])
 			html = g.render(template:"/entity/workOrder/workOrderList",model:[equipment:equipment,entities:orders])
 			if(!request.xhr)
 				response.sendError(404)
@@ -156,7 +148,7 @@ class WorkOrderViewController extends AbstractController{
 		if(log.isDebugEnabled()) log.debug("workOrder filter command object:"+cmd)
 		
 		adaptParamsForList()
-		List<WorkOrder> orders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.criticality,cmd.currentStatus,params)
+		def orders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.criticality,cmd.currentStatus,params)
 		if(!request.xhr)
 			response.sendError(404)
 		this.ajaxModel(orders,cmd.dataLocation,cmd.equipment,"")
@@ -174,23 +166,22 @@ class WorkOrderViewController extends AbstractController{
 		def location = Location.get(params.int('location'))
 		def dataLocationTypesFilter = getLocationTypes()
 		def template = null
-		def correctiveMaintenances = null
+		def maintenances = null
+		def locationSkipLevels = maintenanceService.getSkipLocationLevels()
 
 		adaptParamsForList()
-
-		def locationSkipLevels = correctiveMaintenanceService.getSkipLocationLevels()
-
-		if (location != null) {
-			template = '/correctiveSummaryPage/sectionTable'
-			correctiveMaintenances = correctiveMaintenanceService.getCorrectiveMaintenancesByLocation(location,dataLocationTypesFilter,params)
-		}
-		render (view: '/correctiveSummaryPage/summaryPage', model: [
-					correctiveMaintenances:correctiveMaintenances?.correctiveMaintenanceList,
+		if (location != null) 
+			maintenances = maintenanceService.getMaintenancesByLocation(WorkOrder.class,location,dataLocationTypesFilter,params)
+		
+		render (view: '/orderSummaryPage/summaryPage', model: [
+					maintenances:maintenances?.maintenanceList,
 					currentLocation: location,
 					currentLocationTypes: dataLocationTypesFilter,
-					template: template,
-					entityCount: correctiveMaintenances?.totalCount,
-					locationSkipLevels: locationSkipLevels
+					template: "/orderSummaryPage/sectionTable",
+					entityCount: maintenances?.totalCount,
+					locationSkipLevels: locationSkipLevels,
+					controller:'workOrderView',
+					code:getLabel()
 				])
 	}
 
@@ -206,7 +197,7 @@ class WorkOrderViewController extends AbstractController{
 			response.sendError(404)
 		else {
 				if (log.isDebugEnabled()) log.debug("addProcess params: "+params)
-				maintenanceProcessService.addProcess(order,type,value,now,user)	
+				maintenanceProcessService.addProcess(order,type,value,user)	
 				if(order!=null){
 					result=true
 					def processes = (type==ProcessType.ACTION)? order.actions:order.materials
@@ -217,7 +208,7 @@ class WorkOrderViewController extends AbstractController{
 	}
 
 	def removeProcess = {
-		MaintenanceProcess  process = MaintenanceProcess.get(params.int("process.id"))
+		CorrectiveProcess  process = CorrectiveProcess.get(params.int("process.id"))
 		def result = false
 		def html =""
 		def type =null
@@ -225,7 +216,7 @@ class WorkOrderViewController extends AbstractController{
 			response.sendError(404)
 		else{
 			type = process.type
-			WorkOrder order = maintenanceProcessService.deleteProcess(process,now,user)
+			WorkOrder order = maintenanceProcessService.deleteProcess(process,user)
 			result = true
 			def processes = (type==ProcessType.ACTION)? order.actions:order.materials
 			html = g.render(template:"/templates/processList",model:[processes:processes,type:type.name])
@@ -241,7 +232,7 @@ class WorkOrderViewController extends AbstractController{
 		if (order == null || content.equals("") || order.currentStatus.equals(OrderStatus.CLOSEDFIXED) || order.currentStatus.equals(OrderStatus.CLOSEDFORDISPOSAL))
 			response.sendError(404)
 		else {
-			def comment = commentService.createComment(order,user, now,content)
+			def comment = commentService.createComment(order,user,content)
 			if(comment==null) response.sendError(404)
 			else{ 
 				result=true
@@ -259,7 +250,7 @@ class WorkOrderViewController extends AbstractController{
 		if(!comment || comment.workOrder.currentStatus.equals(OrderStatus.CLOSEDFIXED) || comment.workOrder.currentStatus.equals(OrderStatus.CLOSEDFORDISPOSAL)) 
 			response.sendError(404)
 		else{
-			order = commentService.deleteComment(comment,user,now)
+			order = commentService.deleteComment(comment,user)
 			result = true
 			html = g.render(template:"/templates/comments",model:[order:order])
 		}

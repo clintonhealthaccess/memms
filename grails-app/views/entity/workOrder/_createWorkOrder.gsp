@@ -23,7 +23,7 @@
           <span class="question-default">
             <img src="${resource(dir:'images/icons',file:'star_small.png')}">
           </span>
-          <g:message code="work.order.section.basic.information.label"/>
+          <g:message code="order.section.basic.information.label"/>
         </h4> 
       	<g:selectFromList name="equipment.id" readonly="${(closed)? true:false}" label="${message(code:'equipment.label')}" bean="${order}" field="equipment" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'equipmentView', action:'getAjaxData')}"
@@ -31,29 +31,29 @@
   		<g:if test="${order.id != null}">
 	  		<div class="row">
 		  		 <label class="top"><g:message code="work.order.reported.by.label"/> :</label>
-		  		 ${order.addedBy.firstname} ${order.addedBy.lastname}  - ${Utils.formatDateWithTime(order?.openOn)}
+		  		 ${order.addedBy.names}  - ${Utils.formatDateWithTime(order?.openOn)}
 	  		</div>
 	  		<div class="row">
 		  		 <label class="top"><g:message code="work.order.last.modified.by.label"/> :</label>
-		  		 ${order.lastModifiedBy?.firstname} ${order.lastModifiedBy?.lastname} - ${Utils.formatDateWithTime(order?.lastModifiedOn)}
+		  		 ${order.lastModifiedBy?.names} - ${Utils.formatDateWithTime(order?.lastUpdated)}
 	  		</div>
   		</g:if>						
    		<g:textarea name="description" rows="12" width="380" label="${message(code:'entity.description.label')}" readonly="${(closed)? true:false}" bean="${order}" field="description" value="${order.description}"/>
    		<g:selectFromEnum name="criticality" bean="${order}" values="${Criticality.values()}" field="criticality" readonly="${(closed)? true:false}" label="${message(code:'work.order.criticality.label')}"/>
    		<g:if test="${order.id != null}">
-   			<g:selectFromEnum name="currentStatus" bean="${order}" values="${OrderStatus.values()}" field="currentStatus" label="${message(code:'work.order.status.label')}"/>
+   			<g:selectFromEnum name="currentStatus" bean="${order}" values="${OrderStatus.values()}" field="currentStatus" label="${message(code:'entity.status.label')}"/>
    			<table class="items">
 	    		<tr>
-	    			<th>${message(code:'work.order.status.label')}</th>
+	    			<th>${message(code:'entity.status.label')}</th>
 	    			<th>${message(code:'work.order.status.changed.on.label')}</th>
 	    			<th>${message(code:'work.order.status.changed.by.label')}</th>
 	    			<th>${message(code:'work.order.status.escalation.label')}</th>
 	    		</tr>
-	    		<g:each in="${order.status.sort{a,b -> (a.changeOn > b.changeOn) ? -1 : 1}}" status="i" var="status">
+	    		<g:each in="${order.status.sort{a,b -> (a.dateCreated > b.dateCreated) ? -1 : 1}}" status="i" var="status">
 			    		<tr>
 			    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
-			    			<td>${Utils.formatDate(status?.changeOn)}</td>
-			    			<td>${status.changedBy.firstname} ${status.changedBy.lastname}</td>
+			    			<td>${Utils.formatDate(status?.dateCreated)}</td>
+			    			<td>${status.changedBy.names}</td>
 			    			<td>${(status.escalation)? '\u2713':''}</td>
 			    		</tr>
 	    		</g:each>
@@ -80,8 +80,8 @@
         		<g:render template="/templates/processes" model="['processes':order.materials,'processType':'material','label':'work.order.materials.used.label','readonly':closed]" /> 
         	</div>
         	<div class="form-content">
-        		<g:input name="workTime" label="${message(code:'work.order.work.time.label')}" bean="${order}" field="workTime"/>
-        		<g:input name="travelTime" label="${message(code:'work.order.travel.time.label')}" bean="${order}" field="travelTime"/>
+        		<g:inputHourMinute name="workTime" field="workTime" hours="${order.workTime?.hours}" minutes="${order.workTime?.minutes}" label='work.order.work.time.label' bean="${order}"/>
+        		<g:inputHourMinute name="travelTime" field="travelTime" hours="${order.travelTime?.hours}" minutes="${order.travelTime?.minutes}" label='work.order.travel.time.label' bean="${order}"/>
 	        	<g:currency costName="estimatedCost" id="estimated-cost" costLabel="${message(code:'work.order.estimated.cost.label')}" bean="${order}" costField="estimatedCost"  currencyName="currency" values="${currencies}" currencyField="currency" currencyLabel="${message(code:'work.order.currency.label')}"/>
 			</div>
 	        </fieldset>
@@ -109,10 +109,10 @@
 	        </h4>
 	        <g:selectFromList name="fixedBy.id" readonly="${(closed)? true:false}" label="${message(code:'work.order.equipment.fixed.by.label')}" bean="${order}" field="fixedBy" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'user', action:'getAjaxData')}"
-  			from="${technicians}" value="${order?.fixedBy?.id}" values="${technicians.collect{it.firstname + " " + it.lastname}}" />	
+  			from="${technicians}" value="${order?.fixedBy?.id}" values="${technicians.collect{it.firstname + ' ' + it.lastname}}" />	
   			<g:selectFromList name="receivedBy.id" readonly="${(closed)? true:false}" label="${message(code:'work.order.equipment.received.by.label')}" bean="${order}" field="receivedBy" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'user', action:'getAjaxData')}"
-  			from="${technicians}" value="${order?.receivedBy?.id}" values="${technicians.collect{it.firstname + " " + it.lastname}}" />	
+  			from="${technicians}" value="${order?.receivedBy?.id}" values="${technicians.collect{it.firstname + ' ' + it.lastname}}" />	
   			<g:input name="returnedOn" dateClass="date-picker" label="${message(code:'work.order.returned.on.label')}" bean="${order}" field="returnedOn"/>
   			<g:input name="returnedTo" label="${message(code:'work.order.returned.to.label')}" bean="${order}" field="returnedTo"/>
 	        </fieldset>

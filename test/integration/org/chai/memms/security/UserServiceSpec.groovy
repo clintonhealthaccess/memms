@@ -100,8 +100,8 @@ class UserServiceSpec extends IntegrationTests{
 		Initializer.createInventoryStructure()
 
 		when:
-		def usersOne = userService.getActiveUserByTypeAndLocation(UserType.TECHNICIANDH, CalculationLocation.findByCode(Initializer.NYANZA), [:])
-		def usersTwo = userService.getActiveUserByTypeAndLocation(UserType.TECHNICIANMMC, null, [:])
+		def usersOne = userService.getActiveUserByTypeAndLocation([UserType.TECHNICIANDH], CalculationLocation.findByCode(Initializer.NYANZA), [:])
+		def usersTwo = userService.getActiveUserByTypeAndLocation([UserType.TECHNICIANMMC], null, [:])
 		then:
 		usersOne.size()==1
 		usersTwo.size()==1
@@ -110,6 +110,7 @@ class UserServiceSpec extends IntegrationTests{
 	def "get notificationWorkOrder group"(){
 		setup:
 		setupLocationTree()
+		setupSystemUser()
 		def senderTitulaire = newOtherUserWithType("senderTitulaire", "senderTitulaire",DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
 		
 		def senderDepartment = newOtherUserWithType("senderDepartment", "senderDepartment",DataLocation.findByCode(KIVUYE),UserType.HOSPITALDEPARTMENT)

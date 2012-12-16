@@ -18,7 +18,7 @@
 				</td>
 				<td>${notification.dataLocation.code}</td>
 				<td>
-					${Utils.formatDateWithTime(notification.writtenOn)}
+					${Utils.formatDateWithTime(notification.dateCreated)}
 				</td>
 				<td><g:stripHtml field="${notification.content}" chars="30"/></td>
 				<td>

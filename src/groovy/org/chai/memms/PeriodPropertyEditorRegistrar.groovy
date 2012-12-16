@@ -27,23 +27,17 @@
  */
 package org.chai.memms
 
-import java.util.Date;
-
-import org.chai.memms.util.Utils;
 import org.springframework.beans.PropertyEditorRegistrar;
 import org.springframework.beans.PropertyEditorRegistry;
-import org.springframework.context.i18n.LocaleContextHolder;
 /**
  * @author Jean Kahigiso M.
  *
  */
 class PeriodPropertyEditorRegistrar implements PropertyEditorRegistrar{
-	//def messageSource
 	
 	@Override
 	public void registerCustomEditors(PropertyEditorRegistry registry) {
 		registry.registerCustomEditor(Period.class,new CustomPeriodEditor());
 	}
 	
-	//registry.registerCustomEditor(Period.class,new CustomPeriodEditor(messageSource.getMessage("default.period.years.months.errors",null,null,LocaleContextHolder.locale ),true));
 }

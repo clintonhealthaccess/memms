@@ -28,20 +28,13 @@ class NotificationEquipmentSpec  extends IntegrationTests{
 		def receiver = newOtherUser("receiver", "receiver", DataLocation.findByCode(BUTARO))
 		
 		def notificationWithErrors = new NotificationEquipment()
-		def expectedFieldErrors = ["sender","receiver","writtenOn","content","dataLocation"]
+		def expectedFieldErrors = ["sender","receiver","content","dataLocation"]
 
 		when://All required fields in
 		notificationWithErrors.save()
 		then:
-		notificationWithErrors.errors.fieldErrorCount == 5
+		notificationWithErrors.errors.fieldErrorCount == 4
 		expectedFieldErrors.each{notificationWithErrors.errors.hasFieldErrors(it)}
-		NotificationEquipment.count() == 0
-
-		when://notification date should be before or equal to  today
-		notificationWithErrors = new NotificationEquipment(sender:sender, receiver:receiver, writtenOn: Initializer.now()+1, content:" check this out",read:true,dataLocation:sender.location)
-		notificationWithErrors.save()
-		then:
-		notificationWithErrors.errors.hasFieldErrors("writtenOn") == true
 		NotificationEquipment.count() == 0
 	}
 }

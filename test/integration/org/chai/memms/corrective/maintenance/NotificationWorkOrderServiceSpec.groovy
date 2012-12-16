@@ -23,6 +23,7 @@ class NotificationWorkOrderServiceSpec  extends IntegrationTests{
 	def "can send notifications"() {
 		setup:
 		setupLocationTree()
+		setupSystemUser()
 		
 		def sender = newOtherUser("sender", "sender", DataLocation.findByCode(KIVUYE))
 		sender.userType = UserType.TITULAIREHC
@@ -48,6 +49,7 @@ class NotificationWorkOrderServiceSpec  extends IntegrationTests{
 	def "can escalate notifications"() {
 		setup:
 		setupLocationTree()
+		setupSystemUser()
 		
 		def senderTitulaire = newUser("senderTitulaire", true,true)
 		senderTitulaire.userType = UserType.TITULAIREHC
@@ -98,6 +100,7 @@ class NotificationWorkOrderServiceSpec  extends IntegrationTests{
 	def "reading a notification sets it's read status to true"() {
 		setup:
 		setupLocationTree()
+		setupSystemUser()
 		
 		def sender = newOtherUser("sender", "sender", DataLocation.findByCode(KIVUYE))
 		sender.userType = UserType.TITULAIREHC
@@ -128,6 +131,7 @@ class NotificationWorkOrderServiceSpec  extends IntegrationTests{
 	def "can filter notifications"() {
 		setup:
 		setupLocationTree()
+		setupSystemUser()
 		
 		def senderTitulaire = newUser("senderTitulaire", true,true)
 		senderTitulaire.userType = UserType.TITULAIREHC
@@ -206,6 +210,7 @@ class NotificationWorkOrderServiceSpec  extends IntegrationTests{
 	def "can search notifications"() {
 		setup:
 		setupLocationTree()
+		setupSystemUser()
 		
 		def senderDepartment = newUser("senderDepartment", true,true)
 		senderDepartment.userType = UserType.HOSPITALDEPARTMENT
@@ -242,6 +247,7 @@ class NotificationWorkOrderServiceSpec  extends IntegrationTests{
 	def "get unread notifications count"() {
 		setup:
 		setupLocationTree()
+		setupSystemUser()
 		def senderDepartment = newUser("senderDepartment", true,true)
 		senderDepartment.userType = UserType.HOSPITALDEPARTMENT
 		senderDepartment.location = DataLocation.findByCode(KIVUYE)

@@ -21,7 +21,7 @@ class CommentServiceSpec  extends IntegrationTests{
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		when:
-		commentService.createComment(workOrder,user,Initializer.now(),"Content")
+		commentService.createComment(workOrder,user,"Content")
 		then:
 		Comment.count() == 1
 	}
@@ -33,10 +33,10 @@ class CommentServiceSpec  extends IntegrationTests{
 		def user = newUser("user", "user")
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def createdComment = commentService.createComment(workOrder,user,Initializer.now(),"Content")
+		def createdComment = commentService.createComment(workOrder,user,"Content")
 		when:
 		def sizeOfCommentBeforeDelete = workOrder.comments.size()
-		workOrder = commentService.deleteComment(workOrder.comments.asList()[0],user,Initializer.now())
+		workOrder = commentService.deleteComment(workOrder.comments.asList()[0],user)
 		then:
 		Comment.count()==0
 		sizeOfCommentBeforeDelete == 1

@@ -77,15 +77,16 @@ class DepartmentControllerSpec extends IntegrationTests{
 			Department."findByDescriptions_$it"("test description $it").getDescriptions(new Locale("$it")).equals("test description $it")
 		}
 	}
-	
+
 	def "list department"(){
+
 		setup:
 		departmentController = new DepartmentController();
 		Initializer.newDepartment(["en":"department test one"],CODE(123),["en":"description department one"])
 		Initializer.newDepartment(["en":"department test two"],CODE(124),["en":"description department two"])
 		Initializer.newDepartment(["en":"department test three"],CODE(125),["en":"description department three"])
 		Initializer.newDepartment(["en":"department test four"],CODE(126),["en":"description department four"])
-		
+
 		when: "none ajax"
 		departmentController.list()
 		then:
@@ -101,10 +102,12 @@ class DepartmentControllerSpec extends IntegrationTests{
 		departmentController.response.json.results[0].contains(Department.findByCode(CODE(123)).code)
 		departmentController.response.json.results[0].contains(Department.findByCode(CODE(124)).code)
 		departmentController.response.json.results[0].contains(Department.findByCode(CODE(125)).code)
-		departmentController.response.json.results[0].contains(Department.findByCode(CODE(126)).code)
+		departmentController.response.json.results[0].contains(Department.findByCode(CODE(126)).code)		
+
 	}
-		
+
 	def "search department"(){
+		
 		setup:
 		departmentController = new DepartmentController();
 		Initializer.newDepartment(["en":"department test one"],CODE(123),["en":"description department one"])
@@ -122,6 +125,7 @@ class DepartmentControllerSpec extends IntegrationTests{
 		!departmentController.response.json.results[0].contains(Department.findByCode(CODE(123)).code)
 		departmentController.response.json.results[0].contains(Department.findByCode(CODE(125)).code)
 		!departmentController.response.json.results[0].contains(Department.findByCode(CODE(126)).code)
+
 	}
 	
 	def "none ajax search fails"(){

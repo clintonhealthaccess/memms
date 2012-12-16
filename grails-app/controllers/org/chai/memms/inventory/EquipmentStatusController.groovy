@@ -69,7 +69,7 @@ class EquipmentStatusController extends AbstractEntityController{
 		else{
 			equipment.status.remove(entity)
 			super.deleteEntity(entity);
-			equipmentService.updateCurrentEquipmentStatus(equipment)
+			equipmentService.updateCurrentEquipmentStatus(equipment,null,user)
 		}
 	}
 	
@@ -80,13 +80,15 @@ class EquipmentStatusController extends AbstractEntityController{
 			response.sendError(404)
 		else{
 			entity.changedBy = user
-			entity.statusChangeDate = new Date()
 		}
-		entity.properties = params
+		if(!entity.equipment?.currentStatus?.equals(Status.DISPOSED))
+			entity.properties = params
 	}
 	
 	def saveEntity(def entity) {
-		equipmentService.updateCurrentEquipmentStatus(entity.equipment,entity)
+		if(!entity.equipment?.currentStatus?.equals(Status.DISPOSED))
+			equipmentService.updateCurrentEquipmentStatus(entity.equipment,entity,user)
+		else flash.message = message(code: "error.cannot.modify.disposed.equipment", default: 'Cannot modify a disposed equipment, please reactivate it')
 	}
 	
 	def getModel(def entity) {

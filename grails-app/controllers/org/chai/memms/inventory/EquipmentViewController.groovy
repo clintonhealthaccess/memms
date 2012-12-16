@@ -66,10 +66,19 @@ class EquipmentViewController extends AbstractController {
 	def getEntityClass() {
 		return Equipment.class;
 	}
-	def view ={
-		//TODO
+	
+	def getEquipmentClueTipsAjaxData = {
+		def equipment = Equipment.get(params.long("equipment.id"))
+		def html = g.render(template:"/templates/equipmentClueTip",model:[equipment:equipment])
+		render(contentType:"text/plain", text:html)
 	}
-
+	
+	def view ={
+		Equipment equipment = Equipment.get(params.int("equipment.id"))
+		if(equipment == null)	response.sendError(404)
+		else render(view:"/entity/equipment/summary", model:[equipment: equipment])		
+	}
+	
 	def list={
 		def dataLocation = DataLocation.get(params.int('dataLocation.id'))
 		def equipments
@@ -77,13 +86,15 @@ class EquipmentViewController extends AbstractController {
 		
 		if (dataLocation != null){
 			if(!user.canAccessCalculationLocation(dataLocation)) response.sendError(404)
-			equipments = equipmentService.filterEquipment(user,dataLocation,null,null,null,null,null,null,null,null,params)
+			equipments = equipmentService.getEquipmentsByDataLocationAndManages(dataLocation,params)
+			//equipments = equipmentService.filterEquipment(user,dataLocation,null,null,null,null,null,null,null,null,params)
 		}
 		else equipments = equipmentService.getMyEquipments(user,params)
 		
 		if(request.xhr){
 			 this.ajaxModel(equipments,dataLocation,"")
 		 }else{
+		 	log.debug("not an ajax request"+params)
 			render(view:"/entity/list", model:[
 						template:"equipment/equipmentList",
 						filterTemplate:"equipment/equipmentFilter",
@@ -156,16 +167,14 @@ class EquipmentViewController extends AbstractController {
 
 		def locationSkipLevels = inventoryService.getSkipLocationLevels()
 
-		if (location != null) {
-			template = '/inventorySummaryPage/sectionTable'
+		if (location != null) 
 			inventories = inventoryService.getInventoryByLocation(location,dataLocationTypesFilter,params)
-		}
-
+	
 		render (view: '/inventorySummaryPage/summaryPage', model: [
 					inventories:inventories?.inventoryList,
 					currentLocation: location,
 					currentLocationTypes: dataLocationTypesFilter,
-					template: template,
+					template: "/inventorySummaryPage/sectionTable",
 					entityCount: inventories?.totalCount,
 					locationSkipLevels: locationSkipLevels
 				])
@@ -273,7 +282,10 @@ class EquipmentViewController extends AbstractController {
 			def value= false; def entity = null;
 			if(property.equals("obsolete")){
 				if(equipment.obsolete) equipment.obsolete = false
-				else equipment.obsolete = true
+				else {
+					equipment.lastModifiedBy = user
+					equipment.obsolete = true
+				}
 				entity = equipment.save(flush:true)
 
 			}

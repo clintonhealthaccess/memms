@@ -49,14 +49,23 @@ import org.chai.location.DataLocationType;
 import org.chai.location.Location;
 import org.chai.location.LocationLevel;
 import org.chai.memms.corrective.maintenance.Comment;
-import org.chai.memms.corrective.maintenance.MaintenanceProcess;
+import org.chai.memms.corrective.maintenance.CorrectiveProcess;
+import org.chai.memms.corrective.maintenance.CorrectiveProcess.ProcessType;
 import org.chai.memms.corrective.maintenance.NotificationWorkOrder
-import org.chai.memms.corrective.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
 import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
+import org.chai.memms.preventive.maintenance.DurationBasedOrder;
+import org.chai.memms.preventive.maintenance.Prevention;
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible;
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus;
+import org.chai.memms.preventive.maintenance.WorkBasedOrder
+import org.chai.memms.preventive.maintenance.WorkBasedOrder.WorkIntervalType
+import org.chai.memms.preventive.maintenance.DurationBasedOrder.OccurencyType;
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderType;
+import org.chai.memms.preventive.maintenance.PreventiveProcess;
 import org.chai.memms.security.Role
 import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType
@@ -287,16 +296,16 @@ public class Initializer {
 			
 		if(!EquipmentType.count()){
 			//Add equipment types as defined in ecri
-			def typeOne = newEquipmentType("15810", ["en":"Accelerometers","fr":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now(),25)
-			def typeTwo = newEquipmentType("15819", ["en":"X-Ray Film Cutter"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now(),13)
-			def typeThree = newEquipmentType("15966", ["en":"Video Systems"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now(),12)
-			def typeFour = newEquipmentType("10035", ["en":"Adhesives, Aerosol"],["en":"not used in memms"],Observation.RETIRED,now(),now(),34)
-			def typeFive = newEquipmentType("20760", ["en":"Pancreatic Drainage Tubes"],["en":"not used in memms"],Observation.RETIRED,now(),now(),54)
-			def typeSix = newEquipmentType("20729", ["en":"PCR Test Tubes"],["en":"not used in memms"],Observation.RETIRED,now(),now(),67)
-			def typeSeven = newEquipmentType("10026", ["en":"Adhesive Strips"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now(),12)
-			def typeEight = newEquipmentType("10124", ["en":"Anesthesia Kits"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now(),7)
-			def typeNine = newEquipmentType("10155", ["en":"Anklets"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now(),60)
-			def typeTen = newEquipmentType("10426", ["en":"Blood Donor Sets"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now(),34)
+			def typeOne = newEquipmentType("15810", ["en":"Accelerometers","fr":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,now(),25)
+			def typeTwo = newEquipmentType("15819", ["en":"X-Ray Film Cutter"],["en":"used in memms"],Observation.USEDINMEMMS,now(),13)
+			def typeThree = newEquipmentType("15966", ["en":"Video Systems"],["en":"used in memms"],Observation.USEDINMEMMS,now(),12)
+			def typeFour = newEquipmentType("10035", ["en":"Adhesives, Aerosol"],["en":"not used in memms"],Observation.RETIRED,now(),34)
+			def typeFive = newEquipmentType("20760", ["en":"Pancreatic Drainage Tubes"],["en":"not used in memms"],Observation.RETIRED,now(),54)
+			def typeSix = newEquipmentType("20729", ["en":"PCR Test Tubes"],["en":"not used in memms"],Observation.RETIRED,now(),67)
+			def typeSeven = newEquipmentType("10026", ["en":"Adhesive Strips"],["en":"used in memms"],Observation.USEDINMEMMS,now(),12)
+			def typeEight = newEquipmentType("10124", ["en":"Anesthesia Kits"],["en":"used in memms"],Observation.USEDINMEMMS,now(),7)
+			def typeNine = newEquipmentType("10155", ["en":"Anklets"],["en":"used in memms"],Observation.USEDINMEMMS,now(),60)
+			def typeTen = newEquipmentType("10426", ["en":"Blood Donor Sets"],["en":"used in memms"],Observation.USEDINMEMMS,now(),34)
 		}
 		
 		if(!Provider.count()){
@@ -334,14 +343,17 @@ public class Initializer {
 		
 		if(!Equipment.count()){
 			def equipmentOne = newEquipment("SERIAL01",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"CHAI",false,newPeriod(24),"Room A1","",['en':'Equipment Descriptions'],
-				getDate(22,07,2010),getDate(10,10,2010),"",now(),
+				getDate(22,07,2010),getDate(10,10,2010),"",
 				'MODEL1',
 				DataLocation.findByCode(NYANZA),
 				Department.findByCode('SURGERY'),
 				EquipmentType.findByCode("15810"),
 				Provider.findByCode("ONE"),
 				Provider.findByCode("FIVE"),
-				Status.INSTOCK
+				Status.INSTOCK,
+				User.findByUsername("admin"),
+				null,
+				null
 				)
 						
 			def warrantyContactOne = newContact(['fr':'Warranty Address Descriptions One'],"Warranty","jk@yahoo.com","0768-888-787","Street 654","8988")
@@ -353,14 +365,17 @@ public class Initializer {
 			equipmentOne.save(failOnError:true)
 
 			def equipmentTwo = newEquipment("SERIAL02",PurchasedBy.BYFACILITY,null,null,false,newPeriod(12),"Room A34","34900",['en':'Equipment Descriptions two'],
-				getDate(12,01,2009),getDate(10,10,2009),"USD",now(),
+				getDate(12,01,2009),getDate(10,10,2009),"USD",
 				'MODEL2',
 				DataLocation.findByCode(NYANZA),
 				Department.findByCode('PEDIATRY'),
 				EquipmentType.findByCode("15819"),
 				Provider.findByCode("TWO"),
 				Provider.findByCode("FIVE"),
-				Status.OPERATIONAL
+				Status.OPERATIONAL,
+				User.findByUsername("admin"),
+				null,
+				null
 				)
 			
 			def warrantyTwo = newWarranty(['en':'warranty one'],'warranty name1','email1@gmail.com',"0768-111-787","Street 154","898",getDate(10, 12, 2010),false,[:])
@@ -370,14 +385,17 @@ public class Initializer {
 			equipmentTwo.save(failOnError:true)
 			
 			def equipmentThree = newEquipment("SERIAL03",PurchasedBy.BYFACILITY,null,null,true,newPeriod(34),"Room A1","98700",['en':'Equipment Descriptions three'],
-				getDate(14,8,2008),getDate(10,01,2009),"EUR",now(),
+				getDate(14,8,2008),getDate(10,01,2009),"EUR",
 				'MODEL3',
 				DataLocation.findByCode(KIVUYE),
 				Department.findByCode('EMERGENCY'),
 				EquipmentType.findByCode("15966"),
 				Provider.findByCode("TWO"),
 				Provider.findByCode("FIVE"),
-				Status.OPERATIONAL
+				Status.OPERATIONAL,
+				User.findByUsername("admin"),
+				null,
+				null
 				)
 			
 			def warrantyThree = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","88",getDate(10, 12, 2010),false,[:])
@@ -387,17 +405,20 @@ public class Initializer {
 			equipmentThree.save(failOnError:true)
 			
 			def equipmentFour = newEquipment("SERIAL04",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"Voxiva",false,newPeriod(12),"Room A1","",['en':'Equipment Descriptions four'],
-				getDate(18,2,2011),getDate(10,10,2011),"",now(),
+				getDate(18,2,2011),getDate(10,10,2011),"",
 				'MODEL2',
 				DataLocation.findByCode(KIVUYE),
 				Department.findByCode('CARDIOLOGY'),
 				EquipmentType.findByCode("10035"),
 				Provider.findByCode("THREE"),
 				Provider.findByCode("SEVEN"),
-				Status.UNDERMAINTENANCE
+				Status.UNDERMAINTENANCE,
+				User.findByUsername("admin"),
+				null,
+				null
 				)
 			
-			def warrantyFour = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","888",getDate(10, 12, 2010),false,[:])
+			def warrantyFour = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","888",getDate(10, 12, 2011),false,[:])
 			def statusFour = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentFour,[:])
 			def statusFourOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentFour,[:])
 			equipmentFour.warranty=warrantyFour
@@ -405,14 +426,17 @@ public class Initializer {
 			equipmentFour.save(failOnError:true)
 			
 			def equipmentFive = newEquipment("SERIAL05",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"Voxiva",true,newPeriod(34),"Room A1","",['en':'Equipment Descriptions five'],
-				getDate(11,8,2008),getDate(11,10,2009),"",now(),
+				getDate(11,8,2008),getDate(11,10,2009),"",
 				'MODEL1',
 				DataLocation.findByCode(BUNGWE),
 				Department.findByCode('CONSULTATION'),
 				EquipmentType.findByCode("20760"),
 				Provider.findByCode("FOUR"),
 				Provider.findByCode("SIX"),
-				Status.UNDERMAINTENANCE
+				Status.UNDERMAINTENANCE,
+				User.findByUsername("admin"),
+				null,
+				null
 				)
 			
 			def warrantyFive = newWarranty(['en':'warranty Five'],'warranty name3','email3@gmail.com',"0768-333-787","Street 154","988",getDate(10, 12, 2010),false,[:])
@@ -424,14 +448,17 @@ public class Initializer {
 			equipmentFive.save(failOnError:true)
 			
 			def equipmentSix = newEquipment("SERIAL06",PurchasedBy.BYFACILITY,null,null,true,newPeriod(4),"Room A1","290540",['en':'Equipment Descriptions six'],
-				getDate(1,7,2000),getDate(12,7,2001),"RWF",now(),
+				getDate(1,7,2000),getDate(12,7,2001),"RWF",
 				'MODEL3',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('ANAESTHETICS'),
 				EquipmentType.findByCode("20729"),
 				Provider.findByCode("TWO"),
 				Provider.findByCode("SIX"),
-				Status.UNDERMAINTENANCE
+				Status.UNDERMAINTENANCE,
+				User.findByUsername("admin"),
+				null,
+				null
 				)
 			
 			def warrantySix = newWarranty(['en':'warranty four'],'warranty name4','email4@gmail.com',"0768-444-787","Street 154","8988",getDate(10, 12, 2010),false,[:])
@@ -443,14 +470,17 @@ public class Initializer {
 			equipmentSix.save(failOnError:true)
 			
 			def equipmentSeven = newEquipment("SERIAL07",PurchasedBy.BYFACILITY,null,null,true,newPeriod(4),"Room A1","290540",['en':'Equipment Descriptions seven'],
-				getDate(1,7,2000),getDate(12,7,2001),"USD",now(),
+				getDate(1,7,2000),getDate(12,7,2001),"USD",
 				'MODEL3',
 				DataLocation.findByCode(RUHINDO),
 				Department.findByCode('ANAESTHETICS'),
 				EquipmentType.findByCode("10026"),
 				Provider.findByCode("TWO"),
 				Provider.findByCode("SIX"),
-				Status.UNDERMAINTENANCE
+				Status.UNDERMAINTENANCE,
+				User.findByUsername("admin"),
+				null,
+				null
 				)
 			
 			def warrantySeven = newWarranty(['en':'warranty seven'],'warranty name7','email7@gmail.com',"0768-777-787","Street 174","8988",getDate(1, 12, 2010),false,[:])
@@ -462,14 +492,17 @@ public class Initializer {
 			equipmentSeven.save(failOnError:true)
 			
 			def equipmentEight = newEquipment("SERIAL08",PurchasedBy.BYFACILITY,null,null,true,newPeriod(24),"Room A3","290540",['en':'Equipment Descriptions eight'],
-				getDate(1,7,2000),getDate(12,7,2001),"EUR",now(),
+				getDate(1,7,2000),getDate(12,7,2001),"EUR",
 				'MODEL8',
 				DataLocation.findByCode(RUHINDO),
 				Department.findByCode('ANAESTHETICS'),
 				EquipmentType.findByCode("10155"),
 				Provider.findByCode("EIGHT"),
 				Provider.findByCode("EIGHT"),
-				Status.UNDERMAINTENANCE
+				Status.UNDERMAINTENANCE,
+				User.findByUsername("admin"),
+				null,
+				null
 				)
 			
 			def warrantyEight = newWarranty(['en':'warranty four'],'warranty name4','email4@gmail.com',"0768-444-787","Street 154","8988",getDate(10, 12, 2010),false,[:])
@@ -481,14 +514,17 @@ public class Initializer {
 			equipmentEight.save(failOnError:true)
 			
 			def equipmentNine = newEquipment("SERIAL09",PurchasedBy.BYFACILITY,null,null,true,newPeriod(4),"Room 9A1","290540",['en':'Equipment Descriptions Nine'],
-				getDate(1,7,2000),getDate(12,7,2001),"RWF",now(),
+				getDate(1,7,2000),getDate(12,7,2001),"RWF",
 				'MODEL3',
 				DataLocation.findByCode(NYANGE),
 				Department.findByCode('ANAESTHETICS'),
 				EquipmentType.findByCode("10124"),
 				Provider.findByCode("TWO"),
 				Provider.findByCode("SIX"),
-				Status.UNDERMAINTENANCE
+				Status.UNDERMAINTENANCE,
+				User.findByUsername("admin"),
+				null,
+				null
 				)
 			
 			def warrantyNine = newWarranty(['en':'warranty Nine'],'warranty name9','email94@gmail.com',"0768-999-787","Street 954","8989",getDate(10, 12, 2010),false,[:])
@@ -500,14 +536,17 @@ public class Initializer {
 			equipmentNine.save(failOnError:true)
 			
 			def equipmentTen = newEquipment("SERIAL10",PurchasedBy.BYFACILITY,null,null,true,newPeriod(4),"Room 10A1","290540",['en':'Equipment Descriptions Ten'],
-				getDate(1,7,2000),getDate(12,7,2001),"RWF",now(),
+				getDate(1,7,2000),getDate(12,7,2001),"RWF",
 				'MODELTen3',
 				DataLocation.findByCode(KIREHE),
 				Department.findByCode('ANAESTHETICS'),
 				EquipmentType.findByCode("10426"),
 				Provider.findByCode("TWO"),
 				Provider.findByCode("SIX"),
-				Status.UNDERMAINTENANCE
+				Status.UNDERMAINTENANCE,
+				User.findByUsername("admin"),
+				null,
+				null
 				)
 			
 			def warrantyTen = newWarranty(['en':'warranty Ten'],'warranty name10','email410@gmail.com',"0768-100-787","Street 154","8988",getDate(10, 12, 2010),false,[:])
@@ -535,25 +574,25 @@ public class Initializer {
 		
 		def workOrderOne =  newWorkOrder(equipment01,"First order",Criticality.NORMAL,department,now()-1,FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
-		def statusOne =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATFOSA,now()-1,department,false)
-		def statusTwo =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATMMC,now(),techDH,true)
-		def notifationOne = newWorkOrderNotification(workOrderOne, department, techDH,now(), "notifationOne")
-		def notifationTwo = newWorkOrderNotification(workOrderOne, techDH, department,now(), "I am currentlly working on this, but needs further review. Am making this long to see how it fits when reading it.")
-		def notifationThree = newWorkOrderNotification(workOrderOne, techDH, techMMC,now(), "notifationThree")
+		def statusOne =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATFOSA,department,false)
+		def statusTwo =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATMMC,techDH,true)
+		def notifationOne = newWorkOrderNotification(workOrderOne, department, techDH, "notifationOne")
+		def notifationTwo = newWorkOrderNotification(workOrderOne, techDH, department,"I am currentlly working on this, but needs further review. Am making this long to see how it fits when reading it.")
+		def notifationThree = newWorkOrderNotification(workOrderOne, techDH, techMMC, "notifationThree")
 		workOrderOne.save(failOnError:true)
 		
 		def workOrderTwo =  newWorkOrder(equipment01,"Second order",Criticality.LOW,admin,now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def statusThree =  newWorkOrderStatus(workOrderTwo,OrderStatus.OPENATFOSA,now()-1,admin,false)
+		def statusThree =  newWorkOrderStatus(workOrderTwo,OrderStatus.OPENATFOSA,admin,false)
 		
 		def workOrderFive =  newWorkOrder(equipment01,"Closed order",Criticality.HIGH,department,now()-3,FailureReason.MISUSE,OrderStatus.OPENATFOSA)
 		
-		def statusFour =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATFOSA,now()-3,department,false)
-		def statusFive =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATMMC,now()-2,department,true)		
-		def statusSix =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATFOSA,now()-1,department,false)
-		def statusSeven =  newWorkOrderStatus(workOrderFive,OrderStatus.CLOSEDFIXED,now(),department,false)
+		def statusFour =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATFOSA,department,false)
+		def statusFive =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATMMC,department,true)		
+		def statusSix =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATFOSA,department,false)
+		def statusSeven =  newWorkOrderStatus(workOrderFive,OrderStatus.CLOSEDFIXED,department,false)
 		
-		def notifationFour = newWorkOrderNotification(workOrderOne, department, techDH,now(), "Solve this for me")
-		def notifationFive = newWorkOrderNotification(workOrderOne, techDH, department,now(), "More information needed")
+		def notifationFour = newWorkOrderNotification(workOrderOne, department, techDH,"Solve this for me")
+		def notifationFive = newWorkOrderNotification(workOrderOne, techDH, department,"More information needed")
 		workOrderFive.save(failOnError:true)
 		
 		
@@ -564,19 +603,19 @@ public class Initializer {
 		
 		equipment01.save(failOnError:true)
 		
-		def processOne = newMaintenanceProcess(workOrderOne,ProcessType.ACTION,"cleaning material", now(), admin)
-		def processTwo = newMaintenanceProcess(workOrderOne,ProcessType.ACTION,"open material", now(), admin)
-		def processThree = newMaintenanceProcess(workOrderOne,ProcessType.MATERIAL,"material piece one", now(), admin)
-		def processFour = newMaintenanceProcess(workOrderOne,ProcessType.MATERIAL,"material piece two", now(), admin)
+		def processOne = newCorrectiveProcess(workOrderOne,ProcessType.ACTION,"cleaning material", admin)
+		def processTwo = newCorrectiveProcess(workOrderOne,ProcessType.ACTION,"open material", admin)
+		def processThree = newCorrectiveProcess(workOrderOne,ProcessType.MATERIAL,"material piece one", admin)
+		def processFour = newCorrectiveProcess(workOrderOne,ProcessType.MATERIAL,"material piece two", admin)
 		
 		workOrderOne.addToProcesses(processOne)
 		workOrderOne.addToProcesses(processTwo)
 		workOrderOne.addToProcesses(processThree)
 		workOrderOne.addToProcesses(processFour)
 		
-		def commentOne = newComment(workOrderOne, admin, now(), "comment one")
-		def commentTwo = newComment(workOrderOne, admin, now()-1, "comment one")
-		def commentThree = newComment(workOrderOne, admin, now()-2, "comment one")
+		def commentOne = newComment(workOrderOne, admin, "comment one")
+		def commentTwo = newComment(workOrderOne, admin,  "comment two")
+		def commentThree = newComment(workOrderOne, admin,  "comment three")
 		
 		workOrderOne.addToComments(commentOne)
 		workOrderOne.addToComments(commentTwo)
@@ -585,57 +624,157 @@ public class Initializer {
 		workOrderOne.save(failOnError:true)
 		
 		def workOrderThree =  newWorkOrder(equipment09,"Third order",Criticality.NORMAL,titulaireHC,now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def statusEight =  newWorkOrderStatus(workOrderThree,OrderStatus.OPENATFOSA,now(),admin,false)
+		def statusEight =  newWorkOrderStatus(workOrderThree,OrderStatus.OPENATFOSA,admin,false)
 		equipment09.addToWorkOrders(workOrderThree)
 		equipment09.save(failOnError:true)
 		
 		def workOrderFour =  newWorkOrder(equipment10,"Fourth order",Criticality.HIGH,admin,now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def statusNine =  newWorkOrderStatus(workOrderFour,OrderStatus.OPENATFOSA,now(),admin,false)
+		def statusNine =  newWorkOrderStatus(workOrderFour,OrderStatus.OPENATFOSA,admin,false)
 		equipment10.addToWorkOrders(workOrderFour)
 		equipment10.save(failOnError:true)	
 	}
 	
+	static def createPreventiveMaintenanceStructure(){
+		//TODO the users and what they can
+		def admin = User.findByUsername("admin")
+		def titulaireHC = User.findByUsername("titulaireHC") //hospitalDepartment can do the same job too
+		def department = User.findByUsername("hospitalDepartment")
+		def techDH = User.findByUsername("techDH")
+		def techMMC = User.findByUsername("techMMC")
+		
+		def equipment01 =Equipment.findBySerialNumber("SERIAL01")
+		def equipment09 =Equipment.findBySerialNumber("SERIAL09")
+		def equipment10 =Equipment.findBySerialNumber("SERIAL10")
+		
+		def dOrderOne = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'First Duration Order'],"First Duration Order",now()+1,null,OccurencyType.WEEKLY,true,1,2,[1,3,5])
+		equipment01.addToPreventiveOrders(dOrderOne)
+		equipment01.save(failOnError:true)
+		
+		def dOrderTwo = newDurationBasedOrder(equipment01,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Secod Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.MONTHLY,true,2,null,[])
+		equipment09.addToPreventiveOrders(dOrderTwo)
+		equipment09.save(failOnError:true)
+		
+		def dOrderThree = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Three Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.DAILY,true,2,null,[])
+		equipment09.addToPreventiveOrders(dOrderThree)
+		equipment09.save(failOnError:true)
+		
+		def dOrderFour = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Four Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.YEARLY,true,2,null,[])
+		equipment09.addToPreventiveOrders(dOrderFour)
+		equipment09.save(failOnError:true)
+
+		def dOrderFive = newWorkBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'First Work Based Five'],"First Work Based Order",now()+1,null,WorkIntervalType.HOURS,22)
+		equipment09.addToPreventiveOrders(dOrderFive)
+		equipment09.save(failOnError:true)
+
+		def dOrderSix = newWorkBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Second Work Based Six'],"Second Work Based Order",now()+1,null,WorkIntervalType.WEEK,2)
+		equipment09.addToPreventiveOrders(dOrderSix)
+		equipment09.save(failOnError:true)
+		
+		}
+	
+	
+	
 	//Models definition
+	//Preventive Maintenance
+	public static def newDurationBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def openOn,def closedOn,def occurency,def isRecurring,def occurInterval,def occurCount,def occurDaysOfWeek){
+		def timeDate =  newTimeDate(openOn)
+		def order  = new DurationBasedOrder(
+			equipment: equipment,
+			addedBy: addedBy,
+			type: PreventiveOrderType.DURATIONBASED,
+			status: status,
+			description: description,
+			preventionResponsible: preventionResponsible,
+			technicianInCharge: technicianInCharge,
+			openOn: timeDate,
+			closedOn: closedOn,
+			occurency: occurency,
+			isRecurring: isRecurring,
+			occurInterval: occurInterval,
+			occurCount: occurCount,
+			occurDaysOfWeek: occurDaysOfWeek
+
+			)
+		Utils.setLocaleValueInMap(order,names,"Names") 
+		return order.save(failOnError:true)
+	}
+	public static def newWorkBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def openOn,def closedOn,def occurency,def occurInterval){
+		def timeDate =  newTimeDate(openOn)
+		def order  = new WorkBasedOrder(
+			equipment: equipment,
+			addedBy: addedBy,
+			type: PreventiveOrderType.WORKBASED,
+			status: status,
+			description: description,
+			preventionResponsible: preventionResponsible,
+			technicianInCharge: technicianInCharge,
+			occurInterval: occurInterval,
+			occurency:occurency,
+			openOn: timeDate,
+			closedOn: closedOn
+			)
+		Utils.setLocaleValueInMap(order,names,"Names") 
+		return order.save(failOnError:true)
+	}	
+	public static def newPrevention(def order,def addedBy,def scheduledOn,def happenAsScheduled,def eventDate,def timeSpend,def descriptions){
+		return new Prevention(order:order,addedBy:addedBy,scheduledOn:scheduledOn,happenAsScheduled:happenAsScheduled,eventDate:eventDate,timeSpend:timeSpend,descriptions:descriptions).save(failOnError:true)
+	}
+	public static def newPreventionProcess(def prevention, def name,def addedBy){
+		return new PreventiveProcess(prevention:prevention,name:name,addedBy:addedBy).save(failOnError:true)
+	}
+	public static def newTimeDate(def date,def time){
+		return new TimeDate(date,time)
+	}
+	public static def newTimeDate(def timeDate){
+		return new TimeDate(timeDate:timeDate)
+	}
+	public static def newTimeSpend(def hours,def minutes){
+		return new TimeSpend(hours,minutes)
+	}
+	public static def newTimeSpend(def numberOfMinutes){
+		return new TimeSpend(numberOfMinutes:numberOfMinutes)
+	}
 	//Corrective Maintenance
 	public static def newWorkOrder(def equipment, def description, def criticality, def addedBy, def openOn,def failureReason,def currentStatus){
-		return new WorkOrder(equipment:equipment,description: description,criticality:criticality,addedBy:addedBy,openOn: openOn,currentStatus:currentStatus,failureReason:failureReason).save(failOnError:true,flush:true)
+		return new WorkOrder(equipment:equipment,description: description,criticality:criticality,addedBy:addedBy,openOn: openOn,currentStatus:currentStatus,failureReason:failureReason).save(failOnError:true)
 	}
 	public static def newWorkOrder(def equipment, def description, def criticality,def addedBy, def openOn, def closedOn, def failureReason,def currentStatus){
-		return new WorkOrder(equipment:equipment, description:description, criticality:criticality,addedBy:addedBy, openOn: openOn, closedOn:closedOn, currentStatus:currentStatus,failureReason:failureReason).save(failOnError:true,flush:true)
+		return new WorkOrder(equipment:equipment, description:description, criticality:criticality,addedBy:addedBy, openOn: openOn, closedOn:closedOn, currentStatus:currentStatus,failureReason:failureReason).save(failOnError:true)
 	}
-	public static newWorkOrderNotification(def workOrder, def sender, def receiver,def writtenOn, def content){
-		return new NotificationWorkOrder(workOrder: workOrder, sender: sender, receiver: receiver, writtenOn: writtenOn, content: content).save(failOnError: true)
+	public static newWorkOrderNotification(def workOrder, def sender, def receiver, def content){
+		return new NotificationWorkOrder(workOrder: workOrder, sender: sender, receiver: receiver, content: content).save(failOnError: true)
 	}
 	
-	public static newComment(def workOrder, def writtenBy, def writtenOn, def content){
-		return new Comment(workOrder: workOrder, writtenBy: writtenBy, writtenOn: writtenOn, content: content ).save(failOnError: true)
+	public static newNewEquipmentNotification(def dataLocation, def department, def sender, def receiver,def content){
+		return new NotificationEquipment(dataLocation:dataLocation, department:department, sender: sender, receiver: receiver,content: content).save(failOnError: true)
 	}
-	public static newMaintenanceProcess(def workOrder,def type, def name, def addedOn, def addedBy){
-		return new MaintenanceProcess(workOrder: workOrder,type: type,name: name, addedOn: addedOn, addedBy: addedBy ).save(failOnError: true)
+	
+	public static newComment(def workOrder, def writtenBy, def content){
+		return new Comment(workOrder: workOrder, writtenBy: writtenBy, content: content ).save(failOnError: true)
+	}
+	public static newCorrectiveProcess(def workOrder,def type, def name,def addedBy){
+		return new CorrectiveProcess(workOrder: workOrder,type: type,name: name,addedBy: addedBy ).save(failOnError: true)
 	}
 	public static newNotificationEquipment(def sender, def receiver, def writtenOn, def content, def read, def dataLocation, def department){
 		return new NotificationEquipment(sender:sender, receiver:receiver, writtenOn:writtenOn, content:content, read:read, dataLocation:dataLocation, department:department).save(failOnError: true)
 	}
 	
-	public static newWorkOrderStatus(def workOrder,def status,def changeOn,def changedBy,def escalation){
+	public static newWorkOrderStatus(def workOrder,def status,def changedBy,def escalation){
 		def equipment = workOrder.equipment
-		def stat = new WorkOrderStatus(workOrder:workOrder,status:status,changeOn:changeOn,changedBy:changedBy,escalation:escalation)
+		def stat = new WorkOrderStatus(workOrder:workOrder,status:status,changedBy:changedBy,escalation:escalation)
 		
 		//Create First Work Order
 		if(status == OrderStatus.OPENATFOSA){
-			if(!equipment.currentStatus.equals(Status.UNDERMAINTENANCE)){
-				equipment.currentStatus = Status.UNDERMAINTENANCE
+			if(!equipment.currentStatus.equals(Status.UNDERMAINTENANCE)){			
 				newEquipmentStatus(now(), changedBy, Status.UNDERMAINTENANCE, equipment, [:])
 			}
 		}
 		//Change Equipment Status When closing workorder
 		if(status == OrderStatus.CLOSEDFIXED){
-			 equipment.currentStatus = Status.OPERATIONAL
 			 workOrder.closedOn = now()
 			 newEquipmentStatus(now(), changedBy, Status.OPERATIONAL, equipment, [:])
 		}
 		if(status == OrderStatus.CLOSEDFORDISPOSAL){
-			equipment.currentStatus = Status.FORDISPOSAL
 			workOrder.closedOn = now()
 			newEquipmentStatus(now(), changedBy, Status.FORDISPOSAL, equipment, [:])
 		}		
@@ -646,19 +785,41 @@ public class Initializer {
 	}
 	
 	//Inventory
-	public static def newEquipment(def serialNumber,def purchaser,def donor,def donorName,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def registeredOn,def model,def dataLocation,def department, def type,def manufacture,def supplier,def currentStatus){
-		def equipment = new Equipment(serialNumber:serialNumber,purchaser:purchaser,donor:donor,donorName:donorName,obsolete:obsolete,room:room,purchaseCost:purchaseCost,currency:currency,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,expectedLifeTime:expectedLifeTime,department:department,type:type,manufacturer:manufacture,supplier:supplier,currentStatus:currentStatus);
+	public static def newEquipment(def serialNumber,def purchaser,def donor,def donorName,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def model,def dataLocation,def department, def type,def manufacture,def supplier,def currentStatus,def addedBy,def lastModifiedBy,def lastModifiedOn){
+		def equipment = new Equipment(
+			serialNumber:serialNumber,
+			purchaser:purchaser,
+			donor:donor,
+			donorName:donorName,
+			obsolete:obsolete,
+			room:room,
+			purchaseCost:purchaseCost,
+			currency:currency,
+			manufactureDate:manufactureDate,
+			purchaseDate:purchaseDate,
+			model:model,
+			dataLocation:dataLocation,
+			expectedLifeTime:expectedLifeTime,
+			department:department,
+			type:type,
+			manufacturer:manufacture,
+			supplier:supplier,
+			currentStatus:currentStatus,
+			addedBy:addedBy,
+			lastModifiedBy:lastModifiedBy,
+			lastModifiedOn:lastModifiedOn
+			);
 		Utils.setLocaleValueInMap(equipment,descriptions,"Descriptions")
-		equipment.genarateAndSetEquipmentCode()
 		return equipment.save(failOnError: true,flush:true)
 	}
 
 	public static def newEquipmentStatus(def dateOfEvent,def changedBy,def value, def equipment,def reasons){
-		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value,statusChangeDate:now())
+		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value)
 		Utils.setLocaleValueInMap(status,reasons,"Reasons")
 		equipment.addToStatus(status) 
 		equipment.save(failOnError:true,flush:true)
-		equipment.currentStatus = equipment.timeBasedStatus.status
+		equipment.currentStatus = value
+		equipment.lastModifiedBy = changedBy
 		equipment.save(failOnError:true,flush:true)
 		return status
 	}
@@ -688,14 +849,14 @@ public class Initializer {
 		def contact = newContact(addressDescriptions,contactName,email,phone,street,poBox)
 		return newWarranty(contact, startDate,sameAsSupplier,descriptions)
 	}
-		
-	public static def newEquipmentType(def code, def names,def descriptions, def observation, def addedOn, def lastModifiedOn,def expectedLifeTime = 12){
-		def type = new EquipmentType(code:code,observation:observation,addedOn:addedOn,lastModifiedOn:lastModifiedOn,expectedLifeTime:newPeriod(expectedLifeTime))
+	//@Deprecated have to remove the lastModifiedOn params	
+	public static def newEquipmentType(def code, def names,def descriptions, def observation, def lastModifiedOn,def expectedLifeTime = 12){
+		def type = new EquipmentType(code:code,observation:observation,expectedLifeTime:newPeriod(expectedLifeTime))
 		Utils.setLocaleValueInMap(type,names,"Names")
 		Utils.setLocaleValueInMap(type,descriptions,"Descriptions")
 		return type.save(failOnError: true)
 	}
-	
+
 	public static def newDepartment(def names,def code, def descriptions){
 		def department = new Department(code:code)
 		Utils.setLocaleValueInMap(department,names,"Names") 

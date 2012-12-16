@@ -44,17 +44,23 @@ class EquipmentStatusService {
 	
 	List<Equipment> getEquipmentStatusByEquipment(Equipment equipment, Map<String,String> params){
 		def criteria = EquipmentStatus.createCriteria()
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"statusChangeDate",order: params.order ?:"desc"){
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"dateCreated",order: params.order ?:"desc"){
 			eq("equipment",equipment)
 		}
 	}
 	
-	Equipment createEquipmentStatus(Date statusChangeDate,User changedBy,Status value, Equipment equipment,Date dateOfEvent, Map<String,String> reasons){
-		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value,equipment:equipment,statusChangeDate:statusChangeDate)
+	Equipment createEquipmentStatus(User changedBy,Status value, Equipment equipment,Date dateOfEvent, Map<String,String> reasons){
+		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value)
 		Utils.setLocaleValueInMap(status,reasons,"Reasons")
-		equipment.currentStatus=value
+		equipment.currentStatus = value
+		if(equipment.id){
+			//When updating an equipment
+			equipment.lastModifiedBy = changedBy
+		}
 		equipment.addToStatus(status)
-		return equipment.save(failOnError:true)
+		if(!equipment.currentStatus.equals(Status.DISPOSED))
+			equipment.save(failOnError:true, flush:true)
+		return equipment
 	}
 }
 

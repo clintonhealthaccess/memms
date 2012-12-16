@@ -28,6 +28,8 @@
 
 package org.chai.task
 
+import groovy.transform.EqualsAndHashCode;
+
 import java.util.Map;
 import java.util.Set;
 
@@ -40,7 +42,7 @@ import org.chai.memms.task.Exporter;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.memms.util.Utils;
-
+@EqualsAndHashCode(includes='id')
 class ExportFilter {
 
 	static hasMany = [calculationLocations:CalculationLocation,dataLocationTypes:DataLocationType]

@@ -31,10 +31,12 @@ import groovy.transform.EqualsAndHashCode;
 
 import org.chai.memms.util.Utils
 
-@EqualsAndHashCode
+@EqualsAndHashCode(includes='name')
 class Role {
     String name
 	String permissionString
+	Date dateCreated
+	Date lastUpdated
 	
 	static belongsTo = User
     static hasMany = [ users: User ]
@@ -56,6 +58,10 @@ class Role {
     static constraints = {
         name nullable: false, blank: false, unique: true
 		permissionString nullable: false, blank: false
+		lastUpdated nullable: true, validator:{
+			if(it != null) return (it <= new Date())
+		}
+
     }
 	static mapping = {
 		permissionString type: 'text'
@@ -67,5 +73,4 @@ class Role {
 	String toString() {
 		return name;
 	}
-
 }

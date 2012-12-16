@@ -32,7 +32,6 @@ import org.chai.memms.IntegrationTests;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus;
 import org.chai.memms.inventory.Equipment;
-import org.chai.memms.corrective.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
 import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
@@ -47,7 +46,7 @@ class WorkOrderStatusSpec extends IntegrationTests{
 		setupEquipment()
 		def user = newUser("user", "user")
 		def equipment = Equipment.findBySerialNumber(CODE(123))
-		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",addedOn:Initializer.now(),criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
 		when:
 		def workOrderStatus =  new WorkOrderStatus(workOrder:workOrder,status:OrderStatus.OPENATFOSA,changeOn:Initializer.now(),changedBy:user);
 		workOrder.addToStatus(workOrderStatus)
@@ -63,7 +62,7 @@ class WorkOrderStatusSpec extends IntegrationTests{
 		setupEquipment()
 		def user = newUser("user", "user")
 		def equipment =  Equipment.findBySerialNumber(CODE(123))
-		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",addedOn:Initializer.now(),criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
 		when:
 		def workOrderStatus =  new WorkOrderStatus(workOrder:workOrder,status:OrderStatus.OPENATFOSA,changeOn:Initializer.now(),changedBy:user);
 		workOrder.addToStatus(workOrderStatus)
