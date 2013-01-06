@@ -30,20 +30,13 @@ class CommentSpec  extends IntegrationTests{
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		def commentWithErrors = new Comment()
-		def expectedFieldErrors = ["content","writtenOn","writtenBy","workOrder"]
+		def expectedFieldErrors = ["content","writtenBy","workOrder"]
 
 		when://All required fields in
 		commentWithErrors.save()
 		then:
-		commentWithErrors.errors.fieldErrorCount == 4
+		commentWithErrors.errors.fieldErrorCount == 3
 		expectedFieldErrors.each{commentWithErrors.errors.hasFieldErrors(it)}
-		Comment.count() == 0
-
-		when://comment date should be before or equal to today
-		commentWithErrors = new Comment(content:"comment test", writtenOn:new Date().next(), writtenBy:user, workOrder:workOrder)
-		commentWithErrors.save()
-		then:
-		commentWithErrors.errors.hasFieldErrors("writtenOn") == true
 		Comment.count() == 0
 	}
 }

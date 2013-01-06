@@ -11,8 +11,8 @@ class EquipmentTypeSpec extends IntegrationTests{
 		setup:
 		def observation = Observation.USEDINMEMMS;
 		when:
-		Initializer.newEquipmentType(CODE(123),["en":"testName"],["en":"testObservations"],observation,Initializer.now(),Initializer.now())
-		def equipmentType = new EquipmentType(code:CODE(122),names:["en":"Accelerometers"],descriptions:["en":"used in memms"],observation:observation,addedOn:Initializer.now(),lastModifiedOn:Initializer.now())
+		Initializer.newEquipmentType(CODE(123),["en":"testName"],["en":"testObservations"],observation,Initializer.now())
+		def equipmentType = new EquipmentType(code:CODE(122),names:["en":"Accelerometers"],descriptions:["en":"used in memms"],observation:observation,lastModifiedOn:Initializer.now())
 		equipmentType.save(failOnError: true)
 		then:
 		EquipmentType.count() == 2
@@ -21,9 +21,9 @@ class EquipmentTypeSpec extends IntegrationTests{
 	def "can't create and save an equipment type without a code"() {
 		setup:
 		def observation = Observation.USEDINMEMMS;
-		Initializer.newEquipmentType(CODE(123), ["en":"Accelerometers"],["en":"used in memms"],observation,Initializer.now(),Initializer.now())
+		Initializer.newEquipmentType(CODE(123), ["en":"Accelerometers"],["en":"used in memms"],observation,Initializer.now())
 		when:
-		def equipmentType = new EquipmentType(names:["en":"Accelerometers"],descriptions:["en":"used in memms"],observation:observation,addedOn:Initializer.now(),lastModifiedOn:Initializer.now())
+		def equipmentType = new EquipmentType(names:["en":"Accelerometers"],descriptions:["en":"used in memms"],observation:observation,lastModifiedOn:Initializer.now())
 		equipmentType.save()
 		then:
 		EquipmentType.count() == 1
@@ -33,9 +33,9 @@ class EquipmentTypeSpec extends IntegrationTests{
 	def "can't create and save an equipment type with a duplicate code"() {
 		setup:
 		def observation = Observation.USEDINMEMMS;
-		Initializer.newEquipmentType(CODE(123), ["en":"Accelerometers"],["en":"used in memms"],observation,Initializer.now(),Initializer.now())
+		Initializer.newEquipmentType(CODE(123), ["en":"Accelerometers"],["en":"used in memms"],observation,Initializer.now())
 		when:
-		def equipmentType = new EquipmentType(code:CODE(123),names:["en":"Accelerometers"],descriptions:["en":"used in memms"],observation:observation,addedOn:Initializer.now(),lastModifiedOn:Initializer.now())
+		def equipmentType = new EquipmentType(code:CODE(123),names:["en":"Accelerometers"],descriptions:["en":"used in memms"],observation:observation,lastModifiedOn:Initializer.now())
 		equipmentType.save()
 		then:
 		EquipmentType.count() == 1

@@ -37,7 +37,13 @@
 			color: $primary
 			float: right
 			width: 75%
-	
+.week-days
+	ul
+		float: right
+		li
+			display: inline
+			span
+				font-weight: bold	
 .question-checkbox
 	li
 		clear: both
@@ -86,6 +92,7 @@
 .buttons
 	border-top: 1px solid #eee
 	padding: 15px 7px
+
 	
 button, input[type=submit], .next
 	background: $yes
@@ -515,7 +522,7 @@ form.search-form
 	.date
 		select
 			min-width: 50px
-	.date-picker
+	.date-picker,.time-picker,.date-time-picker
 		width: 132px !important
 	input[type=text], textarea
 		width: 320px
@@ -724,3 +731,19 @@ a.delete-row
 		width: 55px
 	label
 		width: auto
+.time-date
+	display: inline-block
+	width: 33%
+	label
+		width: auto
+//days of a weeks aligned in one line
+.week-days-options
+	display: inline-block
+	width: auto
+// text field made small
+.small-text-field
+	width: 133px !important
+.rows-wrapper
+	.row
+		float: none !important
+		display: inline-block !important

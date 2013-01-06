@@ -72,7 +72,7 @@ class NotificationEquipmentService {
 		}
 	}
 	//TODO refactor and rename
-	public List<NotificationEquipment> searchNotificition(String text,User user,Map<String, String> params) {
+	def searchNotificition(String text,User user,Map<String, String> params) {
 		def criteria = NotificationEquipment.createCriteria()
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(user)
@@ -82,7 +82,7 @@ class NotificationEquipmentService {
 		}
 	}
 	
-	public List<NotificationEquipment> filterNotifications(DataLocation dataLocation, Department department,User receiver,Date from, Date to,Boolean read, Map<String, String> params){
+	def filterNotifications(DataLocation dataLocation, Department department,User receiver,Date from, Date to,Boolean read, Map<String, String> params){
 		def criteria = NotificationEquipment.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocation)
@@ -90,9 +90,9 @@ class NotificationEquipmentService {
 			if(department)
 				eq("department",department)
 			if(from)
-				ge("writtenOn",Utils.getMinDateFromDateTime(from))
+				ge("dateCreated",Utils.getMinDateFromDateTime(from))
 			if(to)
-				le("writtenOn",Utils.getMaxDateFromDateTime(to))
+				le("dateCreated",Utils.getMaxDateFromDateTime(to))
 			if(receiver)
 				eq("receiver",receiver)
 			if(read!=null)

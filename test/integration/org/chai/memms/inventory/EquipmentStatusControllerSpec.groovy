@@ -23,14 +23,14 @@ class EquipmentStatusControllerSpec extends IntegrationTests{
 		equipmentStatusController = new EquipmentStatusController();
 		when:
 		equipmentStatusController.params.reason = "reason bha"
-		equipmentStatusController.params.current = true
-		equipmentStatusController.params.status="DISPOSED"
+		equipmentStatusController.params.status = "DISPOSED"
 		equipmentStatusController.params.dateOfEvent=Initializer.now()
 		equipmentStatusController.params."equipment.id" = equipment.id
 		equipmentStatusController.save()
 		then:
 		EquipmentStatus.count() == 1;
 		EquipmentStatus.findByStatus(Status.DISPOSED).status == Status.DISPOSED
+		equipment.timeBasedStatus.status == Status.DISPOSED			
 	}
 	
 	def "list equipment status"(){

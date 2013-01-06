@@ -14,11 +14,11 @@
 	<ul class="half">
 		<li>
 			<span class="label"><g:message code="equipment.type.added.on.label" /></span>
-			<span class="text">${Utils.formatDate(type?.addedOn)}</span>
+			<span class="text">${Utils.formatDate(type?.dateCreated)}</span>
 		</li>
 		<li>
 			<span class="label"><g:message code="equipment.type.last.modified.on.label" /></span>
-			<span class="text">${Utils.formatDate(type?.lastModifiedOn)}</span>
+			<span class="text">${Utils.formatDate(type?.lastUpdated)}</span>
 		</li>
 	</ul>
 	<input type="hidden" id="expectedLifeTime" value="${type?.expectedLifeTime?.numberOfMonths}"/> 

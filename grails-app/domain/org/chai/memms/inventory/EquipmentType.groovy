@@ -64,8 +64,8 @@ class EquipmentType {
 	Period expectedLifeTime
 	Observation observation
 	
-	Date addedOn
-	Date lastModifiedOn
+	Date dateCreated
+	Date lastUpdated
 	
 	static embedded = ["expectedLifeTime"]
 	static i18nFields = ["descriptions","names"]
@@ -79,8 +79,7 @@ class EquipmentType {
 		
 		expectedLifeTime nullable: true
 		
-		addedOn nullable: false, blank: false, validator:{it <= new Date()}
-		lastModifiedOn nullable: false, blank: false, validator:{it <= new Date()}
+		lastUpdated nullable: false, blank: false, validator:{it <= new Date()}
 		
 		observation nullable: false, inLIst:[Observation.USEDINMEMMS,Observation.RETIRED,Observation.TOODETAILED,Observation.NOTINSCOPE]
     }
@@ -88,10 +87,14 @@ class EquipmentType {
 	static mapping = {
 		table "memms_equipment_type"
 		version false
+		cache true
+	}
+
+	def beforeValidate(){
+		lastUpdated = new Date()
 	}
 	
 	String toString() {
 		return "EquipmentType[Id=" + id + "code="+code+"]";
 	}
-	
 }

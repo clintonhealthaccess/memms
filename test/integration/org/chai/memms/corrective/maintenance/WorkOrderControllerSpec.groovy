@@ -36,7 +36,6 @@ import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.inventory.EquipmentStatus;
 import org.chai.memms.inventory.EquipmentStatus.Status;
-import org.chai.memms.corrective.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
 import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus;
@@ -90,11 +89,13 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		setupSystemUser()
 		def user = User.findByUsername("systemUser")
 		def equipment = Equipment.findBySerialNumber(CODE(123))
-		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
-		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,Initializer.now(),false)
-		equipment = equipmentStatusService.createEquipmentStatus(Initializer.now(),user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),[:])
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,
+			currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED,
+			)
 		equipment.addToWorkOrders(workOrder)
 		equipment.save(failOnError:true)
+		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,false)
+		equipmentStatusService.createEquipmentStatus(user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),[:])
 		when:
 		workOrderController = new WorkOrderController()
 		workOrderController.params."id" = workOrder.id+''
@@ -130,12 +131,13 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		setupSystemUser()
 		def user = User.findByUsername("systemUser")
 		def equipment = Equipment.findBySerialNumber(CODE(123))
-		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
-		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,Initializer.now(),false)
-		equipment = equipmentStatusService.createEquipmentStatus(Initializer.now(),user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),[:])
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,
+			currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
 		equipment.addToWorkOrders(workOrder)
 		equipment.save(failOnError:true)
-		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATMMC,user,Initializer.now(),true)
+		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,false)
+		equipmentStatusService.createEquipmentStatus(user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),[:])
+		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATMMC,user,true)
 		when:
 		workOrderController = new WorkOrderController()
 		workOrderController.params."id" = workOrder.id+''
@@ -170,13 +172,15 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		setupSystemUser()
 		def user = User.findByUsername("systemUser")
 		def equipment = Equipment.findBySerialNumber(CODE(123))
-		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
-		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,Initializer.now(),false)
-		equipment = equipmentStatusService.createEquipmentStatus(Initializer.now(),user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),[:])
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,
+			currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
 		equipment.addToWorkOrders(workOrder)
 		equipment.save(failOnError:true)
-		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATMMC,user,Initializer.now(),true)
-		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,Initializer.now(),false)
+		
+		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,false)
+		equipmentStatusService.createEquipmentStatus(user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),[:])
+		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATMMC,user,true)
+		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,false)
 		
 		when://CLOSEDFIXED
 		workOrderController = new WorkOrderController()
@@ -188,15 +192,15 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		then:
 		WorkOrder.count()==1
 		WorkOrderStatus.count() == 4
-		workOrder.criticality == Criticality.NORMAL
-		workOrder.currentStatus == OrderStatus.CLOSEDFIXED
-		workOrder.timeBasedStatus == WorkOrderStatus.list()[3]
-		workOrder.timeBasedStatus.status == OrderStatus.CLOSEDFIXED
-		workOrder.status.asList().size() == 4
-		workOrder.status.asList().contains(workOrder.timeBasedStatus)
-		workOrder.closedOn !=null
+		WorkOrder.list()[0].criticality == Criticality.NORMAL
+		WorkOrder.list()[0].currentStatus == OrderStatus.CLOSEDFIXED
+		WorkOrder.list()[0].timeBasedStatus == WorkOrderStatus.list()[3]
+		WorkOrder.list()[0].timeBasedStatus.status == OrderStatus.CLOSEDFIXED
+		WorkOrder.list()[0].status.size() == 4
+		WorkOrder.list()[0].status.asList().contains(workOrder.timeBasedStatus)
+		WorkOrder.list()[0].closedOn !=null
 		//check equipment update
-		equipment.status.asList().size() == 2
+		equipment.status.size() == 2
 		equipment.currentStatus == Status.OPERATIONAL
 		equipment.timeBasedStatus.status == Status.OPERATIONAL
 		equipment.workOrders.size() ==1
@@ -210,13 +214,15 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		setupSystemUser()
 		def user = User.findByUsername("systemUser")
 		def equipment = Equipment.findBySerialNumber(CODE(123))
-		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
-		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,Initializer.now(),false)
-		equipment = equipmentStatusService.createEquipmentStatus(Initializer.now(),user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),[:])
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,
+			currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED,
+			)
 		equipment.addToWorkOrders(workOrder)
-		equipment.save(failOnError:true)
-		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATMMC,user,Initializer.now(),true)
-		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,Initializer.now(),false)
+		equipment.save(failOnError:true,flush:true)
+		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,false)
+		equipmentStatusService.createEquipmentStatus(user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),[:])
+		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATMMC,user,true)
+		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,false)
 	
 		when://CLOSEDFORDISPOSAL
 		workOrderController = new WorkOrderController()
@@ -228,15 +234,15 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		then:
 		WorkOrder.count()==1
 		WorkOrderStatus.count() == 4
-		workOrder.criticality == Criticality.NORMAL
-		workOrder.currentStatus == OrderStatus.CLOSEDFORDISPOSAL
-		workOrder.timeBasedStatus == WorkOrderStatus.list()[3]
-		workOrder.timeBasedStatus.status == OrderStatus.CLOSEDFORDISPOSAL
-		workOrder.status.asList().size() == 4
-		workOrder.status.asList().contains(workOrder.timeBasedStatus)
-		workOrder.closedOn !=null
+		WorkOrder.list()[0].criticality == Criticality.NORMAL
+		WorkOrder.list()[0].currentStatus == OrderStatus.CLOSEDFORDISPOSAL
+		WorkOrder.list()[0].timeBasedStatus == WorkOrderStatus.list()[3]
+		WorkOrder.list()[0].timeBasedStatus.status == OrderStatus.CLOSEDFORDISPOSAL
+		WorkOrder.list()[0].status.size() == 4
+		WorkOrder.list()[0].status.asList().contains(workOrder.timeBasedStatus)
+		WorkOrder.list()[0].closedOn !=null
 		//check equipment update
-		equipment.status.asList().size() == 2
+		equipment.status.size() == 2
 		equipment.currentStatus == Status.FORDISPOSAL
 		equipment.timeBasedStatus.status == Status.FORDISPOSAL
 		equipment.workOrders.size() ==1
@@ -251,14 +257,17 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		setupSystemUser()
 		def user = User.findByUsername("systemUser")
 		def equipment = Equipment.findBySerialNumber(CODE(123))
-		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
-		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,Initializer.now(),false)
-		equipment = equipmentStatusService.createEquipmentStatus(Initializer.now(),user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),[:])
+		
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,
+			currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED,
+			)
 		equipment.addToWorkOrders(workOrder)
-		equipment.save(failOnError:true)
-		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.CLOSEDFIXED,user,Initializer.now(),false)
-		equipment = equipmentStatusService.createEquipmentStatus(Initializer.now(),user,Status.OPERATIONAL,equipment,Initializer.now(),[:])
-		equipment.save(failOnError:true)
+		equipment.save(failOnError:true,flush:true)
+		
+		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,false)
+		equipmentStatusService.createEquipmentStatus(user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),[:])
+		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.CLOSEDFIXED,user,false)
+		equipmentStatusService.createEquipmentStatus(user,Status.OPERATIONAL,equipment,Initializer.now(),[:])
 		
 		when:
 		workOrderController = new WorkOrderController()
@@ -278,4 +287,6 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		
 		
 	}
+	
+	
 }

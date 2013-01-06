@@ -44,6 +44,7 @@ class Warranty{
 	static embedded = ["contact","numberOfMonth"]
 	
 	static constraints = {
+		importFrom Contact
 		startDate nullable:false, validator:{it <= new Date()} 
 		descriptions nullable: true, blank: true
 		contact nullable: true,validator:{val, obj ->

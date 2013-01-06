@@ -56,16 +56,30 @@ modules = {
 		resource url: '/js/jquery/chosen/chosen.css', bundle: 'core'
 	}
 	
-	datepicker {
+	jqueryui {
 		dependsOn 'jquery'
-		resource url: '/js/jquery/jquery-ui/css/cupertino/jquery-ui-1.8.24.custom.css', bundle: 'core'
-		resource url: '/js/jquery/jquery-ui/js/jquery-ui-1.8.24.custom.min.js', bundle: 'core'
 		
+		resource url: '/js/jquery/jquery-ui/css/cupertino/jquery-ui-1.9.2.custom.min.css', bundle: 'core'
+		resource url: '/js/jquery/jquery-ui/css/timepicker.css', bundle: 'core'
+		resource url: '/js/jquery/jquery-ui/js/jquery-ui-1.9.2.custom.min.js', bundle: 'core'
+		resource url: '/js/jquery/jquery-ui/js/jquery-ui-timepicker-addon.js', bundle: 'core'
+		resource url: '/js/jquery/jquery-ui/js/jquery-ui-sliderAccess.js', bundle: 'core'
+	}
+	
+	fullCalendar{
+		dependsOn 'jquery'
+		resource url: '/js/jquery/jquery-ui/css/fullcalendar.css', bundle: 'core'
+		resource url: '/js/jquery/jquery-ui/js/fullcalendar.min.js', bundle: 'core'
+	}
+	
+	calendar{
+		dependsOn 'fullCalendar'
+		resource url: '/css/calendar.css', bundle: 'core'
+		resource url: '/js/calendar.js', bundle: 'core'
 	}
 	
 	fieldselection {
 		dependsOn 'jquery'
-
 		resource url: '/js/jquery/fieldselection/jquery.fieldselection.js', bundle: 'core'
 	}
 	
@@ -85,7 +99,7 @@ modules = {
 	}
 
 	form {
-		dependsOn 'jquery,cluetip,fieldselection,datepicker'
+		dependsOn 'jquery,cluetip,fieldselection,jqueryui'
 
 		resource url: '/js/jquery/form/jquery.form.js', bundle: 'core'
 		resource url: '/js/form-util.js', bundle: 'core'

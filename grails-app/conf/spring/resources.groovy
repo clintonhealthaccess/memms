@@ -1,5 +1,7 @@
 import org.chai.memms.DatePropertyEditorRegistrar;
 import org.chai.memms.PeriodPropertyEditorRegistrar;
+import org.chai.memms.TimeSpendPropertyEditorRegistrar;
+import org.chai.memms.TimeDatePropertyEditorRegistrar;
 import org.springframework.beans.PropertyEditorRegistrar;
 
 /**
@@ -38,9 +40,16 @@ beans = {
 	
 	//This is so that we can save the user who makes a task. The task plugin doesn't depend on shiro but on core platform security plugin
 	grailsSecurityBridge(org.chai.task.ShiroSecurityBridge) {
+	
 	}
 	
-	periodPropertyEditorRegistrar(PeriodPropertyEditorRegistrar) {
-		//messageSource = ref('messageSource')
-	 }
+	periodPropertyEditorRegistrar(PeriodPropertyEditorRegistrar){
+		
+	}
+	timeSpendPropertyEditorRegistrar(TimeSpendPropertyEditorRegistrar){
+		
+	}
+	timeDatePropertyEditorRegistrar(TimeDatePropertyEditorRegistrar){
+		
+	}
 }

@@ -35,7 +35,7 @@ import org.chai.location.Location;
 import org.chai.location.LocationLevel;
 import org.chai.memms.util.Utils
 
-@EqualsAndHashCode
+@EqualsAndHashCode(includes='username')
 class User {
 	def locationService
 	enum UserType{
@@ -67,12 +67,15 @@ class User {
 	String uuid
     String passwordHash = ''
 	String permissionString = ''
+	Date dateCreated
+	Date lastUpdated
 	Boolean confirmed = false
 	Boolean active = false
 	String defaultLanguage	
 	String firstname, lastname, organisation, phoneNumber
 	CalculationLocation location
 	UserType userType
+
 	
 	static hasMany = [roles: Role]
 	
@@ -109,34 +112,39 @@ class User {
 		if(calculationLocation instanceof Location && location instanceof DataLocation) return false
 		if(calculationLocation == location) return true
 		//This takes care of technicians to be able to access the dataLocations that they manage
-		if(userType == UserType.TECHNICIANDH && location instanceof DataLocation && calculationLocation instanceof DataLocation && (calculationLocation as DataLocation).managedBy != null) return ((DataLocation)calculationLocation).managedBy == location
-		
-		return location.instanceOf(Location) ? calculationLocation.getParentOfLevel(location.level) == location : calculationLocation.getParentOfLevel(location.location.level) == location
-		
+		if(userType == UserType.TECHNICIANDH && location instanceof DataLocation && calculationLocation instanceof DataLocation && (calculationLocation as DataLocation).managedBy != null) 
+			return ((DataLocation)calculationLocation).managedBy == location
+		return (location.instanceOf(Location)) ? calculationLocation.getParentOfLevel(location.level) == location : calculationLocation.getParentOfLevel(location.location.level) == location
 		return false
 	}
-	
+
 	def canActivate() {
 		return confirmed == true && active == false
 	}
+
+
 	
     static constraints = {
 		permissionString nullable: false
-		email(email:true, unique: true, nullable: true)
-        username(nullable: false, blank: false, unique: true)
-		uuid(nullable: false, blank: false, unique: true)
-		firstname(nullable: false, blank: false)
-		lastname(nullable: false, blank: false)
-		phoneNumber(phoneNumber: true, nullable: false, blank: false)
-		organisation(nullable: false, blank: false)
-		defaultLanguage(nullable: true)
-		userType(nullable: false, blank: false)
-		location(nullable: true)
-		registrationToken(nullable: true)
-		passwordToken(nullable: true)
-		active(validator: {val, obj ->
+		email email:true, unique: true, nullable: true 
+        username nullable: false, blank: false, unique: true 
+		uuid nullable: false, blank: false, unique: true 
+		firstname nullable: false, blank: false 
+		lastname nullable: false, blank: false 
+		phoneNumber phoneNumber: true, nullable: false, blank: false 
+		organisation nullable: false, blank: false 
+		defaultLanguage nullable: true 
+		userType nullable: false, blank: false 
+		location nullable: true 
+		registrationToken nullable: true 
+		passwordToken nullable: true 
+		active validator: {val, obj ->
+			//TODO fix this
 			//return val ? obj.location != null && (obj.permissionString || obj.roles.size() > 0) : true
-		})
+		} 
+		lastUpdated nullable: true, validator:{
+			if(it != null) return (it <= new Date())
+		}
     }
 	
 	static mapping = {
