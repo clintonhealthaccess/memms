@@ -27,6 +27,9 @@
  */
 package org.chai.memms.security
 
+import groovy.transform.EqualsAndHashCode;
+
+@EqualsAndHashCode(includes='id')
 class RegistrationToken {
 
 	String token

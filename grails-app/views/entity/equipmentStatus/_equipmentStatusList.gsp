@@ -24,7 +24,7 @@
     			</td>
     			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
     			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
-    			<td>${Utils.formatDateWithTime(status?.statusChangeDate)}</td>
+    			<td>${Utils.formatDateWithTime(status?.dateCreated)}</td>
     			<td>${(status==equipment.timeBasedStatus)? '\u2713':''}</td>
     		</tr>
    		</g:each>

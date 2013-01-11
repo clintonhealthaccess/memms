@@ -42,7 +42,7 @@ class EquipmentTypeService {
 	static transactional = true
 	def languageService;
 		
-	public List<EquipmentType> searchEquipmentType(String text,Observation observation, Map<String, String> params) {
+	public def searchEquipmentType(String text,Observation observation, Map<String, String> params) {
 		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescritpion = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = EquipmentType.createCriteria()

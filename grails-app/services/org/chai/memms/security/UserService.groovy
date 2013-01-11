@@ -73,25 +73,24 @@ class UserService {
 		}
 	}
 	
-	List<User> getActiveUserByTypeAndLocation(UserType userType, CalculationLocation location, Map<String, String> params){
-		log.debug("filter criterias usertype: " + userType + ", location: " + location)
+	List<User> getActiveUserByTypeAndLocation(List<UserType> userTypes, CalculationLocation location, Map<String, String> params){
 		def criteria = User.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			eq ("active", true)
 			if(location != null)
 				eq('location',location)
-			if(userType != null){
-					eq ("userType", userType)
+			if(userTypes != null && userTypes.size()!=0){
+					inList ("userType", userTypes)
 			}
 		}
 	}
 	
 	List<User> getNotificationWorkOrderGroup(WorkOrder workOrder,User sender,Boolean escalate){
 		def users = []
-		if(escalate) users.addAll(getActiveUserByTypeAndLocation(UserType.TECHNICIANMMC,null, [:]))
+		if(escalate) users.addAll(getActiveUserByTypeAndLocation([UserType.TECHNICIANMMC],null, [:]))
 		else if(sender.userType != UserType.TECHNICIANDH){
-				if(workOrder.equipment.dataLocation.managedBy instanceof DataLocation) users =  getActiveUserByTypeAndLocation(UserType.TECHNICIANDH,workOrder.equipment.dataLocation.managedBy, [:])
-				else users =  getActiveUserByTypeAndLocation(UserType.TECHNICIANDH,workOrder.equipment.dataLocation, [:])
+				if(workOrder.equipment.dataLocation.managedBy instanceof DataLocation) users =  getActiveUserByTypeAndLocation([UserType.TECHNICIANDH],workOrder.equipment.dataLocation.managedBy, [:])
+				else users =  getActiveUserByTypeAndLocation([UserType.TECHNICIANDH],workOrder.equipment.dataLocation, [:])
 		}
 		if(!users.contains( workOrder.addedBy )) users.add(workOrder.addedBy)
 		if(users.contains( sender )) users.remove(sender)
@@ -103,9 +102,9 @@ class UserService {
 		def users;
 		
 		if(dataLocation.managedBy instanceof DataLocation){
-			users =  getActiveUserByTypeAndLocation(UserType.TECHNICIANDH,dataLocation.managedBy, [:])
+			users =  getActiveUserByTypeAndLocation([UserType.TECHNICIANDH],dataLocation.managedBy, [:])
 		}
-		else users =  getActiveUserByTypeAndLocation(UserType.TECHNICIANDH,dataLocation, [:])
+		else users =  getActiveUserByTypeAndLocation([UserType.TECHNICIANDH],dataLocation, [:])
 		
 		if(log.isDebugEnabled()) log.debug("Users in notificationEquipment group: " + users)
 		return users

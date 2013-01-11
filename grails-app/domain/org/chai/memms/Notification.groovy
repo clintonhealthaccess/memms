@@ -40,14 +40,13 @@ import org.chai.memms.security.User;
 abstract class Notification {
 	User sender
 	User receiver
-	Date writtenOn
+	Date dateCreated
 	String content
 	Boolean read = false
 	
 	static constraints ={
 		sender nullable: false
 		receiver nullable: false 
-		writtenOn nullable: false, validator:{it <=new Date()}
 		content nullable:false, blank:false
 		read nullable: false
 	}
@@ -55,7 +54,7 @@ abstract class Notification {
 		table "memms_notification_abstract"
 		version false
 		content type:"text"
-		tablePerSubclass true
+		tablePerHierarchy false
 		cache true
 		//Do not remove this as read is reserved keyword in MySQL
 		read column:"notification_read"

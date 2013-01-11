@@ -12,7 +12,7 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 	def "can search an equipment type by code"() {
 		setup:
 		def observation = Observation.USEDINMEMMS;
-		Initializer.newEquipmentType(CODE(123),["en":"testName"],["en":"testObservations"],observation,Initializer.now(),Initializer.now())
+		Initializer.newEquipmentType(CODE(123),["en":"testName"],["en":"testObservations"],observation,Initializer.now())
 		when:
 		List<EquipmentType> equipmentTypes = equipmentTypeService.searchEquipmentType(CODE(123),null,[:])
 		then:
@@ -23,7 +23,7 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 	def "can search an equipment type by name"() {
 		setup:
 		def observation = Observation.USEDINMEMMS;
-		Initializer.newEquipmentType(CODE(123),["en":"test Name"],["en":"testObservations"],observation,Initializer.now(),Initializer.now())
+		Initializer.newEquipmentType(CODE(123),["en":"test Name"],["en":"testObservations"],observation,Initializer.now())
 		when:
 		List<EquipmentType> equipmentTypes = equipmentTypeService.searchEquipmentType("Na",null,[:])
 		then:
@@ -34,7 +34,7 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 	def "can search an equipment type by observation"() {
 		setup:
 		def observation = Observation.USEDINMEMMS;
-		Initializer.newEquipmentType(CODE(123),["en":"test Name"],["en":"testObservations"],observation,Initializer.now(),Initializer.now())
+		Initializer.newEquipmentType(CODE(123),["en":"test Name"],["en":"testObservations"],observation,Initializer.now())
 		when:
 		List<EquipmentType> equipmentTypes = equipmentTypeService.searchEquipmentType("used",null,[:])
 		then:
@@ -44,8 +44,8 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 	
 	def "can search an equipment type by specified observation"() {
 		setup:
-		Initializer.newEquipmentType(CODE(123),["en":"retired equipment"],["en":"retired equipment Type"],Observation.RETIRED,Initializer.now(),Initializer.now())
-		Initializer.newEquipmentType(CODE(1234),["en":"test Name"],["en":"testObservations"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+		Initializer.newEquipmentType(CODE(123),["en":"retired equipment"],["en":"retired equipment Type"],Observation.RETIRED,Initializer.now())
+		Initializer.newEquipmentType(CODE(1234),["en":"test Name"],["en":"testObservations"],Observation.USEDINMEMMS,Initializer.now())
 		when:
 		List<EquipmentType> equipmentTypes = EquipmentType.list()
 		List<EquipmentType> searchEquipmentTypes = equipmentTypeService.searchEquipmentType("test",Observation.USEDINMEMMS,[:])
@@ -57,8 +57,8 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 	
 	def "can search an equipment type by specified observation only"() {
 		setup:
-		Initializer.newEquipmentType(CODE(123),["en":"retired equipment"],["en":"retired equipment Type"],Observation.RETIRED,Initializer.now(),Initializer.now())
-		Initializer.newEquipmentType(CODE(1234),["en":"test Name"],["en":"testObservations"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+		Initializer.newEquipmentType(CODE(123),["en":"retired equipment"],["en":"retired equipment Type"],Observation.RETIRED,Initializer.now())
+		Initializer.newEquipmentType(CODE(1234),["en":"test Name"],["en":"testObservations"],Observation.USEDINMEMMS,Initializer.now())
 		when:
 		List<EquipmentType> equipmentTypes = EquipmentType.list()
 		List<EquipmentType> searchEquipmentTypes = equipmentTypeService.searchEquipmentType("",Observation.RETIRED,[:])

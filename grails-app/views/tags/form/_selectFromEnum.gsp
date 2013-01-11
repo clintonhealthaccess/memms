@@ -1,6 +1,6 @@
 <div class="row ${hasErrors(bean:bean,field:field,'errors')}">
-	<label for="${name}">${label}</label>
-	<select name="${name}" ${readonly?'disabled="disabled"':''}>
+	<label for="${name}">${label} :</label>
+	<select name="${name}">
 		<g:each in="${values}" var="enume">
 			<option value="${enume.key}" ${enume.key+''==fieldValue(bean:bean, field:field+'.key')+''?'selected="selected"':''}>
 				${message(code: enume?.messageCode+'.'+enume?.name)}

@@ -1,5 +1,5 @@
 /**
- *  nice input fields  
+ *  Nice input fields  
  */
 $(document).delegate('input[type="text"],textarea','focus',function() {
 	$(this).removeClass("idle-field completed-field").addClass("focus-field");

@@ -27,6 +27,8 @@
  */
 package org.chai.memms.corrective.maintenance
 
+import groovy.transform.EqualsAndHashCode;
+
 import org.chai.memms.security.User;
 
 /**
@@ -47,7 +49,7 @@ public class WorkOrderStatus {
 		String getKey() { return name() }
 	}
 	
-	Date changeOn
+	Date dateCreated
 	User changedBy
 	OrderStatus status
 	Boolean escalation = false
@@ -59,7 +61,6 @@ public class WorkOrderStatus {
 	}
 	
 	static constraints = {
-		changeOn nullable: false, validator:{it <= new Date()}
 		status nullable: false, inList:[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC,OrderStatus.CLOSEDFIXED,OrderStatus.CLOSEDFORDISPOSAL]
 		escalation validator:{ val, obj ->
 			def valid = true
@@ -72,30 +73,5 @@ public class WorkOrderStatus {
 	@Override
 	public String toString() {
 		return "WorkOrderStatus [id= " + id + " status= "+status+"]";
-	}
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		WorkOrderStatus other = (WorkOrderStatus) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
 	}
 }

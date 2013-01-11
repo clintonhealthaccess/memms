@@ -38,21 +38,19 @@ class CommentService {
 	
 	static transactional = true
 	
-	Comment createComment(WorkOrder workOrder, User writtenBy, Date writtenOn, String content){
-		    Comment comment = new Comment(writtenBy: writtenBy, writtenOn: writtenOn, content: content )
+	Comment createComment(WorkOrder workOrder, User writtenBy, String content){
+		    Comment comment = new Comment(writtenBy: writtenBy, content: content )
 			workOrder.addToComments(comment)
-			workOrder.lastModifiedOn = writtenOn
 			workOrder.lastModifiedBy = writtenBy
 			workOrder.save(failOnError: true)	
 			return comment	
 	}
 	
-	WorkOrder deleteComment(Comment comment,User user,Date now){
+	WorkOrder deleteComment(Comment comment,User user){
 		WorkOrder workOrder = comment.workOrder
 		workOrder.removeFromComments(comment)
-		workOrder.lastModifiedOn = now
 		workOrder.lastModifiedBy = user
 		comment.delete()
-		return workOrder.save(failOnError:true,flush:true)	
+		return workOrder.save(failOnError:true)	
 	}
 }

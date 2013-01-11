@@ -2,16 +2,17 @@
 	<thead>
 		<tr>
 			<th/>
-			<g:sortableColumn property="code" defaultOrder="asc" title="${message(code: 'equipment.code.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="type" defaultOrder="asc" title="${message(code: 'equipment.type.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="model" defaultOrder="asc" title="${message(code: 'equipment.model.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="code"  title="${message(code: 'equipment.code.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="type"  title="${message(code: 'equipment.type.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="model"  title="${message(code: 'equipment.model.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<th><g:message code="location.label"/></th>
-			<g:sortableColumn property="currentStatus" defaultOrder="asc" title="${message(code: 'equipment.status.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="obsolete" defaultOrder="asc" title="${message(code: 'equipment.obsolete.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="manufacturer" defaultOrder="asc" title="${message(code: 'provider.type.manufacturer')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="supplier" defaultOrder="asc" title="${message(code: 'provider.type.supplier')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="purchaser" defaultOrder="asc" title="${message(code: 'equipment.purchaser.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="currentStatus"  title="${message(code: 'equipment.status.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="obsolete"  title="${message(code: 'equipment.obsolete.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="purchaser"  title="${message(code: 'equipment.purchaser.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<th><g:message code="work.order.label"/></th>
+			<th><g:message code="preventive.order.label"/></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -56,6 +57,11 @@
 				<td>
 					<a href="${createLinkWithTargetURI(controller:'workOrderView', action:'list', params:['equipment.id': equipment?.id])}" title="${message(code: 'work.order.see.list.label')}" class="tooltip">
   	    				${equipment.workOrders?.size()}
+  	    			</a>
+				</td>
+				<td>
+					<a href="${createLinkWithTargetURI(controller:'preventiveOrderView', action:'list', params:['equipment.id': equipment?.id])}" title="${message(code: 'preventive.order.see.list.label')}" class="tooltip">
+  	    				${equipment.preventiveOrders?.size()}
   	    			</a>
 				</td>
 			</tr>
