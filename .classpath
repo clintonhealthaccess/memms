@@ -305,6 +305,6 @@
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.apache.tomcat.embed/tomcat-embed-core/jars/tomcat-embed-core-7.0.27.jar"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.apache.tomcat.embed/tomcat-embed-jasper/jars/tomcat-embed-jasper-7.0.27.jar"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.apache.tomcat.embed/tomcat-embed-logging-log4j/jars/tomcat-embed-logging-log4j-7.0.27.jar"/>
-	<classpathentry kind="lib" path="/Users/jeankahigiso/.grails/2.1.0/projects/memms/plugins/yui-minify-resources-0.1.5/lib/yuicompressor-2.4.7.jar"/>
+	<classpathentry kind="lib" path="/home/aphrorwa/yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar"/>
 	<classpathentry kind="output" path="target-eclipse/classes"/>
 </classpath>

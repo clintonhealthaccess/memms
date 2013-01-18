@@ -56,7 +56,6 @@ import org.chai.memms.security.User.UserType;
  */
 class WorkOrderController extends AbstractEntityController{
 	
-	def grailsApplication
 	def locationService
 	def equipmentService
 	def equipmentStatusService

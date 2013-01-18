@@ -81,6 +81,7 @@ public abstract class AbstractController {
 	}
 	
 	def hasAccess(CalculationLocation location){
+	//TO BE REVIEWED BY APHRODICE BECAUSE IT MAKES ERRORS WHILE TESTING
 		if(!user.canAccessCalculationLocation(location)) response.sendError(403)
 	}
 }
