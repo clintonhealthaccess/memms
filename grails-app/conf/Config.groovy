@@ -194,9 +194,6 @@ site.admin.email = "memms@dhsst.org"
 site.contact.email = "memms@dhsst.org"
 site.from.email = "no-reply@dhsst.org"
 
-
-
-site.datalocationtype.checked=["District Hospital","Health Center"]
 location.sector.skip.level=["Sector"]
 site.possible.currency = ["":"NONE","RWF":"RWF","USD":"USD","EUR":"EUR"]
 

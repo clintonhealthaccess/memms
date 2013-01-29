@@ -32,6 +32,7 @@ import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests;
 import org.chai.location.DataLocationType
 import org.chai.location.Location
+import java.util.HashSet
 
 class InventoryServiceSpec extends IntegrationTests{
 	def inventoryService
@@ -49,7 +50,7 @@ class InventoryServiceSpec extends IntegrationTests{
 		Initializer.createUsers()
 		Initializer.createInventoryStructure()
 		
-		def types = grailsApplication.config.site.datalocationtype.checked.collect{ DataLocationType.findByCode(it) }.toSet()
+		def types = new HashSet(DataLocationType.findAllByDefaultSelected(true))
 		when:
 		def inventories = inventoryService.getInventoryByLocation(Location.findByCode('Burera'),types,adaptParamsForList())
 		then:

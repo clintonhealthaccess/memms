@@ -158,7 +158,7 @@ class WorkOrderService {
 		}
 		else
 		{
-			location.collectDataLocations(null, null).each{
+			location.collectDataLocations(null).each{
 				dataLocations.add(it)
 				if(it.manages) dataLocations.addAll(it.manages)
 			}

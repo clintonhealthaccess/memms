@@ -80,6 +80,8 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
+	    build ":tomcat:$grailsVersion"
+    
         compile ":hibernate:$grailsVersion"
 		compile ":mail:1.0"
         compile ":jquery:1.7.1"
@@ -92,9 +94,8 @@ grails.project.dependency.resolution = {
 		compile ":mail:1.0"
 		compile ":i18n-fields:0.6.1-CHAI"
 		compile ":yui-minify-resources:0.1.5"
-        build ":tomcat:$grailsVersion"
 		compile ":rabbitmq-tasks:0.5.3-SNAPSHOT"
-		compile ":chai-locations:0.4-CHAI"
+		compile ":chai-locations:0.5.1-CHAI"
 		compile ":build-info-tag:0.3.1"
 		//compile ':cloud-foundry:1.2.3'
 		

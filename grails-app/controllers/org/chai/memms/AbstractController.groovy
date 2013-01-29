@@ -74,7 +74,7 @@ public abstract class AbstractController {
 		}
 		
 		if(dataLocationTypes == null || dataLocationTypes.empty){
-			dataLocationTypes.addAll(grailsApplication.config.site.datalocationtype.checked.collect{ DataLocationType.findByCode(it) } - null)
+			dataLocationTypes.addAll(DataLocationType.findAllByDefaultSelected(true))
 		}
 		
 		return dataLocationTypes.sort()

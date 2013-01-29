@@ -18,6 +18,11 @@
 		
   		<g:input name="code" label="${message(code:'entity.code.label')}" bean="${dataLocationType}" field="code"/>
 		
+		<div class="row">
+			<label><g:message code="datalocationtype.defaultselected.label"/></label>
+			<g:checkBox name="defaultSelected" value="${dataLocationType.defaultSelected}" />
+		</div>
+		
   		<g:if test="${dataLocationType.id != null}">
   			<input type="hidden" name="id" value="${dataLocationType.id}"></input>
   		</g:if>

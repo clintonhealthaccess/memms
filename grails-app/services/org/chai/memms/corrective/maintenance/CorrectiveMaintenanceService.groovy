@@ -62,7 +62,7 @@ class CorrectiveMaintenanceService {
 		if(log.isDebugEnabled()) log.debug("getCorrectiveMaintenancesByLocation url params: "+params)
 		List<CorrectiveMaintenance> correctiveMaintenances = []
 		Set<LocationLevel> skipLevels = getSkipLocationLevels()
-		for(DataLocation dataLocation : location.collectDataLocations(skipLevels,types)){
+		for(DataLocation dataLocation : location.collectDataLocations(types)){
 			correctiveMaintenances.add(new CorrectiveMaintenance(dataLocation:dataLocation,workOrderCount:workOrderService.filterWorkOrders(dataLocation,null,null, null, null,null,[:]).size()))
 		}
 		

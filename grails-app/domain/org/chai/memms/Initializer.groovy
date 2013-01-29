@@ -713,13 +713,13 @@ public class Initializer {
 	
 	//Location
 	public static def newDataLocationType(def names, def code) {
-		def dataLocationType = new DataLocationType(code: code)
+		def dataLocationType = new DataLocationType(code: code, defaultSelected: true)
 		Utils.setLocaleValueInMap(dataLocationType,names,"Names")
 		return dataLocationType.save(failOnError: true)
 	}
 	
 	public static def newLocationLevel(def names, def code, def order) {
-		def locationLevel = new LocationLevel(code: code,order:order)
+		def locationLevel = new LocationLevel(code: code, order:order)
 		Utils.setLocaleValueInMap(locationLevel,names,"Names")
 		return locationLevel.save(failOnError: true)
 	}
