@@ -36,6 +36,7 @@ import org.chai.memms.exports.EquipmentTypeExport;
 import org.chai.memms.imports.FileImporter;
 import org.chai.memms.imports.ImporterErrorManager;
 import org.chai.memms.util.Utils;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 class EquipmentTypeImportTask extends ImportTask {
 
@@ -44,7 +45,8 @@ class EquipmentTypeImportTask extends ImportTask {
 	def messageSource
 	
 	String getInformation() {
-		return messageSource.getMessage(code: 'equipment.type.label') + '<br/>'+ message(code:'import.file.label')+': '+getInputFilename()
+		def informLabel = messageSource.getMessage('equipment.type.label', new Object[0], LocaleContextHolder.getLocale())
+		return informLabel + '<br/>'+ messageSource.getMessage('import.file.label', new Object[0], LocaleContextHolder.getLocale())
 	}
 	
 	FileImporter getImporter(ImporterErrorManager errorManager) {

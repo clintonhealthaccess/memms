@@ -33,12 +33,14 @@ import java.util.Map;
 import org.chai.memms.exports.EquipmentTypeExport;
 import org.chai.memms.task.Exporter;
 import org.chai.memms.util.Utils;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 class EquipmentTypeExportTask extends DataExportTask {
+	def messageSource
 	
 	String getInformation() {
-		//TODO find out why the message is not working
-		return "EquipmentTypeExport"//message(code: 'equipment.type.label') + '<br/>'+message(code:'import.file.label')+': '+getOutputFilename()
+		def informLabel = messageSource.getMessage('equipment.type.label', new Object[0], LocaleContextHolder.getLocale())
+		return informLabel +" "+'<br/>'+messageSource.getMessage('import.file.label', new Object[0], LocaleContextHolder.getLocale())
 	}
 	
 	Exporter getExporter() {

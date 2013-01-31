@@ -40,11 +40,13 @@ import org.chai.memms.task.Exporter;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.memms.util.Utils;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 class EquipmentExportTask extends DataExportTask{
+	def messageSource
 	String getInformation() {
-		//TODO find out why the message is not working
-		return "export equipment"//message(code: 'equipment.type.label') + '<br/>'+message(code:'import.file.label')+': '+getOutputFilename()
+		def informLabel = messageSource.getMessage('equipment.label', new Object[0], LocaleContextHolder.getLocale())
+		return informLabel +" "+'<br/>'+messageSource.getMessage('import.file.label', new Object[0], LocaleContextHolder.getLocale())
 	}
 	Exporter getExporter() {
 		return new EquipmentExport()

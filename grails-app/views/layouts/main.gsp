@@ -142,8 +142,10 @@
 						<li><a href="#"><g:message code="user.manage.users.label"/></a>
 							<div class="sub-submenu">
 								<ul class="submenu">
-									<li><a href="${createLink(controller: 'role', action:'list')}"><g:message code="roles.label" /></a></li>
 									<shiro:hasPermission permission="menu:role">
+										<li><a href="${createLink(controller: 'role', action:'list')}"><g:message code="roles.label" /></a></li>
+									</shiro:hasPermission>
+									<shiro:hasPermission permission="menu:user">
 										<li><a href="${createLink(controller: 'user', action:'list')}"><g:message code="users.label" /></a></li>
 									</shiro:hasPermission>
 								</ul>
@@ -157,9 +159,9 @@
     </div>
   </div>
   
-  <div class="flash-message">
+  	<div class="flash-message">
 		<g:if test="${flash.message}">
-      <p>${flash.message}</p>
+      		<p>${flash.message}</p>
 		</g:if>	
 	</div>
 	
@@ -170,16 +172,16 @@
 	</div>
 	
 	<div id="footer">
-    <div class="wrapper">
-      &copy;<g:message code="footer.labels.chai"/>
-      <br>
-      <a href="#"><g:message code="footer.labels.about"/></a>
-      |
-      <a href="#"><g:message code="footer.labels.contact"/></a>
-      |
-      <a href="#"><g:message code="footer.labels.helpdesk"/></a>
-    </div>
-  </div>
+	    <div class="wrapper">
+	      &copy;<g:message code="footer.labels.chai"/>
+	      <br>
+	      <a href="#"><g:message code="footer.labels.about"/></a>
+	      |
+	      <a href="#"><g:message code="footer.labels.contact"/></a>
+	      |
+	      <a href="#"><g:message code="footer.labels.helpdesk"/></a>
+	    </div>
+  	</div>
 	<div class="build-info">
         <build:buildInfo/>
     </div>
