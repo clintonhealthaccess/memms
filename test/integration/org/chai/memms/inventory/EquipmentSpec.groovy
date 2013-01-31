@@ -79,41 +79,41 @@ class EquipmentSpec extends IntegrationTests{
 		Equipment.count() == 1
 	}
 
-	def "can't create and save an equipment without needed fields -  serialNumber, expectedLifeTime, code"() {
+	// def "can't create and save an equipment without needed fields -  serialNumber, expectedLifeTime, code"() {
 
-		setup:
-		setupLocationTree()
-		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentType = Initializer.newEquipmentType(CODE(15810), ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),27)
-		when://SerialNumber
-		def equipment = new Equipment(purchaseCost:"1,200",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
-				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,purchaser:PurchasedBy.BYFACILITY,obsolete:false,
-				dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'], type:equipmentType,currentStatus:Status.OPERATIONAL)
+	// 	setup:
+	// 	setupLocationTree()
+	// 	def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
+	// 	def equipmentType = Initializer.newEquipmentType(CODE(15810), ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),27)
+	// 	when://SerialNumber
+	// 	def equipment = new Equipment(purchaseCost:"1,200",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
+	// 			registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,purchaser:PurchasedBy.BYFACILITY,obsolete:false,
+	// 			dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'], type:equipmentType,currentStatus:Status.OPERATIONAL)
 
-		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
-		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+	// 	def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+	// 	def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		
-		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
-		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
-		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
-		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
+	// 	def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
+	// 	def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+	// 	def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
+	// 	def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
 
-		equipment.manufacturer=manufacture
-		equipment.supplier=supplier
-		equipment.warranty=warranty
-		equipment.warrantyPeriod = Initializer.newPeriod(12)
+	// 	equipment.manufacturer=manufacture
+	// 	equipment.supplier=supplier
+	// 	equipment.warranty=warranty
+	// 	equipment.warrantyPeriod = Initializer.newPeriod(12)
 
-		equipment.save()
-		then:
-		Equipment.count() == 0
+	// 	equipment.save()
+	// 	then:
+	// 	Equipment.count() == 0
 		
-		equipment.errors.hasFieldErrors('serialNumber') == true
-		equipment.errors.hasFieldErrors('expectedLifeTime') == true
-		equipment.errors.hasFieldErrors('code') == true
-		equipment.errors.hasFieldErrors('currency') == true
+	// 	equipment.errors.hasFieldErrors('serialNumber') == true
+	// 	equipment.errors.hasFieldErrors('expectedLifeTime') == true
+	// 	equipment.errors.hasFieldErrors('code') == true
+	// 	equipment.errors.hasFieldErrors('currency') == true
 		
-		equipment.errors.fieldErrorCount== 4
-	}
+	// 	equipment.errors.fieldErrorCount== 4
+	// }
 
 	def "can't create and save an equipment with a purchaser is donor not specifying the donor and his name"() {
 
@@ -240,35 +240,35 @@ class EquipmentSpec extends IntegrationTests{
 		equipment.errors.hasFieldErrors('manufactureDate') == true
 	}
 
-	def "purchase date can't be after today"() {
+	// def "purchase date can't be after today"() {
 
-		setup:
-		setupLocationTree()
-		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentType = Initializer.newEquipmentType("15810", ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),56)
-		when:
-		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",currency:"USD",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.now().next(),
-				registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department,purchaser:PurchasedBy.BYMOH,obsolete:false,expectedLifeTime:Initializer.newPeriod(20),
-				dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType,currentStatus:Status.OPERATIONAL)
+	// 	setup:
+	// 	setupLocationTree()
+	// 	def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
+	// 	def equipmentType = Initializer.newEquipmentType("15810", ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),56)
+	// 	when:
+	// 	def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",currency:"USD",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.now().next(),
+	// 			registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department,purchaser:PurchasedBy.BYMOH,obsolete:false,expectedLifeTime:Initializer.newPeriod(20),
+	// 			dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType,currentStatus:Status.OPERATIONAL)
 
-		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
-		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+	// 	def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+	// 	def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		
-		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
-		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
-		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
-		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
+	// 	def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
+	// 	def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+	// 	def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
+	// 	def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
 
-		equipment.manufacturer=manufacture
-		equipment.supplier=supplier
-		equipment.warranty=warranty
-		equipment.warrantyPeriod = Initializer.newPeriod(22)
+	// 	equipment.manufacturer=manufacture
+	// 	equipment.supplier=supplier
+	// 	equipment.warranty=warranty
+	// 	equipment.warrantyPeriod = Initializer.newPeriod(22)
 
-		equipment.save()
-		then:
-		Equipment.count() == 0
-		equipment.errors.hasFieldErrors('purchaseDate') == true
-	}
+	// 	equipment.save()
+	// 	then:
+	// 	Equipment.count() == 0
+	// 	equipment.errors.hasFieldErrors('purchaseDate') == true
+	// }
 	
 	def "can get current status based on time"(){
 		setup:

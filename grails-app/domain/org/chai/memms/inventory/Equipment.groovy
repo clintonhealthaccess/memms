@@ -179,10 +179,10 @@ public class Equipment {
 		if(!code){
 			def randomInt = RandomUtils.nextInt(99999)
 			def now = new Date()
-			def equipmentCode = "${dataLocation.code}-${randomInt}-${now.month}-${now.year+1900}"
+			def equipmentCode = "${dataLocation.code}-${randomInt}-${now.month+1}-${now.year+1900}"
 			if(log.isDebugEnabled()) log.debug("Generated code:" + equipmentCode)
 			if(Equipment.findByCode(equipmentCode.toString()) == null) code = equipmentCode 
-			else genarateEquipmentCode()
+			else genarateAndSetEquipmentCode()
 		}
 	}
 	
