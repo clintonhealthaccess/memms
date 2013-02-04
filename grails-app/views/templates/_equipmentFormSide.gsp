@@ -22,6 +22,8 @@
 					<span class="text">${equipment.department.names}</span>
 					<span class="label"><g:message code="equipment.room.label"/>:</span>
 					<span class="text"> ${equipment.room}</span>
+					<span class="label"><g:message code="entity.in.system.since.label"/>:</span>
+					<span class="text"> ${Utils.formatDate(equipment.dateCreated)}</span>
 				</li>
 			</ul>
 		</li>

@@ -40,7 +40,9 @@ import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
 
 
 class WorkOrderStatusServiceSpec extends IntegrationTests{
+	
 	def workOrderStatusService
+	
 	def "can create using  createWorkOrderStatus method"(){
 		setup:
 		setupLocationTree()
@@ -48,12 +50,15 @@ class WorkOrderStatusServiceSpec extends IntegrationTests{
 		def user = newUser("user", "user")
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
+		def statusOne = new WorkOrderStatus(status:OrderStatus.OPENATFOSA,changedBy:user,escalation:false)
+		workOrder.addToStatus(statusOne)
+		workOrder.save(failOnError:true, flush:true)
 		when:
-		def workOrderStatus = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,Initializer.now(),false);
-		workOrder.save(failOnError:true)
+		def workOrderStatus = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATMMC,user,true);
 		then:
 		WorkOrder.count() == 1
-		WorkOrder.list()[0].status.status.equals([OrderStatus.OPENATFOSA])
-		WorkOrderStatus.count() == 1
+		WorkOrderStatus.count() == 2
+		WorkOrder.list()[0].currentStatus == OrderStatus.OPENATMMC
+		WorkOrder.list()[0].timeBasedStatus.status == OrderStatus.OPENATMMC
 	}
 }

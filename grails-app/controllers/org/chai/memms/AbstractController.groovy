@@ -38,7 +38,16 @@ import org.chai.location.Location
 import org.chai.location.LocationLevel
 
 public abstract class AbstractController {
+	
+	def languageService
 	def locationService
+	
+	def getNames(){
+		return 'names_'+languageService.getCurrentLanguagePrefix();
+	}
+	def getDescriptions(){
+		return 'descriptions_'+languageService.getCurrentLanguagePrefix();
+	}
 	def getTargetURI() {
 		return params.targetURI?: "/"
 	}
@@ -53,7 +62,7 @@ public abstract class AbstractController {
 	
 	def adaptParamsForList() {
 		if(log.isDebugEnabled()) log.debug("Grails application value: " + grailsApplication)
-		params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.site.entity.list.max, 30)
+		params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.site.entity.list.max, 40)
 		params.offset = params.offset ? params.int('offset'): 0
 	}
 	

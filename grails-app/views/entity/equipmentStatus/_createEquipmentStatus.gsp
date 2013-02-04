@@ -12,6 +12,9 @@
 	<g:form url="[controller:'equipmentStatus', action:'save', params:[targetURI: targetURI]]" useToken="true" class="simple-list">
 		<div class="row">
 			<input type="hidden" name="equipment.id" value="${status.equipment.id}"/>
+			<label><g:message code="entity.code.label"/>:</label>${status.equipment.code}
+		</div>
+		<div class="row">
 			<label><g:message code="equipment.serial.number.label"/>:</label>${status.equipment.serialNumber}
 		</div>
 		<g:selectFromEnum name="status" bean="${status}" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}"/>
@@ -48,7 +51,7 @@
 		    			</td>
 		    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
 		    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
-		    			<td>${Utils.formatDateWithTime(status?.statusChangeDate)}</td>
+		    			<td>${Utils.formatDateWithTime(status?.dateCreated)}</td>
 		    			<td>${(status==equipment.timeBasedStatus)? '\u2713':''}</td>
 		    		</tr>
 		    	</g:if>

@@ -28,6 +28,8 @@
 
 package org.chai.task
 
+import groovy.transform.EqualsAndHashCode;
+
 import java.util.Map;
 import java.util.Set;
 
@@ -45,6 +47,7 @@ import org.chai.memms.util.Utils;
  * @author Jean Kahigiso M.
  *
  */
+@EqualsAndHashCode(includes='id')
 class EquipmentExportFilter extends ExportFilter{
 	Status equipmentStatus
 	String donated

@@ -33,6 +33,8 @@ import org.chai.memms.Contact;
 import org.chai.memms.Period;
 import org.chai.memms.Warranty;
 import org.chai.memms.inventory.EquipmentStatus.Status;
+import org.chai.memms.preventive.maintenance.PreventiveOrder;
+import org.chai.memms.security.User;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.location.DataLocation;
 import org.apache.commons.lang.math.RandomUtils;
@@ -105,18 +107,30 @@ public class Equipment {
 	Date manufactureDate
 	Date purchaseDate
 	Date serviceContractStartDate
-	Date registeredOn
+	Date dateCreated
+	Date lastUpdated
+	
+	User addedBy
+	User lastModifiedBy
 	
 	
-	
-	static hasMany = [status: EquipmentStatus, workOrders: WorkOrder]
+	static hasMany = [status: EquipmentStatus, workOrders: WorkOrder,preventiveOrders: PreventiveOrder]
+
 	static belongsTo = [dataLocation: DataLocation, department: Department, type: EquipmentType]
 	static i18nFields = ["observations","descriptions"]
 	static embedded = ["warranty","serviceContractPeriod","expectedLifeTime","warrantyPeriod"]
 	
 	static constraints = {
-		importFrom Contact
+		importFrom Warranty, exclude:["startDate"]
 		code nullable: false, blank:false, unique:true
+		addedBy nullable: false
+		
+		lastModifiedBy nullable:true, validator:{ val, obj ->
+			if (val != null) return (obj.lastUpdated != null) 
+		}
+		lastUpdated nullable:true, validator:{ val, obj ->
+			if(val != null) return (obj.lastUpdated!=null && (obj.lastUpdated.after(obj.dateCreated) || obj.lastUpdated.compareTo(obj.dateCreated)==0))
+		}
 		model nullable: true
 		currentStatus nullable:true,validator:{
 			if(it!=null) return it in [Status.OPERATIONAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]
@@ -128,12 +142,16 @@ public class Equipment {
 		serviceProvider nullable: true, validator:{val, obj ->
 			if(val == null) return (obj.serviceContractStartDate==null && obj.serviceContractPeriod==null)
 		}
-		warranty nullable: true
+
+		warranty nullable:true, validator:{ val, obj ->
+			if(val!=null) return (val.startDate.after(obj.purchaseDate) || val.startDate.compareTo(obj.purchaseDate)==0)
+		}
 		warrantyPeriod nullable: true, validator:{val, obj ->
-			if (obj.warranty!=null) return (val!=null)
+			if (obj.warranty!=null) return (val!=null) && (val.numberOfMonths >= 0)
 		}
 		
 		serialNumber nullable: false, blank: false,  unique: true
+
 		purchaseCost nullable: true, blank: true, validator:{ if(it!=null) return (it>0) }
 		//TODO nullable has to be false, but it is true for first iteration
 		//The value none have to be removed from valid answer
@@ -147,10 +165,15 @@ public class Equipment {
 		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
 			if(obj.purchaseCost != null) return (val != null)
 		}
+
 		//TODO nullable has to be false, but it is true for first iteration
-		expectedLifeTime nullable: true
+		expectedLifeTime nullable: true, validator:{
+			if(it==null) return true 
+			else return (it.numberOfMonths >= 0)
+		}
 		serviceContractPeriod nullable: true, validator:{ val, obj ->
 			if(val==null) return (obj.serviceContractStartDate == null && obj.serviceProvider == null)
+			if(val!=null) return (val.numberOfMonths >= 0)
 		}
 		serviceContractStartDate nullable: true, blank: true, validator:{ val, obj ->
 			if(val!=null) return (val<=new Date() && (val.after(obj.purchaseDate) || (val.compareTo(obj.purchaseDate)==0)))
@@ -164,7 +187,6 @@ public class Equipment {
 			//TODO uncomment when fix
 			//return  ((val <= new Date()) && val.after(obj.manufactureDate) || (val.compareTo(obj.manufactureDate)==0))
 		}
-		registeredOn nullable: false, blank:false
 		descriptions nullable: true, blank: true
 		obsolete nullable: false
 	}
@@ -172,6 +194,15 @@ public class Equipment {
 	static mapping = {
 		table "memms_equipment"
 		version false
+		cache true
+	}
+
+	def beforeUpdate(){
+		lastUpdated = new Date()
+	}
+	
+	def beforeValidate(){
+		this.genarateAndSetEquipmentCode()
 	}
 	
 	@Transient
@@ -198,10 +229,10 @@ public class Equipment {
 				currentState= state;
 			}
 			if(state.dateOfEvent.compareTo(currentState.dateOfEvent)==0){
-				if(state.statusChangeDate.after(currentState.statusChangeDate))
+				if(state.dateCreated.after(currentState.dateCreated))
 					currentState = state
 				//This case happen in test data settings
-				if(state.statusChangeDate.compareTo(currentState.statusChangeDate)==0)
+				if(state.dateCreated.compareTo(currentState.dateCreated)==0)
 					currentState = (currentState.id > state.id)?currentState:state
 			}
 			
@@ -209,8 +240,8 @@ public class Equipment {
 		return currentState
 	}
 	
-	
 	String toString() {
-		return "Equipment[id=" + id + " currentState="+currentStatus+"]";
+		return "Equipment[id= " + id + " code= "+code+" serialNumber= "+serialNumber+" currentState= "+currentStatus+"]";
+
 	}
 }

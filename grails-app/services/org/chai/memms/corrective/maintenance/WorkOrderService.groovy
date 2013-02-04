@@ -27,7 +27,6 @@
  */
 package org.chai.memms.corrective.maintenance
 
-import org.chai.location.DataLocation
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality
 
 import java.util.Map;
@@ -39,69 +38,27 @@ import org.chai.location.DataLocationType;
 import org.chai.location.Location;
 import org.chai.location.LocationLevel;
 import org.chai.memms.corrective.maintenance.WorkOrder;
-import org.chai.memms.corrective.maintenance.MaintenanceProcess.ProcessType;
+import org.chai.memms.corrective.maintenance.WorkOrderStatus;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
-import org.chai.memms.inventory.Equipment;
 import org.chai.memms.security.User;
 import org.chai.memms.util.Utils;
+import org.chai.memms.corrective.maintenance.NotificationWorkOrderService;
+
 
 /**
  * @author Jean Kahigiso M.
  *
  */
 class WorkOrderService {
-	def equipmentService
-	def locationService
 	static transactional = true
-	def languageService;
 	def notificationWorkOrderService
-	/**
-	 * Searches for a WorkOrder that contains the search term
-	 * Pass a null value for the criteria you want to be ignored in the search other than the search text
-	 * NB workOrdersEquipment is named like this to avoid conflicting with the navigation property equipment
-	 * @param text
-	 * @param location
-	 * @param workOrdersEquipment
-	 * @param params
-	 * @return
-	 */
-	public List<WorkOrder> searchWorkOrder(String text,DataLocation dataLocation,Equipment workOrdersEquipment,Map<String, String> params) {
-		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
-		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
-		def criteria = WorkOrder.createCriteria()
-
-		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(workOrdersEquipment)
-				eq('equipment',workOrdersEquipment)
-			if(dataLocation)
-				equipment{eq('dataLocation',dataLocation)}
-			or{
-				ilike("description","%"+text+"%")
-				equipment{
-					or{
-						ilike("code","%"+text+"%")
-						ilike("serialNumber","%"+text+"%")
-						ilike(dbFieldDescriptions,"%"+text+"%")
-						type{
-							or{
-								ilike(dbFieldTypeNames,"%"+text+"%")
-								ilike("code","%"+text+"%")
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-
 
 	/**
 	 * Returns a filtered list of WorkOrders according to the passed criteria
 	 * Pass a null value for the criteria you want to be ignored in the filter
 	 * NB workOrdersEquipment is named like this to avoid conflicting with the navigation property equipment
 	 * @param dataLocation
-	 * @param workOrdersequipment
+	 * @param equip //Named so to avoid ambiguity in criteria
 	 * @param openOn
 	 * @param closedOn
 	 * @param assistaceRequested
@@ -111,13 +68,13 @@ class WorkOrderService {
 	 * @param params
 	 * @return
 	 */
-	List<WorkOrder> filterWorkOrders(def dataLocation,def workOrdersEquipment,def openOn,def closedOn,def criticality,def currentStatus,def params) {
+	def filterWorkOrders(def dataLocation,def equip,def openOn,def closedOn,def criticality,def currentStatus,def params) {
 		def criteria = WorkOrder.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocation)
 				equipment{ eq('dataLocation',dataLocation)}
-			if(workOrdersEquipment)
-				eq("equipment",workOrdersEquipment)
+			if(equip)
+				eq("equipment",equip)
 			if(openOn)
 				between("openOn",Utils.getMinDateFromDateTime(openOn),Utils.getMaxDateFromDateTime(openOn))
 			if(closedOn)
@@ -129,47 +86,13 @@ class WorkOrderService {
 		}
 	}
 
-	def escalateWorkOrder(WorkOrder workOrder,String content, User escalatedBy){
+	def escalateWorkOrder(def workOrder,def content,def escalatedBy){
 		workOrder.currentStatus = OrderStatus.OPENATMMC
-		WorkOrderStatus status = new WorkOrderStatus(workOrder:workOrder,status:OrderStatus.OPENATMMC,escalation:true,changedBy:escalatedBy,changeOn:new Date())
+		WorkOrderStatus status = new WorkOrderStatus(workOrder:workOrder,status:OrderStatus.OPENATMMC,escalation:true,changedBy:escalatedBy)
 		workOrder.addToStatus(status)
 		workOrder.save(failOnError:true)
 		if(status)
 			notificationWorkOrderService.newNotification(workOrder,content,escalatedBy,true)
 		return workOrder
-	}
-	
-	//TODO we can get this using the filter methode
-	List<WorkOrder> getWorkOrdersByEquipment(Equipment equipment, Map<String, String> params){
-		def criteria = WorkOrder.createCriteria();
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			eq("equipment",equipment)
-		}
-	}
-
-	List<WorkOrder> getWorkOrdersByCalculationLocation(CalculationLocation location, Map<String, String> params){
-		def criteria = WorkOrder.createCriteria();
-		
-		def dataLocations = []
-		if(location instanceof DataLocation)
-		{
-			dataLocations.add(location as DataLocation)
-			if((location as DataLocation).manages) dataLocations.addAll((location as DataLocation).manages)
-		}
-		else
-		{
-			location.collectDataLocations(null, null).each{
-				dataLocations.add(it)
-				if(it.manages) dataLocations.addAll(it.manages)
-			}
-		}
-		
-		if(log.isDebugEnabled()) log.debug("getting workordes in DataLocations = " + dataLocations)
-		
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			equipment{
-				inList("dataLocation", dataLocations)
-			}
-		}
 	}
 }

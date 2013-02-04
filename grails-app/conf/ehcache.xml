@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="ehcache.xsd" 
+         maxBytesLocalOnHeap="60m" maxBytesLocalOffHeap="60m" maxBytesLocalDisk="5g">
+
+    <diskStore path="java.io.tmpdir"/>
+
+    <cacheManagerEventListenerFactory class="" properties=""/>
+
+    <defaultCache
+    		eternal="false"
+            maxElementsInMemory="500"
+            timeToLiveSeconds="86400"
+            overflowToDisk="false"
+            diskPersistent="false"
+    />
+
+    <cache name="org.hibernate.cache.UpdateTimestampsCache"
+			maxElementsInMemory="10000"
+            timeToLiveSeconds="86400"
+    />
+
+    <cache name="org.hibernate.cache.StandardQueryCache"
+			maxElementsInMemory="4000"
+            timeToLiveSeconds="86400"
+    />
+    
+
+    
+   	<cache name="org.chai.location.CalculationLocation"
+			maxElementsInMemory="5000"
+			timeToLiveSeconds="86400"
+    />
+    
+    <cache name="org.chai.location.LocationLevel"
+			maxElementsInMemory="100"
+            timeToLiveSeconds="86400"
+    />
+    
+    <cache name="org.chai.location.DataLocationType"
+			maxElementsInMemory="100"
+			timeToLiveSeconds="86400"
+    />
+    
+    <cache name="org.chai.location.Location.children"
+			maxElementsInMemory="5000"
+			timeToLiveSeconds="86400"
+    />
+    
+    <cache name="org.chai.location.Location.dataLocations"
+			maxElementsInMemory="2000"
+			timeToLiveSeconds="86400"
+    />
+    
+</ehcache>

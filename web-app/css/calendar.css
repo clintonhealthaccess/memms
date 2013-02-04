@@ -1,0 +1,49 @@
+#calendar {
+    padding: 50px 5px 5px 5px;
+    background: #fff
+}
+ 
+#calendar table {
+    margin-bottom: 5px;
+}
+ 
+#calendar tr>td:first-child, tr>th:first-child {
+    padding-left: 0;
+}
+ 
+#calendar tr>td:last-child, tr>th:last-child {
+    padding-right: 0;
+}
+ 
+#calendar th:hover, tr:hover {
+    background: inherit;
+}
+ 
+#calendar tbody td:hover {
+    background: #E1F2B6;
+}
+ 
+#calendar table.fc-header {
+    border: none;
+}
+
+#calendar table.fc-header {
+    border: none;
+}
+
+#calendar th.fc-widget-header {
+    background: #eee;
+    padding-top: 5px;
+    padding-bottom: :8px;
+}
+ 
+#calendar table.fc-header td:hover {
+    background: inherit;
+}
+.fc-event-inner{
+    background: #3195DA;
+} 
+.fc-event-skin{
+    border: 1px solid #3195DA;
+
+}

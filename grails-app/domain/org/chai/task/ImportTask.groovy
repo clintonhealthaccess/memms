@@ -28,6 +28,8 @@
 
 package org.chai.task
 
+import groovy.transform.EqualsAndHashCode;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.chai.memms.imports.FileImporter;
@@ -35,7 +37,7 @@ import org.chai.memms.imports.ImporterErrorManager
 import org.chai.memms.util.Utils;
 import org.chai.task.Task
 import org.springframework.web.multipart.MultipartFile;
-
+@EqualsAndHashCode(includes='id')
 abstract class ImportTask extends Task {
 
 	def groovyPageRenderer

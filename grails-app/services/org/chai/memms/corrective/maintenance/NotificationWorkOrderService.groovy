@@ -49,7 +49,7 @@ class NotificationWorkOrderService {
 		int numberOfNotificationSent = 0
 		receivers.each{ receiver ->
 			if(receiver.active){
-					def notification = new NotificationWorkOrder(workOrder:workOrder,sender:sender,receiver:receiver,writtenOn:Utils.now(),content:content,read:false).save(failOnError: true)
+					def notification = new NotificationWorkOrder(workOrder:workOrder,sender:sender,receiver:receiver,content:content,read:false).save(failOnError: true)
 					if(notification)
 						numberOfNotificationSent++
 				}
@@ -72,7 +72,7 @@ class NotificationWorkOrderService {
 			projections{rowCount()}
 		}
 	}
-	public List<NotificationWorkOrder> searchNotificition(String text,User user,WorkOrder workOrder, Boolean read,Map<String, String> params) {
+	public def searchNotificition(String text,User user,WorkOrder workOrder, Boolean read,Map<String, String> params) {
 		def criteria = NotificationWorkOrder.createCriteria()
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(user)
@@ -86,15 +86,15 @@ class NotificationWorkOrderService {
 		}
 	}
 	
-	public List<NotificationWorkOrder> filterNotifications(WorkOrder workOrder,User receiver,Date from, Date to,Boolean read, Map<String, String> params){
+	public def filterNotifications(WorkOrder workOrder,User receiver,Date from, Date to,Boolean read, Map<String, String> params){
 		def criteria = NotificationWorkOrder.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(workOrder) 
 				eq("workOrder",workOrder)
 			if(from) 
-				ge("writtenOn",Utils.getMinDateFromDateTime(from))
+				ge("dateCreated",Utils.getMinDateFromDateTime(from))
 			if(to) 
-				le("writtenOn",Utils.getMaxDateFromDateTime(to))
+				le("dateCreated",Utils.getMaxDateFromDateTime(to))
 			if(receiver) 
 				eq("receiver",receiver)
 			if(read!=null) 
@@ -102,7 +102,7 @@ class NotificationWorkOrderService {
 		}
 	}
 	
-	public NotificationWorkOrder setNotificationRead(NotificationWorkOrder notification){
+	public def setNotificationRead(NotificationWorkOrder notification){
 		notification.read = true
 		notification.save(failOnError:true)
 		return notification

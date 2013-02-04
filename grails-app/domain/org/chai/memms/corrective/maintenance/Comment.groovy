@@ -40,14 +40,14 @@ import org.chai.memms.security.User;
 @EqualsAndHashCode
 public class Comment {
 	User writtenBy
-	Date writtenOn
+	Date dateCreated
 	String content
 	
    static belongsTo = [workOrder: WorkOrder]
    
+   
    static constraints ={
 	   writtenBy nullable: false
-	   writtenOn nullable: false, validator:{it <=new Date()}
 	   content nullable:false, blank:false
    }
    static mapping ={
@@ -56,7 +56,6 @@ public class Comment {
 	   content type:"text"
 	   
    }
-   
 
 	@Override
 	public String toString() {

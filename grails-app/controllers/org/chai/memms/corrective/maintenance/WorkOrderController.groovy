@@ -34,20 +34,16 @@ import org.chai.location.DataLocation;
 import org.chai.location.Location;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.corrective.maintenance.Comment;
-import org.chai.memms.corrective.maintenance.MaintenanceProcess;
 import org.chai.memms.corrective.maintenance.WorkOrder;
-import org.chai.memms.corrective.maintenance.WorkOrderStatus;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.inventory.EquipmentStatus;
 import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.inventory.Provider;
 import org.chai.memms.inventory.EquipmentStatus.Status;
-import org.chai.memms.corrective.maintenance.MaintenanceProcess.ProcessType;
+import org.chai.memms.security.User.UserType;
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
 import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
-import org.chai.memms.security.User;
-import org.chai.memms.security.User.UserType;
 
 
 /**
@@ -93,7 +89,7 @@ class WorkOrderController extends AbstractEntityController{
 			currencies: grailsApplication.config.site.possible.currency,
 			orderClosed:(entity.currentStatus == OrderStatus.CLOSEDFIXED || entity.currentStatus == OrderStatus.CLOSEDFORDISPOSAL)? true:false,
 			//entity can be null
-			technicians : userService.getActiveUserByTypeAndLocation(UserType.TECHNICIANDH,entity.equipment?.dataLocation, [:])
+			technicians : userService.getActiveUserByTypeAndLocation([UserType.TECHNICIANDH],entity.equipment?.dataLocation, [:])
 		]
 	}
 
@@ -105,9 +101,8 @@ class WorkOrderController extends AbstractEntityController{
 			entity.currentStatus = OrderStatus.OPENATFOSA
 		}else{
 			params.oldStatus = entity.currentStatus
-			//Only change this value if it was changed
+			//Only change currentStatus value if currentStatus was changed
 			entity.currentStatus = (!params.currentStatus)?entity.currentStatus:OrderStatus."$params.currentStatus"
-			entity.lastModifiedOn = now
 			entity.lastModifiedBy = user
 			if(entity.currentStatus.equals(OrderStatus.CLOSEDFIXED) || entity.currentStatus.equals(OrderStatus.CLOSEDFORDISPOSAL))
 				entity.closedOn = now
@@ -126,7 +121,7 @@ class WorkOrderController extends AbstractEntityController{
 			//Making sure we cannot modify a closed workOrder
 			if(log.isDebugEnabled()) log.debug("in validate closure oldStatus= "+params.oldStatus)
 			if(params.oldStatus.equals(OrderStatus.CLOSEDFIXED) || params.oldStatus.equals(OrderStatus.CLOSEDFORDISPOSAL)){
-				flash.message = "error.closed.work.order.mofication"
+				flash.message = message(code: "error.cannot.modify.closed.work.order", default: 'Cannot modify a closed equipment, please reactivate it')
 				updateClosedOrder = false
 			}
 			if(log.isDebugEnabled()) log.debug("updateClosedOrder value= "+updateClosedOrder)
@@ -145,8 +140,8 @@ class WorkOrderController extends AbstractEntityController{
 		//Change Equipment Status and Create first workOrderStatus to the new workOrder
 		if(entity.id==null){
 			newEntity=true
-			entity = workOrderStatusService.createWorkOrderStatus(entity,OrderStatus.OPENATFOSA,user,now,escalation)
-			equipment = equipmentStatusService.createEquipmentStatus(now,user,Status.UNDERMAINTENANCE,entity.equipment,now,[:])
+			entity = workOrderStatusService.createWorkOrderStatus(entity,OrderStatus.OPENATFOSA,user,escalation)
+			equipment = equipmentStatusService.createEquipmentStatus(user,Status.UNDERMAINTENANCE,entity.equipment,now,[:])
 			equipment.addToWorkOrders(entity)
 			equipment.save(failOnError:true)
 		}else{
@@ -157,11 +152,11 @@ class WorkOrderController extends AbstractEntityController{
 				if(entity.currentStatus == OrderStatus.OPENATMMC && params.oldStatus == OrderStatus.OPENATFOSA) escalation = true			
 				//Change Equipment Status When closing workorder
 				if(entity.currentStatus == OrderStatus.CLOSEDFIXED)
-					equipment = equipmentStatusService.createEquipmentStatus(now,user,Status.OPERATIONAL,entity.equipment,now,[:])
+					equipment = equipmentStatusService.createEquipmentStatus(user,Status.OPERATIONAL,entity.equipment,now,[:])
 				if(entity.currentStatus == OrderStatus.CLOSEDFORDISPOSAL)
-					equipment = equipmentStatusService.createEquipmentStatus(now,user,Status.FORDISPOSAL,entity.equipment,now,[:])
+					equipment = equipmentStatusService.createEquipmentStatus(user,Status.FORDISPOSAL,entity.equipment,now,[:])
 					
-				entity = workOrderStatusService.createWorkOrderStatus(entity,entity.currentStatus,user,now,escalation)
+				entity = workOrderStatusService.createWorkOrderStatus(entity,entity.currentStatus,user,escalation)
 			}
 		}
 		

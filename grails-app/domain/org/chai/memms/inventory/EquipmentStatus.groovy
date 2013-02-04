@@ -28,6 +28,8 @@
 package org.chai.memms.inventory
 
 import org.chai.memms.security.User
+
+import groovy.transform.EqualsAndHashCode;
 import i18nfields.I18nFields
 
 /**
@@ -55,8 +57,8 @@ class EquipmentStatus {
 		String getKey() { return name() }
 	}
 	
-	Date dateOfEvent;
-	Date statusChangeDate;
+	Date dateOfEvent
+	Date dateCreated
 	User changedBy
 	Status status
 	String reasons
@@ -64,15 +66,11 @@ class EquipmentStatus {
 	static belongsTo = [equipment: Equipment]
 	static i18nFields = ["reasons"]
 	
-	def isCurrent(){
-		return current
-	}
 	static constraints = {
-		dateOfEvent nullable:false, validator:{val, obj ->
+		dateOfEvent nullable:false, validator:{ val, obj ->
 			//TODO be uncomment after first data collection
 			return (val <= new Date()) //&&  (val.after(obj.equipment.purchaseDate) || (val.compareTo(obj.equipment.purchaseDate)==0))
 		} 
-		statusChangeDate nullable: false, validator:{it <= new Date()} 
 		changedBy nullable: false 
 		status blank: false, nullable: false, inList:[Status.OPERATIONAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]
 		reasons nullable: true, blank: true
@@ -85,31 +83,6 @@ class EquipmentStatus {
 
 	@Override
 	public String toString() {
-		return "EquipmentStatus [dateOfEvent=" + dateOfEvent + ", changedBy="+ changedBy + ", status=" + status + " statusChangeDate=" + statusChangeDate + "]";
+		return "EquipmentStatus [dateOfEvent=" + dateOfEvent + ", changedBy="+ changedBy + ", status=" + status + " dateCreated=" + dateCreated + "]";
 	}	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		EquipmentStatus other = (EquipmentStatus) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-	
-	
 }

@@ -25,49 +25,67 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.corrective.maintenance
+package org.chai.memms.preventive.maintenance
 
-import groovy.transform.EqualsAndHashCode;
-
-import org.chai.memms.security.User;
+import org.chai.location.CalculationLocation;
+import org.chai.memms.AbstractEntityController;
+import org.chai.memms.inventory.Equipment;
+import org.chai.memms.security.User.UserType;
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderType
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus
 
 /**
  * @author Jean Kahigiso M.
  *
  */
-@EqualsAndHashCode
-class MaintenanceProcess {
+class WorkBasedOrderController extends AbstractEntityController {
 	
-	enum ProcessType{
-		ACTION("action"),
-		MATERIAL("material"),
-		String messageCode = "maintenance.process"
-		String name
-		ProcessType(String name){this.name=name}
-		String getKey(){ return name() }
-	}
-	
-	String name
-	Date addedOn
-	User addedBy
-	ProcessType type
-	
-	static belongsTo =[workOrder: WorkOrder]
-	
-	static constraints = {
-		name nullable:false, blank: false
-		addedOn nullable:false, validator:{it <= new Date()}
-		addedBy nullable:false
-		type nullable:false, inList:[ProcessType.ACTION,ProcessType.MATERIAL]
-	}
-	
-	static mapping = {
-		table "memms_work_order_maintenance_process"
-		version  false
+	def userService
+
+	def bindParams(def entity) {
+		def oldStatus = entity.status
+		if(!entity.id){
+			entity.addedBy = user
+			entity.type = PreventiveOrderType.WORKBASED
+			entity.status = PreventiveOrderStatus.OPEN
+		}else{
+			entity.lastModifiedBy = user
+		}
+		entity.properties = params
 	}
 
-	@Override
-	public String toString() {
-		return "MaintenanceProcess [id=" + id + ", name=" + name + ", workOrder="+ workOrder +"]";
-	}	
+	def getModel(def entity) {
+		def equipments =  []
+		def usersInCharge = userService.getActiveUserByTypeAndLocation([UserType.HOSPITALDEPARTMENT,UserType.TITULAIREHC,UserType.TECHNICIANDH],entity.equipment?.dataLocation,[:])
+		if(entity.lastModifiedBy != null) usersInCharge.add(entity.lastModifiedBy)
+		if(entity.equipment) equipments << entity.equipment
+
+		[
+			order:entity,
+			equipments: equipments,
+			currencies: grailsApplication.config.site.possible.currency,
+			technicians : usersInCharge
+		]
+	}
+
+	def getEntity(def id) {
+		return WorkBasedOrder.get(id);
+	}
+
+	def createEntity() {
+		return new WorkBasedOrder();
+	}
+
+	def getTemplate() {
+		return "/entity/preventiveOrder/createWorkBasedOrder";
+	}
+
+	def getLabel() {
+		return "preventive.order.label";
+	}
+
+	def getEntityClass() {
+		return WorkBasedOrder.class;
+	}
+	
 }

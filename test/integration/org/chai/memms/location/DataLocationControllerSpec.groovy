@@ -98,7 +98,7 @@ class DataLocationControllerSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		dataLocationController =  new DataLocationController()
-		
+
 		when: "none ajax"
 		dataLocationController.list()
 		

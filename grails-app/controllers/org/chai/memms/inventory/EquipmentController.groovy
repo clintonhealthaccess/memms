@@ -36,7 +36,6 @@ import org.chai.memms.inventory.Equipment.PurchasedBy;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
-import org.chai.task.EquipmentExportFilter;
 import org.chai.memms.util.Utils;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.inventory.Provider;
@@ -86,8 +85,10 @@ class EquipmentController extends AbstractEntityController{
 	def bindParams(def entity) {
 		if(log.isDebugEnabled()) log.debug("Equipment params: before bind "+params)
 		if(!entity.id){
-			entity.registeredOn = new Date()
+			entity.addedBy = user
 		}else{
+		    params.oldStatus =  entity.currentStatus
+			entity.lastModifiedBy = user
 			if(params["warranty.sameAsSupplier"]=="on"){
 				params["warranty.contact.contactName"]=""
 				params["warranty.contact.email"]=""
@@ -105,14 +106,20 @@ class EquipmentController extends AbstractEntityController{
 			params["donor"] =""
 			params["donorName"] = ""
 		}
-		bindData(entity,params,[exclude:["status","dateOfEvent"]])
+		//Making sure a disposed equipment cannot be modified 
+		//TODO add this check to method that modified an equipment
+		if(!params.oldStatus.equals(Status.DISPOSED))
+			bindData(entity,params,[exclude:["status","dateOfEvent"]])
 		if(log.isDebugEnabled()) log.debug("Equipment params: after bind  "+entity)
 	}
 
 	def validateEntity(def entity) {
 		boolean validStatus = true
 		if(entity.id==null){
-			validStatus = (!params.cmd.hasErrors())
+			//Checking if the dateOfEvent is not after parchase date and add error
+			if(!(entity.purchaseDate?.before(params.cmd.dateOfEvent) || entity.purchaseDate?.compareTo(params.cmd.dateOfEvent)==0)) 
+				params.cmd.errors.rejectValue('dateOfEvent','date.of.event.before.parchase.date')
+			validStatus = (!params.cmd.hasErrors()) 
 			if(log.isDebugEnabled()) log.debug("Rejecting EquipmentStatus: "+params.cmd.errors)
 		}
 		entity.genarateAndSetEquipmentCode()
@@ -124,7 +131,7 @@ class EquipmentController extends AbstractEntityController{
 		if(entity.dataLocation) hasAccess(entity.dataLocation)
 		if(entity.id==null){
 			entity.currentStatus = Status."$params.cmd.status"
-			entity = equipmentStatusService.createEquipmentStatus(now,user,params.cmd.status,entity,params.cmd.dateOfEvent,[:])
+			equipmentStatusService.createEquipmentStatus(user,params.cmd.status,entity,params.cmd.dateOfEvent,[:])
 		}
 		else entity.save(failOnError:true)
 	}

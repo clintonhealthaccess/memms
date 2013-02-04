@@ -25,7 +25,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		setupSystemUser()
 		
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now())
 		
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact(['en':'Address Descriptions '],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
@@ -48,11 +48,10 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.descriptions_en = "test_english_descriptions"
 		equipmentController.params.manufactureDate = Initializer.getDate(1,1,2012)
 		equipmentController.params.purchaseDate = Initializer.getDate(2,1,2012)
-		equipmentController.params.registeredOn = Initializer.now()
 		equipmentController.params.department = department
 		equipmentController.params.type = equipmentType
 		
-		equipmentController.params."warranty.startDate" = Initializer.getDate(1,1,2012)
+		equipmentController.params."warranty.startDate" = Initializer.getDate(10,1,2012)
 		equipmentController.params."warranty.sameAsSupplier" = true
 		equipmentController.params."warranty.descriptions_en" = "new warranty for testing"
 		equipmentController.params.warrantyPeriod = "struct"
@@ -71,7 +70,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.expectedLifeTime_years = "1"
 		equipmentController.params.expectedLifeTime_months = "3"
 		equipmentController.params.dataLocation = DataLocation.list().first()
-		equipmentController.params.status="DISPOSED"
+		equipmentController.params.status="INSTOCK"
 		equipmentController.params.dateOfEvent=Initializer.now()
 		equipmentController.save()
 				
@@ -100,7 +99,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		def servicePr = Initializer.newProvider(CODE(125), Type.SERVICEPROVIDER,serviceProvider)
 		
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now())
 		
 		equipmentController = new EquipmentController();
 		when:
@@ -132,7 +131,6 @@ class EquipmentControllerSpec extends IntegrationTests{
 		}
 		equipmentController.params.manufactureDate = Initializer.getDate(1,1,2012)
 		equipmentController.params.purchaseDate = Initializer.getDate(1,1,2012)
-		equipmentController.params.registeredOn = Initializer.getDate(1,1,2012)
 		equipmentController.params.department = department
 		equipmentController.params.type = equipmentType
 		equipmentController.params.expectedLifeTime = "struct"

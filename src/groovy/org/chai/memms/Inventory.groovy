@@ -32,4 +32,7 @@ import org.chai.location.DataLocation
 class Inventory {
 	DataLocation dataLocation
 	Integer equipmentCount
+	String toString() {
+		return "DataLocation = " + dataLocation + " , equipmentCount = " + equipmentCount
+	}
 }

@@ -1,12 +1,23 @@
 /**
+ * Load Calendar
+ */
+
+function loadCalendar(dataLocation){
+	$("#calendar").fullCalendar({
+	        events: "projection.json?dataLocation.id="+dataLocation,
+	        header: { left: 'prev,next today',center: 'title',right: 'month,agendaWeek,agendaDay'}
+	    });
+}
+
+/**
  * List ajax init
  */
 function listGridAjaxInit(){
-	$(".spinner-container").hide()
-	listGridAjax()
-	searchFormAjax()
-	filterFormAjax()
-	clearFormField()
+	$(".spinner-container").hide();
+	listGridAjax();
+	searchFormAjax();
+	filterFormAjax();
+	clearFormField();
 }
 /**
  * Loading list with Ajax
@@ -20,10 +31,10 @@ function listGridAjax() {
             type: 'GET',
             url: url,
             success: function(data) {
-            	addListAjaxResponse(data)
+            	addListAjaxResponse(data);
             }
         });
-        $(this).ajaxError(function(){ listLoadingFailed() })
+        $(this).ajaxError(function(){ listLoadingFailed(); });
     });
 }
 
@@ -33,7 +44,7 @@ function listGridAjax() {
 function searchFormAjax(){
 	 $(".heading1-bar form").submit(function(event) {
 		 	event.preventDefault();
-		 	$(".spinner-container").show()
+		 	$(".spinner-container").show();
 		    var url = $(this).parents(".heading1-bar").find("form").attr("action");
 		    var dataLocation = $(this).parents(".heading1-bar").find("input[name=dataLocation]").attr("value");
 		    var equipment = $(this).parents(".heading1-bar").find("input[name=equipment]").attr("value");
@@ -43,10 +54,10 @@ function searchFormAjax(){
 	            url: url,
 	            data: {"dataLocation.id":dataLocation,"equipment.id":equipment,"q":term},
 	            success: function(data) {
-	            	addListAjaxResponse(data)
+	            	addListAjaxResponse(data);
 	            }
-	        })
-	        $(this).ajaxError(function(){ listLoadingFailed() })
+	        });
+	        $(this).ajaxError(function(){ listLoadingFailed(); });
 	});
 }
 /**
@@ -65,11 +76,22 @@ function filterFormAjax() {
 	        url: url,
 	        data: data,
 	        success: function(data) {
-	        	addListAjaxResponse(data)
+	        	addListAjaxResponse(data);
 	        }
 	     });
-	    $(this).ajaxError(function(){ listLoadingFailed() })
+	    $(this).ajaxError(function(){ listLoadingFailed(); });
     });
+}
+
+function showClutips(){
+	$('a.clueTip').cluetip({
+		  arrows: true,
+		  dropShadow: false,
+		  hoverIntent: false,
+		  sticky: true,
+		  mouseOutClose: true,
+		  closePosition: 'title'
+		});
 }
 /**
  * Clear form content
@@ -81,7 +103,7 @@ function clearFormField(){
 		$(form)[0].reset();
 		//For chosen plugin fields
 		$(form).find(".chzn-done").val('').trigger("liszt:updated");
-	})
+	});
 }
 /**
  * Add list html to div holder
@@ -107,7 +129,7 @@ function listLoadingFailed(){
  * Make an input field to accept only number
  */
 function numberOnlyField(){
-	$('.numbersOnly').keyup(function () {
+	$(".numbers-only").keyup(function () {
 	    if (this.value != this.value.replace(/[^0-9\.]/g, '')) {
 	       this.value = this.value.replace(/[^0-9\.]/g, '');
 	    }
@@ -125,6 +147,22 @@ function getDatePicker(iconPath){
 			showOn: "both",
 			buttonImage: iconPath,
 			buttonImageOnly: true
+		});
+		$('.date-time-picker').datetimepicker({
+			changeYear: true,
+			dateFormat: "dd/mm/yy",
+			showOn: "both",
+			buttonImage: iconPath,
+			buttonImageOnly: true,
+			timeFormat: "HH:mm:ss",
+			addSliderAccess: true,
+			sliderAccessArgs: { touchonly: false }
+		});
+		$('.time-picker').timepicker({
+			timeFormat: "HH:mm:ss",
+			showSecond: true,
+			addSliderAccess: true,
+			sliderAccessArgs: { touchonly: false }
 		});
 	});
 }
@@ -348,4 +386,17 @@ function getToHide(parchaseCost,estimatedCost){
 			$(".donor-information").slideUp()
 		}
 	})
+
+	$("select[name=occurency]").change(function(e){
+		if($(this).val()=="DAYS_OF_WEEK"){ 
+			$(".week-days").slideDown()
+			$(".occur-interval").slideUp()
+		}else{
+			$(".week-days").slideUp()
+			$(".occur-interval").slideDown()
+		}
+		$("select[name=occurInterval]").nextAll("label.has-helper").html($(this).find("option:selected").text());
+		$("input[name=occurInterval]").nextAll("label.has-helper").html($(this).find("option:selected").text());
+	})
 }
+
