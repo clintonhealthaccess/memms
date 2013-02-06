@@ -36,26 +36,24 @@ import org.chai.memms.security.User;
  * @author Jean Kahigiso M.
  *
  */
-@i18nfields.I18nFields
 @EqualsAndHashCode
 public class Comment {
 	User writtenBy
 	Date dateCreated
 	String content
 	
-   static belongsTo = [workOrder: WorkOrder]
+	static belongsTo = [workOrder: WorkOrder]
    
    
-   static constraints ={
-	   writtenBy nullable: false
-	   content nullable:false, blank:false
-   }
-   static mapping ={
-	   table "memms_work_order_comment"
-	   version false
-	   content type:"text"
-	   
-   }
+	static constraints ={
+		writtenBy nullable: false
+		content nullable:false, blank:false
+	}
+	static mapping ={
+		table "memms_work_order_comment"
+		version false
+		content type:"text"
+	}
 
 	@Override
 	public String toString() {
