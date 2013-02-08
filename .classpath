@@ -11,6 +11,8 @@
 	<classpathentry kind="src" path="test/integration"/>
 	<classpathentry kind="src" path="test/unit"/>
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
 	<classpathentry kind="src" path=".plugin-src-yui-minify-resources-0.1.5-grails-app-resourceMappers"/>
 	<classpathentry kind="src" path=".plugin-src-yui-minify-resources-0.1.5-src-groovy"/>
 	<classpathentry kind="src" path=".plugin-src-webxml-1.4.1-grails-app-conf"/>
@@ -81,6 +83,7 @@
 	<classpathentry kind="src" path=".plugin-src-build-info-tag-0.3.1-grails-app-views"/>
 =======
 >>>>>>> master
+>>>>>>> spare-part-module
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path=".link_to_grails_plugins/build-info-tag-0.3.1/grails-app/taglib">
 		<attributes>
@@ -223,6 +226,8 @@
 		</attributes>
 	</classpathentry>
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.grails/grails-test/jars/grails-test-2.1.0.jar" sourcepath="/GRAILS_HOME/src/java">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/Applications/grails/doc/api/"/>
@@ -239,6 +244,7 @@
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.apache.tomcat.embed/tomcat-embed-logging-log4j/jars/tomcat-embed-logging-log4j-7.0.27.jar"/>
 	<classpathentry kind="lib" path="/Users/jeankahigiso/.grails/2.1.0/projects/memms/plugins/yui-minify-resources-0.1.5/lib/yuicompressor-2.4.7.jar"/>
 =======
+>>>>>>> spare-part-module
 	<classpathentry excluding="BuildConfig.groovy|*DataSource.groovy|UrlMappings.groovy|Config.groovy|BootStrap.groovy|spring/resources.groovy" kind="src" path=".link_to_grails_plugins/platform-core-1.0.M6/grails-app/conf">
 		<attributes>
 			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
@@ -440,6 +446,9 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.grails.ide.eclipse.core.CLASSPATH_CONTAINER"/>
+<<<<<<< HEAD
+=======
 >>>>>>> master
+>>>>>>> spare-part-module
 	<classpathentry kind="output" path="target-eclipse/classes"/>
 </classpath>

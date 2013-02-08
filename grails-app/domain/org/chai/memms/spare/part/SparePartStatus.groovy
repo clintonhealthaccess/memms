@@ -25,36 +25,47 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms
+package org.chai.memms.spare.part
 
-import i18nfields.I18nFields
+import java.util.Date;
+
+import org.chai.memms.security.User;
+
 /**
  * @author Jean Kahigiso M.
  *
  */
 @i18nfields.I18nFields
-class Warranty{
+class SparePartStatus {
 	
-	Date startDate
-	Boolean sameAsSupplier = false
-	String descriptions
-	Contact contact
-	
-	static i18nFields = ["descriptions"]
-	static embedded = ["contact","numberOfMonth"]
-	
-	static constraints = {
-		importFrom Contact
-		startDate nullable:false, validator:{it <= new Date()} 
-		descriptions nullable: true, blank: true
-		contact nullable: true,validator:{val, obj ->
-			 if(obj.sameAsSupplier==true) return (val==null)
-			}
-		sameAsSupplier nullable: true
+	enum Status{
 		
+		NONE("none"),
+		INSTOCK("in.stock"),
+		OPERATIONAL("operational"),
+		PENDINGORDER("pending.order"),
+		DISPOSED("disposed")
+		
+		String messageCode = "equipment.status"
+		
+		final String name
+		Status(String name){ this.name=name }
+		String getKey() { return name() }
 	}
 	
-	static mapping = {
-		version false
-	}
+	Date dateOfEvent
+	Date dateCreated
+	User changedBy
+	Status status
+	String reasons
+	
+	static belongsTo = [sparePart: SparePart]
+	static i18nFields = ["reasons"]
+	
+	
+	@Override
+	public String toString() {
+		return "SparePartStatus [dateOfEvent=" + dateOfEvent + ", changedBy="+ changedBy + ", status=" + status + " dateCreated=" + dateCreated + "]";
+	}	
+
 }

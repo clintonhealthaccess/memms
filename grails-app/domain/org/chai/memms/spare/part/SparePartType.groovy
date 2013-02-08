@@ -25,36 +25,75 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms
+package org.chai.memms.spare.part
 
-import i18nfields.I18nFields
+import javax.persistence.Transient;
+
+import groovy.transform.EqualsAndHashCode;
+import org.chai.memms.inventory.Provider;
+import org.chai.memms.spare.part.SparePartStatus.Status;
+import org.chai.memms.spare.part.SparePart;
+
 /**
  * @author Jean Kahigiso M.
  *
  */
 @i18nfields.I18nFields
-class Warranty{
+@EqualsAndHashCode(includes="code")
+class SparePartType {
 	
-	Date startDate
-	Boolean sameAsSupplier = false
+
+	String code
+	String names
+	String partNumber
 	String descriptions
-	Contact contact
+	Date discontinuedDate
+	Date dateCreated
+	Date lastUpdated
+	Provider manufacturer
 	
-	static i18nFields = ["descriptions"]
-	static embedded = ["contact","numberOfMonth"]
-	
+	static i18nFields = ["descriptions","names"]
+	static hasMany = [spareParts: SparePart]	
 	static constraints = {
-		importFrom Contact
-		startDate nullable:false, validator:{it <= new Date()} 
+		code nullable: false, unique :true
+		names nullable: true, blank: true
 		descriptions nullable: true, blank: true
-		contact nullable: true,validator:{val, obj ->
-			 if(obj.sameAsSupplier==true) return (val==null)
-			}
-		sameAsSupplier nullable: true
-		
+		partNumber nullable: false
+		discontinuedDate nullable: true
+		manufacturer nullable: true
 	}
 	
 	static mapping = {
+		table "memms_spare_part_type"
 		version false
+		cache true
 	}
+	
+	@Transient
+	def getInStockSpareParts(){
+		List<SparePart> inStockSpareParts =  []
+		if(!spareParts==null && !spareParts.isEmpty()){
+			for(SparePart sparePart: spareParts)
+				if(sparePart.usedOnEquipment == null && sparePart.currentStatus.equals(Status.INSTOCK))
+					inStockSpareParts.add(sparePart)
+		}
+		return inStockSpareParts
+	}
+	
+	@Transient
+	def getPendingSpareParts(){
+		List<SparePart> pendingSpareParts=[]
+		if(!spareParts==null && !spareParts.isEmpty()){
+			for(SparePart sparePart:spareParts)
+			if(sparePart.usedOnEquipment == null && sparePart.currentStatus.equals(Status.PENDINGORDER))
+			pendingSpareParts.add(sparePart)
+			}
+		return pendingSpareParts
+	}
+	
+	@Override
+	public String toString() {
+		return "SparePartType [code=" + code + ", partNumber=" + partNumber + "]";
+	}
+	
 }

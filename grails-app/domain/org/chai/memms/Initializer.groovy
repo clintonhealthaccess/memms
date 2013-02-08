@@ -69,6 +69,7 @@ import org.chai.memms.preventive.maintenance.PreventiveProcess;
 import org.chai.memms.security.Role
 import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType
+import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.util.Utils;
 
 public class Initializer {
@@ -656,8 +657,23 @@ public class Initializer {
 		def dOrderSix = newWorkBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Second Work Based Six'],"Second Work Based Order",now()+1,null,WorkIntervalType.WEEK,2)
 		
 		}
+
+    public static createSparePartStructure(){
+			def sparePartOne = newSparePartType("4323", ['en':'first spare part','fr':' premiere piece de rechange'],['en':'first spare part description','fr':' description de la premiere piece de rechange'],"4323-XYZ",Provider.findByCode("ONE"),now())
+	     	def sparePartTwo = newSparePartType("4324", ['en':'second spare part','fr':' deuxieme piece de rechange'],['en':'second spare part description','fr':' description de la deuxieme piece de rechange'],"4324-ABC",Provider.findByCode("TWO"),now())
+	 		def sparePartThree = newSparePartType("4325", ['en':'third spare part','fr':' troisieme piece de rechange'],['en':'third spare part description','fr':' description de la troisieme piece de rechange'],"4325-IJK",Provider.findByCode("THREE"),now())
+    }
 	
+
 	//Models definition
+	//Spare Part
+	public static def newSparePartType(def code, def names, def descriptions,def partNumber,def manufacturer, def discontinuedDate){
+		def type = new SparePartType(code:code,partNumber:partNumber,manufacturer:manufacturer,discontinuedDate:discontinuedDate)
+		Utils.setLocaleValueInMap(type,names,"Names")
+		Utils.setLocaleValueInMap(type,descriptions,"Descriptions")
+		return type.save(failOnError: false)
+	}
+
 	//Preventive Maintenance
 	public static def newDurationBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def firstOccurenceOn,def closedOn,def occurency,def occurInterval,def occurDaysOfWeek){
 		def timeDate =  newTimeDate(firstOccurenceOn)

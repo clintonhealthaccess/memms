@@ -1,4 +1,4 @@
-/** 
+/**
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
@@ -13,7 +13,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,36 +25,34 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms
-
-import i18nfields.I18nFields
+package org.chai.memms.spare.part;
+import java.util.List;
+import java.util.Map;
+import org.chai.memms.spare.part.SparePartType;
+import org.chai.memms.util.Utils;
 /**
  * @author Jean Kahigiso M.
  *
  */
-@i18nfields.I18nFields
-class Warranty{
+class SparePartTypeService {
+	def languageService;
 	
-	Date startDate
-	Boolean sameAsSupplier = false
-	String descriptions
-	Contact contact
-	
-	static i18nFields = ["descriptions"]
-	static embedded = ["contact","numberOfMonth"]
-	
-	static constraints = {
-		importFrom Contact
-		startDate nullable:false, validator:{it <= new Date()} 
-		descriptions nullable: true, blank: true
-		contact nullable: true,validator:{val, obj ->
-			 if(obj.sameAsSupplier==true) return (val==null)
-			}
-		sameAsSupplier nullable: true
+	static transactional = true
 		
-	}
-	
-	static mapping = {
-		version false
+	public def searchSparePartType(String text,Map<String, String> params) 
+	{
+		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
+		def dbFieldDescritpion = 'descriptions_'+languageService.getCurrentLanguagePrefix();
+		def criteria = SparePartType.createCriteria()
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			or{
+			ilike("code","%"+text+"%")
+		    ilike(dbFieldName,"%"+text+"%")
+			ilike(dbFieldDescritpion,"%"+text+"%")
+			}	
+		}
+			
 	}
 }
+
+
