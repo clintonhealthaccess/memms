@@ -1,751 +1,775 @@
 .form-section
-	border-bottom: 1px solid #eee
-	+pie-clearfix
-	.form-content
-		float: left
-		width: 60%
-	.form-aside
-		background: url('../images/bg-body.png')
-		border: 1px solid #f6f6f6
-		float: right
-		margin-top: 15px
-		margin-bottom: 15px
-		padding: 10px 2% 20px 3%
-		width: 33%
-		.pulled
-			margin-top: -6px
-	h6
-		color: #888
-		font-size: 12px
-		font-weight: bold
-		margin: 1em 0 .4em
-	h5
-		font-size: 12px
-		margin-bottom: 1em
-		text-transform: uppercase
-	li
-		+pie-clearfix
-	span
-		display: inline-block
-		font-size: 11px
-		line-height: 1.5
-		&.label
-			color: #666
-			float: left
-			width: 25%
-		&.text
-			color: $primary
-			float: right
-			width: 75%
+  border-bottom: 1px solid #eee
+  +pie-clearfix
+  .form-content
+    float: left
+    width: 60%
+  .form-aside
+    background: url('../images/bg-body.png')
+    border: 1px solid #f6f6f6
+    float: right
+    margin-top: 15px
+    margin-bottom: 15px
+    padding: 10px 2% 20px 3%
+    width: 33%
+    .pulled
+      margin-top: -6px
+  h6
+    color: #888
+    font-size: 12px
+    font-weight: bold
+    margin: 1em 0 .4em
+  h5
+    font-size: 12px
+    margin-bottom: 1em
+    text-transform: uppercase
+  li
+    +pie-clearfix
+  span
+    display: inline-block
+    font-size: 11px
+    line-height: 1.5
+    &.label
+      color: #666
+      float: left
+      width: 25%
+    &.text
+      color: $primary
+      float: right
+      width: 75%
 .week-days
-	ul
-		float: right
-		li
-			display: inline
-			span
-				font-weight: bold	
+  ul
+    float: right
+    li
+      display: inline
+      span
+        font-weight: bold 
 .question-checkbox
-	li
-		clear: both
-		padding: 5px 10px
-	input[type=checkbox]
-		margin: 0 5px 0 0
-		
+  li
+    clear: both
+    padding: 5px 10px
+  input[type=checkbox]
+    margin: 0 5px 0 0
+    
 .form-actions
-	border-top: 2px solid $filler
-	margin-top: 15px
-	+pie-clearfix
-	li
-		display: inline
-		float: left
-		padding: 10px 0 10px 10px
-		
+  border-top: 2px solid $filler
+  margin-top: 15px
+  +pie-clearfix
+  li
+    display: inline
+    float: left
+    padding: 10px 0 10px 10px
+    
 .go-back
-	color: $no
-	display: block
-	font-size: 11px
-	opacity: 0.6
-	padding: 11px 0 0
-	&:hover, &:focus
-		opacity: 1
+  color: $no
+  display: block
+  font-size: 11px
+  opacity: 0.6
+  padding: 11px 0 0
+  &:hover, &:focus
+    opacity: 1
 .form-aside-hidden
-	display: none		
+  display: none   
 .facility-type
-	background: $filler2
-	border: 1px solid $filler2 - #111
-	margin: 15px
-	padding: 11px 15px
-	width: 940px
-	+border-radius
-	+pie-clearfix
-	&.no-margin
-		margin: 0 0 15px
-	h4
-		color: #888
-		float: left
-		font-size: 12px
-		padding: 3px 5px 0 0
-	#facility-type-filter
-		color: $primary
-		font-size: 11px
-	
+  background: $filler2
+  border: 1px solid $filler2 - #111
+  margin: 15px
+  padding: 11px 15px
+  width: 940px
+  +border-radius
+  +pie-clearfix
+  &.no-margin
+    margin: 0 0 15px
+  h4
+    color: #888
+    float: left
+    font-size: 12px
+    padding: 3px 5px 0 0
+  #facility-type-filter
+    color: $primary
+    font-size: 11px
+  
 .buttons
-	border-top: 1px solid #eee
-	padding: 15px 7px
+  border-top: 1px solid #eee
+  padding: 15px 7px
 
-	
+  
 button, input[type=submit], .next
-	background: $yes
-	border: 1px solid $yes - #222
-	color: $filler
-	cursor: pointer
-	display: inline-block
-	font: bold 14px/1 Arial, sans-serif
-	padding: 6px 40px
-	text-decoration: none
-	+border-radius(3px)
-	+background(linear-gradient($yes + #090909, $yes - #090909))
-	+text-shadow($yes - #333 0 1px 0)
-	&:hover, &:focus
-		background: $yes - #222
-		border: 1px solid $yes - #333
-		color: #fff
-		+background(linear-gradient($yes, $yes - #111))
-	&:active
-		position: relative
-		top: 2px
-		+box-shadow(#ddd 0px 1px 1px)
-	&#cancel-button
-		background: none
-		border: none
-		color: $no
-		font-size: 11px
-		padding: 7px 10px
-		text-decoration: underline
-		+box-shadow(none)
-		+background(linear-gradient(#fff, #fff))
-		+text-shadow(#fff 0 0 0)
-	&.medium
-		font-size: 11px
-		padding: 5px 15px
-		+text-shadow(rgba(0, 0, 0, 0.2) 0 1px 0)
-	&.small
-		font-size: 11px
-		padding: 3px 10px
-		+text-shadow(rgba(0, 0, 0, 0.2) 0 1px 0)
-	&.gray
-		background: #d9d9d9
-		border: 1px solid #ddd
-		color: #666
-		+box-shadow(#fff 0px 3px 1px)
-		+background(linear-gradient(#eee, #e9e9e9))
-		+text-shadow(#fff 0 1px 0)
-		&:hover, &:focus
-			background: $yes - #222
-			border: 1px solid $yes - #333
-			color: #fff
-			+background(linear-gradient($yes, $yes - #111))
-			+text-shadow($yes - #333 0 1px 0)
-	&.import
-		margin-right: 5px
-	&.push-r
-		margin-right: 5px
-		
+  background: $yes
+  border: 1px solid $yes - #222
+  color: $filler
+  cursor: pointer
+  display: inline-block
+  font: bold 14px/1 Arial, sans-serif
+  padding: 6px 40px
+  text-decoration: none
+  +border-radius(3px)
+  +background(linear-gradient($yes + #090909, $yes - #090909))
+  +text-shadow($yes - #333 0 1px 0)
+  &:hover, &:focus
+    background: $yes - #222
+    border: 1px solid $yes - #333
+    color: #fff
+    +background(linear-gradient($yes, $yes - #111))
+  &:active
+    position: relative
+    top: 2px
+    +box-shadow(#ddd 0px 1px 1px)
+  &#cancel-button
+    background: none
+    border: none
+    color: $no
+    font-size: 11px
+    padding: 7px 10px
+    text-decoration: underline
+    +box-shadow(none)
+    +background(linear-gradient(#fff, #fff))
+    +text-shadow(#fff 0 0 0)
+  &.medium
+    font-size: 11px
+    padding: 5px 15px
+    +text-shadow(rgba(0, 0, 0, 0.2) 0 1px 0)
+  &.small
+    font-size: 11px
+    padding: 3px 10px
+    +text-shadow(rgba(0, 0, 0, 0.2) 0 1px 0)
+  &.gray
+    background: #d9d9d9
+    border: 1px solid #ddd
+    color: #666
+    +box-shadow(#fff 0px 3px 1px)
+    +background(linear-gradient(#eee, #e9e9e9))
+    +text-shadow(#fff 0 1px 0)
+    &:hover, &:focus
+      background: $yes - #222
+      border: 1px solid $yes - #333
+      color: #fff
+      +background(linear-gradient($yes, $yes - #111))
+      +text-shadow($yes - #333 0 1px 0)
+  &.import
+    margin-right: 5px
+  &.push-r
+    margin-right: 5px
+    
 .edit-button, .delete-button
-	display: inline-block
-	height: 12px
-	opacity: 0.3
-	text-indent: -9999em
-	width: 12px
-	&:hover, &:focus
-		opacity: 1
-	
+  display: inline-block
+  height: 12px
+  opacity: 0.3
+  text-indent: -9999em
+  width: 12px
+  &:hover, &:focus
+    opacity: 1
+  
 .edit-button
-	background: url('../images/icons/mini_edit.png') no-repeat center
+  background: url('../images/icons/mini_edit.png') no-repeat center
 .delete-button
-	background: url('../images/icons/mini_delete.png') no-repeat center
-	
+  background: url('../images/icons/mini_delete.png') no-repeat center
+  
 select
-	background: #f6f6f6
-	border: 1px solid $filler - #333
-	color: #444
-	font: normal 12px Arial, sans-serif
-	padding: 2px
-	min-width: 140px
-	+box-shadow($filler - #111 1px 1px 3px 0 inset)
-	&:hover, &:focus
-		background: $filler + #030303
-		border-color: $primary
-		
+  background: #f6f6f6
+  border: 1px solid $filler - #333
+  color: #444
+  font: normal 12px Arial, sans-serif
+  padding: 2px
+  min-width: 140px
+  +box-shadow($filler - #111 1px 1px 3px 0 inset)
+  &:hover, &:focus
+    background: $filler + #030303
+    border-color: $primary
+    
 .focus-field
-	border: solid 1px $primary
-	background: $filler + #060606
-	color: #333
-	font: normal 12px Arial, sans-serif
-	padding: 3px
-	  
+  border: solid 1px $primary
+  background: $filler + #060606
+  color: #333
+  font: normal 12px Arial, sans-serif
+  padding: 3px
+    
 .idle-field
-	background: #f9f9f9
-	border: 1px solid $filler - #333
-	color: #444
-	font: normal 12px Arial, sans-serif
-	padding: 3px
-	+box-shadow($filler - #111 1px 1px 3px 0 inset)
-	&:hover, &:focus
-		background: $filler + #030303
-		border-color: $primary
+  background: #f9f9f9
+  border: 1px solid $filler - #333
+  color: #444
+  font: normal 12px Arial, sans-serif
+  padding: 3px
+  +box-shadow($filler - #111 1px 1px 3px 0 inset)
+  &:hover, &:focus
+    background: $filler + #030303
+    border-color: $primary
 .in-input
-	margin-top: 8px
-	
+  margin-top: 8px
+  
 .completed-field
-	background: #ededed
-	color: #333
-	border: solid 1px $yes
-	
+  background: #ededed
+  color: #333
+  border: solid 1px $yes
+  
 .ajax-search-field
-	width: 340px
-	
+  width: 340px
+  
 .login-field
-	background: $filler
-	border: 1px solid $filler - #333
-	color: #444
-	font: normal 18px 'Lucida Grande', Arial, sans-serif
-	padding: 4px
-	text-align: center
-	width: 154px
-	+box-shadow($filler - #111 1px 1px 3px 0 inset)
-	&:hover, &:focus
-		background: $filler + #030303
-		border-color: $primary
-		
+  background: $filler
+  border: 1px solid $filler - #333
+  color: #444
+  font: normal 18px 'Lucida Grande', Arial, sans-serif
+  padding: 4px
+  text-align: center
+  width: 154px
+  +box-shadow($filler - #111 1px 1px 3px 0 inset)
+  &:hover, &:focus
+    background: $filler + #030303
+    border-color: $primary
+    
 // fterrier start: added textare style
 textarea.login-field
-	width: 400px
-	height: 50px
-	text-align: left
+  width: 400px
+  height: 50px
+  text-align: left
 // fterrier end
-		
+    
 .login-label
-	color: $primary
-	font-family: 'Lucida Grande', Arial, sans-serif
-	font-size: 11px
-	margin: 0 auto
-	padding: 3px
-	text-align: center
-	width: 154px
-	
+  color: $primary
+  font-family: 'Lucida Grande', Arial, sans-serif
+  font-size: 11px
+  margin: 0 auto
+  padding: 3px
+  text-align: center
+  width: 154px
+  
 ul.filtered
-	border: 1px solid lightGrey
-	padding: 4px
-	height: 270px
-	overflow: auto
-	
-	li
-		display: block
-		white-space: nowrap
+  border: 1px solid lightGrey
+  padding: 4px
+  height: 270px
+  overflow: auto
+  
+  li
+    display: block
+    white-space: nowrap
 
-		span
-			color: grey
+    span
+      color: grey
 
-	li:hover
-		background-color: yellow
+  li:hover
+    background-color: yellow
 
 .element-list
-	.element-map-header, .element-map-body
-		display: block
-		//.element-map-header, .element-map-body
-		.element-map-header
-			font-size: 11px
-		input
-			width: 121px
-		select
-			width: 129px
-			
-	li
-		position: relative
-			
-	h5
-		color: $primary
-		font-size: 14px
-		
+  .element-map-header, .element-map-body
+    display: block
+    //.element-map-header, .element-map-body
+    .element-map-header
+      font-size: 11px
+    input
+      width: 121px
+    select
+      width: 129px
+      
+  li
+    position: relative
+      
+  h5
+    color: $primary
+    font-size: 14px
+    
 .element-map-level-2
-	float: left
-	padding-top: 5px
-	position: relative
-	> li
-		margin-bottom: 5px
-		
+  float: left
+  padding-top: 5px
+  position: relative
+  > li
+    margin-bottom: 5px
+    
 .element-list-row
-	background: #fafafa
-	border: 1px solid $dropdown
-	padding: 15px
-	position: relative
-	
+  background: #fafafa
+  border: 1px solid $dropdown
+  padding: 15px
+  position: relative
+  
 ul.element-map
-	+pie-clearfix
-	li
-		+pie-clearfix
-		
-	ul.element-map li
-		display: inline
-		float: left
-		
-	label
-		font-size: 10px
-		margin-bottom: 3px
+  +pie-clearfix
+  li
+    +pie-clearfix
+    
+  ul.element-map li
+    display: inline
+    float: left
+    
+  label
+    font-size: 10px
+    margin-bottom: 3px
 
 .form-heading-list
-	padding-left: 20px
-	li
-		background: url('../images/select.png') no-repeat left center
-		color: $primary
-		padding-left: 10px
+  padding-left: 20px
+  li
+    background: url('../images/select.png') no-repeat left center
+    color: $primary
+    padding-left: 10px
 
 .inline-list li
-	display: inline
-	float: left
+  display: inline
+  float: left
 .error-warning
-	display: block
-	color: $primary
-	float: left
-	
+  display: block
+  color: $primary
+  float: left
+  
 form.search-form
-	color: $primary
-	display: inline-block
-	font-size: 12px
-	input, button
-		float: left
-	input
-		background: #f9f9f9
-		border: 1px solid $filler - #333
-		color: #444
-		font: normal 12px Arial, sans-serif
-		margin: 0
-		padding: 3px 5px 4px
-		+box-shadow($filler - #111 1px 1px 3px 0 inset)
-		&:hover, &:focus
-			background: $filler + #030303
-			border-color: $primary
-	button
-		height: 23px
-		margin: 0 0 0 -1px
-		+border-left-radius(0)
+  color: $primary
+  display: inline-block
+  font-size: 12px
+  input, button
+    float: left
+  input
+    background: #f9f9f9
+    border: 1px solid $filler - #333
+    color: #444
+    font: normal 12px Arial, sans-serif
+    margin: 0
+    padding: 3px 5px 4px
+    +box-shadow($filler - #111 1px 1px 3px 0 inset)
+    &:hover, &:focus
+      background: $filler + #030303
+      border-color: $primary
+  button
+    height: 23px
+    margin: 0 0 0 -1px
+    +border-left-radius(0)
 
 .form-box
-	border: 1px solid #ddd
-	margin: 0 auto
-	width: 250px
-	+box-shadow(#eee 0 0 5px)
-	+border-radius(3px)
-	table.listing
-		tbody
-			border: none
-		tr:last-child td
-			border: none
-			padding-top: 10px
-			padding-bottom: 10px
-		tr:first-child td
-			border: none
-		td
-			border: none
-			padding: 12px 0 5px 0
-			text-align: center
+  border: 1px solid #ddd
+  margin: 0 auto
+  width: 250px
+  +box-shadow(#eee 0 0 5px)
+  +border-radius(3px)
+  table.listing
+    tbody
+      border: none
+    tr:last-child td
+      border: none
+      padding-top: 10px
+      padding-bottom: 10px
+    tr:first-child td
+      border: none
+    td
+      border: none
+      padding: 12px 0 5px 0
+      text-align: center
 
-	a
-		font-size: 11px
-	&.wide
-		background: #e8f3fb
-		width: 350px
-	&.register
-		padding: 0 10px
-		width: 460px
-		
+  a
+    font-size: 11px
+  &.wide
+    background: #e8f3fb
+    width: 350px
+  &.register
+    padding: 0 10px
+    width: 460px
+    
 .nice-form
-	padding-top: 10px
-	
-	input, select
-		font-family: 'Lucida Grande', Arial, sans-serif
-		width: 250px
-		background: $filler
-		border: 1px solid $filler - #333
-		color: #444
-		font-size: 14px
-		padding: 4px
-		margin-bottom: 0px
-		+box-shadow($filler - #111 1px 1px 3px 0 inset)
-		&:hover, &:focus
-			background: $filler + #030303
-			border-color: $primary
-	
-	select
-		width: 200px
-		
-	label, span, a, div:not(.error-list)
-		font-family: 'Lucida Grande', Arial, sans-serif
-		color: $primary
-		font-size: 11px
-		margin: 0 auto
-		padding: 3px
+  padding-top: 10px
+  
+  input, select
+    font-family: 'Lucida Grande', Arial, sans-serif
+    width: 250px
+    background: $filler
+    border: 1px solid $filler - #333
+    color: #444
+    font-size: 14px
+    padding: 4px
+    margin-bottom: 0px
+    +box-shadow($filler - #111 1px 1px 3px 0 inset)
+    &:hover, &:focus
+      background: $filler + #030303
+      border-color: $primary
+  
+  select
+    width: 200px
+    
+  label, span, a, div:not(.error-list)
+    font-family: 'Lucida Grande', Arial, sans-serif
+    color: $primary
+    font-size: 11px
+    margin: 0 auto
+    padding: 3px
 
-	td
-		vertical-align: middle
-		
-	tr
-		height: 42px
-		
+  td
+    vertical-align: middle
+    
+  tr
+    height: 42px
+    
 .login-form
-	button
-		margin-bottom: 5px
-	td:first-child
-		text-align: center
-	input
-		width: 200px
-		text-align: center
-	input[type=checkbox]
-		width: 14px
-	a
-		display: block
-	button
-		margin: 0 auto
-	.error-list
-		position: relative
-		left: 20px
-	.listing tbody tr
-		&:hover, &:focus
-			background: none
-		
+  button
+    margin-bottom: 5px
+  td:first-child
+    text-align: center
+  input
+    width: 200px
+    text-align: center
+  input[type=checkbox]
+    width: 14px
+  a
+    display: block
+  button
+    margin: 0 auto
+  .error-list
+    position: relative
+    left: 20px
+  .listing tbody tr
+    &:hover, &:focus
+      background: none
+    
 .todo
-	padding: 7px
-	a
-		background: rgba(255, 255, 255, 0.8)
-		border: 1px solid rgba(0, 0, 0, 0.12)
-		display: block
-		font-size: 12px
-		margin: 3px
-		padding: 8px 10px
-		text-decoration: none
-		+border-radius(2px)
-		&:hover, &:focus
-			background: url('../images/follow2.png') no-repeat 305px center #fff
-			border: 1px solid rgba(0, 0, 0, 0.35)
-			color: #222
-			+box-shadow(rgba(0, 0, 0, 0.08) 1px 1px 4px inset)
+  padding: 7px
+  a
+    background: rgba(255, 255, 255, 0.8)
+    border: 1px solid rgba(0, 0, 0, 0.12)
+    display: block
+    font-size: 12px
+    margin: 3px
+    padding: 8px 10px
+    text-decoration: none
+    +border-radius(2px)
+    &:hover, &:focus
+      background: url('../images/follow2.png') no-repeat 305px center #fff
+      border: 1px solid rgba(0, 0, 0, 0.35)
+      color: #222
+      +box-shadow(rgba(0, 0, 0, 0.08) 1px 1px 4px inset)
 
 .items
-	border-collapse: separate
-	margin-bottom: 15px
-	width: 100%
-	th, td
-		line-height: 1.3
-		padding: 10px
-	th, td, a
-		font-size: 11px
-	th
-		border-top: 1px solid $primary
-		background: $filler
-		color: $primary
-		font-weight: bold
-	td
-		border-top: 1px solid rgba(0, 0, 0, 0.08)
-		padding: 5px 10px
-		position: relative
-		&:first-child
-			padding-left: 15px
-		&:last-child
-			padding-right: 15px
-		
-	tr
-		&.even td
-			background: rgba(0, 0, 0, 0.015)
-		&:hover, &:focus
-			td
-				background: rgba(0, 0, 0, 0.015)
-			.edit-button, .delete-button
-				opacity: 0.7
-		&:first-child th
-			border-bottom: 1px solid rgba(0, 0, 0, 0.15)
-		&:first-child td
-			border-top: 0
-		&:last-child td
-			border-bottom: 1px solid rgba(0, 0, 0, 0.08)
-	&.spaced
-		td
-			padding: 10px
-			&:first-child
-				padding-left: 15px
-			&:last-child
-				padding-right: 15px
-				
-	th.sortable a
-		background-position: right
-		background-repeat: no-repeat
-		padding-right: 1.1em
+  border-collapse: separate
+  margin-bottom: 15px
+  width: 100%
+  th, td
+    line-height: 1.3
+    padding: 10px
+  th, td, a
+    font-size: 11px
+  th
+    border-top: 1px solid $primary
+    background: $filler
+    color: $primary
+    font-weight: bold
+  td
+    border-top: 1px solid rgba(0, 0, 0, 0.08)
+    padding: 5px 10px
+    position: relative
+    &:first-child
+      padding-left: 15px
+    &:last-child
+      padding-right: 15px
+    
+  tr
+    &.even td
+      background: rgba(0, 0, 0, 0.015)
+    &:hover, &:focus
+      td
+        background: rgba(0, 0, 0, 0.015)
+      .edit-button, .delete-button
+        opacity: 0.7
+    &:first-child th
+      border-bottom: 1px solid rgba(0, 0, 0, 0.15)
+    &:first-child td
+      border-top: 0
+    &:last-child td
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08)
+  &.spaced
+    td
+      padding: 10px
+      &:first-child
+        padding-left: 15px
+      &:last-child
+        padding-right: 15px
+        
+  th.sortable a
+    background-position: right
+    background-repeat: no-repeat
+    padding-right: 1.1em
 
-	th.asc a
-		background-image: url(../images/skin/sorted_asc.gif)
+  th.asc a
+    background-image: url(../images/skin/sorted_asc.gif)
 
-	th.desc a
-		background-image: url(../images/skin/sorted_desc.gif)
-		
+  th.desc a
+    background-image: url(../images/skin/sorted_desc.gif)
+    
+  + div
+    padding: 10px
+    text-align: center
+    
 .simple-list
-	fieldset
-		display: block
-		padding: 10px 0
-	legend
-		font-size: 14px
-		font-weight: bold
-	label
-		color: $primary
-		display: inline-block
-		font-size: 11px
-		line-height: 1.4
-		margin-left: 7px
-		padding-top: 5px
-		vertical-align: top
-		width: 100px
-		&.top
-			padding-top: 0
-	.row
-		margin-bottom: 7px
-		vertical-align: middle
-	.rows-wrapper
-		.row
-			float: left
-		input[type=text]
-			margin: 0
-			width: 230px
-		select[name=currency]
-			height: 23px
-			margin-left: 3px
-			min-width: 50px
-			width: 90px
-		label[for=currency]
-			display: none
-	.date
-		select
-			min-width: 50px
-	.date-picker,.time-picker,.date-time-picker
-		width: 132px !important
-	input[type=text], textarea
-		width: 320px
+  fieldset
+    display: block
+    padding: 10px 0
+  legend
+    font-size: 14px
+    font-weight: bold
+  label
+    color: $primary
+    display: inline-block
+    font-size: 11px
+    line-height: 1.4
+    margin-left: 7px
+    padding-top: 5px
+    vertical-align: top
+    width: 100px
+    &.top
+      padding-top: 0
+  .row
+    margin-bottom: 7px
+    vertical-align: middle
+  .rows-wrapper
+    .row
+      float: left
+    input[type=text]
+      margin: 0
+      width: 230px
+    select[name=currency]
+      height: 23px
+      margin-left: 3px
+      min-width: 50px
+      width: 90px
+    label[for=currency]
+      display: none
+  .date
+    select
+      min-width: 50px
+  .date-picker,.time-picker,.date-time-picker
+    width: 132px !important
+  input[type=text], textarea
+    width: 320px
 
 .paginateButtons
-	padding: 0 15px 15px
-	+pie-clearfix
-	a
-		background: $filler
-		color: $primary
-		&:hover, &:focus
-			border: 1px solid $primary + #222
-	a, span
-		border: 1px solid rgba(0, 0, 0, 0.07)
-		display: block
-		float: left
-		margin-right: 3px
-		padding: 7px 10px
-		text-decoration: none
+  padding: 0 15px 15px
+  +pie-clearfix
+  a
+    background: $filler
+    color: $primary
+    &:hover, &:focus
+      border: 1px solid $primary + #222
+  a, span
+    border: 1px solid rgba(0, 0, 0, 0.07)
+    display: block
+    float: left
+    margin-right: 3px
+    padding: 7px 10px
+    text-decoration: none
 
-	span
-		background: $primary
-		color: #fff
-		
+  span
+    background: $primary
+    color: #fff
+    
 .foldable-container
-	border-top: 1px dotted $dropdown - #191919
-	margin-top: 6px
-	
+  border-top: 1px dotted $dropdown - #191919
+  margin-top: 6px
+  
 .foldable
-	&.opened:not(.current)
-		padding-bottom: 0px !important
+  &.opened:not(.current)
+    padding-bottom: 0px !important
 
-	a.foldable-toggle
-		display: block
-		cursor: pointer
-		height: 14px
-		margin-top: -3px
-		width: 20px
-		float: left
-		text-indent: -9999px
-		background-image: url('../images/icons/toggle_plus.png')
-		&.toggled
-			background-image: url('../images/icons/toggle_minus.png')
+  a.foldable-toggle
+    display: block
+    cursor: pointer
+    height: 14px
+    margin-top: -3px
+    width: 20px
+    float: left
+    text-indent: -9999px
+    background-image: url('../images/icons/toggle_plus.png')
+    &.toggled
+      background-image: url('../images/icons/toggle_minus.png')
 
 .filter-bar
-	color: #888888
-	font-size: 11px
-	margin-top: 15px
-	padding: 15px 15px 40px
-	
+  color: #888888
+  font-size: 11px
+  margin-top: 15px
+  padding: 15px 15px 40px
+  
 .filters
-	border: 1px solid rgba(0, 0, 0, 0.1)
-	padding: 0
-	margin-bottom: 15px
-	h2
-		border-bottom: 1px solid #eee
-		font: bold 15px Arial, sans-serif
-		padding: 10px 15px
-		a
-			margin-top: 4px
-			opacity: 0.4
-			&:hover, &:focus
-				opacity: 1
-	ul.filters-list
-		padding: 10px 15px 0
-		+pie-clearfix
-		> li
-			display: inline
-			float: left
-			height: 50px
-			width: 32%
-		.date
-			select
-				min-width: 31%
-				width: 31%
-	label
-		display: block
-		font-size: 11px
-		margin-bottom: 2px
-	select
-		background: $filler + #111
-		border: 1px solid $primary + #222
-		color: $primary
-		font-size: 11px
-		font-weight: bold
-		height: 24px
-		padding: 3px
-		width: 300px
-		+border-radius(2px)
-	button
-		margin: 5px 15px 15px
-	.date-picker
-		width: 137px
-		
+  border: 1px solid rgba(0, 0, 0, 0.1)
+  padding: 0
+  margin-bottom: 15px
+  h2
+    font: bold 12px Arial, sans-serif
+    padding: 10px 15px
+
+    a
+      font: normal 11px Arial, sans-serif
+      margin-top: 1px
+      opacity: 0.7
+      text-decoration: none
+      +transition(all .4s)
+      &:hover, &:focus
+        color: $primary - #111
+        opacity: 1
+        text-decoration: underline
+  ul.filters-list
+    padding: 10px 15px 0
+    +pie-clearfix
+    > li
+      display: inline
+      float: left
+      height: 50px
+      margin-right: 1%
+      width: 32%
+    .date
+      select
+        min-width: 31%
+        width: 31%
+  label
+    display: block
+    font-size: 11px
+    margin-bottom: 2px
+  select
+    background: $filler + #111
+    border: 1px solid $primary + #222
+    color: $primary
+    font-size: 11px
+    font-weight: bold
+    height: 24px
+    padding: 3px
+    width: 300px
+    +border-radius(2px)
+  button
+    margin: 5px 15px 15px
+  .date-picker
+    width: 137px
+    
+  &.projection
+    padding: 10px
+    .question-help
+      background-color: #fff
+      border: none
+      display: inline
+      margin: 0
+      padding: 12px 45px
+      position: relative
+    
+.filters-box
+  border-top: 1px solid #eee
+  display: none
+    
 .filter-results
-	color: #aaa
-	font: bold 14px Arial, sans-serif
-	padding: 5px 0
-	text-transform: uppercase
-	
+  color: #aaa
+  font: bold 14px Arial, sans-serif
+  padding: 5px 0
+  text-transform: uppercase
+  
 .form-languages a
-	font-size: 10px
-	margin-left: 5px
-	text-transform: uppercase
-	
+  font-size: 10px
+  margin-left: 5px
+  text-transform: uppercase
+  
 .checkbox
-	position: relative
-	+pie-clearfix
-	.ajax-spinner, .list-check-box
-		position: absolute
-	.ajax-spinner
-		top: -7px
-	.list-check-box
-		margin: 0
-		top: -5px
-	.ajax-error
-		color: $no
-		display: inline-block
-		left: -50%
-		position: absolute
-		top: 12px
-		white-space: nowrap
+  position: relative
+  +pie-clearfix
+  .ajax-spinner, .list-check-box
+    position: absolute
+  .ajax-spinner
+    top: -7px
+  .list-check-box
+    margin: 0
+    top: -5px
+  .ajax-error
+    color: $no
+    display: inline-block
+    left: -50%
+    position: absolute
+    top: 12px
+    white-space: nowrap
 .process-list-action, .process-list-material
-	border: 1px solid $primary + #222
-	max-height: 188px
-	overflow-y: scroll
-	
-// jkahigiso start: added textare style	
+  border: 1px solid $primary + #222
+  max-height: 188px
+  overflow-y: scroll
+  
+// jkahigiso start: added textare style 
 .hide-list
-	display: none
+  display: none
 // jkahigiso end
-	
+  
 .process
-	margin-bottom: 15px
-	fieldset
-		display: inline
-		padding: 3px 0 10px
-		width: 330px
-		ul
-			margin-bottom: 10px
-		li
-			border-bottom: 1px solid #eee
-			line-height: 1.4
-			padding: 5px
-			position: relative
-			&:last-child
-				border-bottom: 0
-			.ajax-spinner
-				position: absolute
-				right: 28px
-				top: 6px
-	input[type=text]
-		width: 264px
-	.ajax-error
-		color: $no
-		font-size: 12px
-		padding: 0 0 0 3px
-		&.alt
-			display: block
-	a.delete-row
-		float: none
-		position: absolute
-		right: 4px
-		top: 4px
-		
+  margin-bottom: 15px
+  fieldset
+    display: inline
+    padding: 3px 0 10px
+    width: 330px
+    ul
+      margin-bottom: 10px
+    li
+      border-bottom: 1px solid #eee
+      line-height: 1.4
+      padding: 5px
+      position: relative
+      &:last-child
+        border-bottom: 0
+      .ajax-spinner
+        position: absolute
+        right: 28px
+        top: 6px
+  input[type=text]
+    width: 264px
+  .ajax-error
+    color: $no
+    font-size: 12px
+    padding: 0 0 0 3px
+    &.alt
+      display: block
+  a.delete-row
+    float: none
+    position: absolute
+    right: 4px
+    top: 4px
+    
 a.delete-row
-	background: $no
-	color: #fff
-	display: block
-	float: right
-	font-size: 10px
-	font-weight: bold
-	height: 18px
-	position: relative
-	z-index: 1000
-	line-height: 18px
-	margin-left: 5px
-	opacity: .2
-	text-align: center
-	text-decoration: none
-	width: 18px
-	+border-radius(50%)
-	&:hover, &:focus
-		opacity: 1
+  background: $no
+  color: #fff
+  display: block
+  float: right
+  font-size: 10px
+  font-weight: bold
+  height: 18px
+  position: relative
+  z-index: 1000
+  line-height: 18px
+  margin-left: 5px
+  opacity: .2
+  text-align: center
+  text-decoration: none
+  width: 18px
+  +border-radius(50%)
+  &:hover, &:focus
+    opacity: 1
 
 // ui-datepicker overrides
-		
+    
 .filters .ui-datepicker-trigger
-	position: absolute
-	right: 13px
-	top: 17px
+  position: absolute
+  right: 13px
+  top: 17px
 .ui-datepicker-trigger
-	position: relative
-	right: 20px
-	top: 4px
+  position: relative
+  right: 20px
+  top: 4px
 .ui-datepicker-title, .ui-datepicker-calendar
-	font-size: 12px !important
+  font-size: 12px !important
 
 //expected life time aligned in one row
 
 .period-month-year
-	display: inline-block
-	width: 20%
-	input[type=text]
-		float: left
-		width: 55px
-	label
-		width: auto
+  display: inline-block
+  width: 20%
+  input[type=text]
+    float: left
+    width: 55px
+  label
+    width: auto
 .time-date
-	display: inline-block
-	width: 33%
-	label
-		width: auto
+  display: inline-block
+  width: 33%
+  label
+    width: auto
 //days of a weeks aligned in one line
 .week-days-options
-	display: inline-block
-	width: auto
+  display: inline-block
+  width: auto
 // text field made small
 .small-text-field
-	width: 133px !important
+  width: 133px !important
 .rows-wrapper
-	.row
-		float: none !important
-		display: inline-block !important
+  .row
+    float: none !important
+    display: inline-block !important

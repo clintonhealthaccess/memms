@@ -2,6 +2,7 @@
 	<thead>
 		<th><g:message code="datalocation.label" /></th>
 		<th>${message(code:code)}</th>
+		<th>View mapper</th>
 		<th></th>
 	</thead>
 	<tbody>
@@ -12,6 +13,11 @@
 				</td>
 				<td>
 					${maintenance.orderCount}
+				</td>
+				<td>
+				  <a href="${createLinkWithTargetURI(controller:'durationBasedOrder',action:'calendar',params:['dataLocation.id': dataLocation?.id])}">
+            <img src="${resource(dir:'images',file:'icon_calendar2.png')}" alt="View mapper"/>
+          </a>
 				</td>
 				<td>
 					<shiro:hasPermission permission="order:list">

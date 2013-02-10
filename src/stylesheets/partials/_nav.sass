@@ -92,7 +92,7 @@
     text-decoration: none
     +text-shadow(rgba(0, 0, 0, 0.2) 0 1px 0)
     &:hover, &:focus
-      background: $primary
+      background: $primary - #1e1e1e
   > li:hover > .sub-submenu
     position: relative
     left: 158px
@@ -160,3 +160,30 @@
       border-bottom: 1px solid #fff
       margin-bottom: -1px
       
+
+// New entity dropdown
+.new-entity-dropdown
+  float: left
+  position: relative
+  .new-entity-sub-menu
+    border: 1px solid rgba(0, 0, 0, 0.1)
+    display:  none
+    position: absolute
+    top: 24px
+    width: 96%
+    +border-radius(3px)
+    a
+      background: #f9f9f9
+      display: block
+      font-size: 11px
+      padding: 5px 10px
+      
+  &:hover, &:focus
+    > li > a
+      background: $yes - #222
+      border: 1px solid $yes - #333
+      color: #fff
+      +background(linear-gradient($yes, $yes - #111))
+      +text-shadow(rgba(0, 0, 0, 0.2) 0 1px 1px)
+    .new-entity-sub-menu
+      display:  block
