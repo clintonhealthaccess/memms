@@ -72,7 +72,7 @@ function filterFormAjax() {
 	    var url = $(filterBox).find("form").attr("action");
 	    var data = $(filterBox).find("form").serialize(); 
 	    $.ajax({
-	        type: 'POST',
+	        type: 'GET',
 	        url: url,
 	        data: data,
 	        success: function(data) {

@@ -59,6 +59,8 @@ class UtilTagLib {
 	def createLinkWithTargetURI = {attrs, body ->
 		if (attrs['params'] == null) attrs['params'] = [:]
 		else attrs['params'] = new HashMap(attrs['params'])
+		
+		log.debug("found query string: ${request.queryString}")
 		attrs['params'] << [targetURI: request.forwardURI - request.contextPath + (request.queryString==null?'':'?'+request.queryString)];
 		
 		log.debug('creating link with attrs: '+attrs)
@@ -91,11 +93,6 @@ class UtilTagLib {
 		out << render(template:"/tags/util/locales", model: attrs)
 	}
 	
-//	def i18n = { attrs, body ->
-//		def text = languageService.getText(attrs['field'])
-//		out << text 
-//	}
-	
 	def prettyList = { attrs, body ->
 		def entities = attrs['entities']
 		def splitDelim = attrs['split'] ?: ','
@@ -109,6 +106,11 @@ class UtilTagLib {
 		else {}
 		
 		out << text
+	}
+	
+	def i18nField = { attrs, body ->
+		def field = attrs['field']
+		out << field + '_' + languageService.currentLanguage
 	}
 	
 	def ifText = { attrs, body ->

@@ -95,16 +95,11 @@ class WorkOrderViewController extends AbstractController{
 			if(request.xhr){
 				this.ajaxModel(orders,dataLocation,equipment,"")
 			}else{
-				render(view:"/entity/list", model:[
-							template:"workOrder/workOrderList",
-							filterTemplate:"workOrder/workOrderFilter",
-							listTop:"workOrder/listTop",
-							dataLocation:dataLocation,
-							equipment:equipment,
-							entities: orders,
-							entityCount: orders.totalCount,
-							code: getLabel()
-						])
+				render(view:"/entity/list", model: model(orders, dataLocation, equipment) << [
+					template:"workOrder/workOrderList",
+					filterTemplate:"workOrder/workOrderFilter",
+					listTop:"workOrder/listTop",
+				])
 			}
 		}
 	}
@@ -119,9 +114,16 @@ class WorkOrderViewController extends AbstractController{
 			
 		adaptParamsForList()
 		def orders = maintenanceService.searchOrder(WorkOrder.class,params['q'],dataLocation,equipment,params)
-		if(!request.xhr)
-			response.sendError(404)
-		this.ajaxModel(orders,dataLocation,equipment,params['q'])
+		if(request.xhr)
+			this.ajaxModel(orders,dataLocation,equipment,params['q'])
+		else {
+			render(view:"/entity/list", model: model(orders, dataLocation, equipment) << [
+				template:"workOrder/workOrderList",
+				filterTemplate:"workOrder/workOrderFilter",
+				listTop:"workOrder/listTop",
+			])	
+		}
+
 	}
 	
 	def escalate = {
@@ -149,13 +151,29 @@ class WorkOrderViewController extends AbstractController{
 		
 		adaptParamsForList()
 		def orders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.criticality,cmd.currentStatus,params)
-		if(!request.xhr)
-			response.sendError(404)
-		this.ajaxModel(orders,cmd.dataLocation,cmd.equipment,"")
+		if(request.xhr)
+			this.ajaxModel(orders,cmd.dataLocation,cmd.equipment,"")
+		else {
+			render(view:"/entity/list", model: model(orders, cmd.dataLocation, cmd.equipment) << [
+				template:"workOrder/workOrderList",
+				filterTemplate:"workOrder/workOrderFilter",
+				listTop:"workOrder/listTop",
+			])
+		}
+	}
+	
+	def model(def entities, def dataLocation, def equipment) {
+		return [
+			entities: entities,
+			entityCount: entities.totalCount,
+			dataLocation:dataLocation,
+			equipment:equipment,
+			code: getLabel()
+		]
 	}
 	
 	def ajaxModel(def entities,def dataLocation,def equipment, def searchTerm) {
-		def model = [entities: entities,entityCount: entities.totalCount,dataLocation:dataLocation,equipment:equipment,q:searchTerm]
+		def model = model(entities, dataLocation, equipment) << [q:searchTerm]
 		def listHtml = g.render(template:"/entity/workOrder/workOrderList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}

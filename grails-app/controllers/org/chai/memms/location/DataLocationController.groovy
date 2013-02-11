@@ -108,35 +108,42 @@ class DataLocationController extends AbstractEntityController {
 			flash.message = message(code: 'datalocation.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated equipment.')
 		else entity.delete()
 	}
-	
-	
-	
+
 	def list = {
 		adaptParamsForList()
 		List<DataLocation> locations = DataLocation.list(offset:params.offset,max:params.max,sort:params.sort ?:names,order: params.order ?:"asc");
 		if(request.xhr){
 			this.ajaxModel(locations,"")
 		}else{
-			render (view: '/entity/list', model:[
+			render (view: '/entity/list', model:model(locations) << [
 				template:"location/dataLocationList",
 				listTop:"location/dataLocationListTop",
-				entities: locations,
-				entityCount: locations.totalCount,
-				code: getLabel(),
-				names:names
 			])
 		}
 	}
 	def search = {
 		adaptParamsForList()
 		List<DataLocation> locations = locationService.searchLocation(DataLocation.class, params['q'], params)		
-		if(!request.xhr)
-			response.sendError(404)
-		this.ajaxModel(locations,params['q'])
+		if(request.xhr)
+			this.ajaxModel(locations,params['q'])
+		else {
+			render (view: '/entity/list', model:model(locations) << [
+				template:"location/dataLocationList",
+				listTop:"location/dataLocationListTop",
+			])
+		}
+	}
+	
+	def model(def entities) {
+		return [
+			entities: entities,
+			entityCount: entities.totalCount,
+			code: getLabel(),
+		]
 	}
 
 	def ajaxModel(def entities,def searchTerm) {
-		def model = [entities: entities,entityCount: entities.totalCount,names:names,q:searchTerm]
+		def model = model(entities) << [q:searchTerm]
 		def listHtml = g.render(template:"/entity/location/dataLocationList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}

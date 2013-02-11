@@ -2,7 +2,7 @@
 	<thead>
 		<tr>
 			<th/>
-			<g:sortableColumn property="name" params="[q:q]" title="${message(code: 'roles.label')}" />
+			<g:sortableColumn property="${i18nField(field: 'names')}" params="[q:q]" title="${message(code: 'roles.label')}" />
 			<th><g:message code="role.permissions.label"/></th>
 		</tr>
 	</thead>

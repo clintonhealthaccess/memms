@@ -454,7 +454,7 @@ class EquipmentViewControllerSpec extends IntegrationTests{
 		equipmentViewController.search()
 		
 		then:
-		equipmentViewController.response.status == 404
+		equipmentViewController.modelAndView.model.entities == [equipmentOne]
 	}
 		
 	
@@ -630,7 +630,7 @@ class EquipmentViewControllerSpec extends IntegrationTests{
 		equipmentViewController.filter()
 		
 		then:
-		equipmentViewController.response.status == 404
+		equipmentViewController.modelAndView.model.entities.size() == 1
 	}
 	
 	def "filter command validation passes"(){

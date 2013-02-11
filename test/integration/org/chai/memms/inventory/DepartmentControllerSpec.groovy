@@ -131,7 +131,7 @@ class DepartmentControllerSpec extends IntegrationTests{
 	def "none ajax search fails"(){
 		setup:
 		departmentController = new DepartmentController();
-		Initializer.newDepartment(["en":"department test one"],CODE(123),["en":"description department one"])
+		def dep = Initializer.newDepartment(["en":"department test one"],CODE(123),["en":"description department one"])
 		Initializer.newDepartment(["en":"department test two"],CODE(124),["en":"description department two"])
 		Initializer.newDepartment(["en":"department test three"],CODE(125),["en":"description department three"])
 		Initializer.newDepartment(["en":"department test four"],CODE(126),["en":"description department four"])
@@ -139,8 +139,10 @@ class DepartmentControllerSpec extends IntegrationTests{
 		when: "none ajax search fails"
 		departmentController.params.q = "one"
 		departmentController.search()
+		
 		then:
 		Department.count() == 4
-		departmentController.response.status == 404
+		departmentController.modelAndView.model.entities == [dep]
+
 	}
 }

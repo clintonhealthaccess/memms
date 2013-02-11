@@ -8,7 +8,7 @@
 		<tr>
 			<th/>
 			<th><g:message code="equipment.label"/></th>
-			<g:sortableColumn property="${names}" title="${message(code: 'entity.names.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="${i18nField(field: 'names')}" title="${message(code: 'entity.names.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="type"  title="${message(code: 'entity.type.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<th><g:message code="preventive.occurance.label"/></th>
 			<th><g:message code="preventive.occurance.interval.label"/></th>

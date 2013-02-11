@@ -174,8 +174,8 @@ class NotificationEquipmentControllerSpec  extends IntegrationTests{
 
 		def receiverTwo = newOtherUserWithType("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 
-		notificationEquipmentService.newNotification(null, "Send for rapair, one",senderOne)
-		notificationEquipmentService.newNotification(null, "Send for rapair, oneTwo",senderOne)
+		def not1 = notificationEquipmentService.newNotification(null, "Send for rapair, one",senderOne)
+		def not2 = notificationEquipmentService.newNotification(null, "Send for rapair, oneTwo",senderOne)
 		notificationEquipmentService.newNotification(null, "Send for rapair, two",senderTwo)
 
 		setupSecurityManager(receiverTwo)
@@ -186,7 +186,7 @@ class NotificationEquipmentControllerSpec  extends IntegrationTests{
 		notificationEquipmentController.search()
 
 		then:
-		notificationEquipmentController.response.status == 404
+		notificationEquipmentController.modelAndView.model.entities.size() == 2
 		NotificationEquipment.count() == 6
 	}
 	

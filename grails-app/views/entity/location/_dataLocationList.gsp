@@ -3,7 +3,7 @@
 		<tr>
 			<th/>
 			<g:sortableColumn property="code" params="[q:q]" title="${message(code: 'entity.code.label')}" />
-			<g:sortableColumn property="${names}" params="[q:q]" title="${message(code: 'entity.name.label')}" />
+			<g:sortableColumn property="${i18nField(field: 'names')}" params="[q:q]" title="${message(code: 'entity.name.label')}" />
 			<g:sortableColumn property="type" params="[q:q]" title="${message(code: 'datalocation.type.label')}" />
 			<g:sortableColumn property="managedBy" params="[q:q]" title="${message(code: 'dataLocation.managed.by.label')}" />
 			<g:sortableColumn property="location" params="[q:q]" title="${message(code: 'location.label')}" />

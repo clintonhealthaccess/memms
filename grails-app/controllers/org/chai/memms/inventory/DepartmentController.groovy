@@ -81,13 +81,9 @@ class DepartmentController extends AbstractEntityController{
 		if(request.xhr)
 			this.ajaxModel(departments,"")
 		else{
-		render(view:"/entity/list", model:[
-			template:"department/departmentList",
-			listTop:"department/listTop",
-			entities: departments,
-			entityCount: departments.totalCount,
-			code: getLabel(),
-			names:names
+			render(view:"/entity/list", model: model(departments) << [
+				template:"department/departmentList",
+				listTop:"department/listTop"
 			])
 		}
 	}
@@ -95,13 +91,26 @@ class DepartmentController extends AbstractEntityController{
 	def search = {
 		adaptParamsForList()
 		List<Department> departments = departmentService.searchDepartment(params['q'], params)
-		if(!request.xhr)
-			response.sendError(404)
-		this.ajaxModel(departments,params['q'])
+		if(request.xhr)
+			this.ajaxModel(departments,params['q'])
+		else {
+			render(view:"/entity/list", model: model(departments) << [
+				template:"department/departmentList",
+				listTop:"department/listTop"
+			])
+		}
+	}
+	
+	def model(def entities) {
+		return [
+			entities: entities,
+			entityCount: entities.totalCount,
+			code: getLabel(),
+		]
 	}
 	
 	def ajaxModel(def entities,def searchTerm) {
-		def model = [entities: entities,entityCount: entities.totalCount,names:names,q:searchTerm,entityClass: getEntityClass(),]
+		def model = model(entities) << [q:searchTerm,entityClass: getEntityClass(),]
 		def listHtml = g.render(template:"/entity/department/departmentList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}

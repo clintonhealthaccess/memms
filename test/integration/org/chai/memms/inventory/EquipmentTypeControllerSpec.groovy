@@ -79,7 +79,7 @@ class EquipmentTypeControllerSpec extends IntegrationTests{
 		equipmentTypeController.search()
 		then:
 		EquipmentType.count() == 4
-		equipmentTypeController.response.status == 404
+		equipmentTypeController.modelAndView.model.entities == [EquipmentType.findByCode(CODE(125))]
 		
 		when: "with ajax"
 		equipmentTypeController.params.q = "three"

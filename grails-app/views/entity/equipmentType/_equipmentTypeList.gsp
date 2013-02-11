@@ -4,7 +4,7 @@
 		<tr>
 			<th/>
 			<g:sortableColumn property="code" params="[q:q]" title="${message(code: 'entity.code.label')}" />
-			<g:sortableColumn property="${names}" params="[q:q]" title="${message(code: 'entity.name.label')}" />
+			<g:sortableColumn property="${i18nField(field: 'names')}" params="[q:q]" title="${message(code: 'entity.name.label')}" />
 			<th><g:message code="entity.description.label"/></th>
 			<g:sortableColumn property="observation" params="[q:q]" title="${message(code: 'entity.observation.label')}" />
 			<g:sortableColumn property="expectedLifeTime" params="[q:q]" title="${message(code: 'equipmentType.expectedLifeTime.label')}" />

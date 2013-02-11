@@ -107,10 +107,11 @@ class LocationControllerSpec extends IntegrationTests{
 		locationController =  new LocationController()
 
 		when:
-		locationController.params.q = BUTARO
+		locationController.params.q = BURERA
 		locationController.search()
+		
 		then:
 		Location.count() == 5
-		locationController.response.status == 404
+		locationController.modelAndView.model.entities == [Location.findByCode(BURERA)]
 	}
 }

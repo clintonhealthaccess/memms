@@ -149,6 +149,6 @@ class DataLocationControllerSpec extends IntegrationTests{
 		dataLocationController.search()
 		then:
 		DataLocation.count() == 5
-		dataLocationController.response.status == 404
+		dataLocationController.modelAndView.model.entities == [DataLocation.findByCode(BUTARO)]
 	}
 }

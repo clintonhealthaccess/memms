@@ -238,6 +238,7 @@ class NotificationWorkOrderControllerSpec extends IntegrationTests{
 		when://Get only those that are unread
 		notificationWorkOrderController.params.read = "false"
 		notificationWorkOrderController.params.to = Initializer.now()+1
+		notificationWorkOrderController.request.makeAjaxRequest()
 		notificationWorkOrderController.filter()
 		
 		then:
@@ -278,7 +279,7 @@ class NotificationWorkOrderControllerSpec extends IntegrationTests{
 		
 		then:
 		NotificationWorkOrder.count() == 5
-		notificationWorkOrderController.response.status == 404
+		notificationWorkOrderController.modelAndView.model.entities.size() == 2
 	}
 	
 	def "can search notifications"(){
@@ -305,6 +306,7 @@ class NotificationWorkOrderControllerSpec extends IntegrationTests{
 		notificationWorkOrderController = new NotificationWorkOrderController()
 		
 		when://Get only those that are unread
+		notificationWorkOrderController.request.makeAjaxRequest()
 		notificationWorkOrderController.params.q = "one"
 		notificationWorkOrderController.search()
 		

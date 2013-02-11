@@ -148,7 +148,7 @@ class PreventiveOrderViewControllerSpec extends IntegrationTests {
 		preventiveOrderViewController.params.q = "description"
 		preventiveOrderViewController.search()
 		then:
-		preventiveOrderViewController.response.status == 404
+		preventiveOrderViewController.modelAndView.model.entities.size() == 6
 	}
 	
 	def "can search with ajax"(){

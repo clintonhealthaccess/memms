@@ -67,16 +67,10 @@ class PreventiveOrderViewController extends AbstractController {
 		 if(request.xhr){
 			 this.ajaxModel(orders,dataLocation,equipment,"")
 		 }else{
-			render (view: '/entity/list', model:[
+			render (view: '/entity/list', model:model(orders, dataLocation, equipment) << [
 				template:"preventiveOrder/preventiveOrderList",
 				filterTemplate:"preventiveOrder/preventiveOrderFilter",
 				listTop:"preventiveOrder/listTop",
-				dataLocation:dataLocation,		
-				equipment:equipment,
-				entities: orders,
-				entityCount: orders.totalCount,
-				code:getLabel(),
-				names:names
 			])
 		}
 	}
@@ -91,13 +85,29 @@ class PreventiveOrderViewController extends AbstractController {
 			
 		adaptParamsForList()
 		def orders = maintenanceService.searchOrder(PreventiveOrder.class,params['q'],dataLocation,equipment,params)
-		if(!request.xhr)
-			response.sendError(404)
-		this.ajaxModel(orders,dataLocation,equipment,params['q'])
+		if(request.xhr)
+			this.ajaxModel(orders,dataLocation,equipment,params['q'])
+		else {
+			render (view: '/entity/list', model:model(orders, dataLocation, equipment) << [
+				template:"preventiveOrder/preventiveOrderList",
+				filterTemplate:"preventiveOrder/preventiveOrderFilter",
+				listTop:"preventiveOrder/listTop",
+			])
+		}
 	}
-	
+
+	def model(def entities, def dataLocation, def equipment) {
+		return [
+			entities: entities,
+			entityCount: entities.totalCount,
+			dataLocation:dataLocation,
+			equipment:equipment,
+			code:getLabel(),
+		]
+	}
+
 	def ajaxModel(def entities,def dataLocation,def equipment, def searchTerm) {
-		def model = [entities: entities,entityCount: entities.totalCount,dataLocation:dataLocation,equipment:equipment,q:searchTerm,names:names]
+		def model = model(entities, dataLocation, equipment) << [q:searchTerm]
 		def listHtml = g.render(template:"/entity/preventiveOrder/preventiveOrderList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}

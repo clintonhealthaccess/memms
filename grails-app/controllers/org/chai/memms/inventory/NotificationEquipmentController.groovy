@@ -98,15 +98,11 @@ class NotificationEquipmentController extends AbstractEntityController{
 		if(request.xhr)
 			this.ajaxModel(notifications,"")
 		else{
-			render(view:"/entity/list", model:[
+			render(view:"/entity/list", model: model(notifications) << [
 				template:"notification/notificationEquipmentList",
 				filterTemplate:"notification/notificationEquipmentFilter",
-				listTop:"notification/notificationEquipmentListTop",
-				entities: notifications,
-				entityCount: notifications.totalCount,
-				code: getLabel(),
-				entityClass: getEntityClass()
-				])
+				listTop:"notification/notificationEquipmentListTop"
+			])
 		}
 	}
 	
@@ -114,13 +110,29 @@ class NotificationEquipmentController extends AbstractEntityController{
 		adaptParamsForList()
 		Boolean read = (params.read) ? params.boolean("read") : null;
 		def notifications = notificationEquipmentService.searchNotificition(params['q'],user,params)
-		if(!request.xhr)
-			response.sendError(404)
-		this.ajaxModel(notifications,params['q'])
+		if(request.xhr)
+			this.ajaxModel(notifications,params['q'])
+		else {
+			render(view:"/entity/list", model: model(notifications) << [
+				template:"notification/notificationEquipmentList",
+				filterTemplate:"notification/notificationEquipmentFilter",
+				listTop:"notification/notificationEquipmentListTop"
+			])
+		}
 	}
 	
+	def model(def entities) {
+		return [
+			entities: entities,
+			entityCount: entities.totalCount,
+			entityClass: getEntityClass(),
+			code: getLabel(),
+		]
+	}
+	
+	
 	def ajaxModel(def entities,def searchTerm) {
-		def model = [entities: entities,entityCount: entities.totalCount,q: searchTerm,entityClass: getEntityClass()]
+		def model = model(entities) << [q: searchTerm]
 		def listHtml = g.render(template:"/entity/notification/notificationEquipmentList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}
@@ -148,9 +160,15 @@ class NotificationEquipmentController extends AbstractEntityController{
 	def filter = {NotificationEquipmentFilterCommand cmd ->
 		adaptParamsForList()
 		List<NotificationEquipment> notifications = notificationEquipmentService.filterNotifications(cmd.dataLocation,cmd.department, user, cmd.from,cmd.to,cmd.getReadStatus(), params)
-		if(!request.xhr)
-			response.sendError(404)
-		this.ajaxModel(notifications,"")
+		if(request.xhr)
+			this.ajaxModel(notifications,"")
+		else {
+			render(view:"/entity/list", model: model(notifications) << [
+				template:"notification/notificationEquipmentList",
+				filterTemplate:"notification/notificationEquipmentFilter",
+				listTop:"notification/notificationEquipmentListTop"
+			])	
+		}
 	}
 }
 

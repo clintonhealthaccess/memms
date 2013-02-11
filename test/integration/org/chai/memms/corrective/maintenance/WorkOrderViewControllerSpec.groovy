@@ -260,11 +260,14 @@ class WorkOrderViewControllerSpec extends IntegrationTests{
 		def workOrder = Initializer.newWorkOrder(equipmentTwo, "Nothing yet, not even after escalations", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		setupSecurityManager( admin)
 		workOrderViewController = new WorkOrderViewController()
+		
 		when:
 		workOrderViewController.params."q" = "escalations"
 		workOrderViewController.search()
+		
 		then:
 		WorkOrder.count() == 2
-		workOrderViewController.response.status == 404
+		workOrderViewController.response.status == 200
+		workOrderViewController.modelAndView.model.entities == [workOrder]
 	}
 }
