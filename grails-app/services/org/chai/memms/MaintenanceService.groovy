@@ -110,16 +110,13 @@ class MaintenanceService {
 		if(log.isDebugEnabled()) log.debug("getMaintenancesByLocation url params: "+params)
 		List<Maintenance> maintenances = []
 		Set<LocationLevel> skipLevels = getSkipLocationLevels()
-
-		for(DataLocation dataLocation : location.collectDataLocations(types)){
+		
+		def locations = location.collectDataLocations(types)
+		for(DataLocation dataLocation : locations[(params.offset) ..< ((params.offset + params.max) > locations.size() ? locations.size() : (params.offset + params.max))]){
 			maintenances.add(new Maintenance(dataLocation:dataLocation,orderCount:this.getMaintenanceOrderByDataLocation(clazz,dataLocation,[:]).size()))
 		}
 		Maintenances maintenance = new Maintenances()
-		//If user specifies the pagination params, use them. Else return the whole list
-		if(params.offset != null && params.offset >= 0  && params.max != null && params.max > 0)
-			maintenance.maintenanceList = maintenances[(params.offset) ..< ((params.offset + params.max) > maintenances.size() ? maintenances.size() : (params.offset + params.max))]
-		else
-			maintenance.maintenanceList = maintenances
+		maintenance.maintenanceList = maintenances
 
 		maintenance.totalCount = maintenances.size()
 		return maintenance

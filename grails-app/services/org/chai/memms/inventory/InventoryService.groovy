@@ -59,12 +59,13 @@ class InventoryService {
 	public Inventories getInventoryByLocation(Location location,Set<DataLocationType> types,Map<String, String> params) {
 		List<Inventory> inventories = []
 		Set<LocationLevel> skipLevels = getSkipLocationLevels()
-		for(DataLocation dataLocation : location.collectDataLocations(types)){
+		def locations = location.collectDataLocations(types)
+		for (DataLocation dataLocation : locations[(params.offset) ..< ((params.offset + params.max) > locations.size() ? locations.size() : (params.offset + params.max))]) {
 			inventories.add(new Inventory(dataLocation:dataLocation,equipmentCount:equipmentService.filterEquipment(null,dataLocation,null,null,null,null,null,null,null,null,[:]).size()))
 		}
 		
 		Inventories inventory = new Inventories()
-		inventory.inventoryList = inventories[(params.offset) ..< ((params.offset + params.max) > inventories.size() ? inventories.size() : (params.offset + params.max))]
+		inventory.inventoryList = inventories
 
 		inventory.totalCount = inventories.size()
 		return inventory
