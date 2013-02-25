@@ -126,6 +126,7 @@ class WorkOrderViewController extends AbstractController{
 
 	}
 	
+	
 	def escalate = {
 		WorkOrder order = WorkOrder.get(params.int("order"))
 		def result = false

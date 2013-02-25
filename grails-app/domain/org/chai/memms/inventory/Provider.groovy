@@ -41,9 +41,9 @@ public class Provider{
 	
 	enum Type{
 		NONE("none"),
-		BOTH("both"),
 		MANUFACTURER("manufacturer"),
 		SUPPLIER("supplier"),
+		BOTH("both"),
 		SERVICEPROVIDER("serviceProvider")
 		
 		String messageCode = "provider.type"
