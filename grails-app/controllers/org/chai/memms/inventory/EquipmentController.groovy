@@ -44,6 +44,7 @@ import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.location.Location
 import org.chai.location.LocationLevel
+import org.chai.memms.inventory.Provider.Type;
 
 import java.util.HashSet;
 import java.util.Set
@@ -143,13 +144,16 @@ class EquipmentController extends AbstractEntityController{
 	}
 
 	def getModel(def entity) {
-		def manufacturers = []; def suppliers = []; def serviceProviders = []; def departments = []; def types = []; def dataLocations = [];
-		if (entity.manufacturer != null) manufacturers << entity.manufacturer
-		if (entity.supplier != null) suppliers << entity.supplier
-		if (entity.serviceProvider != null) serviceProviders << entity.serviceProvider
-		if (entity.department!=null) departments << entity.department
+		def manufacturers = Provider.findAllByTypeInList([Type.MANUFACTURER,Type.BOTH],[sort:'contact.contactName']); 
+		def suppliers = Provider.findAllByTypeInList([Type.SUPPLIER,Type.BOTH],[sort:'contact.contactName']);  
+		def serviceProviders = Provider.findAllByType(Type.SERVICEPROVIDER,[sort:'contact.contactName']);  
+		def departments = Department.list(sort: names); 
+		
+		def types = []; 
+		def dataLocations = [];
 		if (entity.type!=null) types << entity.type
 		if (entity.dataLocation!=null) dataLocations << entity.dataLocation
+
 		[
 					equipment: entity,
 					departments: departments,
