@@ -49,7 +49,8 @@ class EquipmentTypeService {
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(observation!=null)
 				eq("observation",observation)
-			or{
+			or
+			{
 				if(observation==null){
 					for(Observation obs: this.getEnumeMatcher(text))
 						eq("observation",obs)

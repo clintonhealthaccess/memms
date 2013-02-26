@@ -38,9 +38,9 @@ import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.exports.EquipmentExport;
 import org.chai.memms.inventory.Equipment;
 import org.chai.location.CalculationLocation;
-import org.chai.location.DataLocation
+import org.chai.location.DataLocation;
 import org.chai.location.DataLocationType;
-import org.chai.location.Location
+import org.chai.location.Location;
 import org.chai.location.LocationLevel;
 
 import org.chai.memms.util.Utils;

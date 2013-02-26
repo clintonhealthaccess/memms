@@ -37,7 +37,6 @@ import org.chai.memms.inventory.EquipmentType.Observation;
 import org.chai.location.DataLocation;
 import org.chai.memms.security.User;
 import org.chai.memms.IntegrationTests
-import org.chai.location.DataLocation;
 import org.chai.memms.inventory.Provider.Type;
 import org.chai.memms.inventory.Equipment;
 /**
@@ -53,6 +52,7 @@ class EquipmentSpec extends IntegrationTests{
 		setupSystemUser()
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),34)
+		
 		when:
 		def equipment = new Equipment(serialNumber:"test123",manufactureDate:Initializer.getDate(22,07,2010),
 			purchaseDate:Initializer.getDate(22,07,2010),dateCreated:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,

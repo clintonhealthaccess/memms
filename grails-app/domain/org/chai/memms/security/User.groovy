@@ -38,8 +38,7 @@ import org.chai.memms.util.Utils
 @EqualsAndHashCode(includes='username')
 class User {
 	def locationService
-	enum UserType{
-		
+	enum UserType{		
 		ADMIN("admin"),
 		SYSTEM("system"),
 		TECHNICIANDH("technician.dh"),
