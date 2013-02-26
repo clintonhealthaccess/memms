@@ -38,9 +38,9 @@ import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.exports.EquipmentExport;
 import org.chai.memms.inventory.Equipment;
 import org.chai.location.CalculationLocation;
-import org.chai.location.DataLocation
+import org.chai.location.DataLocation;
 import org.chai.location.DataLocationType;
-import org.chai.location.Location
+import org.chai.location.Location;
 import org.chai.location.LocationLevel;
 
 import org.chai.memms.util.Utils;
@@ -85,6 +85,7 @@ class EquipmentService {
 	}
 	public def searchEquipment(String text,User user,DataLocation currentDataLocation,Map<String, String> params) {
 		def dataLocations = []
+		text = text.trim()
 		if(currentDataLocation) dataLocations.add(currentDataLocation)
 		else if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([].toSet(), [].toSet()))
 		else{

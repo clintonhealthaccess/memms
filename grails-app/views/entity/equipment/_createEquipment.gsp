@@ -27,12 +27,15 @@
             <g:message code="equipment.section.basic.information.label" default="Basic Information"/>
           </h4>  			  		
       		<div class="row">
+      		<!-- To be viewed if there is no ? sign because in spare part this is not working unless you put ? after dataLocation property --> 
     			  <input type="hidden" name="dataLocation.id" value="${equipment.dataLocation.id}" />
     			  <label><g:message code="datalocation.label"/>:</label> ${equipment.dataLocation.names}
-    		  </div>				
+    		  </div>
+    		  				
         	<g:selectFromList name="type.id" label="${message(code:'equipment.type.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
     			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData', params: [observation:'USEDINMEMMS'])}"
     			from="${types}" value="${equipment?.type?.id}" values="${types.collect{it.names}}" />
+    			
       		<g:inputYearMonth name="expectedLifeTime" field="expectedLifeTime" years="${equipment.expectedLifeTime?.years}" months="${equipment.expectedLifeTime?.months}" label='entity.expectedLifeTime.label' bean="${equipment}"/>
       		<g:input name="serialNumber" label="${message(code:'equipment.serial.number.label')}" bean="${equipment}" field="serialNumber"/>
       		<g:input name="model" label="${message(code:'equipment.model.label')}" bean="${equipment}" field="model"/>

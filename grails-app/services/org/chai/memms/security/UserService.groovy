@@ -109,4 +109,8 @@ class UserService {
 		if(log.isDebugEnabled()) log.debug("Users in notificationEquipment group: " + users)
 		return users
 	}
+	boolean canViewManagedSpareParts(User user){
+		return user.userType == UserType.TECHNICIANDH && user.location instanceof DataLocation && (user.location as DataLocation).manages
+	}
+	
 }

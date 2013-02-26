@@ -36,7 +36,7 @@ import i18nfields.I18nFields
 class Warranty{
 	
 	Date startDate
-	Boolean sameAsSupplier
+	Boolean sameAsSupplier = false
 	String descriptions
 	Contact contact
 	

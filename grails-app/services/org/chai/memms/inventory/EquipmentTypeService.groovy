@@ -46,10 +46,12 @@ class EquipmentTypeService {
 		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescritpion = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = EquipmentType.createCriteria()
+		text = text.trim()
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(observation!=null)
 				eq("observation",observation)
-			or{
+			or
+			{
 				if(observation==null){
 					for(Observation obs: this.getEnumeMatcher(text))
 						eq("observation",obs)

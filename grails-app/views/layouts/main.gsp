@@ -114,22 +114,28 @@
 			<li><a href="#"><g:message code="header.navigation.administration"/></a>
 	         	<ul class="submenu">
 	         		<shiro:hasPermission permission="menu:equipmentType">
-					<li><a href="${createLink(controller: 'equipmentType', action:'list')}"><g:message code="equipment.type.label"/></a></li>
+						<li><a href="${createLink(controller: 'equipmentType', action:'list')}"><g:message code="equipment.type.label"/></a></li>
+					</shiro:hasPermission>
+					<shiro:hasPermission permission="menu:sparePartType">
+						<li><a href="${createLink(controller: 'sparePartType', action:'list')}"><g:message code="spare.part.type.label"/></a></li>
+					</shiro:hasPermission>
+					<shiro:hasPermission permission="menu:sparePart">
+						<li><a href="${createLink(controller: 'sparePartView', action:'list')}"><g:message code="spare.part.label"/></a></li>
 					</shiro:hasPermission>
 					<shiro:hasPermission permission="menu:equipmentExport">
-					<li><a href="${createLink(controller: 'equipmentView', action:'generalExport')}"><g:message code="equipment.export.label"/></a></li>
+						<li><a href="${createLink(controller: 'equipmentView', action:'generalExport')}"><g:message code="equipment.export.label"/></a></li>
 					</shiro:hasPermission>
 					<shiro:hasPermission permission="menu:location">
-					<li><a href="#"><g:message code="location.label"/></a>
-						<div class="sub-submenu">
-							<ul class="submenu">
-								<li><a href="${createLink(controller: 'location', action:'list')}"><g:message code="location.label"/></a></li>
-								<li><a href="${createLink(controller: 'locationLevel', action:'list')}"><g:message code="location.level.label"/></a></li>
-								<li><a href="${createLink(controller: 'dataLocation', action:'list')}"><g:message code="datalocation.label"/></a></li>
-								<li><a href="${createLink(controller: 'dataLocationType', action:'list')}"><g:message code="datalocation.type.label"/></a></li>
-							</ul>
-						</div>
-					</li>
+						<li><a href="#"><g:message code="location.label"/></a>
+							<div class="sub-submenu">
+								<ul class="submenu">
+									<li><a href="${createLink(controller: 'location', action:'list')}"><g:message code="location.label"/></a></li>
+									<li><a href="${createLink(controller: 'locationLevel', action:'list')}"><g:message code="location.level.label"/></a></li>
+									<li><a href="${createLink(controller: 'dataLocation', action:'list')}"><g:message code="datalocation.label"/></a></li>
+									<li><a href="${createLink(controller: 'dataLocationType', action:'list')}"><g:message code="datalocation.type.label"/></a></li>
+								</ul>
+							</div>
+						</li>
 					</shiro:hasPermission>
 					<shiro:hasPermission permission="menu:department">
 						<li><a href="${createLink(controller: 'department', action:'list')}"><g:message code="department.label"/></a></li>
@@ -163,13 +169,13 @@
       		<p>${flash.message}</p>
 		</g:if>	
 	</div>
-	
+
 	<div id="content">
 	  <div class="wrapper">
 		  <g:layoutBody />
 		</div>
 	</div>
-	
+
 	<div id="footer">
 	    <div class="wrapper">
 	      &copy;<g:message code="footer.labels.chai"/>
@@ -182,8 +188,8 @@
 	    </div>
   	</div>
 	<div class="build-info">
-        <build:buildInfo/>
-    </div>
+        <build:buildInfo/>
+    </div>
 <r:layoutResources/>
 
 </body>

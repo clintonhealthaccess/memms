@@ -41,7 +41,6 @@ import org.chai.memms.inventory.EquipmentType
 import org.chai.memms.inventory.EquipmentType.Observation;
 import org.chai.memms.inventory.Provider
 import org.chai.memms.inventory.Equipment.PurchasedBy;
-import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.Provider.Type;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation;
@@ -69,7 +68,16 @@ import org.chai.memms.preventive.maintenance.PreventiveProcess;
 import org.chai.memms.security.Role
 import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType
+import org.chai.memms.spare.part.SparePart;
+import org.chai.memms.spare.part.SparePartType;
+import org.chai.memms.spare.part.SparePartStatus;
+import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
+import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
+import org.chai.memms.inventory.EquipmentStatus.Status;
+
 import org.chai.memms.util.Utils;
+import org.chai.memms.TimeDate;
+import org.chai.memms.TimeSpend
 
 public class Initializer {
 		
@@ -656,8 +664,205 @@ public class Initializer {
 		def dOrderSix = newWorkBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Second Work Based Six'],"Second Work Based Order",now()+1,null,WorkIntervalType.WEEK,2)
 		
 		}
-	
+
+	public static def createSparePartStructure(){
+			
+		if(!SparePartType.count()){
+			//Add spare part types as defined in ecri
+			def sparePartOne = newSparePartType("4323", ['en':'first spare part','fr':' premiere piece de rechange'],['en':'first spare part description','fr':' description de la premiere piece de rechange'],"4323-XYZ",Provider.findByCode("ONE"),now())
+			def sparePartTwo = newSparePartType("4324", ['en':'second spare part','fr':' deuxieme piece de rechange'],['en':'second spare part description','fr':' description de la deuxieme piece de rechange'],"4324-ABC",Provider.findByCode("TWO"),now())
+			def sparePartThree = newSparePartType("4325", ['en':'third spare part','fr':' troisieme piece de rechange'],['en':'third spare part description','fr':' description de la troisieme piece de rechange'],"4325-IJK",Provider.findByCode("THREE"),now())
+   
+			
+			def sparePartTypeOne = newSparePartType("15810", ['en':'first spare part','fr':'premier sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part",Provider.findByCode("ONE"),now())
+			def sparePartTypeTwo = newSparePartType("15819", ['en':'Second spare part','fr':'Second sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 2",Provider.findByCode("TWO"),now())
+			def sparePartTypeThree = newSparePartType("15966", ['en':'Third spare part','fr':'Troisieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 3",Provider.findByCode("THREE"),now())
+			def sparePartTypeFour = newSparePartType("10035", ['en':'Forth spare part','fr':'Quatrieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 4",Provider.findByCode("FOUR"),now())
+			def sparePartTypeFive = newSparePartType("20760", ['en':'Fifth spare part','fr':'Cinquieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 5",Provider.findByCode("FIVE"),now())
+			def sparePartTypeSix = newSparePartType("20729", ['en':'Sixth spare part','fr':'Sixieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 6",Provider.findByCode("SIX"),now())
+			def sparePartTypeSeven = newSparePartType("10026", ['en':'Seventh spare part','fr':'premier sp'], ['en':'Septieme spare part','fr':'premier sp'],"CODE Spare Part 7",Provider.findByCode("SEVEN"),now())
+			def sparePartTypeEight = newSparePartType("10124", ['en':'Eighth spare part','fr':'Huitieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 8",Provider.findByCode("EIGHT"),now())
+			def sparePartTypeNine = newSparePartType("10155", ['en':'Ninth spare part','fr':'Neuvieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 9",Provider.findByCode("NINE"),now())
+			def sparePartTypeTen = newSparePartType("10426", ['en':'Tenth spare part','fr':'Dixieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 10",Provider.findByCode("TEN"),now())
+			
+			}
+		
+		if(!Provider.count()){
+			def contactOne = newContact(['fr':'Manufacture Address Descriptions One'],"Manufacture Nokia","jkl@yahoo.com","0768-889-787","Street 154","8988")
+			def sontactTwo = newContact(['en':'Supplier Address Descriptions Two'],"Manufacture Siemens","jk@yahoo.com","0768-888-787","Street 1654","8988")
+			def contactThree = newContact(['en':'Address Descriptions Three'],"Manufacture HP","jkl2@yahoo.com","0768-888-787","Street 151","8988")
+			def contactFour = newContact(['en':'Address Descriptions Four'],"Manufacture DELL","jkl3@yahoo.com","0768-132-787","Street 152","8988")
+			def contactFive = newContact(['en':'Address Descriptions Five'],"Supplier Company 1","jkl4@yahoo.com","0768-657-787","Street 153","8988")
+			def contactSix = newContact(['en':'Address Descriptions Six'],"Supplier Company 2","jkl5@yahoo.com","0768-342-787","Street 155","8988")
+			def contactSeven = newContact(['en':'Address Descriptions Seven'],"Supplier Company 3","jkl6@yahoo.com","0768-123-787","Street 156","8988")
+			def contactEight = newContact(['en':'Address Descriptions Eight'],"Manufacture and Supplier Ericson","jkl6@yahoo.com","0768-123-787","Street 156","8988")
+			
+			
+			def manufactureOne = newProvider("ONE",Type.MANUFACTURER,contactOne)
+			def manufactureTwo = newProvider("TWO",Type.MANUFACTURER,sontactTwo)
+			def manufactureThree = newProvider("THREE",Type.MANUFACTURER,contactThree)
+			def manufactureFour = newProvider("FOUR",Type.MANUFACTURER,contactFour)
+			
+			
+			def supplierOne = newProvider("FIVE",Type.SUPPLIER,contactFive)
+			def supplierTwo = newProvider("SIX",Type.SUPPLIER,contactSix)
+			def supplierThree = newProvider("SEVEN",Type.SUPPLIER,contactSeven)
+			
+			def both = newProvider("EIGHT",Type.BOTH,contactEight)
+		}
+		
+		if(!SparePart.count()){
+			def sparePartOne = newSparePart("SERIAL01",SparePartPurchasedBy.BYMOH,false,newPeriod(24),"",['en':'Spare Part Descriptions'],
+				getDate(22,07,2010),getDate(10,10,2010),"",
+				'MODEL1',
+				DataLocation.findByCode(NYANZA),
+				SparePartType.findByCode("15810"),
+		
+				Provider.findByCode("FIVE"),
+				StatusOfSparePart.INSTOCK,
+				User.findByUsername("admin"),
+				null,
+				null
+				)
+					
+			def warrantyContactOne = newContact(['fr':'Warranty Address Descriptions One'],"Warranty","jk@yahoo.com","0768-888-787","Street 654","8988")
+			def warrantyOne = newWarranty(warrantyContactOne,getDate(10, 12, 2010),false,[:])
+			def statusOne= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePartOne,[:])
+			
+			sparePartOne.warranty = warrantyOne
+			sparePartOne.warrantyPeriod = newPeriod(22)
+			sparePartOne.save(failOnError:true)
+
+			def sparePartTwo = newSparePart("SERIAL02",SparePartPurchasedBy.BYFACILITY,false,newPeriod(12),"34900",['en':'Spare Part Descriptions two'],
+				getDate(12,01,2009),getDate(10,10,2009),"USD",
+				'MODEL2',
+				DataLocation.findByCode(NYANZA),
+				SparePartType.findByCode("15819"),
+				
+				Provider.findByCode("FIVE"),
+				StatusOfSparePart.OPERATIONAL,
+				User.findByUsername("admin"),
+				null,
+				null
+				)
+			
+			def warrantyTwo = newWarranty(['en':'warranty one'],'warranty name1','email1@gmail.com',"0768-111-787","Street 154","898",getDate(10, 12, 2010),false,[:])
+			def statusTwo= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePartTwo,[:])
+			sparePartTwo.warranty=warrantyTwo
+			sparePartTwo.warrantyPeriod = newPeriod(14)
+			sparePartTwo.save(failOnError:true)
+			
+			def sparePartThree = newSparePart("SERIAL03",SparePartPurchasedBy.BYFACILITY,true,newPeriod(34),"98700",['en':'Spare Part Descriptions three'],
+				getDate(14,8,2008),getDate(10,01,2009),"EUR",
+				'MODEL3',
+				DataLocation.findByCode(KIVUYE),
+				SparePartType.findByCode("15966"),
+				
+				Provider.findByCode("FIVE"),
+				StatusOfSparePart.OPERATIONAL,
+				User.findByUsername("admin"),
+				null,
+				null
+				)
+		
+			def warrantyThree = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","88",getDate(10, 12, 2010),false,[:])
+			def statusThree= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePartThree,[:])
+			sparePartThree.warranty=warrantyTwo
+			sparePartThree.warrantyPeriod = newPeriod(12)
+			sparePartThree.save(failOnError:true)
+			
+			def sparePartFour = newSparePart("SERIAL04",SparePartPurchasedBy.BYMOH,false,newPeriod(12),"",['en':'Spare Part Descriptions four'],
+				getDate(18,2,2011),getDate(10,10,2011),"",
+				'MODEL2',
+				DataLocation.findByCode(KIVUYE),
+				SparePartType.findByCode("10035"),
+				
+				Provider.findByCode("SEVEN"),
+				StatusOfSparePart.PENDINGORDER,
+				User.findByUsername("admin"),
+				null,
+				null
+				)
+			
+			
+			def warrantyFour = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","888",getDate(10, 12, 2011),false,[:])
+			def statusFour = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePartFour,[:])
+			def statusFourOne = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.PENDINGORDER,sparePartFour,[:])
+			sparePartFour.warranty=warrantyFour
+			sparePartFour.warrantyPeriod = newPeriod(24)
+			sparePartFour.save(failOnError:true)
+			
+			def sparePartFive = newSparePart("SERIAL05",SparePartPurchasedBy.BYMOH,true,newPeriod(34),"",['en':'Spare Part Descriptions five'],
+				getDate(11,8,2008),getDate(11,10,2009),"",
+				'MODEL1',
+				DataLocation.findByCode(BUNGWE),
+				SparePartType.findByCode("20760"),
+				
+				Provider.findByCode("SIX"),
+				StatusOfSparePart.PENDINGORDER,
+				User.findByUsername("admin"),
+				null,
+				null
+				)
+			
+			def warrantyFive = newWarranty(['en':'warranty Five'],'warranty name3','email3@gmail.com',"0768-333-787","Street 154","988",getDate(10, 12, 2010),false,[:])
+			def statusFive= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePartFive,[:])
+			def statusFiveOne = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePartFive,[:])
+			def statusFiveTwo = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.PENDINGORDER,sparePartFive,[:])
+			sparePartFive.warranty=warrantyFour
+			sparePartFive.warrantyPeriod = newPeriod(8)
+			sparePartFive.save(failOnError:true)
+		
+		}
+	}
+
+
 	//Models definition
+	//Spare Part
+	public static def newSparePartType(def code, def names, def descriptions,def partNumber,def manufacturer, def discontinuedDate){
+		def type = new SparePartType(code:code,partNumber:partNumber,manufacturer:manufacturer,discontinuedDate:discontinuedDate)
+		Utils.setLocaleValueInMap(type,names,"Names")
+		Utils.setLocaleValueInMap(type,descriptions,"Descriptions")
+		return type.save(failOnError: false, flush:true)
+	}
+
+	//Spare Part status
+	public static def newSparePartStatus(def dateOfEvent,def changedBy,def value, def sparePart,def reasons){
+		def status = new SparePartStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,statusOfSparePart:value)
+		Utils.setLocaleValueInMap(status,reasons,"Reasons")
+		sparePart.addToStatus(status)
+		sparePart.save(failOnError:true,flush:true)
+		sparePart.statusOfSparePart = value
+		sparePart.lastModified = changedBy
+		sparePart.save(failOnError:true,flush:true)
+		return status
+	}
+	// Spare part
+	public static def newSparePart(def serialNumber,def sparePartPurchasedBy,def sameAsManufacturer,def expectedLifeTime,
+		def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def model,def dataLocation,def type,
+		def supplier,def statusOfSparePart,def addedBy,def lastModifiedBy,def lastModifiedOn){
+		def sparePart = new SparePart(
+			serialNumber:serialNumber,
+			sparePartPurchasedBy:sparePartPurchasedBy,
+			sameAsManufacturer:sameAsManufacturer,
+			expectedLifeTime:expectedLifeTime,		
+			purchaseCost:purchaseCost,
+			manufactureDate:manufactureDate,
+			purchaseDate:purchaseDate,
+			currency:currency,
+			model:model,
+			dataLocation:dataLocation,
+			type:type,
+			supplier:supplier,
+			statusOfSparePart:statusOfSparePart,
+			addedBy:addedBy,
+			lastModified:lastModifiedBy,
+			lastUpdated:lastModifiedOn
+			);
+		Utils.setLocaleValueInMap(sparePart,descriptions,"Descriptions")
+		return sparePart.save(failOnError: true,flush:true)
+	}
+
 	//Preventive Maintenance
 	public static def newDurationBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def firstOccurenceOn,def closedOn,def occurency,def occurInterval,def occurDaysOfWeek){
 		def timeDate =  newTimeDate(firstOccurenceOn)
