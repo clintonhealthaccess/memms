@@ -41,7 +41,8 @@ class SparePartTypeService {
 	static transactional = true
 		
 	public def searchSparePartType(String text,Map<String, String> params) 
-	{
+	{   
+		text = text.trim();
 		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescritpion = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = SparePartType.createCriteria()

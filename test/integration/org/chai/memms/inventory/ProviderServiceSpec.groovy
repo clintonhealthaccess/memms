@@ -13,6 +13,8 @@ class ProviderServiceSpec extends IntegrationTests{
 	def "test search provider based on type as text"(){
 		
 		setup:
+		
+	
 		def manufactureContact = Initializer.newContact(['en':'Manufacture Address Descriptions One'],"Manufacture Nokia","jkl@yahoo.com","0768-889-787","Street 154","8988")
 		def supplierContact = Initializer.newContact(['en':'Supplier Address Descriptions Two'],"Supplier Siemens","jk2@yahoo.com","0768-432-787","Street 112654","89388")
 		def othersContact = Initializer.newContact(['en':'Unknown Address Descriptions Two'],"Unknown Other","jk1@yahoo.com","0768-111-787","Street 12","89288")
@@ -24,10 +26,20 @@ class ProviderServiceSpec extends IntegrationTests{
 		both.save()
 		def servicePro = new Provider(code:CODE(126), type: Type.SERVICEPROVIDER, contact:othersContact)
 		servicePro.save()
-		when:
-		List<Provider> providers = providerService.searchProvider(null,"Manu",["":""])
+		List<Provider> providers
+		
+		when:"test search provider based on type as text not follwed by a space" 
+		providers = providerService.searchProvider(null,"Manu",["":""])
 		
 		then:
+		Provider.count()==4
+		providers.size()==1
+		providers[0].code.equals("CODE123")
+		
+		when:
+		providers = providerService.searchProvider(null,"Manu  ",["":""])
+		
+		then:"test search provider based on type as text followed by a space "
 		Provider.count()==4
 		providers.size()==1
 		providers[0].code.equals("CODE123")

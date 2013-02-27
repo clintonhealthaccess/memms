@@ -46,8 +46,17 @@ class SparePartTypeServiceSpec extends IntegrationTests{
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def manufacturer = Initializer.newProvider("TEST" + CODE(1), Type.MANUFACTURER,manufactureContact)
 		Initializer.newSparePartType(CODE(123),["en":"names spare part type one"],["en":"descriptions spare part type one"],"7654-HGT",manufacturer,new Date())
-		when:  
-		List<SparePartType>sparePartTypes = sparePartTypeService.searchSparePartType(CODE(123),[:])
+		
+		List<SparePartType> sparePartTypes
+		
+		when:"user can search by code without a space"
+		sparePartTypes = sparePartTypeService.searchSparePartType(CODE(123),[:])
+		then:
+		sparePartTypes.size() == 1
+		sparePartTypes[0].code.equals(CODE(123))
+		
+		when:"user can search by code with a space"
+		sparePartTypes = sparePartTypeService.searchSparePartType(CODE(123)+"  ",[:])
 		then:
 		sparePartTypes.size() == 1
 		sparePartTypes[0].code.equals(CODE(123))
@@ -58,8 +67,17 @@ class SparePartTypeServiceSpec extends IntegrationTests{
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def manufacturer = Initializer.newProvider("TEST" + CODE(1), Type.MANUFACTURER,manufactureContact)
 		Initializer.newSparePartType(CODE(123),["en":"names spare part type one"],["en":"descriptions spare part type one"],"7654-HGT",manufacturer,new Date())
-		when:
-		List<SparePartType>sparePartTypes = sparePartTypeService.searchSparePartType("names spare part type one",[:])
+		
+		List<SparePartType> sparePartTypes
+		
+		when:"user can search by name without space"
+		sparePartTypes = sparePartTypeService.searchSparePartType("names spare part type one",[:])
+		then:
+		sparePartTypes.size() == 1
+		sparePartTypes[0].code.equals(CODE(123))
+		
+		when:"user can search by name with space"
+		sparePartTypes = sparePartTypeService.searchSparePartType("names spare part type one  ",[:])
 		then:
 		sparePartTypes.size() == 1
 		sparePartTypes[0].code.equals(CODE(123))
@@ -69,8 +87,17 @@ class SparePartTypeServiceSpec extends IntegrationTests{
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def manufacturer = Initializer.newProvider("TEST" + CODE(1), Type.MANUFACTURER,manufactureContact)
 		Initializer.newSparePartType(CODE(123),["en":"names spare part type one"],["en":"descriptions spare part type one"],"7654-HGT",manufacturer,new Date())
-		when:  
-		List<SparePartType>sparePartTypes = sparePartTypeService.searchSparePartType("7654-HGT",[:])
+		
+		List<SparePartType> sparePartTypes
+		
+		when:"user can search by a part number without a space"
+		sparePartTypes = sparePartTypeService.searchSparePartType("7654-HGT",[:])
+		then:
+		sparePartTypes.size() == 1
+		sparePartTypes[0].partNumber.equals("7654-HGT")
+		
+		when:"user can search by a part number with a space"
+		sparePartTypes = sparePartTypeService.searchSparePartType("7654-HGT  ",[:])
 		then:
 		sparePartTypes.size() == 1
 		sparePartTypes[0].partNumber.equals("7654-HGT")
@@ -80,11 +107,19 @@ class SparePartTypeServiceSpec extends IntegrationTests{
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def manufacturer = Initializer.newProvider("TEST" + CODE(1), Type.MANUFACTURER,manufactureContact)
 		Initializer.newSparePartType(CODE(123),["en":"names spare part type one"],["en":"descriptions spare part type one"],"7654-HGT",manufacturer,new Date())
-		when:
-		List<SparePartType>sparePartTypes = sparePartTypeService.searchSparePartType("descriptions spare part type one",[:])
+		
+		List<SparePartType> sparePartTypes 
+		
+		when:"user can search by description without a space"
+		sparePartTypes = sparePartTypeService.searchSparePartType("descriptions spare part type one",[:])
+		then:
+		sparePartTypes.size() == 1
+		sparePartTypes[0].code.equals(CODE(123))
+		
+		when:"user can search by description with a space"
+		sparePartTypes = sparePartTypeService.searchSparePartType("descriptions spare part type one  ",[:])
 		then:
 		sparePartTypes.size() == 1
 		sparePartTypes[0].code.equals(CODE(123))
 	}
-	
 }

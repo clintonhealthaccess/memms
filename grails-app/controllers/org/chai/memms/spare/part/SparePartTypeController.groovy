@@ -34,6 +34,12 @@ import org.chai.location.DataLocationType;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.spare.part.SparePartType;
+import org.chai.memms.inventory.Provider.Type;
+import org.chai.memms.inventory.Provider;
+import org.chai.memms.Contact
+
+
+
 /**
  * @author Alain Inema
  *
@@ -75,14 +81,12 @@ class SparePartTypeController  extends AbstractEntityController{
 		
 	
 	def getModel(def entity) {
-		def manufacturers = []
-		if (entity.manufacturer!=null) manufacturers << entity.manufacturer
-		
+		def manufacturers = Provider.findAllByTypeInList([Type.MANUFACTURER,Type.BOTH],[sort:'contact.contactName'])		
 		[ type: entity,
 		  manufacturers: manufacturers		
          ]
 	}
-				
+							
 	def list = {
 		adaptParamsForList()
 		List<SparePartType> types = SparePartType.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
