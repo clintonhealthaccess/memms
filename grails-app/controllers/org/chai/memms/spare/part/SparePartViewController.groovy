@@ -76,16 +76,11 @@ class SparePartViewController extends AbstractController{
 		def html = g.render(template:"/templates/sparePartClueTip",model:[sparePart:sparePart])
 		render(contentType:"text/plain", text:html)
 	}
-	//TODO By Aphrodice View Page not yet having codes "/entity/sparePart/summary"
-	def view ={
-		SparePart sparePart = SparePart.get(params.int("sparePart.id"))
-		if(sparePart == null)	response.sendError(404)
-		else render(view:"/entity/sparePart/summary", model:[sparePart: sparePart])
-	}
 	
 	def list = {
 		adaptParamsForList()
-		List<SparePart> spareParts = SparePart.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
+		def spareParts = sparePartService.getSparePartsByUser(user,params)
+		
 		if(request.xhr)
 			this.ajaxModel(spareParts,"")
 		else{
@@ -101,36 +96,6 @@ class SparePartViewController extends AbstractController{
 			])
 		}
 	}
-	
-	/*def list={
-		def location = DataLocation.get(params.int('location.id'))
-		def spareParts= sparePartService.getSparePartsByDataLocationAndManages(location,params)
-		adaptParamsForList()
-		
-		if (location != null){
-			if(!user.canAccessCalculationLocation(location)) response.sendError(404)
-			spareParts = sparePartService.getSparePartsByDataLocationAndManages(location,params)
-		}
-		else spareParts = sparePartService.getMySpareParts(user,params)
-		
-		if(request.xhr){
-			 this.ajaxModel(spareParts,location,"")
-		 }else{
-			 log.debug("not an ajax request"+params)
-			render(view:"/entity/list", model:[
-						template:"sparePart/sparePartList",
-						filterTemplate:"sparePart/sparePartFilter",
-						listTop:"sparePart/listTop",
-						location:location,
-						entities: spareParts,
-						entityCount: spareParts.totalCount,
-						entityClass: getEntityClass(),
-						code: getLabel()
-						
-						])
-		}
-
-	}*/
 	
 	//TODO don't think we need ajax for this
 	def selectFacility = {
@@ -148,17 +113,16 @@ class SparePartViewController extends AbstractController{
 	}
 	
 	def search = {
-		DataLocation location = DataLocation.get(params.int("location.id"))
-		if (location != null && !user.canAccessCalculationLocation(location))
-			response.sendError(404)
-		else{
-			adaptParamsForList()
-			def spareParts = sparePartService.searchSparePart(params['q'],user,location,params)
-			if(!request.xhr)
-				response.sendError(404)
-			else
-				this.ajaxModel(spareParts,params['q'])
-		}
+		adaptParamsForList()
+		def spareParts = sparePartService.searchSparePart(params['q'],user,params)
+		if(!request.xhr)
+			render(view:"/entity/list", model: model(spareParts) << [
+				template:"sparePart/sparePartList",
+				filterTemplate:"sparePart/sparePartFilter",
+				listTop:"sparePart/listTop"
+			])
+		else
+			this.ajaxModel(spareParts,params['q'])
 	}
 	
 	def filter = { FilterCommand cmd ->
@@ -179,11 +143,10 @@ class SparePartViewController extends AbstractController{
 		def listHtml = g.render(template:"/entity/sparePart/sparePartList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}
-	def model(def entities, def dataLocation) {
+	def model(def entities) {
 		return [
 			entities: entities,
 			entityCount: entities.totalCount,
-			dataLocation:dataLocation,
 			code: getLabel()
 		]
 	}
@@ -212,81 +175,6 @@ class SparePartViewController extends AbstractController{
 					locationSkipLevels: locationSkipLevels
 				])
 	}
-
-/*	def generalExport = { ExportFilterCommand cmd ->
-
-		// we do this because automatic data binding does not work with polymorphic elements
-		Set<CalculationLocation> calculationLocations = new HashSet<CalculationLocation>()
-		params.list('calculationLocationids').each { id ->
-			if (NumberUtils.isDigits(id)) {
-				def calculationLocation = CalculationLocation.get(id)
-				if (calculationLocation != null && !calculationLocations.contains(calculationLocation)) calculationLocations.add(calculationLocation);
-			}
-		}
-		cmd.calculationLocations = calculationLocations
-
-		Set<DataLocationType> locationTypes = new HashSet<DataLocationType>()
-		params.list('locationTypeids').each { id ->
-			if (NumberUtils.isDigits(id)) {
-				def locationType = DataLocationType.get(id)
-				if (locationType != null && !locationTypes.contains(locationType)) locationTypes.add(locationType);
-			}
-		}
-		cmd.locationTypes = locationTypes
-
-		Set<SparePartType> sparePartTypes = new HashSet<SparePartType>()
-		params.list('sparePartTypeids').each { id ->
-			if (NumberUtils.isDigits(id)) {
-				def sparePartType = SparePartType.get(id)
-				if (sparePartType != null && !sparePartTypes.contains(sparePartType)) sparePartTypes.add(sparePartType);
-			}
-		}
-		cmd.sparePartTypes = sparePartTypes
-
-		Set<Provider> suppliers = new HashSet<Provider>()
-		params.list('supplierids').each { id ->
-			if (NumberUtils.isDigits(id)) {
-				def supplier = Provider.get(id)
-				if (supplier != null && !suppliers.contains(supplier)) suppliers.add(supplier);
-			}
-		}
-		cmd.suppliers = suppliers
-
-		if (log.isDebugEnabled()) log.debug("spareParts.export, command="+cmd+", params"+params)
-
-
-		if(params.exported != null){
-			def sparePartExportTask = new SparePartExportFilter(calculationLocations:cmd.calculationLocations,locationTypes:cmd.locationTypes,
-					sparePartTypes:cmd.sparePartTypes,suppliers:cmd.suppliers,sparePartStatus:cmd.sparePartStatus,
-					sparePartPurchasedBy:cmd.sparePartPurchasedBy,sameAsManufacturer:cmd.sameAsManufacturer).save(failOnError: true,flush: true)
-			params.exportFilterId = sparePartExportTask.id
-			params.class = "SparePartExportTask"
-			params.targetURI = "/sparePartView/generalExport"
-			redirect(controller: "task", action: "create", params: params)
-		}
-		adaptParamsForList()
-		render(view:"/entity/sparePart/sparePartExportPage", model:[
-					template:"/entity/sparePart/sparePartExportFilter",
-					filterCmd:cmd,
-					locationTypes:DataLocationType.list(),
-					code: getLabel()
-				])
-	}*/
-
-	/*def export = { FilterCommand cmd ->
-		if (log.isDebugEnabled()) log.debug("spareParts.export, command "+cmd)
-		def location = DataLocation.get(params.int('dataLocation.id'))
-		adaptParamsForList()
-
-		def spareParts = sparePartService.filterSparePart(user,location,cmd.supplier,cmd.sparePartType,cmd.sparePartPurchasedBy,cmd.sameAsManufacturer,cmd.status,params)
-		File file = sparePartService.exporter(location?:user.location,spareParts)
-
-		response.setHeader "Content-disposition", "attachment; filename=${file.name}.csv"
-		response.contentType = 'text/csv'
-		response.outputStream << file.text
-		response.outputStream.flush()
-	}*/
-
 	def updateSameAsManufacturer = {
 		if (log.isDebugEnabled()) log.debug("updateSameAsManufacturer sparePart.sameAsManufacturer "+params['sparePart.id'])
 		SparePart sparePart = SparePart.get(params.int(['sparePart.id']))

@@ -76,9 +76,9 @@ class CorrectiveMaintenanceServiceSpec extends IntegrationTests{
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user,Initializer.now(),FailureReason.NOTSPECIFIED, OrderStatus.OPENATFOSA)
 		def types = new HashSet(DataLocationType.findAllByDefaultSelected(true))
 		when:
-		def correctiveMaintenances = maintenanceService.getMaintenancesByLocation(WorkOrder.class,burera,types,["offset":1,"max":0 ])
+		def correctiveMaintenances = maintenanceService.getMaintenancesByLocation(WorkOrder.class,burera,types,["offset":1,"max":0])
 		then:
-		correctiveMaintenances.maintenanceList.size() == 3
+		correctiveMaintenances.maintenanceList.size() == 0
 		correctiveMaintenances.totalCount == 3
 	}
 }

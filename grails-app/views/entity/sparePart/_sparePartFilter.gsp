@@ -1,8 +1,12 @@
-<%@ page import="org.chai.memms.spare.part.SparePartStatus.Status" %>
-<%@ page import="org.chai.memms.spare.part.SparePart.PurchasedBy" %>
-<%@ page import="org.chai.memms.spare.part.SparePart.Donor" %>
+<%@ page import="org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart" %>
+<%@ page import="org.chai.memms.spare.part.SparePart.SparePartPurchasedBy" %>
 <div class="filters main">
-		  <h2><g:message code:'spare.part.filter.label" /><a href="#" id="showhide" class="right"><g:message code="entity.show.hide.filter.label" /></a></h2>
+		  <h2>
+		  		<g:message code="spare.part.filter.label" />
+			  	<a href="#" id="showhide" class="right">
+			  		<g:message code="entity.show.hide.filter.label" />
+			  	</a>
+		  </h2>
 
 			<g:hasErrors bean="${filterCmd}">
 				<ul>
@@ -17,16 +21,9 @@
 					<li><g:selectFromList name="sparePartType.id"
 							label="${message(code:'spare.part.type.label')}" bean="${filterCmd}"
 							field="type" optionKey="id" multiple="false"
-							ajaxLink="${createLink(controller:'SparePartType', action:'getAjaxData', params:[observation:'USEDINMEMMS'])}"
+							ajaxLink="${createLink(controller:'SparePartType', action:'getAjaxData')}"
 							from="${filterCmd?.sparePartType}" value="${filterCmd?.sparePartType?.id}" 
 							values="${filterCmd?.sparePartType.collect{it.names + ' ['+ it.code +']'}}"/></li>
-
-					<li><g:selectFromList name="manufacturer.id"
-							label="${message(code:'provider.type.manufacturer')}" bean="${filterCmd}"
-							field="manufacturer" optionKey="id" multiple="false"
-							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[type:'MANUFACTURER'])}"
-							from="${filterCmd?.manufacturer}" value="${filterCmd?.manufacturer?.id}" 
-							values="${filterCmd?.manufacturer.collect{it.contact.contactName + ' ['+ it.code +']'}}"/></li>
 
 					<li><g:selectFromList name="supplier.id"
 							label="${message(code:'provider.type.supplier')}" bean="${filterCmd}"
@@ -37,16 +34,15 @@
 							/></li>
 					
 					<li>
-						<label><g:message code:'spare.part.sameAsManufacturer.label" /></label> 
+						<label><g:message code="spare.part.sameAsManufacturer.label" /></label> 
 						<select name="sameAsManufacturer">
 								<option value=""><g:message code="default.please.select" /></option>
 								<option value="true" ${filterCmd?.sameAsManufacturer?.equals("true")? 'selected' : ''} ><g:message code="sameAsManufacturer.boolean.true" /></option>
 								<option value="false" ${filterCmd?.sameAsManufacturer?.equals("false")? 'selected' : ''}><g:message code="sameAsManufacturer.boolean.false" /></option>
 						</select>
 					</li>
-					<li><g:selectFromEnum name="status" values="${Status.values()}" field="status" label="${message(code:'spare.part.status.label')}" /></li>
-					<li><g:selectFromEnum name="purchaser" values="${PurchasedBy.values()}" field="purchaser" label="${message(code:'spare.part.purchaser.label')}" /></li>
-					<li><g:selectFromEnum name="donor" values="${Donor.values()}" field="donor" label="${message(code:'spare.part.donor.label')}" /></li>
+					<li><g:selectFromEnum name="status" values="${StatusOfSparePart.values()}" field="status" label="${message(code:'spare.part.status.label')}" /></li>
+					<li><g:selectFromEnum name="purchaser" values="${SparePartPurchasedBy.values()}" field="purchaser" label="${message(code:'spare.part.purchaser.label')}" /></li>
 				</ul>
 				<input type="hidden" name="dataLocation.id" value="${dataLocation?.id}"/>
 				<button type="submit"><g:message code="entity.filter.label" /></button>

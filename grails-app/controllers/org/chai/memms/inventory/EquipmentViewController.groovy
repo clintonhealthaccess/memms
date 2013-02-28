@@ -87,7 +87,6 @@ class EquipmentViewController extends AbstractController {
 		if (dataLocation != null){
 			if(!user.canAccessCalculationLocation(dataLocation)) response.sendError(404)
 			equipments = equipmentService.getEquipmentsByDataLocationAndManages(dataLocation,params)
-			//equipments = equipmentService.filterEquipment(user,dataLocation,null,null,null,null,null,null,null,null,params)
 		}
 		else equipments = equipmentService.getMyEquipments(user,params)
 		

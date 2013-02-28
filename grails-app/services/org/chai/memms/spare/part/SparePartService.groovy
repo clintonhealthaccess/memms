@@ -47,6 +47,8 @@ import org.chai.memms.security.User;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.spare.part.SparePartType;
+import org.chai.memms.security.User.UserType;
+
 
 import org.supercsv.io.CsvListWriter;
 import org.supercsv.io.ICsvListWriter;
@@ -68,82 +70,67 @@ class SparePartService {
 			sparePart.statusOfSparePart = sparePartStatus.statusOfSparePart
 			sparePart.addToStatus(sparePartStatus)
 		}else{
-			//This assume that there is no sparePart without at least one sparePartStatus associated to it
-			sparePart.statusOfSparePart = sparePart.timeBasedStatus.sparePartStatus
+			sparePart.statusOfSparePart = sparePart.timeBasedStatus.statusOfSparePart
 		}
 		sparePart.lastModified = user
 		if(log.isDebugEnabled()) log.debug("Updating SparePart status params: "+sparePart)
 		sparePart.save(failOnError:true)
 	}
 	
-	public def searchSparePart(String text,User user,DataLocation currentDataLocation,Map<String, String> params) {
-		def dataLocations = []
-		if(currentDataLocation) dataLocations.add(currentDataLocation)
-		else if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([].toSet(), [].toSet()))
-		else{
-			dataLocations = []
-			dataLocations.add(user.location as DataLocation)
-			//TODO to be reviewed by aphrodice
-			if(userService.canViewManagedSpareParts(user))
-			dataLocations.addAll(((DataLocation)user.location).manages)
-		}
-		
+	public def searchSparePart(String text,User user,Map<String, String> params) {
+		//Remove unnecessary blank space
+		text= text.trim()
 		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
+		def dataLocations = []
 		def criteria = SparePart.createCriteria();
+
+		if(!user.userType.equals(UserType.ADMIN) && !user.userType.equals(UserType.TECHNICIANMMC) && !user.userType.equals(UserType.SYSTEM))
+		{
+			if(user.location instanceof Location) 
+				dataLocations.addAll(user.location.getDataLocations([:], [:]))
+			else{
+				dataLocations.add((DataLocation)user.location)
+				if(userService.canViewManagedSpareParts(user)) dataLocations.addAll((user.location as DataLocation).manages?.asList())
+			}
+		}
 		
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				createAlias("type","t")
-				if(dataLocations)
+				if(!dataLocations.isEmpty())
 					inList('dataLocation',dataLocations)
 				or{
 					ilike("code","%"+text+"%")
 					ilike("serialNumber","%"+text+"%")
 					ilike("model","%"+text+"%")
 					ilike(dbFieldDescriptions,"%"+text+"%")
+					ilike(dbFieldTypeNames,"%"+text+"%")
 					ilike("t."+dbFieldTypeNames,"%"+text+"%")
 				}
 		}
 	}
-	public def getMySpareParts(User user,Map<String, String> params) {
+
+	public def getSparePartsByUser(User user, Map<String,String> params) {
 		def dataLocations = []
-		if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([:], [:]))
+		def criteria = SparePart.createCriteria();
+		
+		if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM))
+			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){}
 		else{
-			dataLocations.add((DataLocation)user.location)
-			if(userService.canViewManagedSpareParts(user)) dataLocations.addAll((user.location as DataLocation).manages?.asList())
-		}
-		
-		if(log.isDebugEnabled()) log.debug("Current user = " + user + " , Current user's managed dataLocations = " + dataLocations)
-		
-		def criteria = SparePart.createCriteria();
+			if(user.location instanceof Location) 
+				dataLocations.addAll(user.location.getDataLocations([:], [:]))
+			else{
+				dataLocations.add((DataLocation)user.location)
+				if(userService.canViewManagedSpareParts(user)) dataLocations.addAll((user.location as DataLocation).manages?.asList())
+			}
 
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			inList('dataLocation',dataLocations)
-		}
-	}
-	public def getSparePartsByDataLocationAndManages(DataLocation dataLocation,Map<String, String> params) {
-		if(log.isDebugEnabled()) log.debug("getSparePartsByDataLocationAndManages  dataLocation= "+dataLocation)
-		List<DataLocation> dataLocations = [dataLocation]
-		(!dataLocation.manages)?:dataLocations.addAll(dataLocation.manages)
+			if(log.isDebugEnabled()) log.debug("Current user: " + user + " Current user's managed dataLocations: " + dataLocations)
 
-		def criteria = SparePart.createCriteria();
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			inList('dataLocation',dataLocations)
-//			or{
-//				for(DataLocation dataLoc: dataLocations)
-//					eq('dataLocation',dataLoc)
-//			}
+			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){ 
+				inList('dataLocation',dataLocations) 
+			}
 		}
 	}
-	
-	public def getSparePartsByDataLocation(DataLocation dataLocation,Map<String, String> params) {
-		if(log.isDebugEnabled()) log.debug("getSparePartsByDataLocation  dataLocation= "+dataLocation)
-		def criteria = SparePart.createCriteria();
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			eq('location',dataLocation)
-		}
-	}
-	
 	public def filterSparePart(def user, def dataLocation, def supplier, def sparePartType,
 		def sparePartPurchasedBy,def sameAsManufacturer,def sparePartStatus,Map<String, String> params){
 		
@@ -161,8 +148,6 @@ class SparePartService {
 				inList('dataLocation',dataLocations)
 			if(supplier != null)
 				eq ("supplier", supplier)
-			/*if(manufacturer != null)
-				eq ("manufacturer", manufacturer)*/
 			if(sparePartType != null)
 				eq ("type", sparePartType)
 			if(sparePartPurchasedBy && !sparePartPurchasedBy.equals(SparePartPurchasedBy.NONE))
@@ -195,7 +180,6 @@ class SparePartService {
 						sparePart.serialNumber,sparePart.type.code,sparePart.type?.getNames(new Locale("en")),
 						sparePart.type?.getNames(new Locale("fr")),sparePart.model,sparePart.statusOfSparePart,
 						sparePart.dataLocation?.code,sparePart.dataLocation?.getNames(new Locale("en")),sparePart.dataLocation?.getNames(new Locale("fr")),
-						//sparePart.manufacturer?.code,sparePart.manufacturer?.contact?.contactName,
 						sparePart.manufactureDate,sparePart.supplier?.code,sparePart.supplier?.contact?.contactName,sparePart.purchaseDate,
 						sparePart.purchaseCost?:"n/a",sparePart.currency?:"n/a",
 						sparePart.sparePartPurchasedBy.name(),sparePart.sameAsManufacturer,sparePart?.warranty?.startDate,sparePart?.warrantyPeriod?.numberOfMonths?:""
@@ -226,7 +210,6 @@ class SparePartService {
 			headers.add(ImportExportConstant.LOCATION_CODE)
 			headers.add(ImportExportConstant.LOCATION_NAME_EN)
 			headers.add(ImportExportConstant.LOCATION_NAME_FR)
-			//headers.add(ImportExportConstant.MANUFACTURER_CODE)
 			headers.add(ImportExportConstant.MANUFACTURER_CONTACT_NAME)
 			headers.add(ImportExportConstant.SPARE_PART_MANUFACTURE_DATE)
 			headers.add(ImportExportConstant.SUPPLIER_CODE)

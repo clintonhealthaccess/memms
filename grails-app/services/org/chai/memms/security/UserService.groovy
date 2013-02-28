@@ -55,7 +55,7 @@ class UserService {
 	}
 	
 	boolean canViewManagedEquipments(User user){
-		return user.userType == UserType.TECHNICIANDH && user.location instanceof DataLocation && (user.location as DataLocation).manages
+		return ((user.userType == UserType.TECHNICIANDH) && (user.location instanceof DataLocation) && (user.location as DataLocation).manages)
 	}
 	
 	List<User> searchUser(String text, Map<String, String> params) {
@@ -110,7 +110,7 @@ class UserService {
 		return users
 	}
 	boolean canViewManagedSpareParts(User user){
-		return user.userType == UserType.TECHNICIANDH && user.location instanceof DataLocation && (user.location as DataLocation).manages
+		return ((user.userType == UserType.TECHNICIANDH) && (user.location instanceof DataLocation) && (user.location as DataLocation).manages)
 	}
 	
 }

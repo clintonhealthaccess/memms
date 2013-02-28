@@ -142,9 +142,7 @@ class SparePartController extends AbstractEntityController{
 	}
 
 	def getModel(def entity) {
-		//def manufacturers = []; 
 		def suppliers = []; def types = []; def dataLocations = [];
-		//if (entity.manufacturer != null) manufacturers << entity.manufacturer
 		if (entity.supplier != null) suppliers << entity.supplier
 		if (entity.type!=null) types << entity.type
 		if (entity.dataLocation!=null) dataLocations << entity.dataLocation

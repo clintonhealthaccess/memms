@@ -6,10 +6,10 @@
 			<g:sortableColumn property="type"  title="${message(code: 'spare.part.type.label')}" params="[q:q]" />
 			<g:sortableColumn property="model"  title="${message(code: 'spare.part.model.label')}" params="[q:q]" />
 			<th><g:message code="location.label"/></th>
-			<g:sortableColumn property="statusOfSparePart"  title="${message(code: 'spare.part.status.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="sameAsManufacturer"  title="${message(code: 'spare.part.same.as.manufacturer.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="sparePartPurchasedBy"  title="${message(code: 'spare.part.purchaser.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="statusOfSparePart"  title="${message(code: 'spare.part.status.label')}" params="[q:q]" />
+			<g:sortableColumn property="sameAsManufacturer"  title="${message(code: 'spare.part.same.as.manufacturer.label')}" params="[q:q]" />
+			<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q]" />
+			<g:sortableColumn property="sparePartPurchasedBy"  title="${message(code: 'spare.part.purchaser.label')}" params="[q:q]" />
 			
 		</tr>
 	</thead>
@@ -60,7 +60,7 @@
 <g:render template="/templates/pagination" />
 <script type="text/javascript">
 	$(document).ready(function() {
-		updateEquipment("${createLink(controller:'sparePartView',action: 'updateObsolete')}");
+		updateEquipment("${createLink(controller:'sparePartView',action: 'updateSameAsManufacturer')}");
 	});
 </script>
 

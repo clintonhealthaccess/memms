@@ -29,6 +29,7 @@ package org.chai.memms.spare.part
 
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.spare.part.SparePartStatus;
+import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 /**
  * @author Aphrodice Rwagaju
@@ -41,7 +42,6 @@ class SparePartStatusController extends AbstractEntityController{
     def index() {
 		
 	}
-
 	
 	def bindParams(def entity) {
 		if(log.isDebugEnabled()) log.debug("Spare part status params: "+params)
@@ -89,7 +89,7 @@ class SparePartStatusController extends AbstractEntityController{
 	}
 	
 	def deleteEntity(def entity) {
-		def status = entity.sparePart
+		def sparePart = entity.sparePart
 		if(sparePart.status && sparePart.status.size()==1)
 			flash.message = message(code: "spare.part.without.status", args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Status {0} cannot be deleted')
 		else{

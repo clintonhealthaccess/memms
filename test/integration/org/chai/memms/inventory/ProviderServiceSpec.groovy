@@ -59,8 +59,18 @@ class ProviderServiceSpec extends IntegrationTests{
 		both.save()
 		def servicePro = new Provider(code:CODE(126), type: Type.SERVICEPROVIDER, contact:othersContact)
 		servicePro.save()
+		
+		List<Provider> providers
 		when:
-		List<Provider> providers = providerService.searchProvider(Type.SERVICEPROVIDER,"",["":""])
+		providers = providerService.searchProvider(Type.SERVICEPROVIDER,"",["":""])
+		
+		then:
+		Provider.count()==4
+		providers.size()==1
+		providers[0].code.equals("CODE126")
+		
+		when:
+		providers = providerService.searchProvider(Type.SERVICEPROVIDER,"  ",["":""])
 		
 		then:
 		Provider.count()==4
@@ -82,8 +92,18 @@ class ProviderServiceSpec extends IntegrationTests{
 		both.save()
 		def servicePro = new Provider(code:CODE(126), type: Type.SERVICEPROVIDER, contact:othersContact)
 		servicePro.save()
+		
+		List<Provider> providers
 		when:
-		List<Provider> providers = providerService.searchProvider(null,"address",["":""])
+		providers = providerService.searchProvider(null,"address",["":""])
+		
+		then:"user can search by provider not followed by a space"
+		Provider.count()==4
+		providers.size()==4
+		providers.equals([servicePro,both,supplier,manufacturer])
+		
+		when:"user can search by provider followed by a space"
+		providers = providerService.searchProvider(null,"address  ",["":""])
 		
 		then:
 		Provider.count()==4
