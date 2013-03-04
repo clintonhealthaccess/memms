@@ -34,6 +34,7 @@ import org.chai.memms.inventory.Provider;
 import org.chai.memms.inventory.Provider.Type;
 import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
+import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePartType;
@@ -59,7 +60,7 @@ class SparePartSpec extends IntegrationTests {
 		when:
 		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
 				descriptions:['en':'Spare Part Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
-				type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"))
+				type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"),stockLocation:StockLocation.MMC)
 
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
@@ -85,7 +86,7 @@ class SparePartSpec extends IntegrationTests {
 		def user  = newUser("admin", "Admin UID")
 		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
 				descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
-				type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"))
+				type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"), stockLocation: StockLocation.MMC)
 
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
@@ -100,7 +101,7 @@ class SparePartSpec extends IntegrationTests {
 		when:
 		def statusThree= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePart,[:])
 		def statusTwo= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePart,[:])
-		def statusOne= Initializer.newSparePartStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),StatusOfSparePart.PENDINGORDER,sparePart,[:])
+		def statusOne= Initializer.newSparePartStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),StatusOfSparePart.DISPOSED,sparePart,[:])
 		
 		then:
 		SparePart.count() == 1
@@ -117,7 +118,7 @@ class SparePartSpec extends IntegrationTests {
 		def user  = newUser("admin", "Admin UID")
 		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
 				descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
-				type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"))
+				type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"),stockLocation:StockLocation.MMC)
 
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
@@ -132,7 +133,7 @@ class SparePartSpec extends IntegrationTests {
 		when:
 		def statusThree= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePart,[:])
 		def statusTwo= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePart,[:])
-		def statusOne= Initializer.newSparePartStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),StatusOfSparePart.PENDINGORDER,sparePart,[:])
+		def statusOne= Initializer.newSparePartStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),StatusOfSparePart.DISPOSED,sparePart,[:])
 		then:
 		SparePart.count() == 1
 		SparePart.list()[0].timeBasedStatus.statusOfSparePart==statusOne.statusOfSparePart
@@ -141,7 +142,7 @@ class SparePartSpec extends IntegrationTests {
 		when:
 		def statusSix= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePart,[:])
 		def statusFive= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePart,[:])
-		def statusFour= Initializer.newSparePartStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),StatusOfSparePart.PENDINGORDER,sparePart,[:])
+		def statusFour= Initializer.newSparePartStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),StatusOfSparePart.DISPOSED,sparePart,[:])
 		then:
 		SparePart.count() == 1
 		SparePart.list()[0].timeBasedStatus.is(statusFour)
@@ -149,10 +150,10 @@ class SparePartSpec extends IntegrationTests {
 		when:
 		def statusInStock= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePart,[:])
 		def statusOperational= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePart,[:])
-		def statusPendingOrder= Initializer.newSparePartStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),StatusOfSparePart.PENDINGORDER,sparePart,[:])
+		def statusDisposed= Initializer.newSparePartStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),StatusOfSparePart.DISPOSED,sparePart,[:])
 		then:
 		SparePart.count() == 1
-		SparePart.list()[0].timeBasedStatus.is(statusPendingOrder)
+		SparePart.list()[0].timeBasedStatus.is(statusDisposed)
 	}
 	
 	def "can't create and save a spare part with a duplicate serial number"() {
@@ -170,7 +171,7 @@ class SparePartSpec extends IntegrationTests {
 				
 				def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 				Initializer.newSparePart("test123",SparePartPurchasedBy.BYFACILITY,false,Initializer.newPeriod(30),"16677",['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),Initializer.getDate(22,07,2011),"RWF",'sparePartModel',
-					DataLocation.list().first(),sparePartType,supplier,StatusOfSparePart.OPERATIONAL,User.findByUsername("systemUser"),null,null)
+					DataLocation.list().first(),sparePartType,supplier,StatusOfSparePart.OPERATIONAL,User.findByUsername("systemUser"),null,null, StockLocation.FACILITY)
 					
 				when:
 				def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
@@ -207,7 +208,7 @@ class SparePartSpec extends IntegrationTests {
 		
 				def sparePartOne = Initializer.newSparePart("test123",SparePartPurchasedBy.BYFACILITY,false,Initializer.newPeriod(30),"16677",['en':"testDescription"],Initializer.getDate(22,07,2010), Initializer.getDate(22,07,2010),"RWF",
 						"sparePartModel",DataLocation.list().first(),sparePartType,supplier,StatusOfSparePart.OPERATIONAL,
-						User.findByUsername("systemUser"),null,null)
+						User.findByUsername("systemUser"),null,null, StockLocation.FACILITY)
 					
 				when:
 				
@@ -234,8 +235,8 @@ class SparePartSpec extends IntegrationTests {
 		def user  = newUser("admin", "Admin UID")
 		
 		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYFACILITY,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
-			descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
-			type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"))
+			descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",dataLocation:DataLocation.list().first(),
+			type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"),stockLocation:StockLocation.FACILITY)
 
 		
 
@@ -251,7 +252,7 @@ class SparePartSpec extends IntegrationTests {
 		when:
 		def statusThree= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePart,[:])
 		def statusTwo= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePart,[:])
-		def statusOne= Initializer.newSparePartStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),StatusOfSparePart.PENDINGORDER,sparePart,[:])
+		def statusOne= Initializer.newSparePartStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),StatusOfSparePart.DISPOSED,sparePart,[:])
 		then:
 		SparePart.count() == 1
 		SparePart.list()[0].timeBasedStatus.statusOfSparePart==statusOne.statusOfSparePart

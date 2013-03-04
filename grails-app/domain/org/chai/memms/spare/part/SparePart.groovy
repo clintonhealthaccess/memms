@@ -121,9 +121,10 @@ public class SparePart {
 		purchaseDate nullable: true
 		purchaseCost nullable: true, validator: {val, obj ->
 		if(obj.currency!=null) return (val!=null)
+		}		
+		stockLocation  nullable: false, inList:[StockLocation.MMC, StockLocation.FACILITY], validator: {val, obj ->
+			if(obj.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER)) return (val==null)
 		}
-		
-		stockLocation  nullable: true, inList:[StockLocation.MMC, StockLocation.FACILITY]
 		type nullable: false
 		
 		dataLocation nullable: true, validator: {val,obj ->

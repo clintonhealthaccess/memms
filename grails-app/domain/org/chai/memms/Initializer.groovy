@@ -74,6 +74,7 @@ import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.inventory.EquipmentStatus.Status;
+import org.chai.memms.spare.part.SparePart.StockLocation;
 
 import org.chai.memms.util.Utils;
 import org.chai.memms.TimeDate;
@@ -722,7 +723,8 @@ public class Initializer {
 				StatusOfSparePart.INSTOCK,
 				User.findByUsername("admin"),
 				null,
-				null
+				null,
+				StockLocation.MMC
 				)
 					
 			def warrantyContactOne = newContact(['fr':'Warranty Address Descriptions One'],"Warranty","jk@yahoo.com","0768-888-787","Street 654","8988")
@@ -743,7 +745,8 @@ public class Initializer {
 				StatusOfSparePart.OPERATIONAL,
 				User.findByUsername("admin"),
 				null,
-				null
+				null,
+				StockLocation.FACILITY
 				)
 			
 			def warrantyTwo = newWarranty(['en':'warranty one'],'warranty name1','email1@gmail.com',"0768-111-787","Street 154","898",getDate(10, 12, 2010),false,[:])
@@ -762,7 +765,8 @@ public class Initializer {
 				StatusOfSparePart.OPERATIONAL,
 				User.findByUsername("admin"),
 				null,
-				null
+				null,
+				StockLocation.FACILITY
 				)
 		
 			def warrantyThree = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","88",getDate(10, 12, 2010),false,[:])
@@ -778,16 +782,17 @@ public class Initializer {
 				SparePartType.findByCode("10035"),
 				
 				Provider.findByCode("SEVEN"),
-				StatusOfSparePart.PENDINGORDER,
+				StatusOfSparePart.DISPOSED,
 				User.findByUsername("admin"),
 				null,
-				null
+				null,
+				StockLocation.MMC
 				)
 			
 			
 			def warrantyFour = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","888",getDate(10, 12, 2011),false,[:])
 			def statusFour = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePartFour,[:])
-			def statusFourOne = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.PENDINGORDER,sparePartFour,[:])
+			def statusFourOne = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.DISPOSED,sparePartFour,[:])
 			sparePartFour.warranty=warrantyFour
 			sparePartFour.warrantyPeriod = newPeriod(24)
 			sparePartFour.save(failOnError:true)
@@ -799,16 +804,17 @@ public class Initializer {
 				SparePartType.findByCode("20760"),
 				
 				Provider.findByCode("SIX"),
-				StatusOfSparePart.PENDINGORDER,
+				StatusOfSparePart.DISPOSED,
 				User.findByUsername("admin"),
 				null,
-				null
+				null,
+				StockLocation.MMC
 				)
 			
 			def warrantyFive = newWarranty(['en':'warranty Five'],'warranty name3','email3@gmail.com',"0768-333-787","Street 154","988",getDate(10, 12, 2010),false,[:])
 			def statusFive= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePartFive,[:])
 			def statusFiveOne = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePartFive,[:])
-			def statusFiveTwo = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.PENDINGORDER,sparePartFive,[:])
+			def statusFiveTwo = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.DISPOSED,sparePartFive,[:])
 			sparePartFive.warranty=warrantyFour
 			sparePartFive.warrantyPeriod = newPeriod(8)
 			sparePartFive.save(failOnError:true)
@@ -840,7 +846,7 @@ public class Initializer {
 	// Spare part
 	public static def newSparePart(def serialNumber,def sparePartPurchasedBy,def sameAsManufacturer,def expectedLifeTime,
 		def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def model,def dataLocation,def type,
-		def supplier,def statusOfSparePart,def addedBy,def lastModifiedBy,def lastModifiedOn){
+		def supplier,def statusOfSparePart,def addedBy,def lastModifiedBy,def lastModifiedOn, def stockLocation){
 		def sparePart = new SparePart(
 			serialNumber:serialNumber,
 			sparePartPurchasedBy:sparePartPurchasedBy,
@@ -857,7 +863,8 @@ public class Initializer {
 			statusOfSparePart:statusOfSparePart,
 			addedBy:addedBy,
 			lastModified:lastModifiedBy,
-			lastUpdated:lastModifiedOn
+			lastUpdated:lastModifiedOn,
+			stockLocation:stockLocation
 			);
 		Utils.setLocaleValueInMap(sparePart,descriptions,"Descriptions")
 		return sparePart.save(failOnError: true,flush:true)

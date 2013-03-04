@@ -30,6 +30,7 @@ package org.chai.memms.spare.part
 import org.chai.memms.IntegrationTests;
 import org.chai.memms.spare.part.SparePartController;
 import org.chai.memms.Initializer;
+import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.spare.part.SparePartViewController;
 import org.chai.memms.spare.part.FilterCommand;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
@@ -70,6 +71,7 @@ class SparePartControllerSpec extends IntegrationTests{
 		sparePartController.params.currency = "USD"
 		sparePartController.params.model = "model one"
 		sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYFACILITY
+		sparePartController.params.stockLocation = StockLocation.FACILITY
 		sparePartController.params.sameAsManufacturer = false
 		sparePartController.params.descriptions_en = "test_english_descriptions"
 		sparePartController.params.manufactureDate = Initializer.getDate(1,1,2012)
@@ -121,6 +123,7 @@ class SparePartControllerSpec extends IntegrationTests{
 				sparePartController.params.currency = ""
 				sparePartController.params.model = "model one"
 				sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYFACILITY
+				sparePartController.params.stockLocation = StockLocation.FACILITY
 				sparePartController.params.sameAsMAnufacturer = false
 		
 				sparePartController.params."warranty.startDate" = Initializer.getDate(1,1,2012)
@@ -143,7 +146,7 @@ class SparePartControllerSpec extends IntegrationTests{
 				sparePartController.params.expectedLifeTime_months = "3"
 				sparePartController.params."supplier.id" = supplier.id
 				sparePartController.params.dataLocation = DataLocation.list().first()
-				sparePartController.params.statusOfSparePart="PENDINGORDER"
+				sparePartController.params.statusOfSparePart="OPERATIONAL"
 				sparePartController.params.dateOfEvent=Initializer.now()
 				sparePartController.save()
 		
