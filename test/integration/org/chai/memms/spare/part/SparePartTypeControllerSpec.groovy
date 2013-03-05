@@ -108,7 +108,6 @@ def "search spare part types"(){
 	
 	then:
 	SparePartType.count() == 4
-//	sparePartTypeController.response.status == 404
 	sparePartTypeController.modelAndView.model.entities == [SparePartType.findByCode(CODE(125))]
 	
 	when: "with ajax"

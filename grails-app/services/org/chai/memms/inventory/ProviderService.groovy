@@ -42,9 +42,8 @@ class ProviderService {
 	def sessionFactory;
 	
 	public List<Provider> searchProvider(Type type,String text, Map<String, String>params){
-		text = text.trim();
-		def dbFieldDescriptions = 'addressDescriptions_'+languageService.getCurrentLanguagePrefix();
 		text = text.trim()
+		def dbFieldDescriptions = 'addressDescriptions_'+languageService.getCurrentLanguagePrefix()
 		def criteria = Provider.createCriteria()
 		
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){

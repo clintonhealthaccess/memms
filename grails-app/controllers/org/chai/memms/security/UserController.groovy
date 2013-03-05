@@ -28,8 +28,17 @@
 
 package org.chai.memms.security
 
+import java.util.List;
+
+import org.chai.location.CalculationLocation;
 import org.chai.memms.AbstractEntityController
 import org.apache.shiro.crypto.hash.Sha256Hash;
+import org.chai.memms.security.User;
+import org.chai.memms.security.User.UserType;
+
+import org.chai.location.DataLocation;
+import org.chai.location.Location;
+import org.chai.location.CalculationLocation;
 
 class UserController  extends  AbstractEntityController{
 	def userService
@@ -137,6 +146,23 @@ class UserController  extends  AbstractEntityController{
 		def listHtml = g.render(template:"/entity/user/userList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}
+	
+	def getAjaxData = {
+       List<User> users = userService.searchActiveUserByTypeAndLocation( params['term'],[:],DataLocation.findByCode(KIVUYE))
+		render(contentType:"text/json") {
+			elements = array {
+				users.each { user ->
+					elem (
+						key: user.id,
+						value: user.names
+						                                                
+					)
+				}
+			}
+		}
+		
+	}		
+	
 }
 
 class PasswordCommand {

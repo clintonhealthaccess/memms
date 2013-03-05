@@ -824,7 +824,7 @@ public class Initializer {
 
 
 	//Models definition
-	//Spare Part
+	//Spare Part type
 	public static def newSparePartType(def code, def names, def descriptions,def partNumber,def manufacturer, def discontinuedDate){
 		def type = new SparePartType(code:code,partNumber:partNumber,manufacturer:manufacturer,discontinuedDate:discontinuedDate)
 		Utils.setLocaleValueInMap(type,names,"Names")

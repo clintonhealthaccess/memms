@@ -27,6 +27,7 @@
  */
 package org.chai.memms.security
 
+import java.util.List;
 import java.util.Map;
 
 import org.chai.memms.Initializer;
@@ -37,6 +38,7 @@ import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
 import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User.UserType;
+import org.chai.memms.security.User;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation;
 import org.chai.location.Location;
@@ -62,9 +64,7 @@ class UserServiceSpec extends IntegrationTests{
 		def personUserTwo = newOtherUser("personUserTwo",UUID.randomUUID().toString(),dataLocation);
 		def systemUserOne = newSystemUser("systemUserOne",UUID.randomUUID().toString(),dataLocation);
 		def systemUserTwo = newSystemUser("systemUserTwo",UUID.randomUUID().toString(),dataLocation);
-
-
-
+		
 		when:
 		def users = userService.searchUser("user",[:]);
 		def sortUsersByFirstname = userService.searchUser("one",["sort":"firstname","order":"asc"]);
@@ -207,4 +207,38 @@ class UserServiceSpec extends IntegrationTests{
 		!userService.canViewManagedEquipments(techMMC)
 		!userService.canViewManagedEquipments(admin)
 	}
-}
+	
+	
+	    def "user can search an active and confirmed user by type and Location"(){
+		setup:
+		setupLocationTree()
+		setupSystemUser()
+						
+		def userOne = newOtherUserWithType("userOne", "userOne", DataLocation.findByCode(KIVUYE),UserType.TECHNICIANDH)
+		userOne.active=true
+		userOne.confirmed = true
+		userOne.save()
+		
+		def userTwo = newOtherUserWithType("userTwo", "userTwo", DataLocation.findByCode(BUTARO),UserType.TECHNICIANMMC)
+		userTwo.active=true
+		userTwo.confirmed = true
+		userTwo.save()
+		
+		def userThree = newOtherUserWithType("userThree", "userThree", DataLocation.findByCode(BUTARO),UserType.HOSPITALDEPARTMENT)
+		userThree.active=true
+		userThree.confirmed = true
+		userThree.save()
+		
+		List<User> users
+		
+		when:"user can search an active and confirmed user by type"
+	    users=userService.searchActiveUserByTypeAndLocation("userOne",[UserType.TECHNICIANDH],DataLocation.findByCode(KIVUYE))
+		then:
+		User.list().size()==4
+		users.size()==1
+    	users[0].userType.equals(UserType.TECHNICIANDH)	
+		users[0].location.equals(DataLocation.findByCode(KIVUYE))
+	}				
+}	
+	
+

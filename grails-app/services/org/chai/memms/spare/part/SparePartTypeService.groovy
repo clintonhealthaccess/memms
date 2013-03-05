@@ -42,9 +42,9 @@ class SparePartTypeService {
 		
 	public def searchSparePartType(String text,Map<String, String> params) 
 	{   
-		text = text.trim();
-		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
-		def dbFieldDescritpion = 'descriptions_'+languageService.getCurrentLanguagePrefix();
+		text = text.trim()
+		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix()
+		def dbFieldDescritpion = 'descriptions_'+languageService.getCurrentLanguagePrefix()
 		def criteria = SparePartType.createCriteria()
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			
