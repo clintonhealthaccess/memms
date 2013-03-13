@@ -70,8 +70,8 @@ class SparePartControllerSpec extends IntegrationTests{
 		sparePartController.params.purchaseCost = "32000"
 		sparePartController.params.currency = "USD"
 		sparePartController.params.model = "model one"
-		sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYFACILITY
-		sparePartController.params.stockLocation = StockLocation.FACILITY
+		sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYMOH
+		sparePartController.params.stockLocation = StockLocation.MMC
 		sparePartController.params.sameAsManufacturer = false
 		sparePartController.params.descriptions_en = "test_english_descriptions"
 		sparePartController.params.manufactureDate = Initializer.getDate(1,1,2012)
@@ -122,8 +122,8 @@ class SparePartControllerSpec extends IntegrationTests{
 				sparePartController.params.purchaseCost = ""
 				sparePartController.params.currency = ""
 				sparePartController.params.model = "model one"
-				sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYFACILITY
-				sparePartController.params.stockLocation = StockLocation.FACILITY
+				sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYMOH
+				sparePartController.params.stockLocation = StockLocation.MMC
 				sparePartController.params.sameAsMAnufacturer = false
 		
 				sparePartController.params."warranty.startDate" = Initializer.getDate(1,1,2012)

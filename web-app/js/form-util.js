@@ -407,7 +407,17 @@ function getToHide(parchaseCost,estimatedCost){
 			$(".donor-information").slideUp()
 		}
 	})
-
+	//dataLocation
+	if($("select[name=stockLocation]").val()!="FACILITY") $(".facility-information").hide()
+	$("select[name=stockLocation]").change(function(e){
+		if($(this).val()=="FACILITY"){
+			$(".facility-information").slideDown()
+		}else{
+			$(".facility-information").slideUp()
+		}
+	})
+		
+		
 	$("select[name=occurency]").change(function(e){
 		if($(this).val()=="DAYS_OF_WEEK"){ 
 			$(".week-days").slideDown()

@@ -149,7 +149,7 @@ class SparePartTypeController  extends AbstractEntityController{
 				types.each { type ->
 					elem (
 							key: type.id,
-							html: g.render(template:"/templates/typeFormSide",model:[type:type,label:label,cssClass:"form-aside-hidden",field:'type'])
+							html: g.render(template:"/templates/sparePartTypeFormSide",model:[type:type,label:label,cssClass:"form-aside-hidden",field:'type'])
 							)
 				}
 			}

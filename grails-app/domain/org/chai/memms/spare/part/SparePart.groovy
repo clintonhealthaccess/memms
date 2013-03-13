@@ -69,7 +69,10 @@ public class SparePart {
 		
 		NONE('none'),
 		BYMOH("by.moh"),
+		BYMMC("by.mmc"),
 		BYFACILITY("by.facility"),
+		BYPARTNER("by.partner"),
+		
 	
 		String messageCode = "spare.part.purchased"
 
@@ -141,7 +144,7 @@ public class SparePart {
 		warrantyPeriod nullable: true, validator:{val, obj ->
 			if (obj.warranty!=null) return (val!=null) && (val.numberOfMonths >= 0)
 		}
-		sparePartPurchasedBy nullable: false, inList:[SparePartPurchasedBy.BYFACILITY,SparePartPurchasedBy.BYMOH]
+		sparePartPurchasedBy nullable: false, inList:[SparePartPurchasedBy.BYFACILITY,SparePartPurchasedBy.BYMOH, SparePartPurchasedBy.BYMMC, SparePartPurchasedBy.BYPARTNER]
 		
 		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
 			if(obj.purchaseCost != null) return (val != null)

@@ -26,26 +26,19 @@
             </span>
             <g:message code="spare.part.section.basic.information.label" default="Basic Information"/>
           </h4>
-          		  		
-      			<div class="row">
-    			<input type="hidden" name="dataLocation.id" value="${sparePart.dataLocation?.id}" />
-    			  <label><g:message code="datalocation.label"/>:</label> ${sparePart.dataLocation?.names}
-    			</div>
-    	  					
+          		  			
         	<g:selectFromList name="type.id" label="${message(code:'spare.part.type.label')}" bean="${sparePart}" field="type" optionKey="id" multiple="false"
     			ajaxLink="${createLink(controller:'sparePartType', action:'getAjaxData', params: [type:'TYPE'])}"
     			from="${types}" value="${sparePart?.type?.id}" values="${types.collect{it.names}}" />
     			
     		<g:input name="serialNumber" label="${message(code:'spare.part.serial.number.label')}" bean="${sparePart}" field="serialNumber"/>
-      		<g:input name="model" label="${message(code:'spare.part.model.label')}" bean="${sparePart}" field="model"/>
-      		
-      		<g:selectFromEnum name="stockLocation" bean="${sparePart}" values="${StockLocation.values()}" field="stockLocation" label="${message(code:'spare.part.stockLocation.label')}"/>
-      		
-      		<g:i18nTextarea name="descriptions" bean="${sparePart}" label="${message(code:'entity.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
+      		<g:input name="model" label="${message(code:'spare.part.model.label')}" bean="${sparePart}" field="model"/>	
+      		<g:i18nTextarea name="names" bean="${sparePart}" label="${message(code:'spare.part.names.label')}" field="names" height="50" width="300" maxHeight="100" />
+      		<g:i18nTextarea name="descriptions" bean="${sparePart}" label="${message(code:'entity.comments.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
      
       	</fieldset>
       	
-     		<div id="form-aside-type" class="form-aside">
+     	<div id="form-aside-type" class="form-aside">
       	  <g:if test="${sparePart?.type != null}">
       	 	  <g:render template="/templates/sparePartFormSide" model="['type':sparePart?.type,'cssClass':'current','field':'type' ]" />
           </g:if>
@@ -62,10 +55,8 @@
       	<g:if test="${sparePart.id == null}">
       			<g:selectFromEnum name="statusOfSparePart" bean="${cmd}" values="${StatusOfSparePart.values()}" field="statusOfSparePart" label="${message(code:'spare.part.status.label')}"/>
       			<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'spare.part.status.date.of.event.label')}" bean="${cmd}" field="dateOfEvent"/>
-      			<g:inputBox name="sameAsManufacturer"  label="${message(code:'spare.part.same.as.manufacturer.label')}" bean="${sparePart}" field="sameAsManufacturer" value="${sparePart.sameAsManufacturer}" checked="${(sparePart.sameAsManufacturer)? true:false}"/>
       	</g:if>
       	<g:if test="${sparePart?.status!=null}">
-      	 	<g:inputBox name="sameAsManufacturer"  label="${message(code:'spare.part.same.as.manufacturer.label')}" bean="${sparePart}" field="sameAsManufacturer" value="${sparePart.sameAsManufacturer}" checked="${(sparePart.sameAsManufacturer)? true:false}"/>
 	    	<table class="items">
 	    		<tr>
 	    			<th></th>
@@ -103,7 +94,30 @@
      		</g:if>
      	</fieldset>
       </div>   
-     
+     <div class="form-section">
+      	<fieldset class="form-content">
+      	<h4 class="section-title">
+          <span class="question-default">
+           <img src="${resource(dir:'images/icons',file:'star_small.png')}">
+          </span>
+          <g:message code="spare.part.section.location.information.label" default="Location Information"/>
+        </h4>
+       <g:selectFromEnum name="stockLocation" bean="${sparePart}" values="${StockLocation.values()}" field="stockLocation" label="${message(code:'spare.part.stockLocation.label')}"/>
+      		
+      		<div class="facility-information">
+      		<g:selectFromList name="dataLocation.id" label="${message(code:'spare.part.dataLocation.label')}" bean="${sparePart}" field="dataLocation" optionKey="id" multiple="false"
+    			ajaxLink="${createLink(controller:'dataLocation', action:'getAjaxData', params: [dataLocation:'DATALOCATION'])}"
+    			from="${dataLocations}" value="${sparePart?.dataLocation?.id}" values="${dataLocations.collect{it.names}}" />
+    		</div>
+    			
+      		</fieldset>
+     	 <div id="form-aside-dataLocation" class="form-aside">
+     		<g:if test="${sparePart?.dataLocation != null}">
+     		<!-- To be reviewed why is not displaying -->
+     	  		 <g:render template="/templates/dataLocationFormSide" model="['dataLocation':sparePart?.dataLocation,'cssClass':'current','field':'dataLocation' ]" />
+       		</g:if>
+       	</div>
+      </div>
       <div class="form-section">
       	<fieldset class="form-content">
       	<h4 class="section-title">

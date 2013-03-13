@@ -103,7 +103,10 @@ class SparePartController extends AbstractEntityController{
 				entity.warranty.contact=null
 			}
 		}
-
+		//Verify dataLocation null at MMC NOT NULL at FACILITY
+		if(!params["stockLocation"].equals("FACILITY")){
+			params["dataLocation"] = null
+		}
 		//Making sure a disposed sparePart cannot be modified 
 		//TODO add this check to method that modified sparePart
 		if(!params.oldStatus.equals(StatusOfSparePart.DISPOSED))
@@ -113,8 +116,6 @@ class SparePartController extends AbstractEntityController{
 
 	def validateEntity(def entity) {
 		boolean validStatus = true
-		//Commented by Aphrodice to fullfill the conditions and replaced by the next condition
-		//if(entity.id==null){
 		if(entity.id==null){
 			//Checking if the dateOfEvent is not after parchase date and add error
 			if(!(entity.purchaseDate.before(params.cmd.dateOfEvent) || entity.purchaseDate.compareTo(params.cmd.dateOfEvent)==0)) 
@@ -128,7 +129,6 @@ class SparePartController extends AbstractEntityController{
 
 	def saveEntity(def entity) {
 		SparePartStatus status
-		if(entity.dataLocation) hasAccess(entity.dataLocation)
 		if(entity.id==null){
 			entity.statusOfSparePart = StatusOfSparePart."$params.cmd.statusOfSparePart"
 			sparePartStatusService.createSparePartStatus(user,params.cmd.statusOfSparePart,entity,params.cmd.dateOfEvent,[:])
@@ -164,7 +164,7 @@ class StatusCommand {
 	Date dateOfEvent
 
 	static constraints = {
-		statusOfSparePart nullable: false, inList: [StatusOfSparePart.DISPOSED,StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER,StatusOfSparePart.OPERATIONAL]
+		statusOfSparePart nullable: false, inList: [StatusOfSparePart.INSTOCK, StatusOfSparePart.OPERATIONAL, StatusOfSparePart.PENDINGORDER,StatusOfSparePart.DISPOSED]
 		dateOfEvent nullable: false
 	}
 

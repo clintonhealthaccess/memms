@@ -160,6 +160,14 @@ class DataLocationController extends AbstractEntityController {
 					)
 				}
 			}
+			htmls = array {
+				dataLocations.each { dataLocation ->
+					elem (
+							key: dataLocation.id,
+							html: g.render(template:"/templates/dataLocationFormSide",model:[dataLocation:dataLocation,label:label,cssClass:"form-aside-hidden",field:'dataLocation'])
+							)
+				}
+			}
 		}
 	}
 	

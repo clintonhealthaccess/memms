@@ -119,9 +119,14 @@
   			<g:inputDate name="manufactureDate"  precision="month" label="${message(code:'equipment.manufacture.date.label')}" value="${equipment?.manufactureDate}" bean="${equipment}" field="manufactureDate"/>
      	</fieldset>
     	  <div id="form-aside-manufacturer" class="form-aside">
-	    	  <g:if test="${equipment?.manufacturer != null}">
+    	   <g:if test="${equipment?.manufacturer != null}">
 	    	 	 <g:render template="/templates/providerFormSide" model="['provider':equipment?.manufacturer,'type':equipment?.manufacturer?.type,'label':'provider.manufacturer.details','cssClass':'current','field':'manufacturer' ]" />
-	          </g:if>
+         </g:if>
+         <g:else>
+            <g:each in="${manufacturers}" var="provider">
+                <g:render template="/templates/providerFormSide" model="['provider':provider,'type':provider.type,'label':'provider.manufacturer.details','cssClass':'form-aside-hidden','field':'manufacturer' ]" />
+            </g:each>
+         </g:else> 
        	</div>
       </div>
       <div class="form-section">
@@ -144,9 +149,14 @@
     		<g:currency costName="purchaseCost" id="purchase-cost" costLabel="${message(code:'equipment.purchase.cost.label')}" bean="${equipment}" costField="purchaseCost"  currencyName="currency" values="${currencies}" currencyField="currency" currencyLabel="${message(code:'equipment.currency.label')}"/>
      	</fieldset>
      	 <div id="form-aside-supplier" class="form-aside">
-     		<g:if test="${equipment?.supplier != null}">
-     	  		<g:render template="/templates/providerFormSide" model="['provider':equipment?.supplier,'type':equipment?.supplier?.type,'label':'provider.supplier.details','cssClass':'current','field':'supplier']" />
-       		</g:if>
+       		<g:if test="${equipment?.supplier != null}">
+       	  		<g:render template="/templates/providerFormSide" model="['provider':equipment?.supplier,'type':equipment?.supplier?.type,'label':'provider.supplier.details','cssClass':'current','field':'supplier']" />
+         	</g:if>
+          <g:else>
+            <g:each in="${suppliers}" var="provider">
+                <g:render template="/templates/providerFormSide" model="['provider':provider,'type':provider.type,'label':'provider.supplier.details','cssClass':'form-aside-hidden','field':'supplier' ]" />
+            </g:each>
+         </g:else> 
        	</div>
       </div>
       <div class="form-section">
@@ -181,9 +191,14 @@
   			<g:inputYearMonth name="serviceContractPeriod" field="serviceContractPeriod" years="${equipment.serviceContractPeriod?.years}" months="${equipment.serviceContractPeriod?.months}" bean="${equipment}" label='equipment.provider.period.label'/>
   		</fieldset> 
   		<div id="form-aside-serviceProvider" class="form-aside">
-	    	  <g:if test="${equipment?.serviceProvider != null}">
-	    	 	 <g:render template="/templates/providerFormSide" model="['provider':equipment.serviceProvider,'type':equipment.serviceProvider?.type,'label':'provider.service.provider.details','cssClass':'current','field':'serviceProvider' ]" />
-	          </g:if>
+  	    	<g:if test="${equipment?.serviceProvider != null}">
+  	    	 	  <g:render template="/templates/providerFormSide" model="['provider':equipment.serviceProvider,'type':equipment.serviceProvider?.type,'label':'provider.service.provider.details','cssClass':'current','field':'serviceProvider' ]" />
+  	       </g:if>
+           <g:else>
+            <g:each in="${serviceProviders}" var="provider">
+                <g:render template="/templates/providerFormSide" model="['provider':provider,'type':provider.type,'label':'provider.serviceProvider.details','cssClass':'form-aside-hidden','field':'serviceProvider' ]" />
+            </g:each>
+          </g:else> 
        	</div>
       </div>
   		<g:if test="${equipment.id != null}">
