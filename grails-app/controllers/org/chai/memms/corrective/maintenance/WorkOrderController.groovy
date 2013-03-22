@@ -82,15 +82,18 @@ class WorkOrderController extends AbstractEntityController{
 
 	def getModel(entity) {
 		def equipments =  []
+		def dataLocation = DataLocation.get(params.long("dataLocation.id"))
+		dataLocation = (dataLocation)?dataLocation:entity.equipment?.dataLocation
+		def usersInCharge = userService.getActiveUserByTypeAndLocation([UserType.HOSPITALDEPARTMENT,UserType.TITULAIREHC,UserType.TECHNICIANDH],dataLocation,['sort':'firstname'])
 		if(entity.equipment) equipments << entity.equipment
 		[
 			order:entity,
 			equipments: equipments,
-			dataLocation: DataLocation.get(params.long("dataLocation.id")),
+			dataLocation: dataLocation,
 			currencies: grailsApplication.config.site.possible.currency,
 			orderClosed:(entity.currentStatus == OrderStatus.CLOSEDFIXED || entity.currentStatus == OrderStatus.CLOSEDFORDISPOSAL)? true:false,
 			//entity can be null
-			technicians : userService.getActiveUserByTypeAndLocation([UserType.ASSISTANTTECHHOSP,UserType.TECHNICIANDH],entity.equipment?.dataLocation, [:])
+			technicians : usersInCharge
 		]
 	}
 

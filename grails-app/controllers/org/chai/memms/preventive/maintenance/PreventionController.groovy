@@ -29,11 +29,14 @@ package org.chai.memms.preventive.maintenance
 
 import org.chai.location.CalculationLocation;
 import org.chai.memms.AbstractEntityController;
+import org.chai.memms.TimeDate
+import org.joda.time.DateTime
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.security.User.UserType;
 import org.chai.memms.preventive.maintenance.PreventiveOrder
 import org.chai.memms.preventive.maintenance.PreventiveProcess
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderType
 
 
 
@@ -66,9 +69,13 @@ class PreventionController extends AbstractEntityController {
 	}
 
 	def getModel(def entity) {
+		def scheduledOn = null
+		if(entity.id==null && entity.order.type.equals(PreventiveOrderType.DURATIONBASED))
+			scheduledOn = new TimeDate(entity.order.nextOccurence,new DateTime(entity.order.nextOccurence).toLocalTime().toString("HH:mm:ss"))
 		
 		[
-			prevention:entity
+			prevention:entity,
+			scheduledOn:scheduledOn
 		]
 	}
 
@@ -126,7 +133,6 @@ class PreventionController extends AbstractEntityController {
 
 	def addProcess = {
 		Prevention prevention = Prevention.get(params.int("prevention.id"))
-		log.debug("hahahahha"+prevention)
 		def value = params["value"]
 		def result = false
 		def html =""

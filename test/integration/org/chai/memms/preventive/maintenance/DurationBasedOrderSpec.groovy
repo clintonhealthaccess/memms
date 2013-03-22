@@ -91,16 +91,16 @@ class DurationBasedOrderSpec extends IntegrationTests {
 	}
 	
 	def "date firstOccurenceOn should be less than today"() {
-//		when:
-//		setupLocationTree()
-//		setupEquipment()
-//		def addedBy = newUser("addedBy", CODE(123))
-//		def equipment = Equipment.findBySerialNumber(CODE(123))
-//		//TODO the firstOccurenceOn time needs to have a "24:60:60", otherwise the condition would fail at times later than these
-//		def order  = new DurationBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.CLOSED,description: "test",
-//			preventionResponsible: PreventionResponsible.SERVIDEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAILY).save(failOnError:true)
-//		then:
-//		DurationBasedOrder.count() == 1
+		when:
+		setupLocationTree()
+		setupEquipment()
+		def addedBy = newUser("addedBy", CODE(123))
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		//TODO the firstOccurenceOn time needs to have a "24:60:60", otherwise the condition would fail at times later than these
+		def order  = new DurationBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.CLOSED,description: "test",
+			preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAILY).save(failOnError:true)
+		then:
+		DurationBasedOrder.count() == 1
 	}
 	
 	def "prevention order type cannot be none"() {
@@ -132,32 +132,32 @@ class DurationBasedOrderSpec extends IntegrationTests {
 	}
 	
 	def "closedOn validations"() {
-//		when:
-//		setupLocationTree()
-//		setupEquipment()
-//		def addedBy = newUser("addedBy", CODE(123))
-//		def equipment = Equipment.findBySerialNumber(CODE(123))
-//		def order  = new DurationBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.CLOSED,description: "test",
-//				closedOn:Initializer.now(),
-//				preventionResponsible: PreventionResponsible.SERVIDEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAILY).save(failOnError:true)
-//		def orderFailsOne  = new DurationBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.CLOSED,description: "test",
-//				closedOn:Initializer.now()+1,
-//				preventionResponsible: PreventionResponsible.SERVIDEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAILY).save()
-//		def orderFailsTwo  = new DurationBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.OPEN,description: "test",
-//				closedOn:Initializer.now(),
-//				preventionResponsible: PreventionResponsible.SERVIDEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAILY).save()
-//
-//		then:
-//		DurationBasedOrder.count() == 1
-//		orderFailsOne == null
-//		orderFailsTwo == null
+		when:
+		setupLocationTree()
+		setupEquipment()
+		def addedBy = newUser("addedBy", CODE(123))
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def order  = new DurationBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.CLOSED,description: "test",
+				closedOn:Initializer.now(),
+				preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAILY).save(failOnError:true)
+		def orderFailsOne  = new DurationBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.CLOSED,description: "test",
+				closedOn:Initializer.now()+1,
+				preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAILY).save()
+		def orderFailsTwo  = new DurationBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.OPEN,description: "test",
+				closedOn:Initializer.now(),
+				preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAILY).save()
+
+		then:
+		DurationBasedOrder.count() == 1
+		orderFailsOne == null
+		orderFailsTwo == null
 	}
 	
 	def "technicianInCharge validations"() {
 		setup:
 		setupLocationTree()
 		setupEquipment()
-		def techInCharge = newOtherUserWithType("techInCharge", "techInCharge", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
+		def techInCharge = newOtherUserWithType("techInCharge", "techInCharge", DataLocation.findByCode(BUTARO),UserType.ASSISTANTTECHHOSP)
 		def addedBy = newUser("addedBy", CODE(123))
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		when:
@@ -168,6 +168,7 @@ class DurationBasedOrderSpec extends IntegrationTests {
 				preventionResponsible: PreventionResponsible.HCTECHNICIAN, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAILY).save()
 
 		then:
+		//As 
 		DurationBasedOrder.count() == 1
 		orderFails == null
 	}

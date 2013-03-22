@@ -216,6 +216,11 @@ public class Utils {
 		DateTime secondDateTime = new DateTime(secondDate)
 		return ((Days.daysBetween(firstDateTime, secondDateTime)).days == 0)
 	}
+	public static Date addHoursToDate(Date time,Integer numberHours){
+		DateTime timeTime = new DateTime(time)
+		timeTime = timeTime.plusHours(numberHours)
+		return timeTime.toDate()
+	}
 	/**
 	 * fieldName has to start with capital letter as
 	 * it is used to create setter of the object field

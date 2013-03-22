@@ -65,6 +65,7 @@ import org.chai.memms.preventive.maintenance.WorkBasedOrder.WorkIntervalType
 import org.chai.memms.preventive.maintenance.DurationBasedOrder.OccurencyType;
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderType;
 import org.chai.memms.preventive.maintenance.PreventiveProcess;
+import org.chai.memms.preventive.maintenance.PreventiveOrder
 import org.chai.memms.security.Role
 import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType
@@ -345,6 +346,7 @@ public class Initializer {
 			def serviceProOne = newProvider("Nine",Type.SERVICEPROVIDER,contactNine)
 			def serviceProTwo = newProvider("Ten",Type.SERVICEPROVIDER,contactTen)
 		}
+
 		if(!NotificationEquipment.count()){
 			newNotificationEquipment(User.findByUsername("titulaireHC"), User.findByUsername("techDH"), now(), "I have a new equipment in my health center, am not sure of it't type but has a serial number of 9084320oidbfd. Could you come register it please? thanks", false, User.findByUsername("titulaireHC").location, null)
 			newNotificationEquipment(User.findByUsername("hospitalDepartment"), User.findByUsername("techDH"), now(), "I have a new equipment in my department, am not sure of it't type but has a serial number of 9084320oidbfd. Could you come register it please? thanks", false, User.findByUsername("hospitalDepartment").location, null)
@@ -570,101 +572,112 @@ public class Initializer {
 	}
 	
 	static def createCorrectiveMaintenanceStructure(){
-		def admin = User.findByUsername("admin")
-		def titulaireHC = User.findByUsername("titulaireHC")
-		def department = User.findByUsername("hospitalDepartment")
-		def techDH = User.findByUsername("techDH")
-		def techMMC = User.findByUsername("techMMC")
-		
-		def equipment01 =Equipment.findBySerialNumber("SERIAL01")
-		def equipment09 =Equipment.findBySerialNumber("SERIAL09")
-		def equipment10 =Equipment.findBySerialNumber("SERIAL10")
-		
-		def workOrderOne =  newWorkOrder(equipment01,"First order",Criticality.NORMAL,department,now()-1,FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		
-		def statusOne =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATFOSA,department,false)
-		def statusTwo =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATMMC,techDH,true)
-		def notifationOne = newWorkOrderNotification(workOrderOne, department, techDH, "notifationOne")
-		def notifationTwo = newWorkOrderNotification(workOrderOne, techDH, department,"I am currentlly working on this, but needs further review. Am making this long to see how it fits when reading it.")
-		def notifationThree = newWorkOrderNotification(workOrderOne, techDH, techMMC, "notifationThree")
-		workOrderOne.save(failOnError:true)
-		
-		def workOrderTwo =  newWorkOrder(equipment01,"Second order",Criticality.LOW,admin,now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def statusThree =  newWorkOrderStatus(workOrderTwo,OrderStatus.OPENATFOSA,admin,false)
-		
-		def workOrderFive =  newWorkOrder(equipment01,"Closed order",Criticality.HIGH,department,now()-3,FailureReason.MISUSE,OrderStatus.OPENATFOSA)
-		
-		def statusFour =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATFOSA,department,false)
-		def statusFive =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATMMC,department,true)		
-		def statusSix =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATFOSA,department,false)
-		def statusSeven =  newWorkOrderStatus(workOrderFive,OrderStatus.CLOSEDFIXED,department,false)
-		
-		def notifationFour = newWorkOrderNotification(workOrderOne, department, techDH,"Solve this for me")
-		def notifationFive = newWorkOrderNotification(workOrderOne, techDH, department,"More information needed")
-		workOrderFive.save(failOnError:true)
-		
-		equipment01.addToWorkOrders(workOrderOne)
-		equipment01.addToWorkOrders(workOrderTwo)
-		equipment01.addToWorkOrders(workOrderFive)
-		
-		equipment01.save(failOnError:true)
-		
-		def processOne = newCorrectiveProcess(workOrderOne,ProcessType.ACTION,"cleaning material", admin)
-		def processTwo = newCorrectiveProcess(workOrderOne,ProcessType.ACTION,"open material", admin)
-		def processThree = newCorrectiveProcess(workOrderOne,ProcessType.MATERIAL,"material piece one", admin)
-		def processFour = newCorrectiveProcess(workOrderOne,ProcessType.MATERIAL,"material piece two", admin)
-		
-		workOrderOne.addToProcesses(processOne)
-		workOrderOne.addToProcesses(processTwo)
-		workOrderOne.addToProcesses(processThree)
-		workOrderOne.addToProcesses(processFour)
-		
-		def commentOne = newComment(workOrderOne, admin, "comment one")
-		def commentTwo = newComment(workOrderOne, admin,  "comment two")
-		def commentThree = newComment(workOrderOne, admin,  "comment three")
-		
-		workOrderOne.addToComments(commentOne)
-		workOrderOne.addToComments(commentTwo)
-		workOrderOne.addToComments(commentThree)
-		
-		workOrderOne.save(failOnError:true)
-		
-		def workOrderThree =  newWorkOrder(equipment09,"Third order",Criticality.NORMAL,titulaireHC,now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def statusEight =  newWorkOrderStatus(workOrderThree,OrderStatus.OPENATFOSA,admin,false)
-		equipment09.addToWorkOrders(workOrderThree)
-		equipment09.save(failOnError:true)
-		
-		def workOrderFour =  newWorkOrder(equipment10,"Fourth order",Criticality.HIGH,admin,now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def statusNine =  newWorkOrderStatus(workOrderFour,OrderStatus.OPENATFOSA,admin,false)
-		equipment10.addToWorkOrders(workOrderFour)
-		equipment10.save(failOnError:true)	
+
+		if(!WorkOrder.list()){
+			def admin = User.findByUsername("admin")
+			def titulaireHC = User.findByUsername("titulaireHC")
+			def department = User.findByUsername("hospitalDepartment")
+			def techDH = User.findByUsername("techDH")
+			def techMMC = User.findByUsername("techMMC")
+			
+			def equipment01 =Equipment.findBySerialNumber("SERIAL01")
+			def equipment09 =Equipment.findBySerialNumber("SERIAL09")
+			def equipment10 =Equipment.findBySerialNumber("SERIAL10")
+			
+			def workOrderOne =  newWorkOrder(equipment01,"First order",Criticality.NORMAL,department,now()-1,FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+			
+			def statusOne =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATFOSA,department,false)
+			def statusTwo =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATMMC,techDH,true)
+			def notifationOne = newWorkOrderNotification(workOrderOne, department, techDH, "notifationOne")
+			def notifationTwo = newWorkOrderNotification(workOrderOne, techDH, department,"I am currentlly working on this, but needs further review. Am making this long to see how it fits when reading it.")
+			def notifationThree = newWorkOrderNotification(workOrderOne, techDH, techMMC, "notifationThree")
+			workOrderOne.save(failOnError:true)
+			
+			def workOrderTwo =  newWorkOrder(equipment01,"Second order",Criticality.LOW,admin,now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+			def statusThree =  newWorkOrderStatus(workOrderTwo,OrderStatus.OPENATFOSA,admin,false)
+			
+			def workOrderFive =  newWorkOrder(equipment01,"Closed order",Criticality.HIGH,department,now()-3,FailureReason.MISUSE,OrderStatus.OPENATFOSA)
+			
+			def statusFour =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATFOSA,department,false)
+			def statusFive =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATMMC,department,true)		
+			def statusSix =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATFOSA,department,false)
+			def statusSeven =  newWorkOrderStatus(workOrderFive,OrderStatus.CLOSEDFIXED,department,false)
+			
+			def notifationFour = newWorkOrderNotification(workOrderOne, department, techDH,"Solve this for me")
+			def notifationFive = newWorkOrderNotification(workOrderOne, techDH, department,"More information needed")
+			workOrderFive.save(failOnError:true)
+			
+			equipment01.addToWorkOrders(workOrderOne)
+			equipment01.addToWorkOrders(workOrderTwo)
+			equipment01.addToWorkOrders(workOrderFive)
+			
+			equipment01.save(failOnError:true)
+			
+			def processOne = newCorrectiveProcess(workOrderOne,ProcessType.ACTION,"cleaning material", admin)
+			def processTwo = newCorrectiveProcess(workOrderOne,ProcessType.ACTION,"open material", admin)
+			def processThree = newCorrectiveProcess(workOrderOne,ProcessType.MATERIAL,"material piece one", admin)
+			def processFour = newCorrectiveProcess(workOrderOne,ProcessType.MATERIAL,"material piece two", admin)
+			
+			workOrderOne.addToProcesses(processOne)
+			workOrderOne.addToProcesses(processTwo)
+			workOrderOne.addToProcesses(processThree)
+			workOrderOne.addToProcesses(processFour)
+			
+			def commentOne = newComment(workOrderOne, admin, "comment one")
+			def commentTwo = newComment(workOrderOne, admin,  "comment two")
+			def commentThree = newComment(workOrderOne, admin,  "comment three")
+			
+			workOrderOne.addToComments(commentOne)
+			workOrderOne.addToComments(commentTwo)
+			workOrderOne.addToComments(commentThree)
+			
+			workOrderOne.save(failOnError:true)
+			
+			def workOrderThree =  newWorkOrder(equipment09,"Third order",Criticality.NORMAL,titulaireHC,now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+			def statusEight =  newWorkOrderStatus(workOrderThree,OrderStatus.OPENATFOSA,admin,false)
+			equipment09.addToWorkOrders(workOrderThree)
+			equipment09.save(failOnError:true)
+			
+			def workOrderFour =  newWorkOrder(equipment10,"Fourth order",Criticality.HIGH,admin,now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+			def statusNine =  newWorkOrderStatus(workOrderFour,OrderStatus.OPENATFOSA,admin,false)
+			equipment10.addToWorkOrders(workOrderFour)
+			equipment10.save(failOnError:true)	
+		}
 	}
 	
 	static def createPreventiveMaintenanceStructure(){
 		//TODO the users and what they can
-		def admin = User.findByUsername("admin")
-		def titulaireHC = User.findByUsername("titulaireHC") //hospitalDepartment can do the same job too
-		def department = User.findByUsername("hospitalDepartment")
-		def techDH = User.findByUsername("techDH")
-		def techMMC = User.findByUsername("techMMC")
-		
-		def equipment01 = Equipment.findBySerialNumber("SERIAL01")
-		def equipment09 = Equipment.findBySerialNumber("SERIAL09")
-		def equipment10 = Equipment.findBySerialNumber("SERIAL10")
-		
-		def dOrderOne = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'First Duration Order'],"First Duration Order",now()+1,null,OccurencyType.DAYS_OF_WEEK,1,[1,3,5])
-		
-		def dOrderTwo = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Secod Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.MONTHLY,2,[])
-		
-		def dOrderThree = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Three Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.DAILY,2,[])
-		
-		def dOrderFour = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Four Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.YEARLY,2,[])
+		if(!PreventiveOrder.count()){
+			def admin = User.findByUsername("admin")
+			def titulaireHC = User.findByUsername("titulaireHC") //hospitalDepartment can do the same job too
+			def department = User.findByUsername("hospitalDepartment")
+			def techDH = User.findByUsername("techDH")
+			def techMMC = User.findByUsername("techMMC")
+			
+			def equipment01 = Equipment.findBySerialNumber("SERIAL01")
+			def equipment09 = Equipment.findBySerialNumber("SERIAL09")
+			def equipment10 = Equipment.findBySerialNumber("SERIAL10")
+			
+			def dOrderOne = newDurationBasedOrder(equipment01,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTITULAIRE,null,['en':'First Duration Order'],"First Duration Order",now()+1,null,OccurencyType.DAYS_OF_WEEK,1,[1,3,5])
+			
+			def dOrderTwo = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Secod Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.MONTHLY,2,[])
+			
+			def dOrderThree = newDurationBasedOrder(equipment10,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,['en':'Three Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.DAILY,2,[])
+			
+			def dOrderFour = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTITULAIRE,null,['en':'Four Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.YEARLY,2,[])
 
-		def dOrderFive = newWorkBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'First Work Based Five'],"First Work Based Order",now()+1,null,WorkIntervalType.HOURS,22)
+			def dOrderFive = newWorkBasedOrder(equipment10,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTITULAIRE,null,['en':'First Work Based Five'],"First Work Based Order",now()+1,null,WorkIntervalType.HOURS,22)
 
-		def dOrderSix = newWorkBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Second Work Based Six'],"Second Work Based Order",now()+1,null,WorkIntervalType.WEEK,2)
-		
+			def dOrderSix = newWorkBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Second Work Based Six'],"Second Work Based Order",now()+1,null,WorkIntervalType.WEEK,2)
+
+			// def preventionOne = newPrevention(dOrderOne,admin,Utils.addHoursToDate(now(),1),now(),67,['en':'First Duration Order'], [])
+			// def preventionTwo = newPrevention(dOrderTwo,admin,Utils.addHoursToDate(now(),1),now(),30,['en':'First Duration Order'], [])
+			// def processOne = newPreventionProcess(now(), "process one",admin, preventionOne)
+			// def processTwo = newPreventionProcess(now(), "process two",admin, preventionTwo)
 		}
+		
+	}
+
 
 	public static def createSparePartStructure(){
 			
@@ -686,30 +699,6 @@ public class Initializer {
 			def sparePartTypeNine = newSparePartType("10155", ['en':'Ninth spare part','fr':'Neuvieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 9",Provider.findByCode("NINE"),now())
 			def sparePartTypeTen = newSparePartType("10426", ['en':'Tenth spare part','fr':'Dixieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 10",Provider.findByCode("TEN"),now())
 			
-			}
-		
-		if(!Provider.count()){
-			def contactOne = newContact(['fr':'Manufacture Address Descriptions One'],"Manufacture Nokia","jkl@yahoo.com","0768-889-787","Street 154","8988")
-			def sontactTwo = newContact(['en':'Supplier Address Descriptions Two'],"Manufacture Siemens","jk@yahoo.com","0768-888-787","Street 1654","8988")
-			def contactThree = newContact(['en':'Address Descriptions Three'],"Manufacture HP","jkl2@yahoo.com","0768-888-787","Street 151","8988")
-			def contactFour = newContact(['en':'Address Descriptions Four'],"Manufacture DELL","jkl3@yahoo.com","0768-132-787","Street 152","8988")
-			def contactFive = newContact(['en':'Address Descriptions Five'],"Supplier Company 1","jkl4@yahoo.com","0768-657-787","Street 153","8988")
-			def contactSix = newContact(['en':'Address Descriptions Six'],"Supplier Company 2","jkl5@yahoo.com","0768-342-787","Street 155","8988")
-			def contactSeven = newContact(['en':'Address Descriptions Seven'],"Supplier Company 3","jkl6@yahoo.com","0768-123-787","Street 156","8988")
-			def contactEight = newContact(['en':'Address Descriptions Eight'],"Manufacture and Supplier Ericson","jkl6@yahoo.com","0768-123-787","Street 156","8988")
-			
-			
-			def manufactureOne = newProvider("ONE",Type.MANUFACTURER,contactOne)
-			def manufactureTwo = newProvider("TWO",Type.MANUFACTURER,sontactTwo)
-			def manufactureThree = newProvider("THREE",Type.MANUFACTURER,contactThree)
-			def manufactureFour = newProvider("FOUR",Type.MANUFACTURER,contactFour)
-			
-			
-			def supplierOne = newProvider("FIVE",Type.SUPPLIER,contactFive)
-			def supplierTwo = newProvider("SIX",Type.SUPPLIER,contactSix)
-			def supplierThree = newProvider("SEVEN",Type.SUPPLIER,contactSeven)
-			
-			def both = newProvider("EIGHT",Type.BOTH,contactEight)
 		}
 		
 		if(!SparePart.count()){
@@ -915,13 +904,20 @@ public class Initializer {
 	}
 	//Prevention
 	public static def newPrevention(def order,def addedBy,def scheduledOn,def eventDate,def timeSpend,def descriptions, def processes){
-		def prevention = new Prevention(order:order,addedBy:addedBy,scheduledOn:scheduledOn,eventDate:eventDate,timeSpend:timeSpend,processes:processes)
+		def timeD =  newTimeDate(scheduledOn)
+		def timeS = newTimeSpend(timeSpend)
+		def prevention = new Prevention(addedBy:addedBy,scheduledOn:timeD,eventDate:eventDate,timeSpend:timeS,processes:processes)
 		Utils.setLocaleValueInMap(prevention,descriptions,"Descriptions")
+		order.addToPreventions(prevention)
+		order.save(failOnError:true)
 		return prevention.save(failOnError:true)
 	}
 	//PreventiveProcess
 	public static def newPreventionProcess(def dateCreated, def name,def addedBy, def prevention){
-		return new PreventiveProcess(dateCreated:dateCreated,name:name,addedBy:addedBy,prevention:prevention).save(failOnError:true)
+		def process = new PreventiveProcess(dateCreated:dateCreated,name:name,addedBy:addedBy)
+		prevention.addToProcesses(process)
+		prevention.save(failOnError:true)
+		return process.save(failOnError:true)
 	}
 	public static def newTimeDate(def date,def time){
 		return new TimeDate(date,time)

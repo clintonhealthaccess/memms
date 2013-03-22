@@ -113,6 +113,7 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 		preventionResponsible nullable:false,inList:[PreventionResponsible.HCTECHNICIAN,PreventionResponsible.HCTITULAIRE,PreventionResponsible.SERVICEPROVIDER,PreventionResponsible.DEPARTMENTUSER]
 		technicianInCharge nullable:true, validator:{ val, obj ->
 			if(obj.preventionResponsible.equals(PreventionResponsible.HCTECHNICIAN)) return (val!=null)
+			else return (val==null)
 		}
 		
 	}

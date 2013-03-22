@@ -149,7 +149,42 @@ class DurationBasedOrder extends PreventiveOrder {
 		if(log.isDebugEnabled()) log.debug("getOccurencesBetween(...)=${dates}")
 		return dates
 	}
-	
+
+	def getNextOccurence(){
+		def dates = []
+		Date now = new Date();
+		DateTime yesterday = new DateTime(now-1) 
+		Date nextOccurrence = null
+		
+		switch(occurency) {
+
+			case OccurencyType.DAILY:
+				def oneDayLater = yesterday.plusDays(2)
+				dates = getOccurencesBetween(yesterday.toDate(),oneDayLater.toDate())
+			break
+			//As days_of_week fall in a week period
+			case OccurencyType.DAYS_OF_WEEK:
+			case OccurencyType.WEEKLY:
+				def oneWeekLater = yesterday.plusWeeks(1)
+				dates = getOccurencesBetween(yesterday.toDate(),oneWeekLater.toDate())
+			break
+			case OccurencyType.MONTHLY:
+				def oneMonthLater = yesterday.plusMonths(1)
+				dates = getOccurencesBetween(yesterday.toDate(),oneMonthLater.toDate())
+			break
+			case OccurencyType.YEARLY:
+				def oneYearLater = yesterday.plusYears(1)
+				dates = getOccurencesBetween(yesterday.toDate(),oneYearLater.toDate())
+			break
+			case OccurencyType.NONE:
+			break
+		}
+		//Return the first date as it is next occurence date
+		if(!dates.isEmpty()) nextOccurrence = dates[0]
+		return nextOccurrence
+	}
+
+
 	@Override
 	public String toString() {
 		return "DurationBasedOrder [id= "+id+" occurency=" + occurency + "]";

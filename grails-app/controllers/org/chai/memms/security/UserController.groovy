@@ -148,7 +148,12 @@ class UserController  extends  AbstractEntityController{
 	}
 	
 	def getAjaxData = {
-       List<User> users = userService.searchActiveUserByTypeAndLocation( params['term'],[:],DataLocation.findByCode(KIVUYE))
+		def dataLocation = CalculationLocation.get(params["dataLocation"])
+		List<UserType> userTypes = []
+		for(def type: params['userTypes']) 
+			userTypes.add(UserType."$type")
+
+       	def users = userService.searchActiveUserByTypeAndLocation(params['term'],userTypes,dataLocation)
 		render(contentType:"text/json") {
 			elements = array {
 				users.each { user ->

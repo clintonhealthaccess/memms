@@ -14,6 +14,7 @@
 			<th><g:message code="preventive.occurance.interval.label"/></th>
 			<g:sortableColumn property="status"  title="${message(code: 'entity.status.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="openOn"  title="${message(code: 'preventive.order.open.on.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
+			<th><g:message code="preventive.next.occurence.label"/></th>
 			<g:sortableColumn property="closedOn"  title="${message(code: 'preventive.order.closed.on.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<th><g:message code="entity.descriptions.label"/></th>
 			<th><g:message code="prevention.label"/></th>
@@ -60,6 +61,10 @@
 				</td>
 				<td>
 					${Utils.formatDateWithTime(order.firstOccurenceOn?.timeDate)}
+				</td>
+				<td>
+					${(order.type.equals(PreventiveOrderType.DURATIONBASED))?Utils.formatDateWithTime(order.nextOccurence):''}
+					
 				</td>
 				<td>
 					${Utils.formatDateWithTime(order?.closedOn)}

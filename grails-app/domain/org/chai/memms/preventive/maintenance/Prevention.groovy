@@ -70,11 +70,9 @@ public class Prevention {
 		descriptions nullable: true, blank: true
 		addedBy nullable: false
 		timeSpend nullable: true
-		scheduledOn nullable: false, validator:{it.timeDate <= new Date()}
+		scheduledOn nullable: false
 		eventDate nullable: false, validator:{it <= new Date()}
-		lastUpdated nullable: true, validator:{if(it != null) return (it <= new Date())}
-
-		
+		lastUpdated nullable: true, validator:{if(it != null) return (it <= new Date())}		
 	}
 	
 	

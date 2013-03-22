@@ -36,8 +36,10 @@
 
 <div class="filters main projection">
   <a class="next medium gray" href="${createLinkWithTargetURI(controller:'durationBasedOrder',action:'calendar',params:['dataLocation.id': dataLocation?.id])}">
-    View Mapper
+    <g:message code="preventive.order.view.mapper.label"/>
   </a>
-  <p class="question-help">Click on the view mapper button to view projection of current month and next months</p>
+    <p class="question-help">
+      <g:message code="preventive.order.view.mapper.tip.label"/>
+    </p>
 </div>
 

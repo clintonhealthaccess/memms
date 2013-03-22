@@ -42,6 +42,27 @@ class DurationBasedOrderUnitSpec extends UnitSpec {
 		
 		daily.getOccurencesBetween(now + 1, now + 2) == [now + 1, now + 2]
 	}
+
+
+	def "test next occurence"() {
+		setup:
+		def now = new Date()
+		def nowJoda = new DateTime(now)
+		def firstDayOfWeek = new DateTime(now).withDayOfWeek(1).withMillisOfSecond(0)
+		def days_of_week = new DurationBasedOrder(occurency: OccurencyType.DAYS_OF_WEEK, firstOccurenceOn: new TimeDate(now - 1, nowJoda.toLocalTime().toString("HH:mm:ss")), occurDaysOfWeek: [1, 3, 5])
+		def daily = new DurationBasedOrder(occurency: OccurencyType.DAILY, firstOccurenceOn: new TimeDate(now - 1,nowJoda.toLocalTime().toString("HH:mm:ss")))
+		def weekly = new DurationBasedOrder(occurency: OccurencyType.WEEKLY, firstOccurenceOn: new TimeDate(now - 7,nowJoda.toLocalTime().toString("HH:mm:ss")), occurInterval: 1)
+		def monthly = new DurationBasedOrder(occurency: OccurencyType.MONTHLY, firstOccurenceOn: new TimeDate(new DateTime(now).minusMonths(1).toDate(),nowJoda.toLocalTime().toString("HH:mm:ss")), occurInterval: 1)
+		def yearly = new DurationBasedOrder(occurency: OccurencyType.YEARLY, firstOccurenceOn: new TimeDate(new DateTime(now).minusYears(1).toDate(),nowJoda.toLocalTime().toString("HH:mm:ss")), occurInterval: 1)
+		
+		expect:
+		daily.getNextOccurence() == new DateTime(daily.firstOccurenceOn.timeDate).plusDays(1).toDate() 
+		weekly.getNextOccurence() == new DateTime(weekly.firstOccurenceOn.timeDate).plusWeeks(1).toDate()
+		monthly.getNextOccurence() == new DateTime(monthly.firstOccurenceOn.timeDate).plusMonths(1).toDate()
+		yearly.getNextOccurence() == new DateTime(yearly.firstOccurenceOn.timeDate).plusYears(1).toDate()
+		//TODO Find a better way to test this
+		new DateTime(days_of_week.getNextOccurence()).getDayOfWeek() in [1,3,5]		
+	}
 	
 	def "test occurence days of week"() {
 		setup:

@@ -44,7 +44,6 @@ class PreventionService {
 
 	public List<Prevention> getPreventionByOrder(PreventiveOrder order, Map<String,String> params){
 		def criteria =  Prevention.createCriteria()
-		
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order:params.'$order' ?:"desc"){
 			eq('order',order)
 		}
