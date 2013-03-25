@@ -1,4 +1,5 @@
 <%@ page import="org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart" %>
+<%@ page import="org.chai.memms.inventory.Equipment" %>
 <%@ page import="org.chai.memms.util.Utils" %>
 <div  class="entity-form-container togglable">
 <div class="heading1-bar">
@@ -18,7 +19,12 @@
 			<label><g:message code="spare.part.serial.number.label"/>:</label>${status.sparePart.serialNumber}
 		</div>
 		<g:selectFromEnum name="statusOfSparePart" bean="${statusOfSparePart}" values="${StatusOfSparePart.values()}" field="statusOfSparePart" label="${message(code:'spare.part.status.of.spare.part.label')}"/>
-		<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'spare.part.status.of.spare.part.date.of.event.label')}" bean="${statusOfSparePart}" field="dateOfEvent"/>
+		<div class="equipment-information">
+      		<g:selectFromList name="usedOnEquipment.id" label="${message(code:'spare.part.used.on.equipment.label')}" bean="${sparePart}" field="usedOnEquipment" optionKey="id" multiple="false"
+    		ajaxLink="${createLink(controller:'equipmentView', action:'getAjaxData', params: [type:'EQUIPMENT'])}"
+    		from="${equipments}" value="${statusOfSparePart?.sparePart?.usedOnEquipment?.id}" values="${equipments.collect{it.descriptions}}" />
+    	</div>
+		<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'spare.part.status.of.spare.part.date.of.event.label')}" bean="${statusOfSparePart}" field="dateOfEvent" value="${(status.id!=null)?:Utils.formatDate(now)}"/>
     	<g:i18nTextarea name="reasons" bean="${statusOfSparePart}" label="${message(code:'spare.part.status.of.spare.part.reason')}" field="reasons" height="150" width="300" maxHeight="150" />
 		
 		<g:if test="${status.id != null}">

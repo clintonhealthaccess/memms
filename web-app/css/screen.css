@@ -1237,7 +1237,7 @@ table.nice-table .cell { cursor: default; }
 /* line 13, ../../src/stylesheets/partials/_comments.sass */
 .comment-section button { margin: 5px 0 0 110px; }
 /* line 15, ../../src/stylesheets/partials/_comments.sass */
-.comment-section .ajax-error { color: #d30000; display: inline !important; padding: 0 5px; }
+.comment-section .ajax-error { color: #d30000; display: inline; padding: 0 5px; }
 /* line 19, ../../src/stylesheets/partials/_comments.sass */
 .comment-section .ajax-spinner { background: white; position: absolute; right: 6px; top: 11px; z-index: 10; }
 

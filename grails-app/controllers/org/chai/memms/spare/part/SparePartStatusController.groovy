@@ -31,6 +31,7 @@ import org.chai.memms.AbstractEntityController;
 import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
+import org.chai.memms.inventory.Equipment;
 /**
  * @author Aphrodice Rwagaju
  *
@@ -38,10 +39,8 @@ import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 class SparePartStatusController extends AbstractEntityController{
 	def sparePartStatusService
 	def sparePartService
-	
-    def index() {
-		
-	}
+	def usedOnEquipment
+
 	
 	def bindParams(def entity) {
 		if(log.isDebugEnabled()) log.debug("Spare part status params: "+params)
@@ -56,10 +55,14 @@ class SparePartStatusController extends AbstractEntityController{
 
 	
 	def getModel(def entity) {
+		def equipments=[];
+		if (entity.sparePart.usedOnEquipment!=null) equipments << entity.sparePart.usedOnEquipment
 		[
 			status:entity,
 			sparePart:entity.sparePart,
-			numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.sparePart.form
+			equipments:equipments,
+			numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.sparePart.form,
+			now:now
 		]
 	}
 
@@ -90,19 +93,23 @@ class SparePartStatusController extends AbstractEntityController{
 	
 	def deleteEntity(def entity) {
 		def sparePart = entity.sparePart
+		def usedOnEquipment = Equipment.get(params.int("usedOnEquipment.id"))
 		if(sparePart.status && sparePart.status.size()==1)
 			flash.message = message(code: "spare.part.without.status", args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Status {0} cannot be deleted')
 		else{
 			sparePart.status.remove(entity)
 			super.deleteEntity(entity);
-			sparePartService.updateCurrentSparePartStatus(sparePart,null,user)
+			sparePartService.updateCurrentSparePartStatus(sparePart,null,user, usedOnEquipment)
 		}
 	}
 	
 	def saveEntity(def entity) {
-		if(!entity.sparePart?.statusOfSparePart?.equals(StatusOfSparePart.DISPOSED))
-			sparePartService.updateCurrentSparePartStatus(entity.sparePart,entity,user)
-		else flash.message = message(code: "error.cannot.modify.disposed.sparePart", default: 'Cannot modify a disposed spare part, please reactivate it')
+		def usedOnEquipment = Equipment.get(params.int("usedOnEquipment.id"))
+		if(!entity.sparePart?.statusOfSparePart?.equals(StatusOfSparePart.DISPOSED)){
+		if(log.isDebugEnabled()) log.debug("EQUIPMENT AFTER BINDING:"+usedOnEquipment)
+			sparePartService.updateCurrentSparePartStatus(entity.sparePart,entity,user, usedOnEquipment)
+		}
+		else flash.message = message(code: "error.cannot.modify.disposed.spare.part", default: 'Cannot modify a disposed spare part, please change its status first')
 	}
 	
 	

@@ -164,7 +164,8 @@ class EquipmentController extends AbstractEntityController{
 					dataLocations: dataLocations,
 					numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.equipment.form,
 					cmd:params.cmd,
-					currencies: grailsApplication.config.site.possible.currency
+					currencies: grailsApplication.config.site.possible.currency,
+					now:now
 
 				]
 	}

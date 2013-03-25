@@ -96,7 +96,6 @@ class SparePartViewController extends AbstractController{
 			])
 		}
 	}
-	
 	//TODO don't think we need ajax for this
 	def selectFacility = {
 		adaptParamsForList()

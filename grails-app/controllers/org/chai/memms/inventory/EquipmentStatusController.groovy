@@ -96,7 +96,8 @@ class EquipmentStatusController extends AbstractEntityController{
 		[
 			status:entity,
 			equipment:entity.equipment,
-			numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.equipment.form
+			numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.equipment.form,
+			now:now
 		]
 	}
 	

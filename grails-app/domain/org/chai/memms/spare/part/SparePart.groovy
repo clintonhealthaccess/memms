@@ -109,6 +109,9 @@ public class SparePart {
 	User addedBy
 	User lastModified
 	
+	String room
+	String shelve
+	
 	static belongsTo = [type: SparePartType, stockLocation: StockLocation]
 	static hasMany = [status: SparePartStatus]	
 	static i18nFields = ["descriptions","names"]
@@ -117,6 +120,8 @@ public class SparePart {
 	static constraints = {
 		code nullable: false, unique :true
 		names nullable: true, blank: true
+		room nullable: true, blank: true
+		shelve nullable: true, blank: true
 		descriptions nullable: true, blank: true
 		serialNumber nullable: true, unique: true, validator: { val, obj ->
 			if(!obj.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER)) return (val!=null)
@@ -125,16 +130,16 @@ public class SparePart {
 		purchaseCost nullable: true, validator: {val, obj ->
 		if(obj.currency!=null) return (val!=null)
 		}		
-		stockLocation  nullable: false, inList:[StockLocation.MMC, StockLocation.FACILITY], validator: {val, obj ->
-			if(obj.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER)) return (val==null)
-		}
+		stockLocation  nullable: false, inList:[StockLocation.MMC, StockLocation.FACILITY]
 		type nullable: false
 		
 		dataLocation nullable: true, validator: {val,obj ->
 			if(obj.stockLocation.equals(StockLocation.FACILITY)) return (val!=null)
 		}
 		addedBy nullable: false
-		usedOnEquipment nullable: true
+		usedOnEquipment nullable: true, validator:{val,obj ->
+			if(obj.statusOfSparePart.equals(StatusOfSparePart.OPERATIONAL)) return (val!=null)
+		}
 		lastModified nullable:true, validator:{ val, obj ->
 			if (val != null) return (obj.lastUpdated != null)
 		}	
@@ -152,6 +157,16 @@ public class SparePart {
 		statusOfSparePart nullable:true,validator:{
 			if(it!=null) return it in [StatusOfSparePart.OPERATIONAL,StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER,StatusOfSparePart.DISPOSED]
 		}
+		/*statusOfSparePart nullable:false,validator:{ val, obj ->
+			if(obj.id!=null) {
+				if(log.isDebugEnabled()) log.debug("ID OF STATUS INSIDE IF: " + obj.id)
+				return val in [StatusOfSparePart.OPERATIONAL,StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER,StatusOfSparePart.DISPOSED]		
+			}
+			else{
+				if(log.isDebugEnabled()) log.debug("ID OF STATUS INSIDE ELSE: " + obj.id)
+				return val in [StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER]			
+			}
+		}*/
 		model nullable: true
 		supplier nullable: true
 		expectedLifeTime nullable: true, validator:{

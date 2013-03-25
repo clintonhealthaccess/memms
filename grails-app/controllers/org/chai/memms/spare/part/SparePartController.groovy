@@ -112,6 +112,11 @@ class SparePartController extends AbstractEntityController{
 		if(!params.oldStatus.equals(StatusOfSparePart.DISPOSED))
 			bindData(entity,params,[exclude:["statusOfSparePart","dateOfEvent"]])
 		if(log.isDebugEnabled()) log.debug("SparePart params: after bind  "+entity)
+		
+		//Verify equipment null on status different to operational
+		if(!params["statusOfSparePart"].equals("OPERATIONAL")){
+			params["equipment"] = null
+		}
 	}
 
 	def validateEntity(def entity) {
@@ -142,18 +147,21 @@ class SparePartController extends AbstractEntityController{
 	}
 
 	def getModel(def entity) {
-		def suppliers = []; def types = []; def dataLocations = [];
+		def suppliers = []; def types = []; def dataLocations = []; def equipments=[];
 		if (entity.supplier != null) suppliers << entity.supplier
 		if (entity.type!=null) types << entity.type
 		if (entity.dataLocation!=null) dataLocations << entity.dataLocation
+		if (entity.usedOnEquipment!=null) equipments << entity.usedOnEquipment
 		[
 					sparePart: entity,
 					suppliers: suppliers,
 					types: types,
 					dataLocations: dataLocations,
+					equipments:equipments,
 					numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.spare.part.form,
 					cmd:params.cmd,
-					currencies: grailsApplication.config.site.possible.currency
+					currencies: grailsApplication.config.site.possible.currency,
+					now:now
 
 				]
 	}

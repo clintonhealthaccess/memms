@@ -1,3 +1,4 @@
+<%@ page import="org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart" %>
 <table class="items spaced">
 	<thead>
 		<tr>
@@ -6,6 +7,7 @@
 			<g:sortableColumn property="type"  title="${message(code: 'spare.part.type.label')}" params="[q:q]" />
 			<g:sortableColumn property="model"  title="${message(code: 'spare.part.model.label')}" params="[q:q]" />
 			<g:sortableColumn property="statusOfSparePart"  title="${message(code: 'spare.part.status.label')}" params="[q:q]" />
+			<g:sortableColumn property="usedOnEquipment"  title="${message(code: 'spare.part.used.on.equipment.label')}" params="[q:q]" />
 			<th><g:message code="location.label"/></th>
 			<g:sortableColumn property="purchaseDate"  title="${message(code: 'spare.part.purchase.date.label')}" params="[q:q]" />
 			<g:sortableColumn property="purchaseCost"  title="${message(code: 'spare.part.purchase.cost.label')}" params="[q:q]" />
@@ -41,6 +43,28 @@
   	    			</a>
 				</td>
 				<td>
+				<g:if test="${sparePart?.usedOnEquipment != null}">
+					<g:if test="${sparePart.statusOfSparePart.equals(StatusOfSparePart.DISPOSED)}">
+					</g:if>
+					<g:if test="${sparePart.statusOfSparePart.equals(StatusOfSparePart.OPERATIONAL)}">
+					${sparePart.usedOnEquipment.code}
+					</g:if>
+				</g:if>
+				<g:elseif test="${sparePart?.usedOnEquipment == null && sparePart.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER)}">
+					<a href="${createLinkWithTargetURI(controller:'sparePart', action:'edit', params:[id: sparePart.id])}">
+						<button class="escalate next small gray"><g:message code="spare.part.arrive.in.stock.link.label" /></button>
+					</a>
+				</g:elseif>
+				<g:elseif test="${sparePart?.usedOnEquipment == null && sparePart.statusOfSparePart.equals(StatusOfSparePart.DISPOSED)}">
+
+				</g:elseif>
+				<g:else>
+					<a href="${createLinkWithTargetURI(controller:'sparePart', action:'edit', params:[id: sparePart.id])}">
+						<button class="escalate next small gray"><g:message code="spare.part.assign.equipment.link.label" /></button>
+					</a>		
+				</g:else>
+				</td>
+				<td>
 					<g:message code="datalocation.label"/>: ${sparePart.dataLocation?.names}<br/>
 					
 				</td>
@@ -49,14 +73,9 @@
 				<td>
 					<g:if name="sameAsManufacturer" id="${sparePart.id}" test="${(sparePart.sameAsManufacturer==true)}">&radic;</g:if>
 					<g:else>&nbsp;</g:else>
-				</td>
-		
-				
-				<td>${sparePart.supplier.contact.contactName}</td>
-				
-				
-				<td>${message(code: sparePart.sparePartPurchasedBy?.messageCode+'.'+sparePart.sparePartPurchasedBy?.name)}</td>
-				
+				</td>					
+				<td>${sparePart.supplier.contact.contactName}</td>				
+				<td>${message(code: sparePart.sparePartPurchasedBy?.messageCode+'.'+sparePart.sparePartPurchasedBy?.name)}</td>				
 			</tr>
 		</g:each>
 	</tbody>	

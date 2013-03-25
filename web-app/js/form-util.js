@@ -416,7 +416,15 @@ function getToHide(parchaseCost,estimatedCost){
 			$(".facility-information").slideUp()
 		}
 	})
-
+	//Spare Part Status
+	if($("select[name=statusOfSparePart]").val()!="OPERATIONAL") $(".equipment-information").hide()
+	$("select[name=statusOfSparePart]").change(function(e){
+		if($(this).val()=="OPERATIONAL"){
+			$(".equipment-information").slideDown()
+		}else{
+			$(".equipment-information").slideUp()
+		}
+	})
 	//user
 	if($("select[name=preventionResponsible]").val()!="HCTECHNICIAN") $(".prevention-responsible").hide()
 	$("select[name=preventionResponsible]").change(function(e){
@@ -426,8 +434,7 @@ function getToHide(parchaseCost,estimatedCost){
 			$(".prevention-responsible").slideUp()
 		}
 	})
-		
-		
+				
 	$("select[name=occurency]").change(function(e){
 		if($(this).val()=="DAYS_OF_WEEK"){ 
 			$(".week-days").slideDown()
