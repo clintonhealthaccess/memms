@@ -28,43 +28,6 @@
 			</ul>
 		</li>
 		<li>
-			<h6>${message(code:"equipment.type.label")}</h6>
-			<ul>
-				<li>
-					<span class="label"><g:message code="entity.code.label" /></span>
-					<span class="text">${equipment.type?.code}</span>
-					<span class="label"><g:message code="entity.name.label" /></span>
-					<span class="text">${equipment.type?.names}</span>
-				</li>
-			</ul>
-		</li>
-		<li>
-			<h6>${message(code:"provider.type.manufacturer")}</h6>
-			<ul>
-				<li>
-					<span class="label"><g:message code="entity.name.label"/>:</span>
-					<span class="text">${equipment.manufacturer?.contact?.contactName}</span>
-					<span class="label"><g:message code="contact.email.label"/>:</span>
-					<span class="text">${equipment.manufacturer?.contact?.email}</span>
-					<span class="label"><g:message code="contact.phone.label"/>:</span>
-					<span class="text">${equipment.manufacturer?.contact?.phone}</span>
-				</li>
-			</ul>
-		</li>
-		<li>
-			<h6>${message(code:"provider.type.supplier")}</h6>
-			<ul>
-				<li>
-					<span class="label"><g:message code="entity.name.label"/>:</span>
-					<span class="text">${equipment.supplier?.contact?.contactName}</span>
-					<span class="label"><g:message code="contact.email.label"/>:</span>
-					<span class="text">${equipment.supplier?.contact?.email}</span>
-					<span class="label"><g:message code="contact.phone.label"/>:</span>
-					<span class="text">${equipment.supplier?.contact?.phone}</span>
-				</li>
-			</ul>
-		</li>
-		<li>
 			<h6>${message(code:"equipment.status.current.status")}</h6>
 			<ul>
 				<li>

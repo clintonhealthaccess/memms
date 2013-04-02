@@ -2,6 +2,7 @@
 <%@ page import="org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart" %>
 <%@ page import="org.chai.memms.spare.part.SparePart.SparePartPurchasedBy" %>
 <%@ page import="org.chai.memms.spare.part.SparePart.StockLocation" %>
+<%@ page import="org.chai.memms.inventory.Equipment" %>
 <div  class="entity-form-container togglable">
   <div class="heading1-bar">
 		<h1>
@@ -98,12 +99,13 @@
   	    	<br />
      		</g:if>
      	</fieldset>
-     	<div id="form-aside-assigned-equipment" class="form-aside">
+     	<div id="form-aside-type" class="form-aside">
       	  <g:if test="${sparePart?.usedOnEquipment != null}">
-      	 	  <g:render template="/templates/assignedEquipmentFormSide" model="['usedOnEquipment':sparePart?.usedOnEquipment,'cssClass':'current','field':'usedOnEquipment' ]" />
+      	 	  <g:render template="/templates/assignedEquipmentFormSide" model="['equipment':sparePart?.usedOnEquipment,'cssClass':'current','field':'usedOnEquipment' ]" />
           </g:if>
         </div>
-      </div>   
+      </div>
+     <div class="form-section-to-hide">
      <div class="form-section">
       	<fieldset class="form-content">
       	<h4 class="section-title">
@@ -124,11 +126,11 @@
       		</fieldset>
      	 <div id="form-aside-dataLocation" class="form-aside">
      		<g:if test="${sparePart?.dataLocation != null}">
-     		<!-- To be reviewed why is not displaying -->
      	  		 <g:render template="/templates/dataLocationFormSide" model="['dataLocation':sparePart?.dataLocation,'cssClass':'current','field':'dataLocation' ]" />
        		</g:if>
        	</div>
       </div>
+      </div> 
       <div class="form-section">
       	<fieldset class="form-content">
       	<h4 class="section-title">

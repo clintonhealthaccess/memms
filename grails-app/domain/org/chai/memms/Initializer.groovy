@@ -678,7 +678,6 @@ public class Initializer {
 		
 	}
 
-
 	public static def createSparePartStructure(){
 		
 		def equipment01 =Equipment.findBySerialNumber("SERIAL01")
@@ -686,12 +685,12 @@ public class Initializer {
 		def equipment10 =Equipment.findBySerialNumber("SERIAL10")
 			
 		if(!SparePartType.count()){
+
 			//Add spare part types as defined in ecri
 			def spPtTypOne = newSparePartType("4323", ['en':'first spare part','fr':' premiere piece de rechange'],['en':'first spare part description','fr':' description de la premiere piece de rechange'],"4323-XYZ",Provider.findByCode("ONE"),now())
 			def spPtTypTwo = newSparePartType("4324", ['en':'second spare part','fr':' deuxieme piece de rechange'],['en':'second spare part description','fr':' description de la deuxieme piece de rechange'],"4324-ABC",Provider.findByCode("TWO"),now())
 			def spPtTypThree = newSparePartType("4325", ['en':'third spare part','fr':' troisieme piece de rechange'],['en':'third spare part description','fr':' description de la troisieme piece de rechange'],"4325-IJK",Provider.findByCode("THREE"),now())
    
-			
 			def sparePartTypeOne = newSparePartType("15810", ['en':'first spare part','fr':'premier sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part",Provider.findByCode("ONE"),now())
 			def sparePartTypeTwo = newSparePartType("15819", ['en':'Second spare part','fr':'Second sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 2",Provider.findByCode("TWO"),now())
 			def sparePartTypeThree = newSparePartType("15966", ['en':'Third spare part','fr':'Troisieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 3",Provider.findByCode("THREE"),now())
@@ -885,8 +884,7 @@ public class Initializer {
 		
 		}
 	}
-
-
+	
 	//Models definition
 	//Spare Part type
 	public static def newSparePartType(def code, def names, def descriptions,def partNumber,def manufacturer, def discontinuedDate){
@@ -899,7 +897,6 @@ public class Initializer {
 	//Spare Part status
 	public static def newSparePartStatus(def dateOfEvent,def changedBy,def value, def sparePart,def reasons, def usedOnEquipment){
 		def status = new SparePartStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,statusOfSparePart:value)
-		//TODO this may be customized to add equipments according to the status
 		
 		Utils.setLocaleValueInMap(status,reasons,"Reasons")
 		if (value.equals(StatusOfSparePart.OPERATIONAL))

@@ -9,8 +9,10 @@
 	<g:locales/>
 </div>
 
-<div class="main">	
-	<g:form url="[controller:'sparePartStatus', action:'save', params:[targetURI: targetURI]]" useToken="true" class="simple-list">
+<div class="main">
+ <div class="form-section">
+	<fieldset class="form-content">	
+	<g:form url="[controller:'sparePartStatus', action:'save', params:[targetURI: targetURI]]" useToken="true" class="simple-list">	
 		<div class="row">
 			<input type="hidden" name="sparePart.id" value="${status.sparePart.id}"/>
 			<label><g:message code="entity.code.label"/>:</label>${status.sparePart.code}
@@ -22,7 +24,7 @@
 		<div class="equipment-information">
       		<g:selectFromList name="usedOnEquipment.id" label="${message(code:'spare.part.used.on.equipment.label')}" bean="${sparePart}" field="usedOnEquipment" optionKey="id" multiple="false"
     		ajaxLink="${createLink(controller:'equipmentView', action:'getAjaxData', params: [type:'EQUIPMENT'])}"
-    		from="${equipments}" value="${statusOfSparePart?.sparePart?.usedOnEquipment?.id}" values="${equipments.collect{it.descriptions}}" />
+    		from="${equipments}" value="${sparePart?.usedOnEquipment?.id}" values="${equipments.collect{it.descriptions}}" />
     	</div>
 		<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'spare.part.status.of.spare.part.date.of.event.label')}" bean="${statusOfSparePart}" field="dateOfEvent" value="${(status.id!=null)?:Utils.formatDate(now)}"/>
     	<g:i18nTextarea name="reasons" bean="${statusOfSparePart}" label="${message(code:'spare.part.status.of.spare.part.reason')}" field="reasons" height="150" width="300" maxHeight="150" />
@@ -34,8 +36,21 @@
 		<div class="buttons">
 			<button type="submit"><g:message code="default.button.save.label"/></button>
 			<a href="${createLink(uri: targetURI)}"><g:message code="default.link.cancel.label"/></a>
-		</div>
+		</div>	
 	</g:form>
+	</fieldset>
+	<div id="form-aside-supplier" class="form-aside">
+     	<g:if test="${sparePart?.supplier != null}">
+     	  	<g:render template="/templates/providerFormSide" model="['provider':sparePart?.supplier,'type':sparePart?.supplier?.type,'label':'provider.supplier.details','cssClass':'current','field':'supplier']" />
+       	</g:if>
+    </div>
+    <div id="equipment-information" class="form-aside">
+      	<g:if test="${sparePart?.usedOnEquipment != null}">
+      	 	<g:render template="/templates/assignedEquipmentFormSide" model="['equipment':sparePart?.usedOnEquipment,'cssClass':'current','field':'usedOnEquipment' ]" />
+        </g:if>
+    </div>
+   </div>
+      
 	<g:if test="${status.sparePart!=null}">
     	<table class="items">
     		<tr>
@@ -73,5 +88,6 @@
 <script type="text/javascript">
 	$(document).ready(function() {		
 		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}")
+		getToHide();
 	});
 </script>

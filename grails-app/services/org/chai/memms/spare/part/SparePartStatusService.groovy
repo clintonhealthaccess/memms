@@ -61,7 +61,7 @@ class SparePartStatusService {
 		}
 		sparePart.addToStatus(status)
 		if(!sparePart.statusOfSparePart.equals(StatusOfSparePart.DISPOSED))
-			sparePart.save(failOnError:true, flush:true)
+			sparePart.save()
 		return sparePart
 	}
 

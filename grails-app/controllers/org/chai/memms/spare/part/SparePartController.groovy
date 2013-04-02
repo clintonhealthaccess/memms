@@ -113,15 +113,23 @@ class SparePartController extends AbstractEntityController{
 			bindData(entity,params,[exclude:["statusOfSparePart","dateOfEvent"]])
 		if(log.isDebugEnabled()) log.debug("SparePart params: after bind  "+entity)
 		
-		//Verify equipment null on status different to operational
+		//Verify equipment is null on status different to operational
 		if(!params["statusOfSparePart"].equals("OPERATIONAL")){
-			params["equipment"] = null
+			params["usedOnEquipment"] = null
+		}
+		
+		//Verify stockLocation, dataLocation, room and shelve are null on OPERATIONAL status
+		if((params["statusOfSparePart"].equals("OPERATIONAL")) && (params["statusOfSparePart"].equals("DISPOSED"))){
+			params["room"] = null
+			params["shelve"] = null
+			params["stockLocation"] = null
+			params["dataLocation"] = null
 		}
 	}
 
 	def validateEntity(def entity) {
 		boolean validStatus = true
-		if(entity.id==null){
+		if(entity.id!=null){
 			//Checking if the dateOfEvent is not after parchase date and add error
 			if(!(entity.purchaseDate.before(params.cmd.dateOfEvent) || entity.purchaseDate.compareTo(params.cmd.dateOfEvent)==0)) 
 				params.cmd.errors.rejectValue('dateOfEvent','date.of.event.before.parchase.date')
@@ -138,7 +146,7 @@ class SparePartController extends AbstractEntityController{
 			entity.statusOfSparePart = StatusOfSparePart."$params.cmd.statusOfSparePart"
 			sparePartStatusService.createSparePartStatus(user,params.cmd.statusOfSparePart,entity,params.cmd.dateOfEvent,[:])
 		}
-		else entity.save(failOnError:true)
+		else entity.save()
 	}
 
 	def save = { StatusCommand cmd ->
@@ -153,17 +161,17 @@ class SparePartController extends AbstractEntityController{
 		if (entity.dataLocation!=null) dataLocations << entity.dataLocation
 		if (entity.usedOnEquipment!=null) equipments << entity.usedOnEquipment
 		[
-					sparePart: entity,
-					suppliers: suppliers,
-					types: types,
-					dataLocations: dataLocations,
-					equipments:equipments,
-					numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.spare.part.form,
-					cmd:params.cmd,
-					currencies: grailsApplication.config.site.possible.currency,
-					now:now
+			sparePart: entity,
+			suppliers: suppliers,
+			types: types,
+			dataLocations: dataLocations,
+			equipments:equipments,
+			numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.spare.part.form,
+			cmd:params.cmd,
+			currencies: grailsApplication.config.site.possible.currency,
+			now:now
 
-				]
+		]
 	}
 }
 

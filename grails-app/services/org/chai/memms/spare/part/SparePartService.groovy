@@ -63,7 +63,6 @@ class SparePartService {
 	def languageService;
 	def userService
 	
-	
 	public void updateCurrentSparePartStatus(SparePart sparePart,SparePartStatus sparePartStatus,User user, Equipment equipment){
 		if(sparePartStatus!=null){
 			sparePart.statusOfSparePart = sparePartStatus.statusOfSparePart
@@ -72,9 +71,6 @@ class SparePartService {
 			sparePart.statusOfSparePart = sparePart.timeBasedStatus.sparePartStatus
 		}
 		sparePart.lastModified = user
-		/*if(sparePart.usedOnEquipment==null){
-			sparePart.usedOnEquipment=equipment
-		}*/
 		sparePart.usedOnEquipment=equipment
 		if(log.isDebugEnabled()) log.debug("VALUE OF EQUIPMENT FROM THE FORM: " + equipment)
 		if(log.isDebugEnabled()) log.debug("Updating SparePart status params: "+sparePart)

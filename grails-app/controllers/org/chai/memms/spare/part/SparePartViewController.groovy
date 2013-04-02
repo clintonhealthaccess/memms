@@ -214,7 +214,7 @@ class SparePartViewController extends AbstractController{
 
 	def getAjaxData = {
 		def type = SparePartType.get(params.long('type.id'))
-		List<SparePart> spareParts = sparePartService.searchSparePart(params['term'],type,null,[:])
+		List<SparePart> spareParts = sparePartService.searchSparePart(params['term'],type,user,[:])
 		render(contentType:"text/json") {
 			elements = array {
 				spareParts.each { sparePart ->
@@ -245,7 +245,7 @@ class FilterCommand {
 	StatusOfSparePart status = StatusOfSparePart.NONE
 	SparePartPurchasedBy sparePartPurchasedBy
 	String sameAsManufacturer
-	 
+	
 	public boolean getSameAsManufacturerStatus(){
 		if(sameAsManufacturer) return null
 		else if(sameAsManufacturer.equals("true")) return true

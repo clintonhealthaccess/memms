@@ -1,8 +1,6 @@
 <%@ page import="org.chai.memms.util.Utils" %>
-<div id="form-aside-${field}-${sparePart.id}" class="${(cssClass)?:cssClass}">
-	
-	<ul>
-		
+<div id="form-aside-${field}-${sparePart.id}" class="${(cssClass)?:cssClass}">	
+	<ul>	
 		<li>
 			<h6>${message(code:"spare.part.type.label")}</h6>
 			<ul>
