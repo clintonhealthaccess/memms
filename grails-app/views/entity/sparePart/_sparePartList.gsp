@@ -14,8 +14,7 @@
 			<g:sortableColumn property="purchaseCost"  title="${message(code: 'spare.part.purchase.cost.label')}" params="[q:q,'type.id':type?.id,status:status]" />
 			<g:sortableColumn property="sameAsManufacturer"  title="${message(code: 'spare.part.same.as.manufacturer.label')}" params="[q:q,'type.id':type?.id,status:status]" />
 			<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q,'type.id':type?.id,status:status]" />
-			<g:sortableColumn property="sparePartPurchasedBy"  title="${message(code: 'spare.part.purchaser.label')}" params="[q:q,'type.id':type?.id,status:status]" />
-			
+			<g:sortableColumn property="sparePartPurchasedBy"  title="${message(code: 'spare.part.purchaser.label')}" params="[q:q,'type.id':type?.id,status:status]" />	
 		</tr>
 	</thead>
 	<tbody>
@@ -52,7 +51,7 @@
 					</g:if>
 				</g:if>
 				<g:elseif test="${sparePart?.usedOnEquipment == null && sparePart.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER)}">
-					<a href="${createLinkWithTargetURI(controller:'sparePart', action:'edit', params:[id: sparePart.id])}">
+					<a href="${createLinkWithTargetURI(controller:'sparePartStatus', action:'create', params:['sparePart.id': sparePart?.id])}">
 						<button class="escalate next small gray"><g:message code="spare.part.arrive.in.stock.link.label" /></button>
 					</a>
 				</g:elseif>
@@ -60,9 +59,9 @@
 
 				</g:elseif>
 				<g:else>
-					<a href="${createLinkWithTargetURI(controller:'sparePart', action:'edit', params:[id: sparePart.id])}">
-						<button class="escalate next small gray"><g:message code="spare.part.assign.equipment.link.label" /></button>
-					</a>		
+					<a href="${createLinkWithTargetURI(controller:'sparePartStatus', action:'create', params:['sparePart.id': sparePart?.id])}" >
+  	    				<button class="escalate next small gray"><g:message code="spare.part.assign.equipment.link.label" /></button>
+  	    			</a>		
 				</g:else>
 				</td>
 				<td>
@@ -82,9 +81,3 @@
 	</tbody>	
 </table>
 <g:render template="/templates/pagination" />
-<script type="text/javascript">
-	$(document).ready(function() {
-		updateEquipment("${createLink(controller:'sparePartView',action: 'updateSameAsManufacturer')}");
-	});
-</script>
-

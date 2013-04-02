@@ -31,6 +31,7 @@ import java.util.Date;
 
 import org.apache.shiro.SecurityUtils;
 import org.chai.memms.AbstractEntityController;
+import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.Contact
@@ -129,14 +130,13 @@ class SparePartController extends AbstractEntityController{
 
 	def validateEntity(def entity) {
 		boolean validStatus = true
-		if(entity.id!=null){
+		if(entity.id==null){
 			//Checking if the dateOfEvent is not after parchase date and add error
 			if(!(entity.purchaseDate.before(params.cmd.dateOfEvent) || entity.purchaseDate.compareTo(params.cmd.dateOfEvent)==0)) 
 				params.cmd.errors.rejectValue('dateOfEvent','date.of.event.before.parchase.date')
 			validStatus = (!params.cmd.hasErrors()) 
 			if(log.isDebugEnabled()) log.debug("Rejecting SparePartStatus: "+params.cmd.errors)
 		}
-		entity.getGenerateAndSetCode()
 		return (validStatus & entity.validate())
 	}
 

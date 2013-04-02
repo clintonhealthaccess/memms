@@ -93,6 +93,8 @@ class SparePartViewController extends AbstractController{
 			render(view:"/entity/list",model: model(spareParts,type,status) << [
 				template:"sparePart/sparePartList",
 				listTop:"sparePart/listTop",
+				//Fix filter then uncomment
+				//filterTemplate:"sparePart/sparePartFilter",
 				entities: spareParts,
 				code: getLabel()
 			])
@@ -220,8 +222,8 @@ class SparePartViewController extends AbstractController{
 				spareParts.each { sparePart ->
 					elem (
 							key: sparePart.id,
-							value: sparePart.code
-							)
+							value: "["+sparePart.code+"] - ["+sparePart.serialNumber+"] - ["+sparePart.names+"]"
+						)
 				}
 			}
 			htmls = array {

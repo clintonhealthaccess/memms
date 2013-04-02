@@ -37,8 +37,8 @@
 						<label><g:message code="spare.part.sameAsManufacturer.label" /></label> 
 						<select name="sameAsManufacturer">
 								<option value=""><g:message code="default.please.select" /></option>
-								<option value="true" ${filterCmd?.sameAsManufacturer?.equals("true")? 'selected' : ''} ><g:message code="sameAsManufacturer.boolean.true" /></option>
-								<option value="false" ${filterCmd?.sameAsManufacturer?.equals("false")? 'selected' : ''}><g:message code="sameAsManufacturer.boolean.false" /></option>
+								<option value="true" ${filterCmd?.sameAsManufacturer?.equals("true")? 'selected' : ''} ><g:message code="same.as.manufacturer.boolean.true" /></option>
+								<option value="false" ${filterCmd?.sameAsManufacturer?.equals("false")? 'selected' : ''}><g:message code="same.as.manufacturer.boolean.false" /></option>
 						</select>
 					</li>
 					<li><g:selectFromEnum name="status" values="${StatusOfSparePart.values()}" field="status" label="${message(code:'spare.part.status.label')}" /></li>
@@ -51,7 +51,7 @@
 </div>
 <g:if test="${params?.q}">
 	<h2 class="filter-results">
-		<g:message code="entity.filter.message.label" args="${[message(code: 'entity.sparePart.label'),params?.q]}" />
+		<g:message code="entity.filter.message.label" args="${[message(code: 'spare.part.label'),params?.q]}" />
 	</h2>
 </g:if>
 		

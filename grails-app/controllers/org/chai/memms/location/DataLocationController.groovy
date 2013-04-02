@@ -36,6 +36,8 @@ import org.chai.location.Location;
 import org.chai.location.LocationLevel;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.inventory.Equipment;
+import org.chai.memms.security.User.UserType;
+import org.chai.memms.security.UserService;
 
 class DataLocationController extends AbstractEntityController {
 
@@ -149,7 +151,7 @@ class DataLocationController extends AbstractEntityController {
 		render(contentType:"text/json") { results = [listHtml] }
 	}
 	
-	def getAjaxData = {
+	def getAjaxData = {		
 		List<DataLocation> dataLocations = locationService.searchLocation(DataLocation.class, params['term'], [:])
 		render(contentType:"text/json") {
 			elements = array {
@@ -170,5 +172,4 @@ class DataLocationController extends AbstractEntityController {
 			}
 		}
 	}
-	
 }
