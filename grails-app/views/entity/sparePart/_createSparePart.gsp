@@ -118,7 +118,7 @@
       		
       		<div class="facility-information">
       		<g:selectFromList name="dataLocation.id" label="${message(code:'spare.part.dataLocation.label')}" bean="${sparePart}" field="dataLocation" optionKey="id" multiple="false"
-    			ajaxLink="${createLink(controller:'dataLocation', action:'getPermitedAjaxData', params: [dataLocation:'DATALOCATION'])}"
+    			ajaxLink="${createLink(controller:'dataLocation', action:'getAjaxData', params: [dataLocation:'DATALOCATION'])}"
     			from="${dataLocations}" value="${sparePart?.dataLocation?.id}" values="${dataLocations.collect{it.names}}" />
     		</div>
     		<g:input name="room" label="${message(code:'spare.part.room.label')}" bean="${sparePart}" field="room"/>
@@ -139,8 +139,7 @@
           </span>
           <g:message code="spare.part.section.supplier.information.label" default="Supplier Information"/>
         </h4>
-        <g:inputBox name="sameAsManufacturer"  label="${message(code:'spare.part.same.as.manufacturer.label')}" bean="${sparePart}" field="sameAsManufacturer" checked="${(sparePart?.sameAsManufacturer)? true:false}"/>
-      	<g:selectFromList name="supplier.id" label="${message(code:'provider.type.supplier')}" bean="${sparePart}" field="supplier" optionKey="id" multiple="false"
+        <g:selectFromList name="supplier.id" label="${message(code:'provider.type.supplier')}" bean="${sparePart}" field="supplier" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'SUPPLIER'])}"
   			from="${suppliers}" value="${sparePart?.supplier?.id}" values="${suppliers.collect{it.contact?.contactName}}" />		
   			<g:input name="purchaseDate" dateClass="date-picker" label="${message(code:'spare.part.purchase.date.label')}" bean="${sparePart}" field="purchaseDate"/>
@@ -167,7 +166,7 @@
           </span>
           <g:message code="spare.part.section.warranty.information.label" default="Warranty Information"/>
         </h4>
-        <g:inputBox name="warranty.sameAsSupplier"  label="${message(code:'spare.part.same.as.supplier.label')}" bean="${sparePart}" field="warranty.sameAsSupplier" checked="${(sparePart.warranty?.sameAsSupplier)? true:false}"/>
+		<g:inputBox name="sameAsManufacturer"  label="${message(code:'spare.part.same.as.manufacturer.label')}" bean="${sparePart}" field="sameAsManufacturer" checked="${(sparePart?.sameAsManufacturer)? true:false}"/>
       	<g:input name="warranty.startDate" dateClass="date-picker" label="${message(code:'warranty.start.date.label')}" bean="${sparePart}" field="warranty.startDate"/>
     	<g:inputYearMonth name="warrantyPeriod" field="warrantyPeriod" years="${sparePart.warrantyPeriod?.years}" months="${sparePart.warrantyPeriod?.months}" bean="${sparePart}" label='spare.part.warranty.period.label'/>
       

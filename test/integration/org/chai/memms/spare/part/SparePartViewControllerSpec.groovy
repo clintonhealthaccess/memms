@@ -138,7 +138,7 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		
 		then:
 		SparePart.list().size()==4
-		!sparePartViewController.response.json.results[0].contains(CODE(123))
+		sparePartViewController.response.json.results[0].contains(CODE(123))
 		!sparePartViewController.response.json.results[0].contains(CODE(124))
 	}
 

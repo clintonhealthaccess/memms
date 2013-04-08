@@ -394,6 +394,11 @@ function getToHide(parchaseCost,estimatedCost){
 		if($(this).is(":checked")) $("#address").slideUp()
 		else $("#address").slideDown()
 	})
+	if($("input[name='sameAsManufacturer']").is(":checked")) $("#address").hide()		
+	$("input[name='sameAsManufacturer']").change(function(e){
+		if($(this).is(":checked")) $("#address").slideUp()
+		else $("#address").slideDown()
+	})
 	
 	//purchaser==donor 
 	if($("select[name=purchaser]").val()!="BYDONOR") $(".donor-information").hide()	

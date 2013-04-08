@@ -142,19 +142,22 @@ class SparePartService {
 		}
 
 	}
-	public def filterSparePart(def user, def dataLocation, def supplier, def type,def sparePartPurchasedBy,def sameAsManufacturer,def sparePartStatus, Map<String, String> params){
+	public def filterSparePart(def location, def supplier, def type,def sparePartPurchasedBy,def sameAsManufacturer,def sparePartStatus, Map<String, String> params){
 
-		def dataLocations = []
-		if(dataLocation) dataLocations.add(dataLocation)
-		else if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([:], [:]))
+		def dataLocations = []		
+			
+		if(location instanceof Location) 
+			dataLocations.addAll(location.getDataLocations(null,null))
 		else{
-			dataLocations.add((DataLocation)user.location)
-			dataLocations.addAll((user.location as DataLocation).manages)
+			dataLocations.add(location)
+			//It always takes null value WHY? What logic behind? Will we need to remove this line or not?
+			//dataLocations.addAll(location.manages)
 		}
-
 		def criteria = SparePart.createCriteria();
+		
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(dataLocations != null)
+			
+			if(!dataLocations.isEmpty())
 				inList('dataLocation',dataLocations)
 			if(supplier != null)
 				eq ("supplier", supplier)
@@ -168,9 +171,9 @@ class SparePartService {
 				eq ("statusOfSparePart",sparePartStatus)
 		}
 	}
-	public File exporter(DataLocation dataLocation,List<SparePart> spareParts){
-		if (log.isDebugEnabled()) log.debug("sparePartService.exporter, dataLocation code: "+dataLocation.code + ", ImportExportConstant: "+ImportExportConstant.CSV_FILE_EXTENSION)
-		File csvFile = File.createTempFile(dataLocation.code+"_export",ImportExportConstant.CSV_FILE_EXTENSION);
+	public File exporter(def location,List<SparePart> spareParts){
+		if (log.isDebugEnabled()) log.debug("sparePartService.exporter, location code: "+location.code + ", ImportExportConstant: "+ImportExportConstant.CSV_FILE_EXTENSION)
+		File csvFile = File.createTempFile(location.code+"_export",ImportExportConstant.CSV_FILE_EXTENSION);
 		FileWriter csvFileWriter = new FileWriter(csvFile);
 		ICsvListWriter writer = new CsvListWriter(csvFileWriter, CsvPreference.EXCEL_PREFERENCE);
 		this.writeFile(writer,spareParts);
@@ -193,16 +196,17 @@ class SparePartService {
 					sparePart.type?.getNames(new Locale("fr")),
 					sparePart.model,
 					sparePart.statusOfSparePart,
+					sparePart.sparePartPurchasedBy.name(),
 					sparePart.dataLocation?.code,
 					sparePart.dataLocation?.getNames(new Locale("en")),
 					sparePart.dataLocation?.getNames(new Locale("fr")),
+					sparePart.type?.manufacturer?.contact?.contactName,
 					sparePart.manufactureDate,
 					sparePart.supplier?.code,
 					sparePart.supplier?.contact?.contactName,
 					sparePart.purchaseDate,
 					sparePart.purchaseCost?:"n/a",
 					sparePart.currency?:"n/a",
-					sparePart.sparePartPurchasedBy.name(),
 					sparePart.sameAsManufacturer,
 					sparePart?.warranty?.startDate,
 					sparePart?.warrantyPeriod?.numberOfMonths?:""
@@ -225,14 +229,14 @@ class SparePartService {
 		List<String> headers = new ArrayList<String>();
 
 		headers.add(ImportExportConstant.SPARE_PART_SERIAL_NUMBER)
-		headers.add(ImportExportConstant.DEVICE_CODE)
-		headers.add(ImportExportConstant.DEVICE_NAME_EN)
-		headers.add(ImportExportConstant.DEVICE_NAME_FR)
+		headers.add(ImportExportConstant.SPARE_PART_TYPE_CODE)
+		headers.add(ImportExportConstant.SPARE_PART_TYPE_NAME_EN)
+		headers.add(ImportExportConstant.SPARE_PART_TYPE_NAME_FR)
 		headers.add(ImportExportConstant.SPARE_PART_MODEL)
 		headers.add(ImportExportConstant.SPARE_PART_STATUS)
+		headers.add(ImportExportConstant.SPARE_PART_PURCHASED_BY)
 		headers.add(ImportExportConstant.LOCATION_CODE)
 		headers.add(ImportExportConstant.LOCATION_NAME_EN)
-		headers.add(ImportExportConstant.LOCATION_NAME_FR)
 		headers.add(ImportExportConstant.MANUFACTURER_CONTACT_NAME)
 		headers.add(ImportExportConstant.SPARE_PART_MANUFACTURE_DATE)
 		headers.add(ImportExportConstant.SUPPLIER_CODE)
@@ -240,10 +244,9 @@ class SparePartService {
 		headers.add(ImportExportConstant.SUPPLIER_DATE)
 		headers.add(ImportExportConstant.SPARE_PART_PURCHASE_COST)
 		headers.add(ImportExportConstant.SPARE_PART_PURCHASE_COST_CURRENCY)
-		headers.add(ImportExportConstant.SPARE_PART_DONATION)
 		headers.add(ImportExportConstant.SPARE_PART_SAME_AS_MANUFACTURER)
 		headers.add(ImportExportConstant.SPARE_PART_WARRANTY_START)
-		headers.add(ImportExportConstant.SPARE_PART_WARRANTY_END)
+		headers.add(ImportExportConstant.SPARE_PART_WARRANTY_PERIOD)
 
 		return headers;
 	}

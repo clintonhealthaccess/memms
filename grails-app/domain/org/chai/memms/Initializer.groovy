@@ -801,7 +801,7 @@ public class Initializer {
 				null,
 				null,
 				StockLocation.MMC,
-				equipment09
+				null
 				)
 					
 			def warrantyContactOne = newContact(['fr':'Warranty Address Descriptions One'],"Warranty","jk@yahoo.com","0768-888-787","Street 654","8988")
@@ -847,7 +847,7 @@ public class Initializer {
 				null,
 				null,
 				StockLocation.FACILITY,
-				equipment01
+				null
 				)
 			
 			def warrantyTwo = newWarranty(['en':'warranty one'],'warranty name1','email1@gmail.com',"0768-111-787","Street 154","898",getDate(10, 12, 2010),false,[:])
@@ -868,7 +868,7 @@ public class Initializer {
 				null,
 				null,
 				StockLocation.FACILITY,
-				equipment10
+				null
 				)
 		
 			def warrantyThree = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","88",getDate(10, 12, 2010),false,[:])

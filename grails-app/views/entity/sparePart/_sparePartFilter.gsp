@@ -1,5 +1,6 @@
 <%@ page import="org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart" %>
 <%@ page import="org.chai.memms.spare.part.SparePart.SparePartPurchasedBy" %>
+<%@ page import="org.chai.memms.spare.part.SparePart" %>
 <div class="filters main">
 		  <h2>
 		  		<g:message code="spare.part.filter.label" />
@@ -34,15 +35,15 @@
 							/></li>
 					
 					<li>
-						<label><g:message code="spare.part.sameAsManufacturer.label" /></label> 
+						<label><g:message code="spare.part.same.as.manufacturer.label" /></label> 
 						<select name="sameAsManufacturer">
 								<option value=""><g:message code="default.please.select" /></option>
 								<option value="true" ${filterCmd?.sameAsManufacturer?.equals("true")? 'selected' : ''} ><g:message code="same.as.manufacturer.boolean.true" /></option>
 								<option value="false" ${filterCmd?.sameAsManufacturer?.equals("false")? 'selected' : ''}><g:message code="same.as.manufacturer.boolean.false" /></option>
 						</select>
 					</li>
-					<li><g:selectFromEnum name="status" values="${StatusOfSparePart.values()}" field="status" label="${message(code:'spare.part.status.label')}" /></li>
-					<li><g:selectFromEnum name="purchaser" values="${SparePartPurchasedBy.values()}" field="purchaser" label="${message(code:'spare.part.purchaser.label')}" /></li>
+					<li><g:selectFromEnum name="statusOfSparePart" values="${StatusOfSparePart.values()}" field="statusOfSparePart" label="${message(code:'spare.part.status.label')}" /></li>
+					<li><g:selectFromEnum name="sparePartPurchasedBy" values="${SparePartPurchasedBy.values()}" field="sparePartPurchasedBy" label="${message(code:'spare.part.purchaser.label')}" /></li>
 				</ul>
 				<input type="hidden" name="dataLocation.id" value="${dataLocation?.id}"/>
 				<button type="submit"><g:message code="entity.filter.label" /></button>

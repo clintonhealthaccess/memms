@@ -304,11 +304,11 @@ class SparePartServiceSpec extends IntegrationTests{
 		def List<SparePart> sparePartsOne, sparePartsTwo, sparePartsThree
 		def sparePartStatusOneActive = Initializer.newSparePartStatus(Initializer.now(),user,StatusOfSparePart.INSTOCK,sparePartOne,[:], null)
 		def sparePartStatusOneInActive = Initializer.newSparePartStatus(Initializer.now(),user,StatusOfSparePart.OPERATIONAL,sparePartOne,[:],equipment01)
-		def sparePartStatusTwo = Initializer.newSparePartStatus(Initializer.now(),user,StatusOfSparePart.DISPOSED,sparePartOne,[:],equipment01)
+		def sparePartStatusTwo = Initializer.newSparePartStatus(Initializer.now(),user,StatusOfSparePart.DISPOSED,sparePartOne,[:],null)
 		
 		when://Search by defaults
 
-		sparePartsOne = sparePartService.filterSparePart(null,butaroDH,supplier,sparePartType,SparePartPurchasedBy.NONE,'true',StatusOfSparePart.OPERATIONAL,[:])
+		sparePartsOne = sparePartService.filterSparePart(butaroDH,supplier,sparePartType,SparePartPurchasedBy.NONE,'true',StatusOfSparePart.OPERATIONAL,[:])
 
 		then:
 		SparePart.count() == 2
@@ -322,9 +322,9 @@ class SparePartServiceSpec extends IntegrationTests{
 
 		when://Search by statusOfSparePart
 
-		sparePartsTwo = sparePartService.filterSparePart(null,kivuyeHC,supplier, sparePartType,SparePartPurchasedBy.BYMOH,'false',StatusOfSparePart.DISPOSED,[:])
-		sparePartsThree = sparePartService.filterSparePart(null,kivuyeHC,supplier, sparePartType,SparePartPurchasedBy.BYMOH,'false',StatusOfSparePart.INSTOCK,[:])
-
+		sparePartsTwo = sparePartService.filterSparePart(kivuyeHC,supplier, sparePartType,SparePartPurchasedBy.BYMOH,'false',StatusOfSparePart.DISPOSED,[:])
+		sparePartsThree = sparePartService.filterSparePart(kivuyeHC,supplier, sparePartType,SparePartPurchasedBy.BYMOH,'false',StatusOfSparePart.INSTOCK,[:])
+		
 		then:
 		SparePart.count() == 2
 		sparePartsTwo.size() == 1
