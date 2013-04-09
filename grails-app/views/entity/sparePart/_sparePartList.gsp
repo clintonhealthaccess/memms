@@ -6,7 +6,6 @@
 			<th/>
 			<g:sortableColumn property="code"  title="${message(code: 'spare.part.code.label')}" params="[q:q,'type.id':type?.id,status:status]" />
 			<g:sortableColumn property="type"  title="${message(code: 'spare.part.type.label')}" params="[q:q,'type.id':type?.id,status:status]" />
-			<g:sortableColumn property="model"  title="${message(code: 'spare.part.model.label')}" params="[q:q,'type.id':type?.id,status:status]" />
 			<g:sortableColumn property="statusOfSparePart"  title="${message(code: 'spare.part.status.label')}" params="[q:q,'type.id':type?.id,status:status]" />
 			<g:sortableColumn property="usedOnEquipment"  title="${message(code: 'spare.part.used.on.equipment.label')}" params="[q:q,'type.id':type?.id,status:status]" />
 			<th><g:message code="location.label"/></th>
@@ -36,7 +35,6 @@
 				</td>
 				<td>${sparePart.serialNumber}</td>
 				<td>${sparePart.type.names}</td>
-				<td>${sparePart.model}</td>
 				<td>
 					<a href="${createLinkWithTargetURI(controller:'sparePartStatus', action:'create', params:['sparePart.id': sparePart?.id])}" title="${message(code: 'tooltip.click.update.status')}" class="tooltip">
   	    				${message(code: sparePart.statusOfSparePart?.messageCode+'.'+sparePart.statusOfSparePart?.name)}

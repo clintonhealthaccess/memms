@@ -34,7 +34,7 @@ import org.chai.memms.AbstractEntityController;
 import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
-import org.chai.memms.Contact
+import org.chai.memms.Contact;
 import org.chai.memms.Initializer;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
 import org.chai.memms.security.User;
@@ -45,11 +45,11 @@ import org.chai.memms.inventory.Provider;
 import org.chai.location.DataLocation;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
-import org.chai.location.Location
-import org.chai.location.LocationLevel
+import org.chai.location.Location;
+import org.chai.location.LocationLevel;
 
 import java.util.HashSet;
-import java.util.Set
+import java.util.Set;
 
 /**
  * @author Aphrodice Rwagaju
@@ -131,10 +131,15 @@ class SparePartController extends AbstractEntityController{
 	def validateEntity(def entity) {
 		boolean validStatus = true
 		if(entity.id==null){
-			//Checking if the dateOfEvent is not after parchase date and add error
-			if(!(entity.purchaseDate.before(params.cmd.dateOfEvent) || entity.purchaseDate.compareTo(params.cmd.dateOfEvent)==0)) 
-				params.cmd.errors.rejectValue('dateOfEvent','date.of.event.before.parchase.date')
-			validStatus = (!params.cmd.hasErrors()) 
+			if(!( entity.purchaseDate!=null && entity.purchaseDate.before(params.cmd.dateOfEvent) || entity.purchaseDate.compareTo(params.cmd.dateOfEvent)==0)) 
+				params.cmd.errors.rejectValue('dateOfEvent','date.of.event.before.purchase.date')
+				validStatus = (!params.cmd.hasErrors()) 
+				if(log.isDebugEnabled()) log.debug("Rejecting SparePartStatus: "+params.cmd.errors)
+		}
+		if (entity.id!=null){
+			if(!( entity.purchaseDate!=null && entity.purchaseDate.before(params.cmd.dateOfEvent) || entity.purchaseDate.compareTo(params.cmd.dateOfEvent)==0))
+			params.cmd.errors.rejectValue('dateOfEvent','date.of.event.before.purchase.date')
+			validStatus = (!params.cmd.hasErrors())
 			if(log.isDebugEnabled()) log.debug("Rejecting SparePartStatus: "+params.cmd.errors)
 		}
 		return (validStatus & entity.validate())

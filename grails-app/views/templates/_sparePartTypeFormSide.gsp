@@ -10,6 +10,10 @@
 			<span class="label"><g:message code="entity.name.label" /></span>
 			<span class="text">${type?.names}</span>
 		</li>
+		<li>
+			<span class="label"><g:message code="entity.part.number.label" /></span>
+			<span class="text">${type?.partNumber}</span>
+		</li>
 	</ul>
 	<ul class="half">
 		<li>

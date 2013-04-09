@@ -33,7 +33,6 @@
     			from="${types}" value="${sparePart?.type?.id}" values="${types.collect{it.names}}" />
     			
     		<g:input name="serialNumber" label="${message(code:'spare.part.serial.number.label')}" bean="${sparePart}" field="serialNumber"/>
-      		<g:input name="model" label="${message(code:'spare.part.model.label')}" bean="${sparePart}" field="model"/>	
       		<g:i18nInput name="names" bean="${sparePart}" label="${message(code:'spare.part.names.label')}" field="names" />
       		<g:i18nTextarea name="descriptions" bean="${sparePart}" label="${message(code:'entity.comments.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
      
@@ -118,7 +117,7 @@
       		
       		<div class="facility-information">
       		<g:selectFromList name="dataLocation.id" label="${message(code:'spare.part.dataLocation.label')}" bean="${sparePart}" field="dataLocation" optionKey="id" multiple="false"
-    			ajaxLink="${createLink(controller:'dataLocation', action:'getAjaxData', params: [dataLocation:'DATALOCATION'])}"
+    			ajaxLink="${createLink(controller:'dataLocation', action:'getAjaxData', params: [class:'dataLocation'])}"
     			from="${dataLocations}" value="${sparePart?.dataLocation?.id}" values="${dataLocations.collect{it.names}}" />
     		</div>
     		<g:input name="room" label="${message(code:'spare.part.room.label')}" bean="${sparePart}" field="room"/>

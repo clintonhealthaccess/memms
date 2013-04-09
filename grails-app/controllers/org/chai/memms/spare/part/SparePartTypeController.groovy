@@ -191,7 +191,7 @@ class SparePartTypeController  extends AbstractEntityController{
 				types.each { type ->
 					elem (
 							key: type.id,
-							value: type.names + ' - ['+type.code+']'
+							value: type.names + ' - ['+type.code+']' + ' - ['+type.partNumber+']'
 							)
 				}
 			}

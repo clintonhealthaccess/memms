@@ -67,7 +67,6 @@ class SparePartControllerSpec extends IntegrationTests{
 		sparePartController.params.serialNumber = 'SERIAL12129'
 		sparePartController.params.purchaseCost = "32000"
 		sparePartController.params.currency = "USD"
-		sparePartController.params.model = "model one"
 		sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYMOH
 		sparePartController.params.stockLocation = StockLocation.MMC
 		sparePartController.params.sameAsManufacturer = false
@@ -118,7 +117,6 @@ class SparePartControllerSpec extends IntegrationTests{
 		sparePartController.params.serialNumber = 'SERIAL129'
 		sparePartController.params.purchaseCost = ""
 		sparePartController.params.currency = ""
-		sparePartController.params.model = "model one"
 		sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYMOH
 		sparePartController.params.stockLocation = StockLocation.MMC
 		sparePartController.params.sameAsMAnufacturer = false
@@ -175,7 +173,6 @@ class SparePartControllerSpec extends IntegrationTests{
 		sparePartController.params.serialNumber = 'SERIAL12129'
 		sparePartController.params.purchaseCost = "32000"
 		sparePartController.params.currency = "USD"
-		sparePartController.params.model = "model one"
 		sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYMOH
 		sparePartController.params.stockLocation = null
 		sparePartController.params.dataLocation = null

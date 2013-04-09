@@ -62,7 +62,7 @@ class SparePartSpec extends IntegrationTests {
 		
 		when:
 		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
-				descriptions:['en':'Spare Part Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
+				descriptions:['en':'Spare Part Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
 				type:sparePartType,statusOfSparePart:StatusOfSparePart.INSTOCK,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"),stockLocation:StockLocation.MMC, usedOnEquipment:equipment01)
 
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
@@ -89,7 +89,7 @@ class SparePartSpec extends IntegrationTests {
 		def equipment01 = newEquipment("SERIAL01",DataLocation.findByCode(KIVUYE))
 		def user  = newUser("admin", "Admin UID")
 		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
-				descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
+				descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
 				type:sparePartType,statusOfSparePart:StatusOfSparePart.INSTOCK,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"), stockLocation: StockLocation.MMC, usedOnEquipment:equipment01)
 		
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
@@ -122,7 +122,7 @@ class SparePartSpec extends IntegrationTests {
 		def equipment01 = newEquipment("SERIAL01",DataLocation.findByCode(KIVUYE))
 		def user  = newUser("admin", "Admin UID")
 		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
-				descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
+				descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
 				type:sparePartType,statusOfSparePart:StatusOfSparePart.INSTOCK,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"),stockLocation:StockLocation.MMC, usedOnEquipment:equipment01)
 		
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
@@ -175,12 +175,12 @@ class SparePartSpec extends IntegrationTests {
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 				
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
-		Initializer.newSparePart("test123",SparePartPurchasedBy.BYFACILITY,false,Initializer.newPeriod(30),"16677",['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),Initializer.getDate(22,07,2011),"RWF",'sparePartModel',
+		Initializer.newSparePart("test123",SparePartPurchasedBy.BYFACILITY,false,Initializer.newPeriod(30),"16677",['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),Initializer.getDate(22,07,2011),"RWF",
 			DataLocation.list().first(),sparePartType,supplier,StatusOfSparePart.INSTOCK,User.findByUsername("systemUser"),null, null, StockLocation.FACILITY, equipment01)
 					
 		when:
 		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
-				descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
+				descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
 				type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"),stockLocation:StockLocation.MMC, usedOnEquipment:equipment01)
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
 		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
@@ -210,13 +210,13 @@ class SparePartSpec extends IntegrationTests {
 		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
 		
 		def sparePartOne = Initializer.newSparePart("test123",SparePartPurchasedBy.BYFACILITY,false,Initializer.newPeriod(30),"16677",['en':"testDescription"],Initializer.getDate(22,07,2010), Initializer.getDate(22,07,2010),"RWF",
-				"sparePartModel",DataLocation.list().first(),sparePartType,supplier,StatusOfSparePart.INSTOCK,
+				DataLocation.list().first(),sparePartType,supplier,StatusOfSparePart.INSTOCK,
 				User.findByUsername("systemUser"),null,null, StockLocation.FACILITY, equipment01)
 					
 		when:
 				
 		def sparePart = new SparePart(serialNumber:"test124",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
-			descriptions:['en':'Spare Part Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
+			descriptions:['en':'Spare Part Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
 			type:sparePartType,code:sparePartOne.code,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"))
 		sparePart.supplier=supplier
 		sparePart.warranty=warranty
@@ -239,7 +239,7 @@ class SparePartSpec extends IntegrationTests {
 		def user  = newUser("admin", "Admin UID")
 		
 		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYFACILITY,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
-			descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",dataLocation:DataLocation.list().first(),
+			descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),dataLocation:DataLocation.list().first(),
 			type:sparePartType,statusOfSparePart:StatusOfSparePart.INSTOCK,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"),stockLocation:StockLocation.FACILITY,usedOnEquipment:equipment01)
 
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
@@ -271,7 +271,7 @@ class SparePartSpec extends IntegrationTests {
 		def user  = newUser("admin", "Admin UID")
 		
 		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYFACILITY,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
-			descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",dataLocation:DataLocation.list().first(),
+			descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),dataLocation:DataLocation.list().first(),
 			type:sparePartType,statusOfSparePart:StatusOfSparePart.INSTOCK,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"),stockLocation:StockLocation.FACILITY,usedOnEquipment:null)
 
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
@@ -308,12 +308,12 @@ class SparePartSpec extends IntegrationTests {
 		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
 		
 		def sparePartOne = Initializer.newSparePart("test123",SparePartPurchasedBy.BYFACILITY,false,Initializer.newPeriod(30),"16677",['en':"testDescription"],Initializer.getDate(22,07,2010), Initializer.getDate(22,07,2010),"RWF",
-				"sparePartModel",DataLocation.list().first(),sparePartType,supplier,StatusOfSparePart.INSTOCK,
+				DataLocation.list().first(),sparePartType,supplier,StatusOfSparePart.INSTOCK,
 				User.findByUsername("systemUser"),null,null, StockLocation.FACILITY, null)
 					
 		when:		
 		def sparePart = new SparePart(serialNumber:"test124",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
-			descriptions:['en':'Spare Part Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
+			descriptions:['en':'Spare Part Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
 			type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"), usedOnEquipment:null)
 		
 		sparePart.supplier=supplier
@@ -339,12 +339,12 @@ class SparePartSpec extends IntegrationTests {
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
 		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
 		def sparePartOne = Initializer.newSparePart("test123",SparePartPurchasedBy.BYFACILITY,false,Initializer.newPeriod(30),"16677",['en':"testDescription"],Initializer.getDate(22,07,2010), Initializer.getDate(22,07,2010),"RWF",
-					"sparePartModel",DataLocation.findByCode(KIVUYE),sparePartType,supplier,StatusOfSparePart.INSTOCK,
+					DataLocation.findByCode(KIVUYE),sparePartType,supplier,StatusOfSparePart.INSTOCK,
 					User.findByUsername("systemUser"),null,null, StockLocation.FACILITY, null)
 						
 		when:			
 		def sparePart = new SparePart(serialNumber:"test124",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
-		descriptions:['en':'Spare Part Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
+		descriptions:['en':'Spare Part Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
 			type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"), stockLocation:null, usedOnEquipment:equipment01)
 		
 		sparePart.supplier=supplier

@@ -38,8 +38,6 @@ import org.chai.location.DataLocation;
 import org.chai.location.DataLocationType;
 import org.chai.location.Location;
 import org.chai.location.LocationLevel;
-import org.chai.memms.Parts;
-import org.chai.memms.Part;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePart.StockLocation;
@@ -106,11 +104,12 @@ class SparePartService {
 			or{
 				ilike("code","%"+text+"%")
 				ilike("serialNumber","%"+text+"%")
-				ilike("model","%"+text+"%")
 				ilike(dbFieldDescriptions,"%"+text+"%")
 				ilike(dbFieldTypeNames,"%"+text+"%")
 				ilike("t."+dbFieldTypeNames,"%"+text+"%")
 				ilike("t."+dbFieldDescriptions,"%"+text+"%")
+				ilike("t.partNumber","%"+text+"%")
+				ilike("t.code","%"+text+"%")
 			}
 		}
 	}
@@ -150,8 +149,9 @@ class SparePartService {
 			dataLocations.addAll(location.getDataLocations(null,null))
 		else{
 			dataLocations.add(location)
+			if(log.isDebugEnabled()) log.debug("ADDED LOCATION: " + location)
 			//It always takes null value WHY? What logic behind? Will we need to remove this line or not?
-			//dataLocations.addAll(location.manages)
+			//dataLocations.addAll((location as DataLocation)?.manages?.asList())
 		}
 		def criteria = SparePart.createCriteria();
 		
@@ -194,7 +194,7 @@ class SparePartService {
 					sparePart.type.code,
 					sparePart.type?.getNames(new Locale("en")),
 					sparePart.type?.getNames(new Locale("fr")),
-					sparePart.model,
+
 					sparePart.statusOfSparePart,
 					sparePart.sparePartPurchasedBy.name(),
 					sparePart.dataLocation?.code,

@@ -86,7 +86,6 @@ public class SparePart {
 	String descriptions
 	String currency
 	String serialNumber
-	String model
 	Double purchaseCost
 	Period warrantyPeriod
 	Period expectedLifeTime
@@ -121,9 +120,7 @@ public class SparePart {
 		room nullable: true, blank: true
 		shelve nullable: true, blank: true
 		descriptions nullable: true, blank: true
-		serialNumber nullable: true, unique: true, validator: { val, obj ->
-			if(!obj.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER)) return (val!=null)
-		}
+		serialNumber nullable: true, unique: true
 		purchaseDate nullable: true
 		purchaseCost nullable: true, validator: {val, obj ->
 		if(obj.currency!=null) return (val!=null)
@@ -157,7 +154,6 @@ public class SparePart {
 		statusOfSparePart nullable:true,validator:{
 			if(it!=null) return it in [StatusOfSparePart.OPERATIONAL,StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER,StatusOfSparePart.DISPOSED]
 		}
-		model nullable: true
 		supplier nullable: true
 		expectedLifeTime nullable: true, validator:{
 			if(it==null) return true
