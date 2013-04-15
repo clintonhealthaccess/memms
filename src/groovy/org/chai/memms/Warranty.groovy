@@ -39,9 +39,10 @@ class Warranty{
 	Boolean sameAsSupplier = false
 	String descriptions
 	Contact contact
+	Period period
 	
 	static i18nFields = ["descriptions"]
-	static embedded = ["contact","numberOfMonth"]
+	static embedded = ["contact","period"]
 	
 	static constraints = {
 		importFrom Contact
@@ -51,6 +52,7 @@ class Warranty{
 			 if(obj.sameAsSupplier==true) return (val==null)
 			}
 		sameAsSupplier nullable: true
+		period nullable: true
 		
 	}
 	

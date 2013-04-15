@@ -83,10 +83,10 @@ class EquipmentExport implements Exporter{
 			for(Equipment equipment: equipments){
 				if (log.isDebugEnabled()) log.debug("exporting equipment=" + equipment)
 				List<String> line = [equipment.serialNumber,equipment.type.code,equipment.type?.getNames(new Locale("en")),equipment.type?.getNames(new Locale("fr")),equipment.model,
-					equipment.getCurrentState()?.status,equipment.dataLocation?.code,equipment.dataLocation?.getNames(new Locale("en")),equipment.dataLocation?.getNames(new Locale("fr")),
+					equipment.getTimeBasedStatus()?.status,equipment.dataLocation?.code,equipment.dataLocation?.getNames(new Locale("en")),equipment.dataLocation?.getNames(new Locale("fr")),
 					equipment.department?.code,equipment.department?.getNames(new Locale("en")),equipment.department?.getNames(new Locale("fr")),equipment.room,
 					equipment.manufacturer?.code,equipment.manufacturer?.contact?.contactName,equipment.manufactureDate,equipment.supplier?.code,equipment.supplier?.contact?.contactName,
-					equipment.purchaseDate,equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",equipment.donorName?:"n/a",equipment.obsolete,equipment.warranty?.startDate,equipment.warranty?.numberOfMonth]
+					equipment.purchaseDate,equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",equipment.donorName?:"n/a",equipment.obsolete,equipment.warranty?.startDate,equipment.warranty?.period?.numberOfMonths]
 				log.debug("exporting line=" + line)
 				writer.write(line)
 				progress.incrementProgress()
@@ -133,8 +133,8 @@ class EquipmentExport implements Exporter{
 		
 		def criteria = Equipment.createCriteria();
 		return criteria.list(sort:"id",order:"desc"){
-			if(equipmentExportFilter.calculationLocations != null && equipmentExportFilter.calculationLocations.size() > 0)
-				('dataLocation' in equipmentExportFilter.calculationLocations)
+			if(equipmentExportFilter.dataLocations != null && equipmentExportFilter.dataLocations.size() > 0)
+				('dataLocation' in equipmentExportFilter.dataLocations)
 			if(equipmentExportFilter.suppliers != null && equipmentExportFilter.suppliers.size() > 0)
 				("supplier" in equipmentExportFilter.suppliers)
 			if(equipmentExportFilter.manufacturers != null && equipmentExportFilter.manufacturers.size() > 0)
@@ -149,7 +149,8 @@ class EquipmentExport implements Exporter{
 				createAlias("status","t")
 				and{
 					eq ("t.status", equipmentExportFilter.equipmentStatus)
-					eq ("t.current", true)
+					//Why this property "current". It not found while exporting equipments
+					//eq ("t.current", true)
 				}
 			}
 				

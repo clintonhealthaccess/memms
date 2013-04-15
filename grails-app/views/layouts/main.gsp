@@ -151,6 +151,13 @@
 								</a>
 							</li>
 					</shiro:hasPermission>
+					<shiro:hasPermission permission="menu:sparePartExport">
+							<li>
+								<a href="${createLink(controller: 'sparePartView', action:'generalExport')}">
+									<g:message code="spare.part.export.label"/>
+								</a>
+							</li>
+					</shiro:hasPermission>
 				</ul>
 			</li>
 		</shiro:hasPermission>

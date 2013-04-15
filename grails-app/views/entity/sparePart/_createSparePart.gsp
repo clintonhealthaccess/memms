@@ -33,6 +33,7 @@
     			from="${types}" value="${sparePart?.type?.id}" values="${types.collect{it.names}}" />
     			
     		<g:input name="serialNumber" label="${message(code:'spare.part.serial.number.label')}" bean="${sparePart}" field="serialNumber"/>
+      		<g:input name="manufactureDate" dateClass="date-picker" label="${message(code:'spare.part.manufacture.date.label')}" bean="${sparePart}" field="manufactureDate"/>
       		<g:i18nInput name="names" bean="${sparePart}" label="${message(code:'spare.part.names.label')}" field="names" />
       		<g:i18nTextarea name="descriptions" bean="${sparePart}" label="${message(code:'entity.comments.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
      

@@ -197,23 +197,23 @@ class EquipmentViewController extends AbstractController {
 	def generalExport = { ExportFilterCommand cmd ->
 
 		// we do this because automatic data binding does not work with polymorphic elements
-		Set<CalculationLocation> calculationLocations = new HashSet<CalculationLocation>()
+		/*Set<CalculationLocation> calculationLocations = new HashSet<CalculationLocation>()
 		params.list('calculationLocationids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def calculationLocation = CalculationLocation.get(id)
 				if (calculationLocation != null && !calculationLocations.contains(calculationLocation)) calculationLocations.add(calculationLocation);
 			}
 		}
-		cmd.calculationLocations = calculationLocations
+		cmd.calculationLocations = calculationLocations*/
 
-		Set<DataLocationType> dataLocationTypes = new HashSet<DataLocationType>()
-		params.list('dataLocationTypeids').each { id ->
+		Set<DataLocation> dataLocations = new HashSet<DataLocation>()
+		params.list('dataLocationids').each { id ->
 			if (NumberUtils.isDigits(id)) {
-				def dataLocationType = DataLocationType.get(id)
-				if (dataLocationType != null && !dataLocationTypes.contains(dataLocationType)) dataLocationTypes.add(dataLocationType);
+				def dataLocation = DataLocation.get(id)
+				if (dataLocation != null && !dataLocations.contains(dataLocation)) dataLocations.add(dataLocation);
 			}
 		}
-		cmd.dataLocationTypes = dataLocationTypes
+		cmd.dataLocations = dataLocations
 
 		Set<EquipmentType> equipmentTypes = new HashSet<EquipmentType>()
 		params.list('equipmentTypeids').each { id ->
@@ -255,7 +255,7 @@ class EquipmentViewController extends AbstractController {
 
 
 		if(params.exported != null){
-			def equipmentExportTask = new EquipmentExportFilter(calculationLocations:cmd.calculationLocations,dataLocationTypes:cmd.dataLocationTypes,
+			def equipmentExportTask = new EquipmentExportFilter(dataLocations:cmd.dataLocations,
 					equipmentTypes:cmd.equipmentTypes,serviceProviders:cmd.serviceProviders,manufacturers:cmd.manufacturers,suppliers:cmd.suppliers,equipmentStatus:cmd.equipmentStatus,
 					purchaser:cmd.purchaser,obsolete:cmd.obsolete).save(failOnError: true,flush: true)
 			params.exportFilterId = equipmentExportTask.id
@@ -375,8 +375,7 @@ class FilterCommand {
 }
 
 class ExportFilterCommand {
-	Set<CalculationLocation> calculationLocations
-	Set<DataLocationType> dataLocationTypes
+	Set<DataLocation> dataLocations
 	Set<EquipmentType> equipmentTypes
 	Set<Provider> manufacturers
 	Set<Provider> suppliers
@@ -393,8 +392,7 @@ class ExportFilterCommand {
 	}
 
 	static constraints = {
-		calculationLocations nullable:true
-		dataLocationTypes nullable:true
+		dataLocations nullable:true
 		equipmentTypes nullable:true
 		manufacturers nullable:true
 		suppliers nullable:true
@@ -406,7 +404,7 @@ class ExportFilterCommand {
 	}
 
 	String toString() {
-		return "ExportFilterCommand[ CalculationLocations="+calculationLocations+", DataLocationTypes="+dataLocationTypes+" , EquipmentTypes="+equipmentTypes+
+		return "ExportFilterCommand[ DataLocationTypes="+dataLocations+" , EquipmentTypes="+equipmentTypes+
 		", Manufacturers="+manufacturers+", Suppliers="+suppliers+", ServiceProviders="+serviceProviders+", Status="+equipmentStatus+", donated="+purchaser+", obsolete="+obsolete+
 		", donor=" + donor + "]"
 	}
