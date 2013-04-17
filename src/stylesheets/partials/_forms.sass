@@ -94,7 +94,7 @@
   padding: 15px 7px
 
   
-button, input[type=submit], .next
+button, input[type=submit], .next, .btn
   background: $yes
   border: 1px solid $yes - #222
   color: $filler
@@ -490,6 +490,11 @@ form.search-form
   + div
     padding: 10px
     text-align: center
+
+  &.ralign
+    td, th
+      text-align: right
+
 .sub-items 
   th, td 
     padding: 6px !important 
@@ -498,7 +503,7 @@ form.search-form
   h3
     font-weight: bold
     font-size: 12px
-    
+
 .simple-list
   fieldset
     display: block
@@ -656,6 +661,22 @@ form.search-form
   font: bold 14px Arial, sans-serif
   padding: 5px 0
   text-transform: uppercase
+
+.applied-filters-list > li
+  margin: 10px 25px 15px
+  +pie-clearfix
+  h3
+    color: $primary
+    margin-bottom: 9px
+  li
+    background: $filler1
+    border: 1px solid rgba(0, 0, 0, 0.1)
+    display: inline-block
+    float: left
+    font-size: 11px
+    margin: 0 5px 5px 0
+    padding: 3px 7px
+    +border-radius(2px)
   
 .form-languages a
   font-size: 10px

@@ -1,14 +1,14 @@
 // slister start: modified dsr -> report
 #report
   // slister end
-  
+
   #values
     overflow: auto
-    
+
   .parent-row
     background-color: $primary
     color: #fff
-    
+
   // slister start: modified dsr -> report
   .box-report-value
     background-color: #ffffff
@@ -23,7 +23,7 @@
     color: $primary
     text-align: left
   // slister end
-    
+
   .object-name-box
     background: $filler2
     border: 1px solid $filler - #111
@@ -35,7 +35,7 @@
     span a
       font-size: 10px
       font-weight: normal
-    
+
   .title-th
     width: 10px
     color: $primary
@@ -46,11 +46,487 @@
     a
       font-size: 10px
       font-weight: normal
-      
+
   .add-link, .edit-link
     &:hover, &:focus
       color: $yes
-      
+
   .delete-link
     &:hover, &:focus
       color: $no
+
+
+// Pagination
+
+.paginate
+  margin: 14px 14px 25px
+  +pie-clearfix
+  li
+    display: inline
+    float: left
+  a
+    background: $filler
+    border: 1px solid rgba(0, 0, 0, 0.1)
+    display: block
+    margin-right: 4px
+    padding: 6px 9px
+    text-decoration: none
+    &:hover, &:focus
+      background: $filler2
+      border: 1px solid $primary
+    &.active
+      background: $primary
+      color: #fff
+
+
+// Reports dashboard
+
+.v-tabs
+  position: relative
+  +pie-clearfix
+  .tipsy-inner
+    font-weight: regular
+  a
+    cursor: pointer
+
+  .custom
+    position: absolute
+    right: 0
+
+.v-tabs-nav
+  width: 100%
+  li
+    display: inline
+    float: left
+  a
+    color: #888
+    display: block
+    font-size: 13px
+    padding: 14px 18px
+    text-decoration: none
+    +text-shadow(#fff 0 1px 0)
+    +transition(color .2s)
+    &:hover, &:focus
+      color: $primary
+    &.active
+      background: #fff
+      border: 1px solid rgba(0, 0, 0, 0.1)
+      border-bottom: none
+      color: $primary
+      font-weight: bold
+      margin: 0 0 -1px 0
+      position: relative
+
+.v-tabs-subnav
+  border-bottom: 1px solid $primary
+  padding-left: 5px
+  +pie-clearfix
+  li
+    display: inline
+    float: left
+  a
+    color: #bbb
+    display: block
+    margin-bottom: -1px
+    padding: 2px 14px 15px
+    text-decoration: none
+    +transition(color .2s)
+    &.active
+      background: url('../images/bump.png') no-repeat bottom center
+      color: $primary
+    &:hover, &:focus
+      color: $primary
+  .right
+    float: right !important
+    margin-right: 14px
+    margin-top: -3px
+    a
+      font-size: 14px
+      font-weight: bold
+
+
+.v-tabs-content
+  background: #fff
+  border: 1px solid rgba(0, 0, 0, 0.1)
+  color: #666666
+  font-size: 12px
+  padding: 15px 0 0
+  width: 1000px - 2px /* minus the border */
+  .filters
+    border: none !important
+    margin-bottom: 0
+  .filters-box
+    padding: 10px 0
+  > #showhide
+    cursor: pointer
+    font-size: 11px
+    margin-right: 14px
+    opacity: 0.5
+    &:hover, &:focus
+      opacity: 1
+  .filters-close
+    float: right
+    margin: 10px 20px 0 0
+    opacity: 0.4
+    &:hover, &:focus
+      opacity: 1
+
+.v-tabs-row p
+  +pie-clearfix
+
+.v-tabs-filters
+  border-bottom: 1px solid $primary
+  padding: 0 0 10px 15px
+  +pie-clearfix
+  li
+    display: inline
+    float: left
+    font-size: 12px
+    margin-right: 20px
+
+.v-tabs-summary
+  border: 10px solid $filler1
+  border-bottom-width: 4px
+  padding: 6px 0 9px
+  text-align: center
+  +box-shadow($filler - #444 0 0 1px 0 inset)
+  +pie-clearfix
+  h2
+    background: #fff
+    bottom: -10px
+    color: #999
+    display: inline-block
+    font: bold 12px/1 'Droid Sans', sans-serif
+    margin: 9px auto 0
+    padding: 3px 10px
+    position: relative
+    text-align: center
+    text-transform: uppercase
+    z-index: 1
+  hr
+    background: #eaeaea
+    border: none
+    height: 1px
+    margin: 0 50px 3px
+  ul
+    text-align: center
+  li
+    display: inline-block
+    font-family: 'Droid Sans', sans-serif
+    padding: 15px 20px 25px
+  a
+    display: block
+    font: bold 36px/1.2 'Droid Sans', sans-serif
+    text-decoration: none
+  span
+    color: #999
+    display: block
+    font-size: 12px
+    font-weight: normal
+
+.v-tabs-criteria
+  background: $filler1
+  border: none
+  padding-bottom: 20px
+  +background(linear-gradient($filler1, #f9fcff))
+  +pie-clearfix
+  .tooltip
+    color: $primary
+    text-decoration: underline
+  li
+    border-right: 1px solid #e5e5e5
+    display: inline-block
+    float: left
+    line-height: 1.5
+    margin: 10px 0
+    padding: 0 25px
+    text-align: left
+    +text-shadow(#fff 0 1px 0)
+    &:last-child
+      border: none
+  a
+    color: #555
+    cursor: default
+    text-decoration: none
+  span
+    color: #999
+    display: block
+    font-style: italic
+  #showhide
+    cursor: pointer
+    font-size: 13px
+    font-weight: bold
+
+.v-tabs-list
+  width: 100%
+  +pie-clearfix
+  li
+    border-top: 1px solid rgba(0, 0, 0, 0.1)
+    padding: 0 0 0 10px
+    vertical-align: middle
+    +pie-clearfix
+    &.selected
+      padding: 0
+      p
+        background: rgba(0, 0, 0, 0.02)
+        border-bottom: 1px solid rgba(0, 0, 0, 0.15)
+        color: $primary
+        margin-bottom: 5px
+        padding: 5px 10px
+      .v-tabs-switch img
+        +rotate(90deg)
+  >li
+    &:hover, &:focus, &.selected
+      border: 1px solid #ccc
+      margin: 0 -1px -1px
+      position: relative
+      z-index: 5
+      +box-shadow(rgba(0, 0, 0, 0.1) 0 0 5px)
+    &:first-child
+      border-top: none
+  &.border
+    border-top: 1px solid #ccc
+
+.v-tabs-nested
+  border-top: 1px solid rgba(0, 0, 0, 0.1)
+  margin: 0px 30px 15px
+  li
+    padding: 0
+    &:first-child
+      border-top: 0
+    &:last-child
+      //border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+    &:hover, &:focus
+      background: rgba(0, 0, 0, 0.03)
+  .v-tabs-name
+    padding-top: 10px
+    padding-left: 10px
+    width: 660px
+
+.v-tabs-nested-nav
+  margin: 20px 10px 10px 30px
+  +pie-clearfix
+  li
+    border: none
+    border-right: 1px solid #ccc
+    display: inline
+    float: left
+    padding: 0 10px
+    +pie-clearfix
+    a
+      color: #aaa
+      display: block
+      font-size: 11px
+      padding: 0
+      text-decoration: none
+      &:hover, &:focus
+        color: $primary
+      &.active
+        color: $primary
+        font-weight: bold
+    &:last-child
+      border-right: none
+
+.v-tabs-switch, .v-tabs-name, .v-tabs-formula, .v-tabs-value
+  float: left
+.v-tabs-switch
+  margin: 1px 10px 0 10px
+.v-tabs-name
+  padding: 12px 0 8px
+  width: 689px
+.v-tabs-formula
+  background: $yes
+  height: 12px
+  margin: 10px 20px
+  overflow: hidden
+  text-indent: -9999em
+  width: 12px
+  +border-radius(6px)
+
+.v-tabs-value
+  border-left: 1px solid rgba(0, 0, 0, 0.2)
+  font-size: 15px
+  font-weight: bold
+  padding: 10px 0 8px 20px
+  width: 180px
+
+.v-tabs-fold-container
+  display: none
+
+
+div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment, div#spare_parts, div#monitoring
+  display: none
+
+div#report-2, div#report-3, div#report-4, div#report-5, div#report-6
+  display: none
+
+div#js-corrective, div#js-preventive, div#js-spare-parts
+  display: none
+
+
+// Customize reports overlay
+
+#dialog-form
+  display: none
+  top: 25%
+
+.dialog-form
+  +pie-clearfix
+
+  .date-picker
+    background: url("../images/icon_calendar.png") no-repeat 94% 50%
+    border: 1px solid #aaa
+    font-size: 12px
+    height: auto
+    width: auto
+  .dash
+    display: inline-block
+    float: left
+    margin: 3px 10px
+
+.ui-dialog
+  background: #fff
+  border: 1px solid rgba(0, 0, 0, 0.2)
+  outline: none
+  padding: 0
+  position: absolute
+  top: 17%
+  width: 580px !important
+  z-index: 51
+  +border-radius(3px)
+  +box-shadow(rgba(0, 0, 0, 0.1) 0 0 5px, rgba(0, 0, 0, 0.15) 0 0 200px)
+  .ui-dialog-titlebar
+    background: #fafafa
+    border: none
+    border-top: 1px solid #ddd
+    bottom: 0
+    padding: 0
+    position: absolute
+    text-align: center
+    width: 100%
+    z-index: 52
+    +border-radius(0)
+    +transition(background .4s)
+    &:hover, &:focus
+      background: #f5f5f5
+
+  .ui-dialog-titlebar-close
+    background: none
+    border: none
+    color: #aaa
+    display: inline-block
+    font-size: 11px
+    height: auto
+    position: static
+    text-transform: uppercase
+    width: auto
+    +text-shadow(#fff 0 1px 0)
+    +transition(background .4s)
+    &:hover, &:focus
+      color: #555
+
+  .ui-icon-closethick
+    display: none !important
+
+  .ui-resizable-handle
+    display: none
+  .ui-button-icon-only .ui-button-text, .ui-button-icons-only .ui-button-text
+    text-indent: 0
+
+  h2
+    border-bottom: 1px solid #ddd
+    color: $primary
+    font-size: 22px
+    margin: 30px 0 0
+    padding-bottom: 10px
+    span
+      color: #aaa
+      font-size: 15px
+      font-weight: normal
+      margin-top: 3px
+      text-transform: uppercase
+    b
+      color: #666
+      font-weight: bold
+  p
+    background: #fcfcfc
+    border-bottom: 1px solid #e9e9e9
+    color: #888
+    font-size: 11px
+    padding: 8px
+  form
+    clear: both
+    margin-top: 25px
+    +pie-clearfix
+    li
+      border-bottom: 1px solid #f5f5f5
+      margin-bottom: 5px
+      padding-bottom: 5px
+      +pie-clearfix
+      &:last-child
+        border: none
+  label
+    color: $primary
+    display: inline-block
+    float: left
+    font-size: 12px
+    height: 12px
+    padding: 7px
+    width: 115px
+    +
+      input[type=checkbox]
+        margin-left: 0
+  .no-margin
+    margin-left: 0 !important
+
+  input, select, textarea
+    display: inline-block
+    float: left
+    padding: 5px 7px
+  input, textarea
+    width: 350px
+  input, select
+    height: 28px
+
+  .chzn-search input /* Chosenjs override */
+    float: none
+    height: auto
+
+  select
+    color: $primary
+    font-size: 12px
+    width: 390px
+    +border-radius(0)
+    &:hover, &:focus, &:active
+      outline: none
+    + input[type=checkbox]
+      margin-bottom: 5px
+  input[type=checkbox]
+    height: auto
+    margin-top: 5px
+    margin-left: 128px
+    width: auto
+    + span
+      color: #666
+      display: inline-block
+      font-size: 11px
+      margin-top: 5px
+  .ui-widget-next
+    color: #fff
+    margin-top: 15px
+  .ui-widget-previous
+    margin-top: 18px
+  .ui-dialog-content
+    background: none
+    padding: 10px 30px 45px
+  .twocol-checkboxes
+    +pie-clearfix
+    li
+      display: inline
+      float: left
+      width: 50%
+    input[type=checkbox]
+      margin-left: 0
+
+.ui-widget-overlay
+  z-index: 51

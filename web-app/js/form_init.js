@@ -1,5 +1,5 @@
 /**
- *  Nice input fields  
+ *  Nice input fields
  */
 $(document).delegate('input[type="text"],textarea','focus',function() {
 	$(this).removeClass("idle-field completed-field").addClass("focus-field");
@@ -26,12 +26,12 @@ $(document).delegate('.togglable a.toggle-link', 'click', function(){
 	var toggle = $(this).data('toggle')
 	var allId = $(this).attr('id');
 	$(togglable).find('.toggle-entry').each(function(key, value){
-		if(allId) 
+		if(allId)
 			$(this).show();
-		else{ 
-			if (toggle != $(this).data('toggle')) 
+		else{
+			if (toggle != $(this).data('toggle'))
 				$(this).hide();
-			else 
+			else
 			 $(this).show();
 	   }
 	});
@@ -58,9 +58,3 @@ $(document).delegate('.toggle-list', 'click', function(e){
 	var nextElement = ($(this).hasClass("type"))?'tr.types:first':'tr.vendors:first'
 	$(this).parents('tr').nextAll(nextElement).slideToggle(500);
 });
-
-
-
-
-
-

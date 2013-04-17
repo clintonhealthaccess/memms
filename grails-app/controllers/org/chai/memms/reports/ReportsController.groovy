@@ -33,16 +33,16 @@ import org.chai.memms.AbstractController;
  * @author Jean Kahigiso M.
  *
  */
-class ReportController extends AbstractController{
+class ReportsController extends AbstractController{
 
 	def dashboard ={
-		render(view: '/entity/report',model: [
+		render(view: '/entity/reports',model: [
 				template:"/entity/reports/dashboard"
 				])
 	}	
 
 	def listing ={
-		render(view: '/entity/report',model: [
+		render(view: '/entity/reports',model: [
 				template:"/entity/reports/listing"
 				])
 	}	
