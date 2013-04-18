@@ -26,15 +26,19 @@
 				<td>
 					<ul class="horizontal">
 						<li>
-							<a href="${createLinkWithTargetURI(controller:(order.type.equals(PreventiveOrderType.DURATIONBASED))?'durationBasedOrder':'workBasedOrder', action:'edit', 
-							params:[id: order.id])}" class="edit-button"> <g:message code="default.link.edit.label" />
-							</a>
+							<shiro:hasPermission permission="preventiveOrder:edit">
+								<a href="${createLinkWithTargetURI(controller:(order.type.equals(PreventiveOrderType.DURATIONBASED))?'durationBasedOrder':'workBasedOrder', action:'edit', 
+								params:[id: order.id])}" class="edit-button"> <g:message code="default.link.edit.label" />
+								</a>
+							</shiro:hasPermission>
 						</li>
 						<li>
-							<a href="${createLinkWithTargetURI(controller:(order.type.equals(PreventiveOrderType.DURATIONBASED))?'durationBasedOrder':'workBasedOrder', action:'delete', 
-							params:[id: order.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button">
-							<g:message code="default.link.delete.label" />
-							</a>
+							<shiro:hasPermission permission="preventiveOrder:delete">
+								<a href="${createLinkWithTargetURI(controller:(order.type.equals(PreventiveOrderType.DURATIONBASED))?'durationBasedOrder':'workBasedOrder', action:'delete', 
+								params:[id: order.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button">
+								<g:message code="default.link.delete.label" />
+								</a>
+							</shiro:hasPermission>
 						</li>	
 					</ul>
 				</td>

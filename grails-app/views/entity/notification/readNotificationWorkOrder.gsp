@@ -21,7 +21,7 @@
 	<li>
 	<div class="comment-meta">
 				<span class="comment-written-by">${notification.sender.firstname} ${notification.sender.lastname}</span>
-				<span class="comment-written-on">${Utils.formatDateWithTime(notification?.writtenOn)}</span>
+				<span class="comment-written-on">${Utils.formatDateWithTime(notification?.dateCreated)}</span>
 			</div>
 			<div class="comment-content">${notification.content}</div>
   	

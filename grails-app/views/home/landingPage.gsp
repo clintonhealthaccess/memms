@@ -17,7 +17,7 @@
   		<li><a href="${createLink(controller: 'workOrderView', action:'summaryPage')}"><g:message code="header.navigation.corrective.maintenance"/></a></li>
   		</shiro:hasPermission>
   		<shiro:hasPermission permission="menu:preventivemaintenance">
-  		<li><a href="#"><g:message code="header.navigation.preventive.maintenance"/></a></li>
+  		<li><a href="${createLink(controller: 'preventiveOrderView', action:'summaryPage')}"><g:message code="header.navigation.preventive.maintenance"/></a></li>
   		</shiro:hasPermission>
   		<shiro:hasPermission permission="menu:reports">
   		<li><a href="#"><g:message code="header.navigation.reports"/></a></li>
