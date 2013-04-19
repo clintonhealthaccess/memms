@@ -3,13 +3,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="layout" content="main" />
 <g:set var="entityClass" value="${entityClass}" />
-<title><g:message code="sparePart.summary.title" /></title>
+<title><g:message code="spare.part.summary.title" /></title>
 <r:require modules="chosen,form, dropdown" />
 </head>
 <body>
 	<div>
 		<div class="heading1-bar">
-			<h1><g:message code="sparePart.export.label"/></h1>
+			<h1><g:message code="spare.part.export.label"/></h1>
 		</div>
 		<g:render template="${template}" />
 	</div>

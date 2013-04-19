@@ -196,30 +196,22 @@ class EquipmentViewController extends AbstractController {
 
 	def generalExport = { ExportFilterCommand cmd ->
 
-		// we do this because automatic data binding does not work with polymorphic elements
-		Set<CalculationLocation> calculationLocations = new HashSet<CalculationLocation>()
-		params.list('calculationLocationids').each { id ->
+		Set<DataLocation> dataLocations = new HashSet<DataLocation>()
+		params.list('dataLocationids').each { id ->
 			if (NumberUtils.isDigits(id)) {
-				def calculationLocation = CalculationLocation.get(id)
-				if (calculationLocation != null && !calculationLocations.contains(calculationLocation)) calculationLocations.add(calculationLocation);
+				def dataLocation = DataLocation.get(id)
+				if (dataLocation != null && !dataLocations.contains(dataLocation)) 
+				dataLocations.add(dataLocation);
 			}
 		}
-		cmd.calculationLocations = calculationLocations
-
-		Set<DataLocationType> dataLocationTypes = new HashSet<DataLocationType>()
-		params.list('dataLocationTypeids').each { id ->
-			if (NumberUtils.isDigits(id)) {
-				def dataLocationType = DataLocationType.get(id)
-				if (dataLocationType != null && !dataLocationTypes.contains(dataLocationType)) dataLocationTypes.add(dataLocationType);
-			}
-		}
-		cmd.dataLocationTypes = dataLocationTypes
+		cmd.dataLocations = dataLocations
 
 		Set<EquipmentType> equipmentTypes = new HashSet<EquipmentType>()
 		params.list('equipmentTypeids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def equipmentType = EquipmentType.get(id)
-				if (equipmentType != null && !equipmentTypes.contains(equipmentType)) equipmentTypes.add(equipmentType);
+				if (equipmentType != null && !equipmentTypes.contains(equipmentType)) 
+				equipmentTypes.add(equipmentType);
 			}
 		}
 		cmd.equipmentTypes = equipmentTypes
@@ -228,7 +220,8 @@ class EquipmentViewController extends AbstractController {
 		params.list('manufacturerids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def manufacturer = Provider.get(id)
-				if (manufacturer != null && !manufacturers.contains(manufacturer)) manufacturers.add(manufacturer);
+				if (manufacturer != null && !manufacturers.contains(manufacturer)) 
+				manufacturers.add(manufacturer);
 			}
 		}
 		cmd.manufacturers = manufacturers
@@ -237,13 +230,14 @@ class EquipmentViewController extends AbstractController {
 		params.list('supplierids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def supplier = Provider.get(id)
-				if (supplier != null && !suppliers.contains(supplier)) suppliers.add(supplier);
+				if (supplier != null && !suppliers.contains(supplier)) 
+				suppliers.add(supplier);
 			}
 		}
 		cmd.suppliers = suppliers
 		
 		Set<Provider> serviceProviders = new HashSet<Provider>()
-		params.list('serviceProvidersIds').each { id ->
+		params.list('serviceProviderids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def serviceProvider = Provider.get(id)
 				if (serviceProvider != null && !serviceProviders.contains(serviceProvider)) serviceProviders.add(serviceProvider);
@@ -253,10 +247,9 @@ class EquipmentViewController extends AbstractController {
 
 		if (log.isDebugEnabled()) log.debug("equipments.export, command="+cmd+", params"+params)
 
-
 		if(params.exported != null){
-			def equipmentExportTask = new EquipmentExportFilter(calculationLocations:cmd.calculationLocations,dataLocationTypes:cmd.dataLocationTypes,
-					equipmentTypes:cmd.equipmentTypes,serviceProviders:cmd.serviceProviders,manufacturers:cmd.manufacturers,suppliers:cmd.suppliers,equipmentStatus:cmd.equipmentStatus,
+			def equipmentExportTask = new EquipmentExportFilter(dataLocations:cmd.dataLocations,
+					equipmentTypes:cmd.equipmentTypes,serviceProviders:cmd.serviceProviders,manufacturers:cmd.manufacturers,suppliers:cmd.suppliers,equipmentStatus:cmd.equipmentStatus, donor:cmd.donor,
 					purchaser:cmd.purchaser,obsolete:cmd.obsolete).save(failOnError: true,flush: true)
 			params.exportFilterId = equipmentExportTask.id
 			params.class = "EquipmentExportTask"
@@ -267,7 +260,7 @@ class EquipmentViewController extends AbstractController {
 		render(view:"/entity/equipment/equipmentExportPage", model:[
 					template:"/entity/equipment/equipmentExportFilter",
 					filterCmd:cmd,
-					dataLocationTypes:DataLocationType.list(),
+					dataLocations:DataLocation.list(),
 					code: getLabel()
 				])
 	}
@@ -369,14 +362,13 @@ class FilterCommand {
 
 	String toString() {
 		return "FilterCommand[DataLocation="+dataLocation+", EquipmentType="+equipmentType+
-		", Manufacturer="+manufacturer+", Supplier="+supplier+", ServiceProvider="+serviceProvider+", Status="+status+", donated="+purchaser+", obsolete="+obsolete+
+		", Manufacturer="+manufacturer+", Supplier="+supplier+", ServiceProvider="+serviceProvider+", Status="+status+", purchaser="+purchaser+", obsolete="+obsolete+
 		", donor=" + donor + "]"
 	}
 }
 
 class ExportFilterCommand {
-	Set<CalculationLocation> calculationLocations
-	Set<DataLocationType> dataLocationTypes
+	Set<DataLocation> dataLocations
 	Set<EquipmentType> equipmentTypes
 	Set<Provider> manufacturers
 	Set<Provider> suppliers
@@ -393,8 +385,7 @@ class ExportFilterCommand {
 	}
 
 	static constraints = {
-		calculationLocations nullable:true
-		dataLocationTypes nullable:true
+		dataLocations nullable:true
 		equipmentTypes nullable:true
 		manufacturers nullable:true
 		suppliers nullable:true
@@ -406,8 +397,8 @@ class ExportFilterCommand {
 	}
 
 	String toString() {
-		return "ExportFilterCommand[ CalculationLocations="+calculationLocations+", DataLocationTypes="+dataLocationTypes+" , EquipmentTypes="+equipmentTypes+
-		", Manufacturers="+manufacturers+", Suppliers="+suppliers+", ServiceProviders="+serviceProviders+", Status="+equipmentStatus+", donated="+purchaser+", obsolete="+obsolete+
+		return "ExportFilterCommand[ DataLocationTypes="+dataLocations+" , EquipmentTypes="+equipmentTypes+
+		", Manufacturers="+manufacturers+", Suppliers="+suppliers+", ServiceProviders="+serviceProviders+", Status="+equipmentStatus+", purchaser="+purchaser+", obsolete="+obsolete+
 		", donor=" + donor + "]"
 	}
 }

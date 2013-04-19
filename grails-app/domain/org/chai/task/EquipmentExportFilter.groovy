@@ -33,14 +33,16 @@ import groovy.transform.EqualsAndHashCode;
 import java.util.Map;
 import java.util.Set;
 
+import org.chai.memms.inventory.Equipment;
+import org.chai.memms.inventory.Equipment.PurchasedBy;
 import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.inventory.Provider;
+import org.chai.memms.inventory.Equipment.Donor;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.exports.EquipmentExport;
 import org.chai.memms.exports.EquipmentTypeExport;
 import org.chai.memms.task.Exporter;
-import org.chai.location.CalculationLocation;
-import org.chai.location.DataLocationType;
+import org.chai.location.DataLocation;
 import org.chai.memms.util.Utils;
 
 /**
@@ -50,18 +52,21 @@ import org.chai.memms.util.Utils;
 @EqualsAndHashCode(includes='id')
 class EquipmentExportFilter extends ExportFilter{
 	Status equipmentStatus
-	String donated
+	Donor donor
+	PurchasedBy purchaser
 	String obsolete
 	
-	static hasMany = [equipmentTypes:EquipmentType,manufacturers:Provider,suppliers:Provider,serviceProviders:Provider]
+	static hasMany = [equipmentTypes:EquipmentType,manufacturers:Provider,suppliers:Provider,serviceProviders:Provider,dataLocations:DataLocation]
 	static constraints = {
 		equipmentTypes nullable: true, blank: true
 		manufacturers nullable: true, blank: true
 		suppliers nullable: true, blank: true
 		serviceProviders nullable: true, blank: true
+		dataLocations nullable: true, blank: true
 		equipmentStatus nullable: true
-		donated nullable: true, blank: true
+		donor nullable: true, blank: true
 		obsolete nullable: true, blank: true
+		purchaser nullable: true, blank: true
 	}
 	static mapping = {
 		table "memms_equipment_export_filter"
@@ -70,5 +75,6 @@ class EquipmentExportFilter extends ExportFilter{
 		manufacturers joinTable:[name:"memms_equipment_manufacturer_export_filter",key:"manufacturer_id",column:"equipment_export_filter_id"]
 		suppliers joinTable:[name:"memms_equipment_supplier_export_filter",key:"supplier_id",column:"equipment_export_filter_id"]
 		serviceProviders joinTable:[name:"memms_equipment_service_provider_export_filter",key:"service_provider_id",column:"equipment_export_filter_id"]
+		dataLocations joinTable:[name:"memms_equipment_data_location_export_filter",key:"data_location_id",column:"equipment_export_filter_id"]
 	}
 }

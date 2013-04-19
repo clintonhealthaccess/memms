@@ -35,26 +35,21 @@
 							from="${filterCmd?.suppliers}" value="${filterCmd?.suppliers?.id}"
 							values="${filterCmd?.suppliers.collect{it.contact.contactName + ' ['+ it.code +']'}}"
 							/></li>
-					<li><g:selectFromList name="serviceProvidersIds"
+							
+					<li><g:selectFromList name="serviceProviderids"
 							label="${message(code:'provider.type.serviceProvider')}" bean="${filterCmd}"
-							field="serviceProviders" optionKey="${filterCmd?.suppliers? 'id' : null}" multiple="true"
+							field="serviceProvider" optionKey="${filterCmd?.suppliers? 'id' : null}" multiple="true"
 							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[type:'SERVICEPROVIDER'])}"
 							from="${filterCmd?.serviceProviders}" value="${filterCmd?.serviceProviders?.id}"
 							values="${filterCmd?.serviceProviders.collect{it.contact.contactName + ' ['+ it.code +']'}}"
 							/></li>
-					<li><g:selectFromList name="calculationLocationids"
-							label="${message(code:'calculation.location.display.label')}" bean="${filterCmd}"
-							field="calculationLocations" optionKey="id" multiple="true"
-							ajaxLink="${createLink(controller:'Equipment', action:'getCalculationLocationAjaxData', params:[class: 'CalculationLocation'])}"
-							from="${filterCmd?.calculationLocations}" value="${filterCmd?.calculationLocations*.id}" 
-							values="${filterCmd?.calculationLocations*.names}"/></li>
-
-					<li><g:selectFromList name="dataLocationTypeids"
-							label="${message(code:'filter.datalocationtype.label')}" bean="${filterCmd}"
-							field="manufacturer" optionKey="id" multiple="true"
-							ajaxLink="${createLink(controller:'Equipment', action:'getAjaxData', params:[class: 'DataLocationType'])}"
-							from="${dataLocationTypes}" value="${filterCmd?.dataLocationTypes*.id}" 
-							values="${dataLocationTypes*.names}"/></li>
+							
+					<li><g:selectFromList name="dataLocationids"
+							label="${message(code:'filter.datalocation.label')}" bean="${filterCmd}"
+							field="dataLocation" optionKey="id" multiple="true"
+							ajaxLink="${createLink(controller:'dataLocation', action:'getAjaxData', params:[class: 'dataLocation'])}"
+							from="${dataLocations}" value="${filterCmd?.dataLocations*.id}" 
+							values="${dataLocations*.names}"/></li>
 					<li>
 						<label><g:message code="equipment.obsolete.label" /></label> 
 						<select name="obsolete">

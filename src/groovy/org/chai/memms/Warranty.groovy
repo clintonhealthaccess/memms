@@ -41,7 +41,7 @@ class Warranty{
 	Contact contact
 	
 	static i18nFields = ["descriptions"]
-	static embedded = ["contact","numberOfMonth"]
+	static embedded = ["contact"]
 	
 	static constraints = {
 		importFrom Contact
