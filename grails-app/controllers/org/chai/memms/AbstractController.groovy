@@ -89,6 +89,13 @@ public abstract class AbstractController {
 		return dataLocationTypes.sort()
 	}
 	
+	def getReportType(def reportTypeParam){
+		def reportType = params.get(reportTypeParam)
+		if(log.isDebugEnabled()) 
+			log.debug("abstract.reportType param:"+reportTypeParam+", value: "+reportType+")")
+		return reportType
+	}
+
 	def hasAccess(CalculationLocation location){
 		if(!user.canAccessCalculationLocation(location)) response.sendError(403)
 	}

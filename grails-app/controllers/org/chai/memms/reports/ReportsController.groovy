@@ -36,14 +36,89 @@ import org.chai.memms.AbstractController;
 class ReportsController extends AbstractController{
 
 	def dashboard ={
-		render(view: '/entity/reports',model: [
+		render(view: '/entity/reports', model: 
+			[
 				template:"/entity/reports/dashboard"
-				])
+			])
 	}	
 
 	def listing ={
-		render(view: '/entity/reports',model: [
+		render(view: '/entity/reports', model: 
+			[
 				template:"/entity/reports/listing"
-				])
-	}	
+			])
+	}
+
+	def step1 ={
+		if (log.isDebugEnabled()) log.debug("reports.step1, params:"+params)
+
+		def reportType = getReportType('reportType')
+		def reportSubType = getReportType('reportSubType')
+
+		render(template:"/entity/reports/step1", 
+			model: 
+			[
+				reportType: reportType,
+				reportSubType: reportSubType		
+			])
+	}
+
+	def step2 ={
+		if (log.isDebugEnabled()) log.debug("reports.step2, params:"+params)
+
+		def reportType = getReportType('reportType')
+		def reportSubType = getReportType('reportSubType')
+
+		render(template:"/entity/reports/step2", 
+			model: 
+			[
+				reportType: reportType,
+				reportSubType: reportSubType		
+			])
+	}
+
+	def step3 ={
+		if (log.isDebugEnabled()) log.debug("reports.step3, params:"+params)
+
+		def reportType = params.get('reportType')
+		def reportSubType = params.get('reportSubType')
+
+		render(template:"/entity/reports/step3", 
+			model: 
+			[
+				reportType: reportType,
+				reportSubType: reportSubType		
+			])
+	}
+
+	def step4 ={
+		if (log.isDebugEnabled()) log.debug("reports.step4, params:"+params)
+
+		def reportType = params.get('reportType')
+		def reportSubType = params.get('reportSubType')
+
+		render(template:"/entity/reports/step4", 
+			model: 
+			[
+				reportType: reportType,
+				reportSubType: reportSubType		
+			])
+	}
+
+	def customizedListing ={
+		// TODO
+	}
+
+	def customizedReportSubType ={
+		if (log.isDebugEnabled()) 
+			log.debug("reports.step1.customizedReportSubType, params:"+params)
+
+		def reportType = getReportType('reportType')
+
+		render(template:"/entity/reports/customizedReportSubType", 
+			model: 
+			[
+				reportType: reportType
+			])
+	}
 }

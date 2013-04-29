@@ -74,11 +74,11 @@ class ImportExportConstant {
 	public final static String EQUIPMENT_PURCHASE_COST = "Cost"
 	public final static String EQUIPMENT_PURCHASE_COST_CURRENCY = "Currency"
 	public final static String EQUIPMENT_STATUS = "Status"
-	public final static String EQUIPMENT_DONATION = "Donation" 
+	public final static String EQUIPMENT_DONOR= "Donor" 
 	public final static String EQUIPMENT_OBSOLETE = "Obsolete"
 	public final static String EQUIPMENT_WARRANTY_START = "Warranty start"
-	public final static String EQUIPMENT_WARRANTY_END = "Warranty end"
-	
+	public final static String EQUIPMENT_WARRANTY_END = "Warranty period (Months)"
+	public final static String EQUIPMENT_ID = "Id"
 	//Importing/exporting Spare part
 	public final static String SPARE_PART_SERIAL_NUMBER = "Serial number"
 	public final static String SPARE_PART_TYPE = "Type"
@@ -88,7 +88,7 @@ class ImportExportConstant {
 	public final static String SPARE_PART_PURCHASE_COST_CURRENCY = "Currency"
 	public final static String SPARE_PART_STATUS = "Status of spare part"
 	public final static String SPARE_PART_PURCHASED_BY = "Purchaser"
-	public final static String SPARE_PART_SAME_AS_MANUFACTURER = "warranty same as mnufacturer"
+	public final static String SPARE_PART_SAME_AS_MANUFACTURER = "warranty provider same as mnufacturer"
 	public final static String SPARE_PART_WARRANTY_START = "Warranty start"
 	public final static String SPARE_PART_WARRANTY_PERIOD = "Warranty period (Months)"
 	

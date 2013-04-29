@@ -33,13 +33,6 @@
       </ul>
 
       <div class="filters main">
-        <script src="/memms/static/js/form_init.js" type="text/javascript" ></script>
-        <script src="/memms/static/js/dashboard/foldable.js" type="text/javascript" ></script>
-        <script src="/memms/static/js/dashboard/list_tabs.js" type="text/javascript" ></script>
-        <!-- Load & initialize Tipsy -->
-        <script src="/memms/static/js/jquery/tipsy/src/javascripts/jquery.tipsy.js" type="text/javascript" ></script>
-        <script src="/memms/static/js/tipsy_init.js" type="text/javascript" ></script>
-
         <form class="filters-box" method="get" action="/memms/equipmentView/filter" style="display: none;">
           <ul class="filters-list">
 

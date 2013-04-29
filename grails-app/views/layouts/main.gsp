@@ -5,7 +5,7 @@
 <head>
 	<title><g:layoutTitle /></title>
 	<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
-	<g:layoutHead />	
+	<g:layoutHead />
 	<r:require module="core"/>
 	<r:layoutResources/>
 </head>
@@ -162,6 +162,13 @@
 							<li>
 								<a href="${createLink(controller: 'equipmentView', action:'generalExport')}">
 									<g:message code="equipment.export.label"/>
+								</a>
+							</li>
+					</shiro:hasPermission>
+					<shiro:hasPermission permission="menu:sparePartExport">
+							<li>
+								<a href="${createLink(controller: 'sparePartView', action:'generalExport')}">
+									<g:message code="spare.part.export.label"/>
 								</a>
 							</li>
 					</shiro:hasPermission>

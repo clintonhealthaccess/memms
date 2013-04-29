@@ -232,7 +232,6 @@ class SparePartService {
 		headers.add(ImportExportConstant.SPARE_PART_TYPE_CODE)
 		headers.add(ImportExportConstant.SPARE_PART_TYPE_NAME_EN)
 		headers.add(ImportExportConstant.SPARE_PART_TYPE_NAME_FR)
-		headers.add(ImportExportConstant.SPARE_PART_MODEL)
 		headers.add(ImportExportConstant.SPARE_PART_STATUS)
 		headers.add(ImportExportConstant.SPARE_PART_PURCHASED_BY)
 		headers.add(ImportExportConstant.LOCATION_CODE)
