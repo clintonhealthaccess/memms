@@ -41,8 +41,7 @@
         <script src="/memms/static/js/tipsy_init.js" type="text/javascript" ></script>
 
         <form class="filters-box" method="get" action="/memms/equipmentView/filter" style="display: none;">
-          <ul class="filters-list">
-
+          <ul class="filters-list third">
             <li>
               <div class="row ">
                 <label for="equipmentType.id">Equipment Type :</label>
@@ -53,29 +52,6 @@
                 </select>
               </div>
             </li>
-
-            <li>
-              <div class="row ">
-                <label for="manufacturer.id">Manufacturer :</label>
-                <select name="obsolete">
-                  <option value="">Please select</option>
-                  <option value="true">obsolete</option>
-                  <option value="false">not obsolete</option>
-                </select>
-              </div>
-            </li>
-
-            <li>
-              <div class="row ">
-                <label for="supplier.id">Supplier :</label>
-                <select name="obsolete">
-                  <option value="">Please select</option>
-                  <option value="true">obsolete</option>
-                  <option value="false">not obsolete</option>
-                </select>
-              </div>
-            </li>
-
             <li>
               <div class="row ">
                 <label for="serviceProvider.id">Service Provider :</label>
@@ -86,7 +62,31 @@
                 </select>
               </div>
             </li>
+            <li>
+              <div class="row ">
+                <label for="purchaser">Purchaser :</label>
+                <select name="purchaser">
+                  <option value="NONE">Please select</option>
+                  <option value="BYMOH">Ministry of Health</option>
+                  <option value="BYFACILITY">Facility</option>
+                  <option value="BYDONOR">Donor</option>
+                </select>
+                <div class="error-list"></div>
+              </div>
+            </li>
+          </ul>
 
+          <ul class="filters-list third">
+            <li>
+              <div class="row ">
+                <label for="manufacturer.id">Manufacturer :</label>
+                <select name="obsolete">
+                  <option value="">Please select</option>
+                  <option value="true">obsolete</option>
+                  <option value="false">not obsolete</option>
+                </select>
+              </div>
+            </li>
             <li>
               <label>Obsolete</label>
               <select name="obsolete">
@@ -95,7 +95,32 @@
                 <option value="false">not obsolete</option>
               </select>
             </li>
+            <li>
+              <div class="row ">
+                <label for="donor">Donor :</label>
+                <select name="donor">
+                  <option value="NONE">Please select</option>
+                  <option value="MOHPARTNER">MoH Partner</option>
+                  <option value="OTHERNGO">Other NGO</option>
+                  <option value="INDIVIDUAL">Individual</option>
+                  <option value="OTHERS">Others</option>
+                </select>
+                <div class="error-list"></div>
+              </div>
+            </li>
+          </ul>
 
+          <ul class="filters-list third">
+            <li>
+              <div class="row ">
+                <label for="supplier.id">Supplier :</label>
+                <select name="obsolete">
+                  <option value="">Please select</option>
+                  <option value="true">obsolete</option>
+                  <option value="false">not obsolete</option>
+                </select>
+              </div>
+            </li>
             <li>
               <div class="row ">
                 <label for="status">Status :</label>
@@ -111,38 +136,12 @@
                 <div class="error-list"></div>
               </div>
             </li>
-
-            <li>
-              <div class="row ">
-                <label for="purchaser">Purchaser :</label>
-                <select name="purchaser">
-                  <option value="NONE">Please select</option>
-                  <option value="BYMOH">Ministry of Health</option>
-                  <option value="BYFACILITY">Facility</option>
-                  <option value="BYDONOR">Donor</option>
-                </select>
-                <div class="error-list"></div>
-              </div>
-            </li>
-
-            <li>
-              <div class="row ">
-                <label for="donor">Donor :</label>
-                <select name="donor">
-                  <option value="NONE">Please select</option>
-                  <option value="MOHPARTNER">MoH Partner</option>
-                  <option value="OTHERNGO">Other NGO</option>
-                  <option value="INDIVIDUAL">Individual</option>
-                  <option value="OTHERS">Others</option>
-                </select>
-                <div class="error-list"></div>
-              </div>
-            </li>
-
           </ul>
-          <input type="hidden" value="13" name="dataLocation.id">
-          <button type="submit">Filter</button>
-          <a class="clear-form" href="#">Clear</a>
+          <div class="clear-left">
+            <input type="hidden" value="13" name="dataLocation.id">
+            <button type="submit">Filter</button>
+            <a class="clear-form" href="#">Clear</a>
+          </div>
         </form>
       </div>
 

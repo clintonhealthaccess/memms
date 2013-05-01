@@ -43,14 +43,14 @@
     li
       display: inline
       span
-        font-weight: bold 
+        font-weight: bold
 .question-checkbox
   li
     clear: both
     padding: 5px 10px
   input[type=checkbox]
     margin: 0 5px 0 0
-    
+
 .form-actions
   border-top: 2px solid $filler
   margin-top: 15px
@@ -59,7 +59,7 @@
     display: inline
     float: left
     padding: 10px 0 10px 10px
-    
+
 .go-back
   color: $no
   display: block
@@ -69,7 +69,7 @@
   &:hover, &:focus
     opacity: 1
 .form-aside-hidden
-  display: none   
+  display: none
 .facility-type
   background: $filler2
   border: 1px solid $filler2 - #111
@@ -88,12 +88,12 @@
   #facility-type-filter
     color: $primary
     font-size: 11px
-  
+
 .buttons
   border-top: 1px solid #eee
   padding: 15px 7px
 
-  
+
 button, input[type=submit], .next, .btn
   background: $yes
   border: 1px solid $yes - #222
@@ -150,7 +150,7 @@ button, input[type=submit], .next, .btn
     margin-right: 5px
   &.push-r
     margin-right: 5px
-    
+
 .edit-button, .delete-button
   display: inline-block
   height: 12px
@@ -159,12 +159,12 @@ button, input[type=submit], .next, .btn
   width: 12px
   &:hover, &:focus
     opacity: 1
-  
+
 .edit-button
   background: url('../images/icons/mini_edit.png') no-repeat center
 .delete-button
   background: url('../images/icons/mini_delete.png') no-repeat center
-  
+
 select
   background: #f6f6f6
   border: 1px solid $filler - #333
@@ -176,14 +176,14 @@ select
   &:hover, &:focus
     background: $filler + #030303
     border-color: $primary
-    
+
 .focus-field
   border: solid 1px $primary
   background: $filler + #060606
   color: #333
   font: normal 12px Arial, sans-serif
   padding: 3px
-    
+
 .idle-field
   background: #f9f9f9
   border: 1px solid $filler - #333
@@ -196,15 +196,15 @@ select
     border-color: $primary
 .in-input
   margin-top: 8px
-  
+
 .completed-field
   background: #ededed
   color: #333
   border: solid 1px $yes
-  
+
 .ajax-search-field
   width: 340px
-  
+
 .login-field
   background: $filler
   border: 1px solid $filler - #333
@@ -217,14 +217,14 @@ select
   &:hover, &:focus
     background: $filler + #030303
     border-color: $primary
-    
+
 // fterrier start: added textare style
 textarea.login-field
   width: 400px
   height: 50px
   text-align: left
 // fterrier end
-    
+
 .login-label
   color: $primary
   font-family: 'Lucida Grande', Arial, sans-serif
@@ -233,13 +233,13 @@ textarea.login-field
   padding: 3px
   text-align: center
   width: 154px
-  
+
 ul.filtered
   border: 1px solid lightGrey
   padding: 4px
   height: 270px
   overflow: auto
-  
+
   li
     display: block
     white-space: nowrap
@@ -260,36 +260,36 @@ ul.filtered
       width: 121px
     select
       width: 129px
-      
+
   li
     position: relative
-      
+
   h5
     color: $primary
     font-size: 14px
-    
+
 .element-map-level-2
   float: left
   padding-top: 5px
   position: relative
   > li
     margin-bottom: 5px
-    
+
 .element-list-row
   background: #fafafa
   border: 1px solid $dropdown
   padding: 15px
   position: relative
-  
+
 ul.element-map
   +pie-clearfix
   li
     +pie-clearfix
-    
+
   ul.element-map li
     display: inline
     float: left
-    
+
   label
     font-size: 10px
     margin-bottom: 3px
@@ -308,7 +308,7 @@ ul.element-map
   display: block
   color: $primary
   float: left
-  
+
 form.search-form
   color: $primary
   display: inline-block
@@ -359,10 +359,10 @@ form.search-form
   &.register
     padding: 0 10px
     width: 460px
-    
+
 .nice-form
   padding-top: 10px
-  
+
   input, select
     font-family: 'Lucida Grande', Arial, sans-serif
     width: 250px
@@ -376,10 +376,10 @@ form.search-form
     &:hover, &:focus
       background: $filler + #030303
       border-color: $primary
-  
+
   select
     width: 200px
-    
+
   label, span, a, div:not(.error-list)
     font-family: 'Lucida Grande', Arial, sans-serif
     color: $primary
@@ -389,10 +389,10 @@ form.search-form
 
   td
     vertical-align: middle
-    
+
   tr
     height: 42px
-    
+
 .login-form
   button
     margin-bottom: 5px
@@ -413,7 +413,7 @@ form.search-form
   .listing tbody tr
     &:hover, &:focus
       background: none
-    
+
 .todo
   padding: 7px
   a
@@ -453,7 +453,7 @@ form.search-form
       padding-left: 15px
     &:last-child
       padding-right: 15px
-    
+
   tr
     &.even td
       background: rgba(0, 0, 0, 0.015)
@@ -475,7 +475,7 @@ form.search-form
         padding-left: 15px
       &:last-child
         padding-right: 15px
-        
+
   th.sortable a
     background-position: right
     background-repeat: no-repeat
@@ -486,7 +486,7 @@ form.search-form
 
   th.desc a
     background-image: url(../images/skin/sorted_desc.gif)
-    
+
   + div
     padding: 10px
     text-align: center
@@ -495,11 +495,11 @@ form.search-form
     td, th
       text-align: right
 
-.sub-items 
-  th, td 
-    padding: 6px !important 
+.sub-items
+  th, td
+    padding: 6px !important
     line-height: 1.0 !important
-.sub-list  
+.sub-list
   h3
     font-weight: bold
     font-size: 12px
@@ -565,11 +565,11 @@ form.search-form
   span
     background: $primary
     color: #fff
-    
+
 .foldable-container
   border-top: 1px dotted $dropdown - #191919
   margin-top: 6px
-  
+
 .foldable
   &.opened:not(.current)
     padding-bottom: 0px !important
@@ -591,7 +591,7 @@ form.search-form
   font-size: 11px
   margin-top: 15px
   padding: 15px 15px 40px
-  
+
 .filters
   border: 1px solid rgba(0, 0, 0, 0.1)
   padding: 0
@@ -611,14 +611,16 @@ form.search-form
         opacity: 1
         text-decoration: underline
   ul.filters-list
-    padding: 10px 15px 0
+    padding: 10px 0 0
     +pie-clearfix
     > li
       display: inline
       float: left
-      height: 50px
-      margin-right: 1%
-      width: 32%
+      //slister start
+      //height: 50px
+      //slister end
+      margin-left: 5%
+      width: 94%
     .date
       select
         min-width: 31%
@@ -641,7 +643,7 @@ form.search-form
     margin: 5px 15px 15px
   .date-picker
     width: 137px
-    
+
   &.projection
     padding: 10px
     .question-help
@@ -651,11 +653,11 @@ form.search-form
       margin: 0
       padding: 12px 45px
       position: relative
-    
+
 .filters-box
   border-top: 1px solid #eee
   display: none
-    
+
 .filter-results
   color: #aaa
   font: bold 14px Arial, sans-serif
@@ -677,12 +679,12 @@ form.search-form
     margin: 0 5px 5px 0
     padding: 3px 7px
     +border-radius(2px)
-  
+
 .form-languages a
   font-size: 10px
   margin-left: 5px
   text-transform: uppercase
-  
+
 .checkbox
   position: relative
   +pie-clearfix
@@ -704,10 +706,10 @@ form.search-form
   border: 1px solid $primary + #222
   max-height: 188px
   overflow-y: scroll
-  
+
 .hide-list
   display: none
-    
+
 .process
   margin-bottom: 15px
   fieldset
@@ -740,7 +742,7 @@ form.search-form
     position: absolute
     right: 4px
     top: 4px
-    
+
 a.delete-row
   background: $no
   color: #fff
@@ -762,7 +764,7 @@ a.delete-row
     opacity: 1
 
 // ui-datepicker overrides
-    
+
 .filters .ui-datepicker-trigger
   position: absolute
   right: 13px

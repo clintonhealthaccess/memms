@@ -14,7 +14,7 @@ a
   &.no-link
     color: $primary - #333
     text-decoration: none
-    
+
 .main
   clear: both
   color: #666
@@ -23,8 +23,8 @@ a
   +pie-clearfix
   &.table
     padding: 0
-    
-  
+
+
 .form-heading
   color: $primary
   font-size: 24px
@@ -45,7 +45,7 @@ a
   +border-right-radius(100px)
   +box-shadow($filler - #090909 -2px -2px 2px 0 inset)
   +text-shadow(#fff, 0, 1px, 0)
-  
+
   span
     background: $primary
     color: #fff
@@ -63,19 +63,19 @@ a
 
   &.alt
     left: 0
-      
+
 #questions .incomplete h4 span, #questions .invalid h4 span, #questions span.question-default
   background: $primary
   color: $filler
   +text-shadow($primary - #222, 0, 1px, 0)
-  
+
 .follow
   background: url('../images/icons/follow.png') no-repeat right center !important
   padding-right: 20px !important
-  
+
 .hidden
   display: none
-    
+
 .push-10
   margin-bottom: 10px
 .push-top-10
@@ -84,14 +84,14 @@ a
   margin-bottom: 15px
 .push-20
   margin-bottom: 20px !important
-  
+
 .third
   float: left
   width: 33%
 .fourth
   float: left
   width: 25%
-  
+
 ul.horizontal
   +pie-clearfix
   li
@@ -99,10 +99,10 @@ ul.horizontal
     margin-right: 5px
     &.last
       margin-right: 0
-    
+
 .italic
   font-style: italic
-  
+
 .edit-link
   background: url('../images/icons/mini_edit.png') no-repeat
   display: inline-block
@@ -113,7 +113,7 @@ ul.horizontal
   width: 12px
   &:hover
     opacity: 0.6
-    
+
 .delete-link
   background: url('../images/icons/mini_delete.png') no-repeat
   display: inline-block
@@ -124,13 +124,13 @@ ul.horizontal
   width: 12px
   &:hover
     opacity: 0.6
-    
+
 .entity-form-container h5
   color: #888
   font-size: 16px
   font-weight: bold
   margin-top: 20px
-  
+
 .login-heading
   color: $primary
   font-size: 18px
@@ -148,7 +148,7 @@ ul.horizontal
   +border-radius(3px)
   +box-shadow($filler - #111 1px 1px 3px inset)
   +text-shadow(white 0 1px 0)
-    
+
   &.program
     background: url("../images/icons/star.png") no-repeat 14px 50% #fcfcfc
     &:hover, &:focus
@@ -174,7 +174,7 @@ ul.horizontal
   text-decoration: none
   background: $filler
   border: 1px solid $dropdown - #111
-  display: inline-block 
+  display: inline-block
   margin-bottom: 3px
   padding: 4px 4px
   text-align: center
@@ -185,7 +185,7 @@ ul.horizontal
 
 .with-highlight
   margin-right: 10px
-  &:hover, &:focus, &.dropdown-selected  
+  &:hover, &:focus, &.dropdown-selected
     background-color: $primary !important
     color: white
     position: relative
@@ -195,10 +195,10 @@ ul.horizontal
     +text-shadow($primary - #333 0 1px 0)
     +border-radius(3px)
     +transition(all 0.3s)
-      
+
 .dropdown
   position: relative
-  
+
   .dropdown-list
     padding-bottom: 6px
     background: $dropdown
@@ -211,7 +211,7 @@ ul.horizontal
     +border-bottom-radius(3px)
     +border-top-right-radius(3px)
     +box-shadow(#ccc 2px 2px 3px, $dropdown - #111 0 0 8px 3px inset)
-    
+
     li
       margin-left: 10px
       padding-top: 8px
@@ -219,17 +219,20 @@ ul.horizontal
       border-bottom: 1px dotted $dropdown - #191919
       display: block
       white-space: nowrap
-          
+
       &:last-child
         border: none
         padding-bottom: 0px
-        
+
       a
         color: $primary
         font-size: 11px
         font-weight: bold
         text-decoration: none
         +text-shadow(white 0 1px 0)
-        
+
         &:hover
           color: $primary_dark
+
+.clear-left
+  clear: left
