@@ -31,53 +31,55 @@
  *
  */
 modules = {
-
+	
 	// overrides, let's put jquery in the core bundle
 	overrides {
 		jquery {
 			defaultBundle 'core'
 		}
 	}
-
+	
 	// modules
 	core {
 		dependsOn 'jquery,foldable'
-
+		
 		resource url: '/css/screen.css', bundle: 'core'
 	}
 	error {
 		resource url: '/css/errors.css'
 	}
+
 	chosen {
 		dependsOn 'jquery'
 
-		resource url: '/js/jquery/chosen/chosen.jquery.js', bundle: 'core'
+		resource url: '/js/jquery/chosen/chosen.js', bundle: 'core'
+		// resource url: '/js/jquery/chosen/chosen.jquery.js', bundle: 'core'
 		resource url: '/js/jquery/chosen/ajax-chosen.js', bundle: 'core'
 		resource url: '/js/jquery/chosen/chosen.css', bundle: 'core'
 	}
-
+	
 	jqueryui {
 		dependsOn 'jquery'
-
-		/* resource url: '/js/jquery/jquery-ui/css/cupertino/jquery-ui-1.9.2.custom.min.css', bundle: 'core' */
+		
+		resource url: '/js/jquery/jquery-ui/css/cupertino/jquery-ui-1.9.2.custom.min.css', bundle: 'core'
 		resource url: '/js/jquery/jquery-ui/css/timepicker.css', bundle: 'core'
 		resource url: '/js/jquery/jquery-ui/js/jquery-ui-1.9.2.custom.min.js', bundle: 'core'
 		resource url: '/js/jquery/jquery-ui/js/jquery-ui-timepicker-addon.js', bundle: 'core'
 		resource url: '/js/jquery/jquery-ui/js/jquery-ui-sliderAccess.js', bundle: 'core'
 	}
-
+	
 	fullCalendar{
 		dependsOn 'jquery'
 		resource url: '/js/jquery/jquery-ui/css/fullcalendar.css', bundle: 'core'
 		resource url: '/js/jquery/jquery-ui/js/fullcalendar.min.js', bundle: 'core'
 	}
-
+	
 	calendar{
 		dependsOn 'fullCalendar'
 		resource url: '/css/calendar.css', bundle: 'core'
 		resource url: '/js/calendar.js', bundle: 'core'
 	}
-
+	
 	fieldselection {
 		dependsOn 'jquery'
 		resource url: '/js/jquery/fieldselection/jquery.fieldselection.js', bundle: 'core'
@@ -91,6 +93,7 @@ modules = {
 		resource url: '/js/jquery/cluetip/jquery.cluetip.css', bundle: 'core'
 		resource url: '/js/cluetip_init.js', bundle: 'core'
 	}
+
 	tipsy {
 		dependsOn 'jquery'
 
@@ -105,19 +108,19 @@ modules = {
 		resource url: '/js/form-util.js', bundle: 'core'
 		resource url: '/js/form_init.js', bundle: 'core'
 	}
-
+	
 	foldable {
 		dependsOn 'jquery'
 
 		resource url: '/js/foldable_init.js', bundle: 'core'
 	}
-
+	
 	dropdown {
 		dependsOn 'jquery'
-
+		
 		resource url: '/js/dropdown_init.js', bundle: 'core'
 	}
-
+	
 	list {
 		dependsOn 'core,form,fieldselection,cluetip,dropdown,chosen'
 	}
@@ -129,4 +132,14 @@ modules = {
 		resource url: '/js/progressbar_init.js', bundle: 'core'
 	}
 
+	reports {
+		dependsOn 'core,form,tipsy,jquery,jqueryui,chosen'
+
+		// TODO ? 
+		// Load Droid Sans remotely from Google Webfonts
+		// resource url: 'http://fonts.googleapis.com/css?family=Droid+Sans:400,700&subset=latin'
+		resource url: '/js/reports/reports_init.js'
+		resource url: '/js/reports/listing_init.js'
+		resource url: '/js/reports/customizedlisting_init.js'
+	}
 }

@@ -31,11 +31,17 @@ import java.util.Set;
 
 import org.apache.commons.lang.math.NumberUtils
 import org.apache.shiro.SecurityUtils;
-import org.chai.location.DataLocationType;
-import org.chai.memms.security.User
 import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocation;
+import org.chai.location.DataLocationType;
 import org.chai.location.Location
 import org.chai.location.LocationLevel
+import org.chai.memms.inventory.Department;
+import org.chai.memms.inventory.EquipmentType;
+import org.chai.memms.security.User
+import org.chai.memms.util.Utils
+import org.chai.memms.util.Utils.ReportType
+import org.chai.memms.util.Utils.ReportSubType
 
 public abstract class AbstractController {
 	
@@ -74,7 +80,7 @@ public abstract class AbstractController {
 			location = locationService.getRootLocation()
 		return location
 	}
-	
+
 	public Set<DataLocationType> getLocationTypes() {
 		Set<DataLocationType> dataLocationTypes = new HashSet<DataLocationType>()
 		if (params.list('dataLocationTypes') != null && !params.list('dataLocationTypes').empty) {
@@ -88,7 +94,7 @@ public abstract class AbstractController {
 		
 		return dataLocationTypes.sort()
 	}
-	
+
 	def hasAccess(CalculationLocation location){
 		if(!user.canAccessCalculationLocation(location)) response.sendError(403)
 	}

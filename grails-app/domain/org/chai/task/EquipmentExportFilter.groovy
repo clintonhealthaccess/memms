@@ -33,13 +33,17 @@ import groovy.transform.EqualsAndHashCode;
 import java.util.Map;
 import java.util.Set;
 
+import org.chai.memms.inventory.Equipment;
+import org.chai.memms.inventory.Equipment.PurchasedBy;
 import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.inventory.Provider;
+import org.chai.memms.inventory.Equipment.Donor;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.exports.EquipmentExport;
 import org.chai.memms.exports.EquipmentTypeExport;
 import org.chai.memms.task.Exporter;
 import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocation;
 import org.chai.location.DataLocationType;
 import org.chai.memms.util.Utils;
 
@@ -50,7 +54,8 @@ import org.chai.memms.util.Utils;
 @EqualsAndHashCode(includes='id')
 class EquipmentExportFilter extends ExportFilter{
 	Status equipmentStatus
-	String donated
+	Donor donor
+	PurchasedBy purchaser
 	String obsolete
 	
 	static hasMany = [equipmentTypes:EquipmentType,manufacturers:Provider,suppliers:Provider,serviceProviders:Provider]
@@ -60,8 +65,9 @@ class EquipmentExportFilter extends ExportFilter{
 		suppliers nullable: true, blank: true
 		serviceProviders nullable: true, blank: true
 		equipmentStatus nullable: true
-		donated nullable: true, blank: true
+		donor nullable: true, blank: true
 		obsolete nullable: true, blank: true
+		purchaser nullable: true, blank: true
 	}
 	static mapping = {
 		table "memms_equipment_export_filter"

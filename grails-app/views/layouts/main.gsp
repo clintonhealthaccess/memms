@@ -5,7 +5,7 @@
 <head>
 	<title><g:layoutTitle /></title>
 	<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
-	<g:layoutHead />	
+	<g:layoutHead />
 	<r:require module="core"/>
 	<r:layoutResources/>
 </head>
@@ -146,22 +146,29 @@
 				<ul class="submenu">
 					%{-- <shiro:hasPermission permission="menu:dashboard">
 							<li>
-								<a href="${createLink(controller:'reports', action:'dashboard')}">
+								<a href="#${createLink(controller:'dashboardReport', action:'dashboard')}">
 									<g:message code="header.navigation.reports.dashboard"/>
 								</a>
 							</li>
-					</shiro:hasPermission>
+					</shiro:hasPermission>--}%
 					<shiro:hasPermission permission="menu:listing">
 							<li>
-								<a href="${createLink(controller:'reports', action:'listing')}">
+								<a href="${createLink(controller:'listing', action:'view') }">
 									<g:message code="header.navigation.reports.listing"/>
 								</a>
 							</li>
-					</shiro:hasPermission> --}%
+					</shiro:hasPermission> 
 					<shiro:hasPermission permission="menu:equipmentExport">
 							<li>
 								<a href="${createLink(controller: 'equipmentView', action:'generalExport')}">
 									<g:message code="equipment.export.label"/>
+								</a>
+							</li>
+					</shiro:hasPermission>
+					<shiro:hasPermission permission="menu:sparePartExport">
+							<li>
+								<a href="${createLink(controller: 'sparePartView', action:'generalExport')}">
+									<g:message code="spare.part.export.label"/>
 								</a>
 							</li>
 					</shiro:hasPermission>

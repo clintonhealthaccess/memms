@@ -33,13 +33,6 @@
       </ul>
 
       <div class="filters main">
-        <script src="/memms/static/js/form_init.js" type="text/javascript" ></script>
-        <script src="/memms/static/js/dashboard/foldable.js" type="text/javascript" ></script>
-        <script src="/memms/static/js/dashboard/list_tabs.js" type="text/javascript" ></script>
-        <!-- Load & initialize Tipsy -->
-        <script src="/memms/static/js/jquery/tipsy/src/javascripts/jquery.tipsy.js" type="text/javascript" ></script>
-        <script src="/memms/static/js/tipsy_init.js" type="text/javascript" ></script>
-
         <form class="filters-box" method="get" action="/memms/equipmentView/filter" style="display: none;">
           <ul class="filters-list third">
             <li>
@@ -164,16 +157,16 @@
                       <li><a id='info_facility' href="#">Information By Facility</a></li>
               </ul>
               <div id="historic_trend" class='toggled_tab'>
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="comparison">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="geo_trend">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="info_facility">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
             </div>
           </li>
@@ -195,16 +188,16 @@
                       <li><a id='info_facility' href="#">Information By Facility</a></li>
               </ul>
               <div id="historic_trend" class='toggled_tab'>
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="comparison">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="geo_trend">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="info_facility">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
             </div>
           </li>
@@ -226,16 +219,16 @@
                       <li><a id='info_facility' href="#">Information By Facility</a></li>
               </ul>
               <div id="historic_trend" class='toggled_tab'>
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="comparison">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="geo_trend">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="info_facility">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
             </div>
           </li>
@@ -262,16 +255,16 @@
                       <li><a id='info_facility' href="#">Information By Facility</a></li>
               </ul>
               <div id="historic_trend" class='toggled_tab'>
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="comparison">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="geo_trend">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="info_facility">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
             </div>
           </li>
@@ -293,16 +286,16 @@
                       <li><a id='info_facility' href="#">Information By Facility</a></li>
               </ul>
               <div id="historic_trend" class='toggled_tab'>
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="comparison">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="geo_trend">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="info_facility">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
             </div>
           </li>
@@ -329,16 +322,16 @@
                       <li><a id='info_facility' href="#">Information By Facility</a></li>
               </ul>
               <div id="historic_trend" class='toggled_tab'>
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="comparison">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="geo_trend">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="info_facility">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
             </div>
           </li>
@@ -361,16 +354,16 @@
                       <li><a id='info_facility' href="#">Information By Facility</a></li>
               </ul>
               <div id="historic_trend" class='toggled_tab'>
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="comparison">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="geo_trend">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="info_facility">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
             </div>
           </li>
@@ -391,16 +384,16 @@
                       <li><a id='info_facility' href="#">Information By Facility</a></li>
               </ul>
               <div id="historic_trend" class='toggled_tab'>
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="comparison">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="geo_trend">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="info_facility">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
             </div>
           </li>
@@ -428,16 +421,16 @@
                       <li><a id='info_facility' href="#">Information By Facility</a></li>
               </ul>
               <div id="historic_trend" class='toggled_tab'>
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="comparison">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="geo_trend">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="info_facility">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
             </div>
           </li>
@@ -460,16 +453,16 @@
                       <li><a id='info_facility' href="#">Information By Facility</a></li>
               </ul>
               <div id="historic_trend" class='toggled_tab'>
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="comparison">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="geo_trend">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="info_facility">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
             </div>
           </li>
@@ -497,16 +490,16 @@
                       <li><a id='info_facility' href="#">Information By Facility</a></li>
               </ul>
               <div id="historic_trend" class='toggled_tab'>
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="comparison">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="geo_trend">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="info_facility">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
             </div>
           </li>
@@ -529,16 +522,16 @@
                       <li><a id='info_facility' href="#">Information By Facility</a></li>
               </ul>
               <div id="historic_trend" class='toggled_tab'>
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="comparison">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="geo_trend">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="info_facility">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
             </div>
           </li>
@@ -561,16 +554,16 @@
                       <li><a id='info_facility' href="#">Information By Facility</a></li>
               </ul>
               <div id="historic_trend" class='toggled_tab'>
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="comparison">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="geo_trend">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
               <div id="info_facility">
-                <g:render template="/entity/reports/nested_tabs" />
+                <g:render template="/reports/dashboard/nested_tabs" />
               </div>
             </div>
           </li>

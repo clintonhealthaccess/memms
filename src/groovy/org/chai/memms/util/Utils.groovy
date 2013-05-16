@@ -221,6 +221,7 @@ public class Utils {
 		timeTime = timeTime.plusHours(numberHours)
 		return timeTime.toDate()
 	}
+
 	/**
 	 * fieldName has to start with capital letter as
 	 * it is used to create setter of the object field
@@ -230,16 +231,16 @@ public class Utils {
 	 * @return
 	 */
 	public static def setLocaleValueInMap(def object, def map, def fieldName){
-	   def methodName = 'set'+fieldName
-	   def grailsApplication = new User().domainClass.grailsApplication
-	   grailsApplication.config.i18nFields.locales.each{ loc ->
-		   if(map.get(loc) != null)
-			   object."$methodName"(map.get(loc),new Locale(loc))
-		   else
-			   object."$methodName"("",new Locale(loc))
-	   }
-   }
-	
+		def methodName = 'set'+fieldName
+		def grailsApplication = new User().domainClass.grailsApplication
+
+		grailsApplication.config.i18nFields.locales.each{ loc ->
+			if(map.get(loc) != null)
+				object."$methodName"(map.get(loc),new Locale(loc))
+			else
+				object."$methodName"("",new Locale(loc))
+		}
+	}
 	
 	public static Date getDate( int day, int month, int year) {
 		final Calendar calendar = Calendar.getInstance();
@@ -251,6 +252,29 @@ public class Utils {
  
 		return calendar.getTime();
 	}
-	
-	
+
+	//message.properties, ex. reports.type.inventory
+	public enum ReportType{
+		INVENTORY("inventory"),
+		CORRECTIVE("corrective"),
+		PREVENTIVE("preventive"),
+		SPAREPARTS("spareParts")
+		
+		final String reportType
+		ReportType(String reportType){ this.reportType=reportType }
+		String getReportType() { return reportType }
+	}
+
+	//message.properties, ex. reports.subType.inventory
+	public enum ReportSubType{
+		INVENTORY("inventory"),
+		WORKORDERS("workOrders"),
+		STATUSCHANGES("statusChanges"),
+		USERATE("useRate"),
+		STOCKOUT("stockOut")
+		
+		final String reportSubType
+		ReportSubType(String reportSubType){ this.reportSubType=reportSubType }
+		String getReportSubType() { return reportSubType }
+	}
 }

@@ -51,7 +51,7 @@ class User {
 		
 		String messageCode = "user.type";
 		final String name
-		UserType(String name){ this.name=name; }
+		UserType(String name){ this.name=name;}
 		String getKey() { return name() }
 	}
 	

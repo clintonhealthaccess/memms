@@ -245,6 +245,21 @@ public class Equipment {
 		return currentState
 	}
 	
+	// @Transient
+	// def getTimeBasedPreviousStatus(){
+	// 	if(!status) return null
+	// 	EquipmentStatus equipmentStatuses = status.asList()
+
+	// 	equipmenStatuses.sort([{it.dateOfEvent})
+
+	// 	if(equipmentStatuses.size() == 0) return null
+	// 	else if(equipmenStatuses.size() == 1) return null
+	// 	else{
+	// 		equipmenStatuses.sort([{it.dateOfEvent})
+			
+	// 	}
+	// }
+
 	String toString() {
 		return "Equipment[id= " + id + " code= "+code+" serialNumber= "+serialNumber+" currentState= "+currentStatus+"]";
 

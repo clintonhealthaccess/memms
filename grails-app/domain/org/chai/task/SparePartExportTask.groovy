@@ -1,4 +1,4 @@
-/** 
+/**
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
@@ -13,7 +13,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,25 +25,39 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.reports
+package org.chai.task
 
-import org.chai.memms.AbstractController;
+import java.util.Map;
+
+import org.chai.memms.exports.SparePartExport;
+import org.chai.memms.task.Exporter;
+import org.chai.memms.util.Utils;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocationType;
+import org.chai.memms.exports.SparePartTypeExport;
+import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 
 /**
- * @author Jean Kahigiso M.
+ * @author Aphrodice Rwagaju
  *
  */
-class ReportsController extends AbstractController{
+class SparePartExportTask extends DataExportTask{
+	
+	def messageSource
+	String getInformation() {
+		def informLabel = messageSource.getMessage('spare.part.label', new Object[0], LocaleContextHolder.getLocale())
+		return informLabel +" "+'<br/>'+messageSource.getMessage('import.file.label', new Object[0], LocaleContextHolder.getLocale())
+	}
 
-	def dashboard ={
-		render(view: '/entity/reports',model: [
-				template:"/entity/reports/dashboard"
-				])
-	}	
+	public Exporter getExporter() {
+		return new SparePartExport();
+	}
+	
+	Map getFormModel() {
+		return [
+			task: this
+		]
+	}
 
-	def listing ={
-		render(view: '/entity/reports',model: [
-				template:"/entity/reports/listing"
-				])
-	}	
 }

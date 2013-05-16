@@ -513,7 +513,7 @@ public class Initializer {
 				null
 				)
 			
-			def warrantySix = newWarranty(['en':'warranty four'],'warranty name4','email4@gmail.com',"0768-444-787","Street 154","8988",getDate(10, 12, 2010),false,[:])
+			def warrantySix = newWarranty(['en':'warranty six'],'warranty name6','email4@gmail.com',"0768-444-787","Street 154","8988",getDate(10, 12, 2010),false,[:])
 			def statusSix= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentSix,[:])
 			def statusSixOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentSix,[:])
 			def statusSixTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentSix,[:])
@@ -608,6 +608,28 @@ public class Initializer {
 			equipmentTen.warranty=warrantyTen
 			equipmentTen.warrantyPeriod = newPeriod(28)
 			equipmentTen.save(failOnError:true)
+			
+			def equipmentEleven = newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,true,newPeriod(7),"Room 10A1","290540",['en':'Equipment Descriptions Ten'],
+				getDate(7,4,2013),getDate(12,4,2013),"RWF",
+				'MODELTen3',
+				DataLocation.findByCode(KIREHE),
+				Department.findByCode('ANAESTHETICS'),
+				EquipmentType.findByCode("10426"),
+				Provider.findByCode("TWO"),
+				Provider.findByCode("SIX"),
+				Status.UNDERMAINTENANCE,
+				User.findByUsername("admin"),
+				null,
+				null
+				)
+			
+			def warrantyEleven = newWarranty(['en':'warranty eleven'],'warranty name11','email410@gmail.com',"0768-100-787","Street 154","8988",getDate(13, 5, 2013),false,[:])
+			def statusEleven= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentEleven,[:])
+			def statusElevenOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentEleven,[:])
+			def statusElevenTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentEleven,[:])
+			equipmentEleven.warranty=warrantyEleven
+			equipmentEleven.warrantyPeriod = newPeriod(28)
+			equipmentEleven.save(failOnError:true)
 		
 		}
 	}
