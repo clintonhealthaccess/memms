@@ -52,6 +52,7 @@ import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.chai.memms.security.User
+
 import org.joda.time.DateTime
 import org.joda.time.Days;
 import org.joda.time.Weeks;
@@ -221,6 +222,7 @@ public class Utils {
 		timeTime = timeTime.plusHours(numberHours)
 		return timeTime.toDate()
 	}
+
 	/**
 	 * fieldName has to start with capital letter as
 	 * it is used to create setter of the object field
@@ -230,16 +232,16 @@ public class Utils {
 	 * @return
 	 */
 	public static def setLocaleValueInMap(def object, def map, def fieldName){
-	   def methodName = 'set'+fieldName
-	   def grailsApplication = new User().domainClass.grailsApplication
-	   grailsApplication.config.i18nFields.locales.each{ loc ->
-		   if(map.get(loc) != null)
-			   object."$methodName"(map.get(loc),new Locale(loc))
-		   else
-			   object."$methodName"("",new Locale(loc))
-	   }
-   }
-	
+		def methodName = 'set'+fieldName
+		def grailsApplication = new User().domainClass.grailsApplication
+
+		grailsApplication.config.i18nFields.locales.each{ loc ->
+			if(map.get(loc) != null)
+				object."$methodName"(map.get(loc),new Locale(loc))
+			else
+				object."$methodName"("",new Locale(loc))
+		}
+	}
 	
 	public static Date getDate( int day, int month, int year) {
 		final Calendar calendar = Calendar.getInstance();
@@ -251,6 +253,31 @@ public class Utils {
  
 		return calendar.getTime();
 	}
-	
-	
+
+	public enum ReportType{
+		INVENTORY("inventory"),
+		CORRECTIVE("corrective"),
+		PREVENTIVE("preventive"),
+		SPAREPARTS("spareParts")
+		
+		String messageCode = "reports.type."
+
+		final String reportType
+		ReportType(String reportType){ this.reportType=reportType }
+		String getReportType() { return reportType }
+	}
+
+	public enum ReportSubType{
+		INVENTORY("inventory"),
+		WORKORDERS("workOrders"),
+		STATUSCHANGES("statusChanges"),
+		USERATE("useRate"),
+		STOCKOUT("stockOut")
+		
+		String messageCode = "reports.subType."
+
+		final String reportSubType
+		ReportSubType(String reportSubType){ this.reportSubType=reportSubType }
+		String getReportSubType() { return reportSubType }
+	}
 }

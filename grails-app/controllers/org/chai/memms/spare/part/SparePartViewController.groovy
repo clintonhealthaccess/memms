@@ -35,24 +35,22 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation;
 import org.chai.location.DataLocationType;
-import org.chai.location.Location
-import org.chai.location.LocationLevel
+import org.chai.location.Location;
+import org.chai.location.LocationLevel;
 
 import org.chai.memms.AbstractController;
 import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePartType;
+
 import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.inventory.Provider;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
 import org.chai.memms.spare.part.SparePart.SparePartStatus;
 
-
-
 import org.chai.memms.inventory.Provider;
 
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
-import org.chai.task.SparePartExportFilter;
 
 /**
  * @author Aphrodice Rwagaju
@@ -131,23 +129,17 @@ class SparePartViewController extends AbstractController{
 
 
 	def filter = { FilterCommand cmd ->
-		if (log.isDebugEnabled()) log.debug("spareParts.filter, command "+cmd)
+		if (log.isDebugEnabled()) log.debug("spare.parts.filter, command "+cmd)
 		adaptParamsForList()
 		def spareParts = sparePartService.filterSparePart(user.location,cmd.supplier,cmd.sparePartType,cmd.stockLocation,cmd.sparePartPurchasedBy,cmd.status,params)
 		if(!request.xhr)
 			response.sendError(404)
 		else this.ajaxModel(spareParts,null,"")
 	}
-	
-	
-	
-	
-	
+			
 	def export = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("spareParts.export, command "+cmd)
-		
 		adaptParamsForList()
-
 		def spareParts = sparePartService.filterSparePart(user.location,cmd.supplier,cmd.sparePartType,cmd.stockLocation,cmd.sparePartPurchasedBy,cmd.status,params)
 		File file = sparePartService.exporter(user.location,spareParts)
 
@@ -172,7 +164,6 @@ class FilterCommand {
 		sparePartPurchasedBy nullable:true
 		status nullable: true
 		stockLocation nullable: true
-
 		location nullable:false, validator:{ val, obj ->
 			return (obj.stockLocation != null || obj.sparePartType != null || obj.supplier != null || obj.sparePartPurchasedBy!=null || obj.status!=null)?true:"select.atleast.one.value.text"
 		}
@@ -182,4 +173,3 @@ class FilterCommand {
 		return "FilterCommand[SparePartType="+sparePartType+", StockLocation="+stockLocation+", Supplier="+supplier+",  sparePartPurchasedBy="+sparePartPurchasedBy+" status="+status+"]"
 	}
 }
-

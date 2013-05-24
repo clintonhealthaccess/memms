@@ -56,6 +56,33 @@ class EquipmentStatus {
 		Status(String name){ this.name=name }
 		String getKey() { return name() }
 	}
+
+	enum EquipmentStatusChange{
+		NEWORDER("newEquipment", 
+			['previous':[Status.NONE], 'current':(Status.values()-[Status.NONE])]),
+		DISPOSEDEQUIPMENT("disposedEquipment", 
+			[
+				'previous':(Status.values()-[Status.FORDISPOSAL,Status.DISPOSED]), 
+				'current':[Status.FORDISPOSAL,Status.DISPOSED]
+			]),
+		FROMSTOCKTOOPERATIONAL("equipmentFromStockToOperational", 
+			['previous':[Status.INSTOCK], 'current':[Status.OPERATIONAL,Status.PARTIALLYOPERATIONAL]]),
+		FORMAINTENANCE("equipmentForMaintenance", 
+			[
+				'previous':(Status.values()-Status.UNDERMAINTENANCE), 
+				'current':[Status.UNDERMAINTENANCE]
+			])
+
+		String messageCode = "reports.inventory.statusChanges"
+		final String name
+		final Map<String,List<Status>> statusChange
+		EquipmentStatusChange(String name, Map<String,List<Status>> statusChange) {
+		   this.name=name
+		   this.statusChange=statusChange
+		 }
+		 String getKey() { return name }
+		 Map<String,List<Status>> getStatusChange() { return statusChange }
+	}
 	
 	Date dateOfEvent
 	Date dateCreated

@@ -259,7 +259,7 @@ class EquipmentService {
 		headers.add(ImportExportConstant.SERVICEPROVIDER_PERIOD)
 		headers.add(ImportExportConstant.EQUIPMENT_PURCHASE_COST)
 		headers.add(ImportExportConstant.EQUIPMENT_PURCHASE_COST_CURRENCY)
-		headers.add(ImportExportConstant.EQUIPMENT_DONATION)
+		headers.add(ImportExportConstant.EQUIPMENT_DONOR)
 		headers.add(ImportExportConstant.EQUIPMENT_OBSOLETE)
 		headers.add(ImportExportConstant.EQUIPMENT_WARRANTY_START)
 		headers.add(ImportExportConstant.EQUIPMENT_WARRANTY_END)

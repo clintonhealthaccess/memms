@@ -35,6 +35,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Date;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -43,14 +44,17 @@ import org.chai.task.EquipmentExportFilter;
 import org.chai.task.Progress;
 import org.chai.task.Task;
 import org.chai.memms.inventory.Equipment;
+import org.chai.memms.inventory.Equipment.PurchasedBy;
 import org.chai.memms.inventory.EquipmentStatus.Status;
-import org.chai.memms.inventory.EquipmentType
+import org.chai.memms.inventory.Equipment.Donor;
+import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.util.ImportExportConstant;
 import org.chai.memms.util.Utils;
 import org.supercsv.io.CsvListWriter;
 import org.supercsv.io.ICsvListWriter;
 import org.supercsv.prefs.CsvPreference;
-import org.chai.memms.task.Exporter
+import org.chai.memms.task.Exporter;
+import org.chai.memms.inventory.Provider;
 
 class EquipmentExport implements Exporter{
 	def equipmentService
@@ -79,14 +83,17 @@ class EquipmentExport implements Exporter{
 				equipments = filterEquipment(equipmentExportFilter)
 			}
 			progress.setMaximum(equipments.size())
-			
+			if (log.isDebugEnabled()) log.debug("Equipment size to be exported= " + equipments.size())
 			for(Equipment equipment: equipments){
 				if (log.isDebugEnabled()) log.debug("exporting equipment=" + equipment)
-				List<String> line = [equipment.serialNumber,equipment.type.code,equipment.type?.getNames(new Locale("en")),equipment.type?.getNames(new Locale("fr")),equipment.model,
-					equipment.getCurrentState()?.status,equipment.dataLocation?.code,equipment.dataLocation?.getNames(new Locale("en")),equipment.dataLocation?.getNames(new Locale("fr")),
-					equipment.department?.code,equipment.department?.getNames(new Locale("en")),equipment.department?.getNames(new Locale("fr")),equipment.room,
-					equipment.manufacturer?.code,equipment.manufacturer?.contact?.contactName,equipment.manufactureDate,equipment.supplier?.code,equipment.supplier?.contact?.contactName,
-					equipment.purchaseDate,equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",equipment.donorName?:"n/a",equipment.obsolete,equipment.warranty?.startDate,equipment.warranty?.numberOfMonth]
+				List<String> line = [
+					equipment.id,equipment.serialNumber?:"n/a",equipment.type.code,equipment.type?.getNames(new Locale("en")),equipment.type?.getNames(new Locale("fr")),equipment.model?:"n/a",
+					equipment.currentStatus,equipment.dataLocation?.code,equipment.dataLocation?.getNames(new Locale("en")),equipment.dataLocation?.getNames(new Locale("fr"))?:"n/a",
+					equipment.department?.code,equipment.department?.getNames(new Locale("en")),equipment.department?.getNames(new Locale("fr"))?:"n/a",equipment.room?:"n/a",equipment.manufacturer?.code?:"n/a",
+					equipment.manufacturer?.contact?.contactName?:"n/a",equipment.manufactureDate?:"n/a",equipment.supplier?.code?:"n/a",equipment.supplier?.contact?.contactName?:"n/a",
+					equipment.purchaseDate?:"n/a",equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",equipment.donorName?:"n/a",equipment.obsolete,equipment.warranty?.startDate?:"n/a",
+					equipment.warrantyPeriod?.numberOfMonths?:"n/a"
+					]
 				log.debug("exporting line=" + line)
 				writer.write(line)
 				progress.incrementProgress()
@@ -101,6 +108,7 @@ class EquipmentExport implements Exporter{
 	
 	public List<String> getExportDataHeaders() {
 		List<String> headers = new ArrayList<String>()
+		headers.add(ImportExportConstant.EQUIPMENT_ID)
 		headers.add(ImportExportConstant.EQUIPMENT_SERIAL_NUMBER)
 		headers.add(ImportExportConstant.DEVICE_CODE)
 		headers.add(ImportExportConstant.DEVICE_NAME_EN)
@@ -119,10 +127,10 @@ class EquipmentExport implements Exporter{
 		headers.add(ImportExportConstant.EQUIPMENT_MANUFACTURE_DATE)
 		headers.add(ImportExportConstant.SUPPLIER_CODE)
 		headers.add(ImportExportConstant.SUPPLIER_CONTACT_NAME)
-		headers.add(ImportExportConstant.SUPPLIER_DATE)//
+		headers.add(ImportExportConstant.SUPPLIER_DATE)
 		headers.add(ImportExportConstant.EQUIPMENT_PURCHASE_COST)
 		headers.add(ImportExportConstant.EQUIPMENT_PURCHASE_COST_CURRENCY)
-		headers.add(ImportExportConstant.EQUIPMENT_DONATION)
+		headers.add(ImportExportConstant.EQUIPMENT_DONOR)
 		headers.add(ImportExportConstant.EQUIPMENT_OBSOLETE)
 		headers.add(ImportExportConstant.EQUIPMENT_WARRANTY_START)
 		headers.add(ImportExportConstant.EQUIPMENT_WARRANTY_END)
@@ -133,21 +141,27 @@ class EquipmentExport implements Exporter{
 		
 		def criteria = Equipment.createCriteria();
 		return criteria.list(sort:"id",order:"desc"){
+			createAlias("dataLocation","l")
+			if(equipmentExportFilter.dataLocationTypes != null && equipmentExportFilter.dataLocationTypes.size() > 0)
+				inList('l.type',equipmentExportFilter.dataLocationTypes)
 			if(equipmentExportFilter.calculationLocations != null && equipmentExportFilter.calculationLocations.size() > 0)
-				inList('dataLocation',equipmentExportFilter.calculationLocations)
-			if(equipmentExportFilter.suppliers != null && equipmentExportFilter.suppliers.size() > 0)
-				inList("supplier",equipmentExportFilter.suppliers)
+				inList('dataLocation', equipmentExportFilter.calculationLocations)
 			if(equipmentExportFilter.manufacturers != null && equipmentExportFilter.manufacturers.size() > 0)
 				inList("manufacturer",equipmentExportFilter.manufacturers)
+			if(equipmentExportFilter.suppliers != null && equipmentExportFilter.suppliers.size() > 0)
+				inList("supplier",equipmentExportFilter.suppliers)
+			if(equipmentExportFilter.serviceProviders != null && equipmentExportFilter.serviceProviders.size() > 0)
+				inList("serviceProvider",equipmentExportFilter.serviceProviders)
+			if(!equipmentExportFilter.purchaser.equals(PurchasedBy.NONE))
+				eq ("purchaser", equipmentExportFilter.purchaser)
+			if(!equipmentExportFilter.donor.equals(Donor.NONE))
+				eq ("donor", equipmentExportFilter.donor)	
 			if(equipmentExportFilter.equipmentTypes != null && equipmentExportFilter.equipmentTypes.size() > 0)
 				inList("type",equipmentExportFilter.equipmentTypes)
-			if(equipmentExportFilter.donated)
-				eq ("donation", (equipmentExportFilter.donated.equals('true'))?true:false)
 			if(equipmentExportFilter.obsolete)
 				eq ("obsolete", (equipmentExportFilter.obsolete.equals('true'))?true:false)
 			if(!equipmentExportFilter.equipmentStatus.equals(Status.NONE))
-				eq ("currentStatus", equipmentExportFilter.equipmentStatus)
-						
+				eq ("currentStatus", equipmentExportFilter.equipmentStatus)						
 		}
 	}
 	

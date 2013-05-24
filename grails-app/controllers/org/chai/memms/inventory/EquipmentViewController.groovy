@@ -196,30 +196,32 @@ class EquipmentViewController extends AbstractController {
 
 	def generalExport = { ExportFilterCommand cmd ->
 
-		// we do this because automatic data binding does not work with polymorphic elements
+		Set<DataLocation> dataLocationTypes = new HashSet<DataLocationType>()
+		params.list('dataLocationTypeids').each { id ->
+			if (NumberUtils.isDigits(id)) {
+				def dataLocationType = DataLocationType.get(id)
+				if (dataLocationType != null && !dataLocationTypes.contains(dataLocationType)) 
+				dataLocationTypes.add(dataLocationType);
+			}
+		}
+		cmd.dataLocationTypes = dataLocationTypes
+		
 		Set<CalculationLocation> calculationLocations = new HashSet<CalculationLocation>()
 		params.list('calculationLocationids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def calculationLocation = CalculationLocation.get(id)
-				if (calculationLocation != null && !calculationLocations.contains(calculationLocation)) calculationLocations.add(calculationLocation);
+				if (CalculationLocation != null && !calculationLocations.contains(calculationLocation))
+				calculationLocations.add(calculationLocation);
 			}
 		}
 		cmd.calculationLocations = calculationLocations
-
-		Set<DataLocationType> dataLocationTypes = new HashSet<DataLocationType>()
-		params.list('dataLocationTypeids').each { id ->
-			if (NumberUtils.isDigits(id)) {
-				def dataLocationType = DataLocationType.get(id)
-				if (dataLocationType != null && !dataLocationTypes.contains(dataLocationType)) dataLocationTypes.add(dataLocationType);
-			}
-		}
-		cmd.dataLocationTypes = dataLocationTypes
 
 		Set<EquipmentType> equipmentTypes = new HashSet<EquipmentType>()
 		params.list('equipmentTypeids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def equipmentType = EquipmentType.get(id)
-				if (equipmentType != null && !equipmentTypes.contains(equipmentType)) equipmentTypes.add(equipmentType);
+				if (equipmentType != null && !equipmentTypes.contains(equipmentType)) 
+				equipmentTypes.add(equipmentType);
 			}
 		}
 		cmd.equipmentTypes = equipmentTypes
@@ -228,7 +230,8 @@ class EquipmentViewController extends AbstractController {
 		params.list('manufacturerids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def manufacturer = Provider.get(id)
-				if (manufacturer != null && !manufacturers.contains(manufacturer)) manufacturers.add(manufacturer);
+				if (manufacturer != null && !manufacturers.contains(manufacturer)) 
+				manufacturers.add(manufacturer);
 			}
 		}
 		cmd.manufacturers = manufacturers
@@ -237,13 +240,14 @@ class EquipmentViewController extends AbstractController {
 		params.list('supplierids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def supplier = Provider.get(id)
-				if (supplier != null && !suppliers.contains(supplier)) suppliers.add(supplier);
+				if (supplier != null && !suppliers.contains(supplier)) 
+				suppliers.add(supplier);
 			}
 		}
 		cmd.suppliers = suppliers
 		
 		Set<Provider> serviceProviders = new HashSet<Provider>()
-		params.list('serviceProvidersIds').each { id ->
+		params.list('serviceProviderids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def serviceProvider = Provider.get(id)
 				if (serviceProvider != null && !serviceProviders.contains(serviceProvider)) serviceProviders.add(serviceProvider);
@@ -253,10 +257,9 @@ class EquipmentViewController extends AbstractController {
 
 		if (log.isDebugEnabled()) log.debug("equipments.export, command="+cmd+", params"+params)
 
-
 		if(params.exported != null){
-			def equipmentExportTask = new EquipmentExportFilter(calculationLocations:cmd.calculationLocations,dataLocationTypes:cmd.dataLocationTypes,
-					equipmentTypes:cmd.equipmentTypes,serviceProviders:cmd.serviceProviders,manufacturers:cmd.manufacturers,suppliers:cmd.suppliers,equipmentStatus:cmd.equipmentStatus,
+			def equipmentExportTask = new EquipmentExportFilter(dataLocationTypes:cmd.dataLocationTypes,calculationLocations:cmd.calculationLocations,
+					equipmentTypes:cmd.equipmentTypes,serviceProviders:cmd.serviceProviders,manufacturers:cmd.manufacturers,suppliers:cmd.suppliers,equipmentStatus:cmd.equipmentStatus, donor:cmd.donor,
 					purchaser:cmd.purchaser,obsolete:cmd.obsolete).save(failOnError: true,flush: true)
 			params.exportFilterId = equipmentExportTask.id
 			params.class = "EquipmentExportTask"
@@ -276,8 +279,8 @@ class EquipmentViewController extends AbstractController {
 		if (log.isDebugEnabled()) log.debug("equipments.export, command "+cmd)
 		def dataLocation = DataLocation.get(params.int('dataLocation.id'))
 		adaptParamsForList()
-
-		def equipments = equipmentService.filterEquipment(user,dataLocation,cmd.supplier,cmd.manufacturer,cmd.serviceProvider,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,params)
+		def equipments = equipmentService.filterEquipment(user,dataLocation,cmd.supplier,cmd.manufacturer,cmd.serviceProvider,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,[:])
+		if (log.isDebugEnabled()) log.debug("EQUIPMENTS TO BE EXPORTED IN SIZE "+equipments.size())
 		File file = equipmentService.exporter(dataLocation?:user.location,equipments)
 
 		response.setHeader "Content-disposition", "attachment; filename=${file.name}.csv"
@@ -369,14 +372,14 @@ class FilterCommand {
 
 	String toString() {
 		return "FilterCommand[DataLocation="+dataLocation+", EquipmentType="+equipmentType+
-		", Manufacturer="+manufacturer+", Supplier="+supplier+", ServiceProvider="+serviceProvider+", Status="+status+", donated="+purchaser+", obsolete="+obsolete+
+		", Manufacturer="+manufacturer+", Supplier="+supplier+", ServiceProvider="+serviceProvider+", Status="+status+", purchaser="+purchaser+", obsolete="+obsolete+
 		", donor=" + donor + "]"
 	}
 }
 
 class ExportFilterCommand {
-	Set<CalculationLocation> calculationLocations
 	Set<DataLocationType> dataLocationTypes
+	Set<CalculationLocation> calculationLocations
 	Set<EquipmentType> equipmentTypes
 	Set<Provider> manufacturers
 	Set<Provider> suppliers
@@ -393,8 +396,6 @@ class ExportFilterCommand {
 	}
 
 	static constraints = {
-		calculationLocations nullable:true
-		dataLocationTypes nullable:true
 		equipmentTypes nullable:true
 		manufacturers nullable:true
 		suppliers nullable:true
@@ -403,11 +404,13 @@ class ExportFilterCommand {
 		purchaser nullable:true
 		obsolete nullable:true
 		donor nullable:true
+		dataLocationTypes nullable:true
+		calculationLocations nullable:true
 	}
 
 	String toString() {
-		return "ExportFilterCommand[ CalculationLocations="+calculationLocations+", DataLocationTypes="+dataLocationTypes+" , EquipmentTypes="+equipmentTypes+
-		", Manufacturers="+manufacturers+", Suppliers="+suppliers+", ServiceProviders="+serviceProviders+", Status="+equipmentStatus+", donated="+purchaser+", obsolete="+obsolete+
+		return "ExportFilterCommand[ DataLocationTypes="+dataLocationTypes+" ,CalculationLocations="+calculationLocations+" , EquipmentTypes="+equipmentTypes+
+		", Manufacturers="+manufacturers+", Suppliers="+suppliers+", ServiceProviders="+serviceProviders+", Status="+equipmentStatus+", purchaser="+purchaser+", obsolete="+obsolete+
 		", donor=" + donor + "]"
 	}
 }

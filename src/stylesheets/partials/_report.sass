@@ -144,6 +144,12 @@
       font-size: 14px
       font-weight: bold
 
+  &.slide
+    .move_left
+      background: url('../images/arrow-left.png') no-repeat
+      height: 16px
+      width: 8px
+    .move_right
 
 .v-tabs-content
   background: #fff
@@ -357,18 +363,20 @@
 div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment, div#spare_parts, div#monitoring
   display: none
 
-div#report-2, div#report-3, div#report-4, div#report-5, div#report-6
-  display: none
+//slister start
+// div#report-2, div#report-3, div#report-4, div#report-5, div#report-6
+//   display: none
 
-div#js-corrective, div#js-preventive, div#js-spare-parts
-  display: none
+// div#js-corrective, div#js-preventive, div#js-spare-parts
+//   display: none
+//slister end
 
 
 // Customize reports overlay
 
 #dialog-form
   display: none
-  top: 25%
+
 
 .dialog-form
   +pie-clearfix
@@ -378,66 +386,42 @@ div#js-corrective, div#js-preventive, div#js-spare-parts
     border: 1px solid #aaa
     font-size: 12px
     height: auto
-    width: auto
+    width: 100px
   .dash
     display: inline-block
     float: left
-    margin: 3px 10px
+    margin: 6px 10px
+    color: #666
+
+  &.step-4 input[type=text]
+    height: auto
 
 .ui-dialog
-  background: #fff
+  background: #fff !important
   border: 1px solid rgba(0, 0, 0, 0.2)
   outline: none
   padding: 0
   position: absolute
   top: 24% !important
-  width: 580px !important
+  width: 640px !important
   z-index: 51
   +border-radius(3px)
   +box-shadow(rgba(0, 0, 0, 0.1) 0 0 5px, rgba(0, 0, 0, 0.15) 0 0 200px)
-  .ui-dialog-titlebar
-    background: #fafafa
-    border: none
-    border-top: 1px solid #ddd
-    bottom: 0
-    padding: 0
-    position: absolute
-    text-align: center
-    width: 100%
-    z-index: 52
-    +border-radius(0)
-    +transition(background .4s)
-    &:hover, &:focus
-      background: #f5f5f5
-
-  .ui-dialog-titlebar-close
-    background: none
-    border: none
-    color: #aaa
-    display: inline-block
-    font-size: 11px
-    height: auto
-    position: static
-    text-transform: uppercase
-    width: auto
-    +text-shadow(#fff 0 1px 0)
-    +transition(background .4s)
-    &:hover, &:focus
-      color: #555
-
-  .ui-icon-closethick
-    display: none !important
 
   .ui-resizable-handle
     display: none
+
   .ui-button-icon-only .ui-button-text, .ui-button-icons-only .ui-button-text
     text-indent: 0
+
+  .row + .row
+    margin-top: 10px
 
   h2
     border-bottom: 1px solid #ddd
     color: $primary
     font-size: 22px
-    margin: 30px 0 0
+    margin: 10px 0 0
     padding-bottom: 10px
     span
       color: #aaa
@@ -454,7 +438,12 @@ div#js-corrective, div#js-preventive, div#js-spare-parts
     color: #888
     font-size: 11px
     padding: 8px
-  form
+    //slister start
+    b
+      color: #666
+      font-weight: bold
+    //slister end
+  form fieldset
     clear: both
     margin-top: 25px
     +pie-clearfix
@@ -463,8 +452,23 @@ div#js-corrective, div#js-preventive, div#js-spare-parts
       margin-bottom: 5px
       padding-bottom: 5px
       +pie-clearfix
-      &:last-child
-        border: none
+      &.modular
+        input[type=text]
+          border: 1px solid #aaa
+          font-size: 12px
+          height: auto
+          width: 100px
+        select
+          font-size: 12px
+          height: 27px
+          margin-left: 20px
+          margin-top: 2px
+          padding: 4px 7px
+          width: 100px
+
+  input, select, textarea
+    font-size: 12px !important
+
   label
     color: $primary
     display: inline-block
@@ -472,7 +476,7 @@ div#js-corrective, div#js-preventive, div#js-spare-parts
     font-size: 12px
     height: 12px
     padding: 7px
-    width: 115px
+    width: 145px
     +
       input[type=checkbox]
         margin-left: 0
@@ -484,7 +488,7 @@ div#js-corrective, div#js-preventive, div#js-spare-parts
     float: left
     padding: 5px 7px
   input, textarea
-    width: 350px
+    width: 380px
   input, select
     height: 28px
 
@@ -495,7 +499,7 @@ div#js-corrective, div#js-preventive, div#js-spare-parts
   select
     color: $primary
     font-size: 12px
-    width: 390px
+    width: 420px
     +border-radius(0)
     &:hover, &:focus, &:active
       outline: none
@@ -503,14 +507,16 @@ div#js-corrective, div#js-preventive, div#js-spare-parts
       margin-bottom: 5px
   input[type=checkbox]
     height: auto
-    margin-top: 5px
-    margin-left: 128px
+    margin-top: 6px
+    margin-left: 158px
     width: auto
     + span
       color: #666
+      margin-left: 3px
       display: inline-block
       font-size: 11px
-      margin-top: 5px
+      margin-left: 3px
+      margin-top: 7px
   .ui-widget-next
     color: #fff
     margin-top: 15px
@@ -518,15 +524,57 @@ div#js-corrective, div#js-preventive, div#js-spare-parts
     margin-top: 18px
   .ui-dialog-content
     background: none
-    padding: 10px 30px 45px
+    padding: 0 30px 30px
   .twocol-checkboxes
     +pie-clearfix
     li
       display: inline
       float: left
       width: 50%
+  .onecol-checkboxes, .twocol-checkboxes, .checkbox-list
     input[type=checkbox]
       margin-left: 0
+    input[type=checkbox] + label
+      color: #666
+      font-size: 11px
+  .onecol-checkboxes
+    width: 50%
+    +pie-clearfix
+  .checkbox-list
+    +pie-clearfix
+    li
+      border-bottom: none
+      display: inline
+      float: left
+      margin-bottom: 0
+      padding-bottom: 0
+      width: 50%
+      input[type=checkbox]
+        margin-left: 0
+  label + .checkbox-list
+    padding-left: 160px
+  .ui-dialog-titlebar
+    background: none !important
+    border: none !important
+    padding: 15px
+    position: relative
+  .ui-dialog-titlebar-close
+    background: url("../images/icon_close.png") no-repeat !important
+    height: 18px
+    position: absolute
+    right: -8px
+    text-indent: -9999em !important
+    top: -8px
+    width: 18px
+    span
+      display: none !important
 
 .ui-widget-overlay
+  background: rgba(0, 0, 0, 0.15)
+  position: absolute
+  top: 0
   z-index: 51 !important
+
+.search-choice-close /* Chosen.js override */
+  background: url('../js/jquery/chosen/chosen-sprite.png') -49px -8px no-repeat !important
+  top: 5px !important

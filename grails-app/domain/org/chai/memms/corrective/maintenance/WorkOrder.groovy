@@ -37,6 +37,7 @@ import org.chai.memms.inventory.Equipment;
 import org.chai.memms.maintenance.MaintenanceOrder;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.security.User;
+import org.chai.memms.spare.part.SparePart
 
 /**
  * @author Jean Kahigiso M.
@@ -85,6 +86,7 @@ public class WorkOrder extends MaintenanceOrder{
 	OrderStatus currentStatus
 	Criticality criticality
 	FailureReason failureReason
+	Map<SparePart,Integer> usedSpareParts =  [:]
 	
 	
 	static belongsTo = [equipment: Equipment]

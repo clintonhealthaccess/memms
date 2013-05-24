@@ -245,6 +245,44 @@ public class Equipment {
 		return currentState
 	}
 	
+	@Transient
+	def getTimeBasedPreviousStatus(){
+		// if(!status) return null
+		// if(status.size() == 0) return null
+		// else if(status.size() == 1) return null
+		// else{
+		// 	List<EquipmentStatus> sortedStatus = status.sort{it.dateOfEvent}
+		// 	EquipmentStatus previousState = sortedStatus[status.size()-2]
+		// 	return previousState
+		// }
+
+		if(!status) return null
+		EquipmentStatus previousState = status.asList()[0]
+		EquipmentStatus currentState = status.asList()[0]
+		for(EquipmentStatus state : status){
+			//To make sure we only compare date not time
+			currentState.dateOfEvent.clearTime()
+			state.dateOfEvent.clearTime()
+			if(state.dateOfEvent.after(currentState.dateOfEvent)){
+				previousState = currentState
+				currentState = state
+			}
+			if(state.dateOfEvent.compareTo(currentState.dateOfEvent)==0){
+				if(state.dateCreated.after(currentState.dateCreated)){
+					previousState = currentState
+					currentState = state
+				}
+				//This case happen in test data settings
+				if(state.dateCreated.compareTo(currentState.dateCreated)==0){
+					previousState = (previousState.id > currentState.id)?previousState:currentState
+					currentState = (currentState.id > state.id)?currentState:state
+				}
+			}
+			
+		}
+		return previousState
+	}
+
 	String toString() {
 		return "Equipment[id= " + id + " code= "+code+" serialNumber= "+serialNumber+" currentState= "+currentStatus+"]";
 

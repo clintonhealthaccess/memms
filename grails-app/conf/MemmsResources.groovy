@@ -48,10 +48,12 @@ modules = {
 	error {
 		resource url: '/css/errors.css'
 	}
+
 	chosen {
 		dependsOn 'jquery'
 
-		resource url: '/js/jquery/chosen/chosen.jquery.js', bundle: 'core'
+		resource url: '/js/jquery/chosen/chosen.js', bundle: 'core'
+		// resource url: '/js/jquery/chosen/chosen.jquery.js', bundle: 'core'
 		resource url: '/js/jquery/chosen/ajax-chosen.js', bundle: 'core'
 		resource url: '/js/jquery/chosen/chosen.css', bundle: 'core'
 	}
@@ -59,7 +61,7 @@ modules = {
 	jqueryui {
 		dependsOn 'jquery'
 
-		/* resource url: '/js/jquery/jquery-ui/css/cupertino/jquery-ui-1.9.2.custom.min.css', bundle: 'core' */
+		resource url: '/js/jquery/jquery-ui/css/cupertino/jquery-ui-1.9.2.custom.min.css', bundle: 'core'
 		resource url: '/js/jquery/jquery-ui/css/timepicker.css', bundle: 'core'
 		resource url: '/js/jquery/jquery-ui/js/jquery-ui-1.9.2.custom.min.js', bundle: 'core'
 		resource url: '/js/jquery/jquery-ui/js/jquery-ui-timepicker-addon.js', bundle: 'core'
@@ -91,6 +93,7 @@ modules = {
 		resource url: '/js/jquery/cluetip/jquery.cluetip.css', bundle: 'core'
 		resource url: '/js/cluetip_init.js', bundle: 'core'
 	}
+
 	tipsy {
 		dependsOn 'jquery'
 
@@ -118,10 +121,6 @@ modules = {
 		resource url: '/js/dropdown_init.js', bundle: 'core'
 	}
 
-	list {
-		dependsOn 'core,form,fieldselection,cluetip,dropdown,chosen'
-	}
-
 	progressbar {
 		dependsOn 'jquery'
 
@@ -129,4 +128,18 @@ modules = {
 		resource url: '/js/progressbar_init.js', bundle: 'core'
 	}
 
+	list {
+		dependsOn 'core,form,fieldselection,cluetip,dropdown,chosen'
+	}
+
+	reports {
+		dependsOn 'core,form,tipsy,jquery,jqueryui,chosen,fieldselection'
+
+		// TODO ?
+		// Load Droid Sans remotely from Google Webfonts
+		// resource url: 'http://fonts.googleapis.com/css?family=Droid+Sans:400,700&subset=latin'
+		resource url: '/js/reports/reports_init.js'
+		resource url: '/js/reports/listing_init.js'
+		resource url: '/js/reports/customizedlisting_init.js'
+	}
 }

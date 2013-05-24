@@ -65,6 +65,28 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 		PreventiveOrderStatus(String name){this.name=name}
 		String getKey(){ return name() }
 	}
+
+	enum PreventiveOrderStatusChange{
+		PREVENTIVEMAINTENANCEPERFORMED("preventiveMaintenancePerformed",
+			['previous':[PreventiveOrderStatus.OPEN], 'current':[PreventiveOrderStatus.OPEN]], true),
+		PREVENTIVEMAINTENANCENOTPERFORMED("preventiveMaintenanceNotPerformed",
+			['previous':[PreventiveOrderStatus.OPEN], 'current':[PreventiveOrderStatus.OPEN]], false),
+		CLOSEDSCHEDULEDPREVENTIVEMAINTENANCE("closedScheduledPreventiveMaintenance",
+			['previous':[PreventiveOrderStatus.OPEN], 'current':[PreventiveOrderStatus.CLOSED]], null)
+
+		String messageCode = "reports.preventive.statusChanges"
+		final String name
+		final Map<String,List<PreventiveOrderStatus>> statusChange
+		final Boolean performed
+		PreventiveOrderStatusChange(String name, Map<String,List<PreventiveOrderStatus>> statusChange, Boolean performed) {
+		   this.name=name
+		   this.statusChange=statusChange
+		   this.performed=performed
+		 }
+		 String getKey() { return name }
+		 Map<String,List<PreventiveOrderStatus>> getStatusChange() { return statusChange }
+		 Boolean getPerformed() { return performed }
+	}
 	
 	enum PreventionResponsible{
 		

@@ -26,8 +26,7 @@
             </span>
             <g:message code="spare.part.section.basic.information.label" default="Basic Information"/>
           </h4>	  			
-        	<g:selectFromList name="type.id" label="${message(code:'spare.part.type.label')}" bean="${sparePart}" field="type" optionKey="id" multiple="false"
-    			ajaxLink="${createLink(controller:'sparePartType', action:'getAjaxData', params: [type:'TYPE'])}" from="${types}" value="${sparePart?.type?.id}" values="${types.collect{it.names}}" />
+        	<g:selectFromList name="type.id" label="${message(code:'spare.part.type.label')}" bean="${sparePart}" field="type" optionKey="id" multiple="false" ajaxLink="${createLink(controller:'sparePartType', action:'getAjaxData', params: [type:'TYPE'])}" from="${types}" value="${sparePart?.type?.id}" values="${types.collect{it.names}}" />
       		<g:i18nTextarea name="descriptions" bean="${sparePart}" label="${message(code:'entity.comments.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
       	  <g:selectFromEnum name="status" bean="${sparePart}" values="${SparePartStatus.values()}" field="status" label="${message(code:'spare.part.status.label')}"/>
           <g:if test="${sparePart.id != null}">

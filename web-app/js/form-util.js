@@ -73,7 +73,7 @@ function filterFormAjax() {
 	    var grid = $(filterBox).nextAll("div.list-template");
 	    $(".spinner-container").show()
 	    var url = $(filterBox).find("form").attr("action");
-	    var data = $(filterBox).find("form").serialize(); 
+	    var data = $(filterBox).find("form").serialize();
 	    $.ajax({
 	        type: 'GET',
 	        url: url,
@@ -119,7 +119,7 @@ function addListAjaxResponse(data){
     });
 }
 /**
- * Handle ajax list loading error 
+ * Handle ajax list loading error
  */
 function listLoadingFailed(jqXHR, exception, errorThrown){
 	$("div.spinner-container").hide();
@@ -141,7 +141,7 @@ function listLoadingFailed(jqXHR, exception, errorThrown){
     	  error = 'Uncaught Error.\n' + errorThrown;
       }
     	$(this).html("<span class='ajax-error'> "+ error +"</span>").show();
-    });	
+    });
 }
 
 /**
@@ -155,7 +155,7 @@ function numberOnlyField(){
 	});
 }
 
-/** 
+/**
  * Date picker
  */
 function getDatePicker(iconPath){
@@ -186,7 +186,7 @@ function getDatePicker(iconPath){
 	});
 }
 
-/** 
+/**
  * Form-aside loader
  */
 function getHtml(htmls,field){
@@ -219,7 +219,7 @@ function escaletWorkOrder(baseUrl){
 		});
 		$(this).ajaxError(function(){
 			$(this).nextAll(".ajax-error").show();
-			$(this).nextAll(".ajax-spinner").hide();	
+			$(this).nextAll(".ajax-spinner").hide();
 			$(this).fadeIn("slow");
 		});
 	})
@@ -247,8 +247,8 @@ function updateEquipment(baseUrl){
 			else $(event.target).attr('checked',true);
 			$(event.target).prev().fadeOut("slow");
 			$(event.target).fadeIn("slow");
-			$(event.target).next().show("slow");	
-		
+			$(event.target).next().show("slow");
+
 		});
 	})
 }
@@ -277,7 +277,7 @@ function addWorkOrderProcess(baseUrl,order,errorMsg){
 			}
 		});
 		$(this).ajaxError(function(){
-			$(this).nextAll(".ajax-error").show();	
+			$(this).nextAll(".ajax-error").show();
 			$(this).nextAll(".ajax-spinner").hide();
 			$(this).fadeIn("slow");
 		});
@@ -311,13 +311,13 @@ function removeWorkOrderProcess(baseUrl){
 				refreshList(data.results[1],'.process-list-'+data.results[2])
 			}
 		});
-		
+
 		$(this).ajaxError(function(){
 			$(this).nextAll(".ajax-error").show();
-			$(this).nextAll(".ajax-spinner").hide();	
+			$(this).nextAll(".ajax-spinner").hide();
 			$(this).fadeIn("slow");
 		});
-		
+
 	});
 }
 
@@ -343,7 +343,7 @@ function addComment(baseUrl,order){
 		});
 		$(this).ajaxError(function(){
 			$(this).nextAll(".ajax-error").show();
-			$(this).nextAll(".ajax-spinner").hide();	
+			$(this).nextAll(".ajax-spinner").hide();
 			$(this).fadeIn("slow");
 		});
 	})
@@ -369,7 +369,7 @@ function removeComment(baseUrl){
 		});
 		$(this).ajaxError(function(){
 			$(this).prevAll(".ajax-error").show();
-			$(this).prevAll(".ajax-spinner").hide();	
+			$(this).prevAll(".ajax-spinner").hide();
 			$(this).fadeIn("slow");
 		});
 	})
@@ -380,7 +380,7 @@ function removeComment(baseUrl){
 function refreshList(html,cssClass){
 	$(cssClass).slideUp().replaceWith(html).slideDown();
 	$(".ajax-spinner").hide();
-	$(".ajax-error").hide();	
+	$(".ajax-error").hide();
 }
 
 /**
@@ -389,24 +389,24 @@ function refreshList(html,cssClass){
  */
 function getToHide(parchaseCost,estimatedCost){
 	//supplier==warranty provider
-	if($("input[name='warranty.sameAsSupplier']").is(":checked")) $("#address").hide()		
+	if($("input[name='warranty.sameAsSupplier']").is(":checked")) $("#address").hide()
 	$("input[name='warranty.sameAsSupplier']").change(function(e){
 		if($(this).is(":checked")) $("#address").slideUp()
 		else $("#address").slideDown()
 	})
-	if($("input[name='sameAsManufacturer']").is(":checked")) $("#address").hide()		
+	if($("input[name='sameAsManufacturer']").is(":checked")) $("#address").hide()
 	$("input[name='sameAsManufacturer']").change(function(e){
 		if($(this).is(":checked")) $("#address").slideUp()
 		else $("#address").slideDown()
 	})
-	
-	//purchaser==donor 
-	if($("select[name=purchaser]").val()!="BYDONOR") $(".donor-information").hide()	
+
+	//purchaser==donor
+	if($("select[name=purchaser]").val()!="BYDONOR") $(".donor-information").hide()
 	else{
 		$("label[for=purchaseCost]").html(estimatedCost)
 	}
 	$("select[name=purchaser]").change(function(e){
-		if($(this).val()=="BYDONOR"){ 
+		if($(this).val()=="BYDONOR"){
 			$("label[for=purchaseCost]").html(estimatedCost)
 			$(".donor-information").slideDown()
 		}else{
@@ -414,13 +414,13 @@ function getToHide(parchaseCost,estimatedCost){
 			$(".donor-information").slideUp()
 		}
 	})
-	//purchaser==partner 
-	if($("select[name=sparePartPurchasedBy]").val()!="BYPARTNER") $(".partner-information").hide()	
+	//purchaser==partner
+	if($("select[name=sparePartPurchasedBy]").val()!="BYPARTNER") $(".partner-information").hide()
 	else{
 		$("label[for=sparePartPurchasedBy]").html(estimatedCost)
 	}
 	$("select[name=sparePartPurchasedBy]").change(function(e){
-		if($(this).val()=="BYPARTNER"){ 
+		if($(this).val()=="BYPARTNER"){
 			$("label[for=purchaseCost]").html(estimatedCost)
 			$(".partner-information").slideDown()
 		}else{
@@ -457,9 +457,9 @@ function getToHide(parchaseCost,estimatedCost){
 			$(".prevention-responsible").slideUp()
 		}
 	})
-				
+
 	$("select[name=occurency]").change(function(e){
-		if($(this).val()=="DAYS_OF_WEEK"){ 
+		if($(this).val()=="DAYS_OF_WEEK"){
 			$(".week-days").slideDown()
 			$(".occur-interval").slideUp()
 		}else{
@@ -494,7 +494,7 @@ function addPreventionProcess(baseUrl,prevention,errorMsg){
 			}
 		});
 		$(this).ajaxError(function(){
-			$(this).nextAll(".ajax-error").show();	
+			$(this).nextAll(".ajax-error").show();
 			$(this).nextAll(".ajax-spinner").hide();
 			$(this).fadeIn("slow");
 		});
@@ -519,13 +519,13 @@ function removePreventionProcess(baseUrl){
 				refreshList(data.results[1],'.process-list-'+data.results[2])
 			}
 		});
-		
+
 		$(this).ajaxError(function(){
 			$(this).nextAll(".ajax-error").show();
-			$(this).nextAll(".ajax-spinner").hide();	
+			$(this).nextAll(".ajax-spinner").hide();
 			$(this).fadeIn("slow");
 		});
-		
+
 	});
 }
 

@@ -3,8 +3,8 @@
 
 <div class="row ${hasErrors(bean:bean, field:field, 'errors')}">
 	<g:if test="${multiple}"><input type="hidden" name="${name}" value=""/></g:if>
-	<label for="${name}">${label} :</label>
-	<select id="options-${random}" name="${name}" ${multiple?'multiple':''} ${readonly?'disabled="disabled"':''} style="min-width:300px" class="chzn-select">
+	<label for="${name}">${label}:</label>
+	<select id="options-${random}" name="${name}" ${multiple?'multiple':''} ${readonly?'disabled="disabled"':''} class="chzn-select">
 		<g:if test="${!multiple}"><option value="">-- Please select from the list --</option></g:if>
 		<g:each in="${from}" var="item" status="i">
 			<g:set value="${optionKey!=null?item[optionKey]:item}" var="option"/>

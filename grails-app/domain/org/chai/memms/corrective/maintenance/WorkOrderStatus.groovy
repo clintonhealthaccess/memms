@@ -48,6 +48,31 @@ public class WorkOrderStatus {
 		OrderStatus(String name){ this.name=name }
 		String getKey() { return name() }
 	}
+
+	enum WorkOrderStatusChange{
+		NEWORDER("newOrder",
+			['previous':[OrderStatus.NONE], 'current':[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC]]),
+		ORDERESCALATEDTOMMC("orderEscalatedToMmc",
+			['previous':[OrderStatus.OPENATFOSA], 'current':[OrderStatus.OPENATMMC]]),
+		EQUIPMENTRECEIVEDFROMMMCFIXED("equipmentReceivedFromMmcFixed", 
+			['previous':[OrderStatus.OPENATMMC], 'current':[OrderStatus.CLOSEDFIXED]]),
+		EQUIPMENTRECEIVEDFROMMMCNOTFIXED("equipmentReceivedFromMmcNotFixed",
+			['previous':[OrderStatus.OPENATMMC], 'current':[OrderStatus.OPENATFOSA]]),
+		CLOSEDORDERFIXED("closedOrderFixed",
+			['previous':[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC], 'current':[OrderStatus.CLOSEDFIXED]]),
+		CLOSEDORDERNOTFIXED("closedOrderNotFixed",
+			['previous':[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC], 'current':[OrderStatus.CLOSEDFORDISPOSAL]])
+
+		String messageCode = "reports.corrective.statusChanges"
+		final String name
+		final Map<String,List<OrderStatus>> statusChange
+		WorkOrderStatusChange(String name, Map<String,List<OrderStatus>> statusChange) {
+		   this.name=name
+		   this.statusChange=statusChange
+		 }
+		 String getKey() { return name }
+		 Map<String,List<OrderStatus>> getStatusChange() { return statusChange }
+	}
 	
 	Date dateCreated
 	User changedBy
