@@ -27,7 +27,7 @@
         </h4> 
       	<g:selectFromList name="equipment.id" readonly="${(closed)? true:false}" label="${message(code:'equipment.label')}" bean="${order}" field="equipment" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'equipmentView', action:'getAjaxData',params: [dataLocation:(dataLocation)?dataLocation.id:order.equipment?.dataLocation?.id])}"
-  			from="${equipments}" value="${order?.equipment?.id}" values="${equipments.collect{it.code}}" />	
+  			from="${equipments}" value="${order?.equipment?.id}" values="${equipments.collect{it.code}}" />
   		<g:if test="${order.id != null}">
 	  		<div class="row">
 		  		 <label class="top"><g:message code="work.order.reported.by.label"/> :</label>
@@ -45,6 +45,7 @@
    			<table class="items">
 	    		<tr>
 	    			<th>${message(code:'entity.status.label')}</th>
+	    			<th>${message(code:'entity.previous.status.label')}</th>
 	    			<th>${message(code:'work.order.status.changed.on.label')}</th>
 	    			<th>${message(code:'work.order.status.changed.by.label')}</th>
 	    			<th>${message(code:'work.order.status.escalation.label')}</th>
@@ -52,6 +53,7 @@
 	    		<g:each in="${order.status.sort{a,b -> (a.dateCreated > b.dateCreated) ? -1 : 1}}" status="i" var="status">
 			    		<tr>
 			    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
+			    			<td>${status?.previousStatus != null && status?.previousStatus != status?.status? message(code: status?.previousStatus?.messageCode+'.'+status?.previousStatus?.name):''}</td>
 			    			<td>${Utils.formatDate(status?.dateCreated)}</td>
 			    			<td>${status.changedBy.names}</td>
 			    			<td>${(status.escalation)? '\u2713':''}</td>

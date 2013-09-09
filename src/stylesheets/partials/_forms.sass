@@ -88,7 +88,8 @@
   #facility-type-filter
     color: $primary
     font-size: 11px
-
+.dragging
+  border: 1px solid #333
 .buttons
   border-top: 1px solid #eee
   padding: 15px 7px
@@ -98,7 +99,7 @@ button, input[type=submit], .next, .btn
   background: $yes
   border: 1px solid $yes - #222
   color: $filler
-  cursor: pointer
+  cursor: pointer !important
   display: inline-block
   font: bold 14px/1 Arial, sans-serif
   padding: 6px 40px
@@ -112,9 +113,8 @@ button, input[type=submit], .next, .btn
     color: #fff
     +background(linear-gradient($yes, $yes - #111))
   &:active
-    position: relative
-    top: 2px
-    +box-shadow(#ddd 0px 1px 1px)
+    background: $yes - #111
+    +box-shadow(rgba(0, 0, 0, 0.3) 0px 1px 3px inset)
   &#cancel-button
     background: none
     border: none
@@ -146,10 +146,15 @@ button, input[type=submit], .next, .btn
       color: #fff
       +background(linear-gradient($yes, $yes - #111))
       +text-shadow($yes - #333 0 1px 0)
+    &:active
+      background: $yes - #111
+      +box-shadow(rgba(0, 0, 0, 0.3) 0px 1px 3px inset)
   &.import
     margin-right: 5px
   &.push-r
     margin-right: 5px
+  &.push-r-15
+    margin-right: 15px
 
 .edit-button, .delete-button
   display: inline-block
@@ -585,7 +590,6 @@ form.search-form
     background-image: url('../images/icons/toggle_plus.png')
     &.toggled
       background-image: url('../images/icons/toggle_minus.png')
-
 .filter-bar
   color: #888888
   font-size: 11px
@@ -707,6 +711,8 @@ form.search-form
   border: 1px solid $primary + #222
   max-height: 188px
   overflow-y: scroll
+.draggable, .droppable 
+  min-height: 50px !important
 
 .hide-list
   display: none
@@ -765,7 +771,6 @@ a.delete-row
     opacity: 1
 
 // ui-datepicker overrides
-
 .filters .ui-datepicker-trigger
   position: absolute
   right: 13px
@@ -776,7 +781,6 @@ a.delete-row
   top: 4px
 .ui-datepicker-title, .ui-datepicker-calendar
   font-size: 12px !important
-
 //expected life time aligned in one row
 
 .period-month-year

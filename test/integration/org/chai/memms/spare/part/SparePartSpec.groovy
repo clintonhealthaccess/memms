@@ -36,6 +36,7 @@ import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
 import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.spare.part.SparePart.SparePartStatus;
+import org.chai.memms.spare.part.SparePart.SparePartStatusChange;
 import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.security.User;
@@ -219,6 +220,53 @@ class SparePartSpec extends IntegrationTests {
 		then:
 		SparePart.count() == 1
 		sparePart.errors.hasFieldErrors('supplier') == false
+	}
+
+	def "can get spare part status change"() {
+
+		setup:
+		setupLocationTree()
+		setupSystemUser()
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def manufacturer = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
+
+		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+
+		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
+
+		
+		when:
+		def sparePart = new SparePart(
+			descriptions:['en':'Spare Part Descriptions'],
+			sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,
+			purchaseDate:Initializer.getDate(22,07,2010),
+			purchaseCost:2344,
+			currency:"RWF",	
+			type:sparePartType,
+			supplier:supplier,
+			addedBy: User.findByUsername("systemUser"),
+			stockLocation:StockLocation.MMC,
+			status:SparePartStatus.INSTOCK,
+			initialQuantity:20,
+			inStockQuantity:10
+			)
+		sparePart.save(failOnError: true)
+		
+		then:
+		SparePart.count() == 1
+		sparePart.getSparePartStatusChange().equals(SparePartStatusChange.NEWPENDINGORDER)
+		sparePart.getSparePartStatusChange([SparePartStatusChange.NEWPENDINGORDER]).equals(SparePartStatusChange.NEWPENDINGORDER)
+		sparePart.getSparePartStatusChange([SparePartStatusChange.PENDINGORDERARRIVED]).equals(null)
+
+		when:
+		sparePart.deliveryDate = Initializer.getDate(22,07,2011)
+		sparePart.save()
+
+		then:
+		sparePart.getSparePartStatusChange().equals(SparePartStatusChange.PENDINGORDERARRIVED)
+		sparePart.getSparePartStatusChange([SparePartStatusChange.NEWPENDINGORDER]).equals(null)
+		sparePart.getSparePartStatusChange([SparePartStatusChange.PENDINGORDERARRIVED]).equals(SparePartStatusChange.PENDINGORDERARRIVED)
 	}
 
 }

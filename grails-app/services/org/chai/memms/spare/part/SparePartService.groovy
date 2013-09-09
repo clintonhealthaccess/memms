@@ -113,7 +113,7 @@ class SparePartService {
 		}
 		else{
 			if(user.location instanceof Location)
-				dataLocations.addAll(user.location.getDataLocations([:], [:]))
+				dataLocations.addAll(user.location.collectDataLocations(null))
 			else{
 				def location = (DataLocation)user.location
 				dataLocations.add(location)
@@ -121,60 +121,49 @@ class SparePartService {
 					(location.manages==null)?:dataLocations.addAll(location.manages?.asList())
 			}
 
-			if(log.isDebugEnabled()) log.debug("Current user: " + user + " Current user's managed dataLocations: " + dataLocations)
+			if(log.isDebugEnabled()) log.debug("user: " + user + " user's managed dataLocations: " + dataLocations)
 
-			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){  inList('dataLocation',dataLocations)  }
+			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){  
+				inList('dataLocation',dataLocations)  
+			}
 
 		}
 	}
 
-	/*public def getSparePartTimeBasedStatusChange(SparePart sparePart, List<StatusOfSparePartChange> sparePartStatusChange){
-		StatusOfSparePartChange sparePartStatusChange = null
+	public def filterSparePart(User user, def supplier, def type,def stockLocation,def sparePartPurchasedBy,def status,Map<String, String> params){
 
-		def previousStatus = sparePart.getTimeBasedPreviousStatus()?.status
-		def currentStatus = sparePart.getTimeBasedStatus().status
+		def dataLocations = null
+		
+		if(!user.userType.equals(UserType.ADMIN) && !user.userType.equals(UserType.TECHNICIANMMC) && !user.userType.equals(UserType.SYSTEM) && !user.userType.equals(UserType.TECHNICIANDH)){
+			dataLocations = []
+			if(user.location instanceof Location)
+				dataLocations.addAll(user.location.collectDataLocations(null))
+			else{
+				def location = (DataLocation)user.location
+				dataLocations.add(location)
+				if(userService.canViewManagedSpareParts(user)) 
+					(location.manages==null)?:dataLocations.addAll(location.manages?.asList())
+			}
 
-		if(sparePartStatusChange == null) sparePartStatusChange = StatusOfSparePartChange.values()
-	 	sparePartStatusChange.each{ statusChange ->
- 			
- 			def previousStatusMap = statusChange.getStatusChange()['previous']
-			def currentStatusMap = statusChange.getStatusChange()['current']
-
-			def previousStatusChange = previousStatusMap.contains(previousStatus) || (previousStatusMap.contains(Status.NONE) && previousStatus == null)
-			def currentStatusChange = currentStatusMap.contains(currentStatus)
-
-			if(previousStatusChange && currentStatusChange) sparePartStatusChange = statusChange
-	 	}
-	 	return sparePartStatusChange
-	}*/
-
-	public def filterSparePart(def location, def supplier, def type,def stockLocation,def sparePartPurchasedBy,def status,Map<String, String> params){
-
-		def dataLocations = []		
-			
-		if(location instanceof Location) 
-			//dataLocations.addAll(location.getDataLocations([:], [:]))
-			//TODO Jean you may check if this is the right way Fortunately it is working
-			dataLocations.addAll(location.collectDataLocations(null))
-		else{
-			location = (DataLocation)location
-			dataLocations.add(location)
-			(location.manages==null)?:dataLocations.addAll(location.manages.asList())
+			if(log.isDebugEnabled()) log.debug(" user: " + user + " user's managed dataLocations: " + dataLocations)
 		}
+
 		def criteria = SparePart.createCriteria();
+		if (log.isDebugEnabled()) 
+			log.debug("spare.parts.filter dataLocations="+dataLocations+" type="+type+" supplier="+supplier+" stockLocation="+stockLocation+" sparePartPurchasedBy="+sparePartPurchasedBy+" status="+status+" params="+params)
 		
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(!dataLocations.isEmpty())
+			if(dataLocations != null && !dataLocations.empty)
 				inList('dataLocation',dataLocations)
 			if(supplier != null)
 				eq ("supplier", supplier)
 			if(type != null)
 				eq ("type", type)
-			if(sparePartPurchasedBy && !sparePartPurchasedBy.equals(SparePartPurchasedBy.NONE))
+			if(sparePartPurchasedBy != null && !sparePartPurchasedBy.equals(SparePartPurchasedBy.NONE))
 				eq ("sparePartPurchasedBy",sparePartPurchasedBy)
-			if(status && !status.equals(SparePartStatus.NONE))
+			if(status != null && !status.equals(SparePartStatus.NONE))
 				eq ("status",status)
-			if(stockLocation && !stockLocation.equals(StockLocation.NONE))
+			if(stockLocation != null && !stockLocation.equals(StockLocation.NONE))
 				eq ("stockLocation",stockLocation)
 		}
 	}

@@ -50,7 +50,7 @@ class EquipmentStatusService {
 	}
 	
 	Equipment createEquipmentStatus(User changedBy,Status value, Equipment equipment,Date dateOfEvent, Map<String,String> reasons){
-		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value)
+		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,previousStatus:equipment?.getTimeBasedStatus()?.status,status:value)
 		Utils.setLocaleValueInMap(status,reasons,"Reasons")
 		equipment.currentStatus = value
 		if(equipment.id){

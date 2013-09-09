@@ -70,12 +70,19 @@ class PreventionController extends AbstractEntityController {
 
 	def getModel(def entity) {
 		def scheduledOn = null
-		if(entity.id==null && entity.order.type.equals(PreventiveOrderType.DURATIONBASED))
+		def actions = entity.order.equipment.type.preventiveActions
+		if(entity.id==null && entity.order.type.equals(PreventiveOrderType.DURATIONBASED)){
 			scheduledOn = new TimeDate(entity.order.nextOccurence,new DateTime(entity.order.nextOccurence).toLocalTime().toString("HH:mm:ss"))
+			if(entity.actions && !entity.actions.isEmpty()){
+				actions = actions - entity.actions
+			}
+
+		}
 		
 		[
 			prevention:entity,
-			scheduledOn:scheduledOn
+			scheduledOn:scheduledOn,
+			actions: actions
 		]
 	}
 
@@ -130,38 +137,4 @@ class PreventionController extends AbstractEntityController {
 		def listHtml = g.render(template:"/entity/prevention/preventionList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}
-
-	def addProcess = {
-		Prevention prevention = Prevention.get(params.int("prevention.id"))
-		def value = params["value"]
-		def result = false
-		def html =""
-		if (prevention == null || value.equals("") || prevention.order.status.equals(PreventiveOrderStatus.CLOSED))
-			response.sendError(404)
-		else {
-				if (log.isDebugEnabled()) log.debug("addPreventionProcess params: "+params)
-				maintenanceProcessService.addPreventionProcess(prevention,value,user)	
-				if(prevention!=null){
-					result=true
-					html = g.render(template:"/templates/processList",model:[processes:prevention.processes,type:'prevention'])
-				}
-				render(contentType:"text/json") { results = [result,html,'prevention'] }
-		}
-	}
-
-	def removeProcess = {
-		PreventiveProcess  process = PreventiveProcess.get(params.int("process.id"))
-		def result = false
-		def html =""
-		if(!process || process.prevention.order.status.equals(PreventiveOrderStatus.CLOSED)) 
-			response.sendError(404)
-		else{
-			Prevention prevention = maintenanceProcessService.deletePreventionProcess(process,user)
-			result = true
-			html = g.render(template:"/templates/processList",model:[processes:prevention.processes,type:'prevention'])
-		}
-		render(contentType:"text/json") { results = [result,html,'prevention']}
-	}
-	
-	
 }

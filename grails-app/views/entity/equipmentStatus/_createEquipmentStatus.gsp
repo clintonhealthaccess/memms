@@ -35,11 +35,12 @@
     		<tr>
     			<th></th>
     			<th><g:message code="equipment.status.label"/></th>
+    			<th><g:message code="equipment.previous.status.label"/></th>
     			<th><g:message code="equipment.status.date.of.event.label"/></th>
     			<th><g:message code="equipment.status.recordedon.label"/></th>
     			<th><g:message code="equipment.status.current.label"/></th>
     		</tr>
-    		<g:each in="${equipment.status.sort{a,b -> (a.dateOfEvent > b.dateOfEvent) ? -1 : 1}}" status="i" var="status">
+    		<g:each in="${equipment.status.sort{a,b -> (a.dateCreated > b.dateCreated) ? -1 : 1}}" status="i" var="status">
 	    		<g:if test="${i+1<numberOfStatusToDisplay}">
 		    		<tr>
 		    			<td>
@@ -50,6 +51,7 @@
 						</ul>
 		    			</td>
 		    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
+		    			 <td>${status?.previousStatus != null && status?.previousStatus != status?.status? message(code: status?.previousStatus?.messageCode+'.'+status?.previousStatus?.name):''}</td>
 		    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
 		    			<td>${Utils.formatDateWithTime(status?.dateCreated)}</td>
 		    			<td>${(status==equipment.timeBasedStatus)? '\u2713':''}</td>

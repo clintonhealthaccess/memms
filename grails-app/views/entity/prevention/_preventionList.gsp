@@ -1,4 +1,3 @@
-
 <%@ page import="org.chai.memms.util.Utils" %>
 <table class="items">
 	<thead>
@@ -45,19 +44,11 @@
 				<td>
 					<g:stripHtml field="${prevention.descriptions}" chars="40"/>
 				</td>
-				<td>
-					<g:if test="${!prevention.processes || prevention.processes.size()==0}">
-						<a href="${createLinkWithTargetURI(controller:'prevention', action:'edit', params:[id: prevention.id])}" class="next gray medium"> 
-								<g:message code="prevention.add.process.label" />
-						</a>
-						
-					</g:if>
-				</td>
 			</tr>
 		</g:each>
 	</tbody>
 </table>
-<g:render template="/templates/pagination" />
+<g:render template="/templates/pagination" model="[entities:entities, entityCount:entities.totalCount]" />
 <script type="text/javascript">
 	$(document).ready(function() {
 		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}")

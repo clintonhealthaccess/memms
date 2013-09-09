@@ -14,7 +14,7 @@
 			<th><g:message code="preventive.occurance.label"/></th>
 			<th><g:message code="preventive.occurance.interval.label"/></th>
 			<g:sortableColumn property="status"  title="${message(code: 'entity.status.label')}" params="[q:q]" />
-			<g:sortableColumn property="openOn"  title="${message(code: 'preventive.order.open.on.label')}" params="[q:q]" />
+			<g:sortableColumn property="firstOccurenceOn"  title="${message(code: 'preventive.order.open.on.label')}" params="[q:q]" />
 			<th><g:message code="preventive.next.occurence.label"/></th>
 			<th><g:message code="entity.descriptions.label"/></th>
 			<th><g:message code="prevention.label"/></th>
@@ -33,11 +33,11 @@
 				<td>${message(code: order.status?.messageCode+'.'+order.status?.name)}</td>
 				<td>${Utils.formatDateWithTime(order.firstOccurenceOn?.timeDate)}</td>
 				<td>${(order.type.equals(PreventiveOrderType.DURATIONBASED))?Utils.formatDateWithTime(order.nextOccurence):''}</td>
-				
+		
 				<td><g:stripHtml field="${order.description}" chars="30"/></td>
 				<td>${order.preventions?.size()}</td>
 			</tr>
 		</g:each>
 	</tbody>
 </table>
-<g:render template="/templates/pagination" />
+<g:render template="/templates/pagination" model="[entities:entities, entityCount:entities.totalCount]" />

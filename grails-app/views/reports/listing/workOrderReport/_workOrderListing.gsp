@@ -19,7 +19,7 @@
 	</thead>
 	<tbody>
 		<g:each in="${entities}" status="i" var="order">
-			<tr>
+			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<td>${order.equipment.code}</td>
 				<td>${order.equipment.serialNumber}</td>
 				<td>${order.equipment.type.names}</td>
@@ -34,4 +34,4 @@
 		</g:each>
 	</tbody>
 </table>
-<g:render template="/templates/pagination" />
+<g:render template="/templates/pagination" model="[entities:entities, entityCount:entities.totalCount]" />

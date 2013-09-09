@@ -63,6 +63,14 @@ class EquipmentTypeService {
 		}
 	}
 
+	public def getEquipmentTypeUsedInMemms() {
+		def observation = Observation.USEDINMEMMS
+		def criteria = EquipmentType.createCriteria()
+		return criteria.list(){
+			if(observation!=null)
+				eq("observation",observation)
+		}
+	}
 	
 	public static List<Observation> getEnumeMatcher(String text){
 		List<Observation> observations=[]

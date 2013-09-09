@@ -55,6 +55,12 @@ import org.chai.memms.security.Role
 import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType
 
+import org.chai.memms.reports.dashboard.Indicator
+import org.chai.memms.reports.dashboard.IndicatorCategory
+import org.chai.memms.reports.dashboard.UserDefinedVariable
+import org.chai.memms.reports.dashboard.DashboardInitializer
+import org.chai.memms.reports.dashboard.IndicatorComputationService
+import org.chai.memms.Initializer
 
 abstract class IntegrationTests extends IntegrationSpec {
 
@@ -62,6 +68,7 @@ abstract class IntegrationTests extends IntegrationSpec {
 	def springcacheService
 	def sessionFactory
 	def grailsApplication
+      
 
 	static final String CODE (def number) { return "CODE"+number }
 	static final String HEALTH_CENTER_GROUP = "Health Center"
@@ -248,4 +255,16 @@ abstract class IntegrationTests extends IntegrationSpec {
 		def params = [max:5,offset:0]
 		return params
 	}
+        
+    
+    
+    // dashboard testing data
+    
+      static def createDashboardTestData(){
+     
+          def category=new IndicatorCategory(code:DashboardInitializer.MANAGEMENT_EQUIPMENT+"TESTSTRUCTURE",name_en:"MANAGEMENT EQUIPMENT",redToYellowThreshold:60,yellowToGreenThreshold:80).save()
+          def validIndicator=new Indicator(category:category, code:"DEGREE_STD_EQUIPMENTESTSTRUCTURE", name_en:"Degree of equipment standardization",name_fr:"Degree of equipment standardization",description_en:"Degree of equipment standardization",description_fr:"Degree of equipment standardization", formula_en:"(max (no. of equipments of type 1 from one manufacturer)+max(no. of equipments of type 2 from one manufacturer)+....) / (Total no. of equipments at the facility except equipments with status = For disposal or Disposed))", formula_fr:"(max (no. of equipments of type 1 from one manufacturer)+max(no. of equipments of type 2 from one manufacturer)+....) / (Total no. of equipments at the facility except equipments with status = For disposal or Disposed))",unit:"%",redToYellowThreshold:0.6,yellowToGreenThreshold:0.8, historicalPeriod:Indicator.HistoricalPeriod.YEARLY, historyItems:5, queryScript:DashboardInitializer.DEGREE_STANDARDIZATION_SIMPLE_SLD10, groupName_en:"Type of Equipment", groupName_fr:"Type of Equipment", groupQueryScript:DashboardInitializer.DEGREE_STANDARDIZATION_GROUP_SLD10,sqlQuery:true, active:true).save(failOnError: true, flush:true)
+          def userDefVal=new UserDefinedVariable(code:"WO_REINCIDENCE_DAYSteststr",name_en:"Work order re-incidence period(days)",name_fr:"Work order re-incidence period(days)",currentValue:365.0).save(failOnError: true, flush:true)
+          
+    }
 }

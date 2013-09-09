@@ -181,9 +181,14 @@ class EquipmentViewController extends AbstractController {
 
 		def locationSkipLevels = inventoryService.getSkipLocationLevels()
 
-		if (location != null) 
+		if(params['q'] != null && !params['q'].empty){
+			List<DataLocation> dataLocations = locationService.searchLocation(DataLocation.class, params['q'], params)
+			inventories = inventoryService.getInventoryByDataLocations(location,dataLocations,dataLocationTypesFilter,params)
+		}
+		else if (location != null) {
 			inventories = inventoryService.getInventoryByLocation(location,dataLocationTypesFilter,params)
-	
+		}
+
 		render (view: '/inventorySummaryPage/summaryPage', model: [
 					inventories:inventories?.inventoryList,
 					currentLocation: location,

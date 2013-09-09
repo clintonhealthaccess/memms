@@ -8,8 +8,8 @@
 			<g:sortableColumn property="stockLocation"  title="${message(code: 'location.label')}" params="[q:q,'type.id':type?.id,status:status]"/>
 			<g:sortableColumn property="type"  title="${message(code: 'spare.part.type.label')}" params="[q:q,'type.id':type?.id,status:status]" />
 			<g:sortableColumn property="stockLocation"  title="${message(code: 'spare.part.stockLocation.label')}" params="[q:q,'type.id':type?.id,status:status]" />
-			<g:sortableColumn property="status"  title="${message(code: 'spare.part.status.label')}" params="[q:q,'type.id':type?.id,status:status]" />
 			<g:sortableColumn property="purchaseDate"  title="${message(code: 'spare.part.purchase.date.label')}" params="[q:q,'type.id':type?.id,status:status]" />
+			<g:sortableColumn property="status"  title="${message(code: 'spare.part.status.label')}" params="[q:q,'type.id':type?.id,status:status]" />
 			<g:sortableColumn property="sparePartPurchasedBy"  title="${message(code: 'spare.part.purchaser.label')}" params="[q:q,'type.id':type?.id,status:status]" />	
 			<g:sortableColumn property="purchaseCost"  title="${message(code: 'spare.part.purchase.cost.label')}" params="[q:q,'type.id':type?.id,status:status]" />
 			<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q,'type.id':type?.id,status:status]" />
@@ -20,7 +20,7 @@
 	</thead>
 	<tbody>
 		<g:each in="${entities}" status="i" var="sparePart">
-			<tr >
+			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<td>
 					<g:if test="${sparePart.dataLocation != null}">
 					<g:message code="datalocation.label"/>: ${sparePart.dataLocation?.names}<br/>
@@ -42,10 +42,10 @@
 					${message(code: sparePart.stockLocation?.messageCode+'.'+sparePart.stockLocation?.name)}
 				</td>
 				<td>
-					${message(code: sparePart.status?.messageCode+'.'+sparePart.status?.name)}
+					${Utils.formatDate(sparePart.purchaseDate)}
 				</td>
 				<td>
-					${Utils.formatDate(sparePart.purchaseDate)}
+					${message(code: sparePart.status?.messageCode+'.'+sparePart.status?.name)}
 				</td>
 				<td>
 					${message(code: sparePart.sparePartPurchasedBy?.messageCode+'.'+sparePart.sparePartPurchasedBy?.name)}
@@ -63,10 +63,10 @@
 					${sparePart.inStockQuantity}
 				</td>		
 				<td>
-					${sparePart.usedQuantity}
+					${sparePart.usedQuantity?:0}
 				</td>								
 			</tr>
 		</g:each>
 	</tbody>
 </table>
-<g:render template="/templates/pagination" />
+<g:render template="/templates/pagination" model="[entities:entities, entityCount:entities.totalCount]" />

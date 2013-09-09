@@ -196,11 +196,11 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		def sparePartOne = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions one search term'],Initializer.getDate(22,07,2010),"2900.23","USD",
 			DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,45,0)
 		def sparePartTwo = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","EUR",
-			DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,,33,3)
+			DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,33,3)
 		
-		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
+		def sparePartThree = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
 			DataLocation.findByCode(MUSANZE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,2233,0)
-		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
+		def sparePartFour = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
 			DataLocation.findByCode(GITWE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,29432,0)
 	
 		sparePartViewController = new SparePartViewController()
@@ -214,10 +214,10 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		
 		then:
 		SparePart.list().size()==4
-		sparePartViewController.response.json.results[0].contains("45")
-		!sparePartViewController.response.json.results[0].contains("33")
-		!sparePartViewController.response.json.results[0].contains("2233")
-		!sparePartViewController.response.json.results[0].contains("29432")
+		sparePartViewController.response.json.results[0].contains(sparePartOne.id+"")
+		!sparePartViewController.response.json.results[0].contains(sparePartTwo.id+"")
+		!sparePartViewController.response.json.results[0].contains(sparePartThree.id+"")
+		!sparePartViewController.response.json.results[0].contains(sparePartFour.id+"")
 
 	}
 }

@@ -39,22 +39,28 @@ import org.apache.commons.lang.time.DateUtils;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 
 import org.chai.memms.Initializer;
+import org.chai.memms.reports.dashboard.DashboardInitializer;
 import org.omg.CORBA.INITIALIZE;
 
 class BootStrap {
-
+    def indicatorComputationService
     def init = { servletContext ->
 		
 		switch (GrailsUtil.environment) {
 			case "development":
-			Initializer.createDummyStructure();
-			Initializer.createUsers();
-			Initializer.createInventoryStructure()
-			Initializer.createCorrectiveMaintenanceStructure()
-			Initializer.createPreventiveMaintenanceStructure()
-			Initializer.createSparePartStructure()
+			    Initializer.createDummyStructure();
+			    Initializer.createUsers();
+			    Initializer.createInventoryStructure()
+			    Initializer.createCorrectiveMaintenanceStructure()
+			    Initializer.createPreventiveMaintenanceStructure()
+			    Initializer.createSparePartStructure()
+                DashboardInitializer.createDashboardStructure()
+                indicatorComputationService.computeCurrentReport()
 			break;
-			case "production":					
+			case "production":
+               	// This is needed for the first time use only.
+               	DashboardInitializer.createDashboardStructure()
+                indicatorComputationService.computeCurrentReport()
 			break;
 		}
     }

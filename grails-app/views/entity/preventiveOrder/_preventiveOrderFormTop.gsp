@@ -30,7 +30,7 @@
 
    		<g:textarea name="description" rows="12" width="380" label="${message(code:'entity.action.details.label')}"  bean="${order}" field="description" value="${order.description}"/>
       <g:if test="${order.id != null}">
-   		   <g:selectFromEnum name="status" bean="${order}" values="${PreventiveOrderStatus.values()}" field="status"  label="${message(code:'entity.status.label')}"/>
+   		   <g:selectFromEnum name="status" bean="${order}" values="${(PreventiveOrderStatus.values()-PreventiveOrderStatus.OPENLATE)}" field="status"  label="${message(code:'entity.status.label')}"/>
       </g:if>
    		<g:selectFromEnum name="preventionResponsible" bean="${order}" values="${PreventionResponsible.values()}" field="preventionResponsible"  label="${message(code:'preventive.order.prevention.responsible.label')}"/>
       <div class="prevention-responsible">

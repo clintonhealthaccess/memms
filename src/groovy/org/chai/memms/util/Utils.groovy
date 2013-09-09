@@ -242,6 +242,15 @@ public class Utils {
 				object."$methodName"("",new Locale(loc))
 		}
 	}
+
+    public static buildSubQueryLanguages(def queryPortion){
+        def queryPortions = [] 
+        def grailsApplication = new User().domainClass.grailsApplication
+        grailsApplication.config.i18nFields.locales.each{ loc ->
+            queryPortions.add(queryPortion+'_'+loc)
+        }
+        return queryPortions.join(",")
+    }
 	
 	public static Date getDate( int day, int month, int year) {
 		final Calendar calendar = Calendar.getInstance();
@@ -254,11 +263,14 @@ public class Utils {
 		return calendar.getTime();
 	}
 
+	// report types
 	public enum ReportType{
 		INVENTORY("inventory"),
 		CORRECTIVE("corrective"),
 		PREVENTIVE("preventive"),
-		SPAREPARTS("spareParts")
+		EQUIPMENT("equipment"),
+		SPAREPARTS("spareParts"),
+		MEMMS("monitoring")
 		
 		String messageCode = "reports.type."
 
@@ -267,6 +279,22 @@ public class Utils {
 		String getReportType() { return reportType }
 	}
 
+	// dashboard report chart types
+	public enum ReportChartType{
+		HISTORIC("historic.trend"),
+		COMPARISON("comparison.facilities"),
+		GEOGRAPHIC("geographic.trend"),
+		INFOBY("info.by")
+
+		String messageCode = "dashboard."
+
+		final String reportChartType
+		ReportChartType(String reportChartType){ this.reportChartType=reportChartType }
+		String getReportChartType() { return reportChartType }
+
+	}
+
+	// listing report sub types
 	public enum ReportSubType{
 		INVENTORY("inventory"),
 		WORKORDERS("workOrders"),

@@ -271,6 +271,34 @@ class WorkOrderSpec extends IntegrationTests{
 		result.timeBasedPreviousStatus==workOrderStatusOne
 	}
 
+	def "get time based status change"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def user = newUser("user", "user")
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",currentStatus:OrderStatus.OPENATFOSA,criticality:Criticality.NORMAL,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
+		def workOrderStatusOne =  new WorkOrderStatus(status:OrderStatus.OPENATFOSA,changedBy:user);
+		workOrder.addToStatus(workOrderStatusOne)
+		workOrder.save(failOnError:true,flush:true)
+		when:
+		workOrder = WorkOrder.list()[0]
+		def workOrderStatusTwo =  new WorkOrderStatus(previousStatus:workOrder.currentStatus,status:OrderStatus.CLOSEDFIXED,changedBy:user);
+		workOrder.closedOn = Initializer.now()
+		workOrder.currentStatus =  OrderStatus.CLOSEDFIXED
+		workOrder.addToStatus(workOrderStatusTwo)
+		workOrder.save(failOnError:true,flush:true)
+		def result = WorkOrder.list()[0]
+
+		then:
+		WorkOrder.count() == 1
+		WorkOrderStatus.count()==2
+		result.timeBasedStatus==workOrderStatusTwo
+		result.timeBasedPreviousStatus==workOrderStatusOne
+		result.timeBasedPreviousStatus==workOrderStatusOne
+		workOrderStatusTwo.getWorkOrderStatusChange() == WorkOrderStatusChange.CLOSEDORDERFIXED
+	}
+
 	def "get escalation status an escalted workOrder"(){
 		setup:
 		setupLocationTree()

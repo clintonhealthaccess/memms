@@ -12,6 +12,7 @@
 		</h1>
 		
 	</div>
+              
 	
 	<div class="main">
   	<g:form url="[controller:'equipmentType', action:'save', params:[targetURI: targetURI]]" useToken="true" class="simple-list">

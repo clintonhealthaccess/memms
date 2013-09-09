@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <projectSuggestions>
-<declaringtype type="org.chai.memms.report.listing.EquipmentGeneralReportParameters">
+<declaringtype type="org.chai.memms.reports.listing.EquipmentGeneralReportParameters">
 <property isActive="true" isStatic="false" name="EquipmentType" type="java.lang.Object">
 <doc/>
 </property>

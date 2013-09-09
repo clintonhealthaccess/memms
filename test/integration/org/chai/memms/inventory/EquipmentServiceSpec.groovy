@@ -368,69 +368,69 @@ class EquipmentServiceSpec extends IntegrationTests{
 		Equipment.list()[0].currentStatus == Status.OPERATIONAL	
 	}
 
-	def "can get status change"(){
+	def "return equipments based on distinct dataLocation"() {
 		setup:
 		setupLocationTree()
-		setupSystemUser()
-		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),45)
-		def user  = newUser("admin", "Admin UID")
-		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",currency:"RWF",manufactureDate:Initializer.getDate(22,07,2010),
-			purchaseDate:Initializer.getDate(22,07,2010),dateCreated:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,
-			 dataLocation:DataLocation.list().first(),purchaser:PurchasedBy.BYMOH,obsolete:false,expectedLifeTime:Initializer.newPeriod(20),
-			 descriptions:['en':'Equipment Descriptions'], type:equipmentType,currentStatus:Status.OPERATIONAL,
-			 addedBy: User.findByUsername("systemUser"))
+		def user = newOtherUser("user", "user", DataLocation.findByCode(KIVUYE))
+		
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+
 		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
-		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
-		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
-		equipment.manufacturer=manufacture
-		equipment.supplier=supplier
-		equipment.warranty=warranty
-		equipment.warrantyPeriod = Initializer.newPeriod(5)
-		equipment.save(failOnError: true)
+		def userHc = newOtherUserWithType("userHc", "userHc", DataLocation.findByCode(KIVUYE), UserType.TITULAIREHC)
+		def techDH = newOtherUserWithType("techDH", "techDH", DataLocation.findByCode(BUTARO), UserType.TECHNICIANDH)
+		def techMMC = newOtherUserWithType("techMMC", "techMMC", DataLocation.findByCode(RWANDA), UserType.TECHNICIANMMC)
 		
-		when:
-		def statusThree= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2012),User.findByUsername("admin"),Status.INSTOCK,equipment,[:])
-		then:
-		Equipment.count() == 1
-		Equipment.list()[0].timeBasedStatus.is(statusThree)
-		Equipment.list()[0].timeBasedPreviousStatus?.status == null
-		equipmentService.getEquipmentTimeBasedStatusChange(Equipment.list()[0],null) == EquipmentStatusChange.NEWORDER
+		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now())
 
-		when:
-		equipment.status=[]
-		equipment.save(failOnError: true)
-		def statusN= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),Status.INSTOCK,equipment,[:])
-		def statusH= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),Status.OPERATIONAL,equipment,[:])
-		then:
-		Equipment.count() == 1
-		Equipment.list()[0].timeBasedStatus.is(statusH)
-		Equipment.list()[0].timeBasedPreviousStatus.is(statusN)
-		equipmentService.getEquipmentTimeBasedStatusChange(Equipment.list()[0],null) == EquipmentStatusChange.FROMSTOCKTOOPERATIONAL
+		Initializer.newEquipment(CODE(123),PurchasedBy.BYDONOR,Donor.OTHERNGO,"Internews",false,Initializer.newPeriod(32),"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"EUR","equipmentModelOne",DataLocation.findByCode(BUTARO),department,equipmentType,manufacture,supplier,Status.OPERATIONAL,user,null,null)
+		def equipmentCodeToFind = Initializer.newEquipment(CODE(124),PurchasedBy.BYMOH,null,null,false,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"RWF","equipmentModel",DataLocation.findByCode(BUTARO),department,equipmentType,manufacture,supplier,Status.OPERATIONAL,user,null,null)
+		def equipmentCodeToFindSecond = Initializer.newEquipment(CODE(125),PurchasedBy.BYMOH,null,null,false,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"RWF","equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier,Status.OPERATIONAL,user,null,null)
 
+		List<Equipment> equipments = []
 		when:
-		equipment.status=[]
-		equipment.save(failOnError: true)
-		def statusFive= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),Status.OPERATIONAL,equipment,[:])
-		def statusFour= Initializer.newEquipmentStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipment,[:])
+		equipments = equipmentService.getDistinctEquipmentsByLocation()
 		then:
-		Equipment.count() == 1
-		Equipment.list()[0].timeBasedStatus.is(statusFour)
-		Equipment.list()[0].timeBasedPreviousStatus.is(statusFive)
-		equipmentService.getEquipmentTimeBasedStatusChange(Equipment.list()[0],null) == EquipmentStatusChange.FORMAINTENANCE
+		equipments.size() == 2
+		equipments[0] != equipments[1]
+	}
 
+	def "return list dataLocations that has at least one equipment associated to it"() {
+		setup:
+		setupLocationTree()
+		def user = newOtherUser("user", "user", DataLocation.findByCode(KIVUYE))
+		
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+
+		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
+		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+		def userHc = newOtherUserWithType("userHc", "userHc", DataLocation.findByCode(KIVUYE), UserType.TITULAIREHC)
+		def techDH = newOtherUserWithType("techDH", "techDH", DataLocation.findByCode(BUTARO), UserType.TECHNICIANDH)
+		def techMMC = newOtherUserWithType("techMMC", "techMMC", DataLocation.findByCode(RWANDA), UserType.TECHNICIANMMC)
+		
+		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now())
+
+		Initializer.newEquipment(CODE(123),PurchasedBy.BYDONOR,Donor.OTHERNGO,"Internews",false,Initializer.newPeriod(32),"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"EUR","equipmentModelOne",DataLocation.findByCode(BUTARO),department,equipmentType,manufacture,supplier,Status.OPERATIONAL,user,null,null)
+		def equipmentCodeToFind = Initializer.newEquipment(CODE(124),PurchasedBy.BYMOH,null,null,false,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"RWF","equipmentModel",DataLocation.findByCode(BUTARO),department,equipmentType,manufacture,supplier,Status.OPERATIONAL,user,null,null)
+		def equipmentCodeToFindSocond = Initializer.newEquipment(CODE(125),PurchasedBy.BYMOH,null,null,false,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"RWF","equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier,Status.OPERATIONAL,user,null,null)
+
+		List<DataLocation> dataLocations
 		when:
-		equipment.status=[]
-		equipment.save(failOnError: true)
-		def statusSix= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipment,[:])
-		def statusSeven= Initializer.newEquipmentStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),Status.DISPOSED,equipment,[:])
+		dataLocations = equipmentService.getDataLocationsWithEquipments()
 		then:
-		Equipment.count() == 1
-		Equipment.list()[0].timeBasedStatus.is(statusSeven)
-		Equipment.list()[0].timeBasedPreviousStatus.is(statusSix)
-		equipmentService.getEquipmentTimeBasedStatusChange(Equipment.list()[0],null) == EquipmentStatusChange.DISPOSEDEQUIPMENT
+		dataLocations.size() == 2
+		dataLocations[0] != dataLocations[1]
+		dataLocations.contains(DataLocation.findByCode(BUTARO))
+		dataLocations.contains(DataLocation.findByCode(KIVUYE))
 	}
 }

@@ -31,6 +31,8 @@ import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus;
+import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
+import org.chai.memms.corrective.maintenance.WorkOrderStatus.WorkOrderStatusChange;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
 import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
@@ -63,6 +65,7 @@ class WorkOrderStatusSpec extends IntegrationTests{
 		def user = newUser("user", "user")
 		def equipment =  Equipment.findBySerialNumber(CODE(123))
 		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",addedOn:Initializer.now(),criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
+		
 		when:
 		def workOrderStatus =  new WorkOrderStatus(workOrder:workOrder,status:OrderStatus.OPENATFOSA,changeOn:Initializer.now(),changedBy:user);
 		workOrder.addToStatus(workOrderStatus)
@@ -83,7 +86,36 @@ class WorkOrderStatusSpec extends IntegrationTests{
 		then:
 		WorkOrderStatus.count() == 1
 		workOrderStatusOne.errors.hasFieldErrors("escalation") == true
+	}
+
+	def "can get current and previous equipment status"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def user = newUser("user", "user")
+		def equipment =  Equipment.findBySerialNumber(CODE(123))
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",addedOn:Initializer.now(),criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED).save(failOnError: true)
 		
+		when:
+		def workOrderStatusOne =  new WorkOrderStatus(workOrder:workOrder,previousStatus:workOrder.currentStatus,status:OrderStatus.OPENATFOSA,changeOn:Initializer.now(),changedBy:user)
+		workOrder.addToStatus(workOrderStatusOne)
+		workOrder.save()
+		workOrderStatusOne.save(failOnError: true)
+
+		def workOrderStatusTwo =  new WorkOrderStatus(workOrder:workOrder,previousStatus:workOrder.currentStatus,status:OrderStatus.CLOSEDFIXED,changeOn:Initializer.now(),changedBy:user)
+		workOrder.addToStatus(workOrderStatusTwo)
+		workOrder.save()
+		workOrderStatusTwo.save(failOnError: true)
+
+		def currentState = workOrder.getTimeBasedStatus()
+		def previousState = workOrder.getTimeBasedPreviousStatus()
+
+		then:
+		// WorkOrderStatus.count() == 2
+
+		workOrderStatusTwo.previousStatus.equals(workOrderStatusOne.status)
+		workOrderStatusTwo.getWorkOrderStatusChange().equals(WorkOrderStatusChange.CLOSEDORDERFIXED)
+		workOrderStatusTwo.getWorkOrderStatusChange([WorkOrderStatusChange.NEWORDER]).equals(null)
 	}
 
 }

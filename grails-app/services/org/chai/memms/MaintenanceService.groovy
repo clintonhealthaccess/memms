@@ -130,6 +130,23 @@ class MaintenanceService {
 		}
 	}
 
+	def getMaintenancesByDataLocation(Class clazz,def location,List<DataLocation> dataLocations,Set<DataLocationType> types,Map<String, String> params) {
+		if(log.isDebugEnabled()) log.debug("getMaintenancesByLocation url params: "+params)
+		List<Maintenance> maintenances = []
+		Maintenances maintenance = new Maintenances()
+		Set<LocationLevel> skipLevels = getSkipLocationLevels()
+		
+		def locations = location.collectDataLocations(types)
+		dataLocations.retainAll(locations)
+		for(DataLocation dataLocation : dataLocations[(params.offset)..<(((params.offset + params.max) > dataLocations.size()) ? dataLocations.size() : (params.offset + params.max))]){
+			maintenances.add(new Maintenance(dataLocation:dataLocation,orderCount:this.getMaintenanceOrderByDataLocation(clazz,dataLocation,[:]).size()))
+		}
+		
+		maintenance.maintenanceList = maintenances
+		maintenance.totalCount = dataLocations.size()
+		return maintenance
+	}
+
 	def getMaintenanceOrderByDataLocation(Class clazz,DataLocation dataLocation,Map<String,String> params){
 		def criteria = clazz.createCriteria();
 		def equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,[:])

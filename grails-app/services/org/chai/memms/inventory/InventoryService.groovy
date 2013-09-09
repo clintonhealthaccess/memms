@@ -70,4 +70,21 @@ class InventoryService {
 		inventory.totalCount = locations.size()
 		return inventory
 	}
+
+	//If params are not in order return the whole list.
+	public Inventories getInventoryByDataLocations(Location location,List<DataLocation> dataLocations,Set<DataLocationType> types,Map<String, String> params) {
+		List<Inventory> inventories = []
+		Set<LocationLevel> skipLevels = getSkipLocationLevels()
+		def locations = location.collectDataLocations(types)
+		dataLocations.retainAll(locations)
+		for (DataLocation dataLocation : dataLocations[(params.offset) ..< (((params.offset + params.max) > dataLocations.size()) ? dataLocations.size() : (params.offset + params.max))]) {
+			inventories.add(new Inventory(dataLocation:dataLocation,equipmentCount:equipmentService.filterEquipment(null,dataLocation,null,null,null,null,null,null,null,null,[:]).size()))
+		}
+		
+		Inventories inventory = new Inventories()
+		inventory.inventoryList = inventories
+
+		inventory.totalCount = dataLocations.size()
+		return inventory
+	}
 }

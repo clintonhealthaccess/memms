@@ -33,6 +33,8 @@ function step2_init(){
   //   select.trigger('liszt:updated');
   // });
 
+  numberOnlyField();
+
   // load jqueryui date time picker
   $(function() {
     $( ".js-date-picker" ).datepicker({ dateFormat: "dd/mm/yy" })
@@ -53,6 +55,13 @@ function step3_init(){
   $('#js-prev-step-3').click(function(e) {
     $('#formRemoteStep3Prev').submit();
   });
+  $(':checkbox').click(function(e) {
+    var checked = $(':checkbox:checked').size()
+    if(checked > 10){
+      alert('A maximum of 10 options is required.');
+      return false;
+    }
+  });
 }
 
 function step4_init(){
@@ -63,3 +72,22 @@ function step4_init(){
     $('#formRemoteStep4Prev').submit();
   });
 }
+
+// Prevent the backspace key from navigating back.
+$(document).unbind('keydown').bind('keydown', function (event) {
+    var doPrevent = false;
+    if (event.keyCode === 8) {
+        var d = event.srcElement || event.target;
+        if ((d.tagName.toUpperCase() === 'INPUT' && (d.type.toUpperCase() === 'TEXT' || d.type.toUpperCase() === 'PASSWORD')) 
+             || d.tagName.toUpperCase() === 'TEXTAREA') {
+            doPrevent = d.readOnly || d.disabled;
+        }
+        else {
+            doPrevent = true;
+        }
+    }
+
+    if (doPrevent) {
+        event.preventDefault();
+    }
+});

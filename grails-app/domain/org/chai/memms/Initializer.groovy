@@ -143,7 +143,7 @@ public class Initializer {
 			defaultTechnicianDHRole.addToPermissions("notificationWorkOrder:*")
 			defaultTechnicianDHRole.addToPermissions("preventiveOrderView:*")
 			defaultTechnicianDHRole.addToPermissions("home:*")
-			defaultTechnicianDHRole.addToPermissions("menu:home,inventory,maintenance,correctivemaintenance,preventivemaintenance,sparePart,reports")
+			defaultTechnicianDHRole.addToPermissions("menu:home,inventory,maintenance,correctivemaintenance,preventivemaintenance,sparePart,reports,dashboard")
 			defaultTechnicianDHRole.addToPermissions("provider:getAjaxData")
 			defaultTechnicianDHRole.addToPermissions("equipmentType:getAjaxData")
 			defaultTechnicianDHRole.addToPermissions("sparePartType:getAjaxData")
@@ -154,6 +154,11 @@ public class Initializer {
 			defaultTechnicianDHRole.addToPermissions("auth:saveAccount")
 			defaultTechnicianDHRole.addToPermissions("auth:setPassword")
 			defaultTechnicianDHRole.addToPermissions("auth:retrievePassword")
+			defaultTechnicianDHRole.addToPermissions("menu:reports")
+			defaultTechnicianDHRole.addToPermissions("menu:dashboard")
+			defaultTechnicianDHRole.addToPermissions("menu:listing")
+			defaultTechnicianDHRole.addToPermissions("dashboard:*")
+			defaultTechnicianDHRole.addToPermissions("listing:*")
 			defaultTechnicianDHRole.save(failOnError: true, flush:true)
 			
 			def defaultTechnicianMMCRole = new Role(name: "Technician MMC")
@@ -283,53 +288,81 @@ public class Initializer {
 	public static createDummyStructure() {
 		
 		if (!Location.count()) {
-			//Add Location types
+
+			//Add Location types           
 			def hc = newDataLocationType(['en':HEALTH_CENTER_GROUP], HEALTH_CENTER_GROUP);
 			def dh = newDataLocationType(['en':DISTRICT_HOSPITAL_GROUP], DISTRICT_HOSPITAL_GROUP);
-			//Add Location Level
+
+            //Add Location Level
 			def country = newLocationLevel(['en':NATIONAL], NATIONAL,1)
 			def province = newLocationLevel(['en':PROVINCE], PROVINCE,2)
 			def district = newLocationLevel(['en':DISTRICT], DISTRICT,3)
 			def sector = newLocationLevel(['en':SECTOR], SECTOR,4)
+
+			def rwandaCoordinates = '[[[29.9811,-1.9094],[29.9916,-1.9052],[29.9811,-1.891],[29.9767,-1.8768],[29.9783,-1.8697],[29.9883,-1.8633],'+
+									'[29.9919,-1.8528],[29.9905,-1.8452],[29.9991,-1.8387],[30.0146,-1.8335],[30.0209,-1.8499],[30.0254,-1.8533],'+
+									'[30.0286,-1.8626],[30.048,-1.8479],[30.0591,-1.8287],[30.0692,-1.8243],[30.0796,-1.8235],[30.096,-1.8164],'+
+									'[30.0981,-1.8106],[30.1132,-1.8183],[30.1183,-1.8167],[30.1274,-1.8064],[30.132,-1.7769],[30.1418,-1.778],'+
+									'[30.1476,-1.7908],[30.1612,-1.7874],[30.1813,-1.8028],[30.2055,-1.8302],[30.2167,-1.8383],[30.2349,-1.8432],'+
+									'[30.2471,-1.8432],[30.2469,-1.8541],[30.2631,-1.86],[30.2572,-1.8766],[30.2572,-1.8773],[30.2573,-1.8926],'+
+									'[30.2723,-1.8974],[30.2702,-1.907],[30.276,-1.9239],[30.2758,-1.9337],[30.2633,-1.9506],[30.2628,-1.9505],'+
+									'[30.2586,-1.9497],[30.2578,-1.9496],[30.2534,-1.9488],[30.2335,-1.9583],[30.2316,-1.9734],[30.236,-1.9805],'+
+									'[30.2332,-1.9986],[30.2294,-2.0064],[30.2282,-2.0382],[30.224,-2.0522],[30.2149,-2.0657],[30.2141,-2.0724],'+
+									'[30.2089,-2.0742],[30.209,-2.0756],[30.2035,-2.0712],[30.2053,-2.0645],[30.1998,-2.0608],[30.1991,-2.0599],'+
+									'[30.1898,-2.0538],[30.1886,-2.0405],[30.1777,-2.0338],[30.1714,-2.0263],[30.167,-2.028],[30.1659,-2.0283],'+
+									'[30.1573,-2.0288],[30.1468,-2.0383],[30.1413,-2.036],[30.1334,-2.0441],[30.1333,-2.0429],[30.1256,-2.0481],'+
+									'[30.1241,-2.0474],[30.1249,-2.0531],[30.1167,-2.0524],[30.1132,-2.0574],[30.1029,-2.0539],[30.095,-2.062],'+
+									'[30.0896,-2.0571],[30.0805,-2.0611],[30.0801,-2.0607],[30.0731,-2.0617],[30.0626,-2.0678],[30.0534,-2.0624],'+
+									'[30.0561,-2.0534],[30.0455,-2.052],[30.0445,-2.0564],[30.044,-2.0567],[30.0385,-2.0592],[30.0383,-2.0597],'+
+									'[30.0382,-2.0659],[30.0286,-2.0622],[30.0197,-2.0704],[30.0184,-2.0714],[30.0178,-2.0721],[30.0112,-2.0698],'+
+									'[30.0104,-2.0707],[30.0017,-2.0633],[29.9984,-2.0665],[29.998,-2.0661],[29.9931,-2.0654],[29.9851,-2.053],'+
+									'[29.9855,-2.0527],[29.9832,-2.0403],[29.9875,-2.0411],[29.9965,-2.0278],[30.0067,-2.0226],[30.0058,-2.0221],'+
+									'[30.0042,-2.0196],[30.0144,-2.0111],[30.0099,-2.0103],[29.9945,-1.995],[29.9927,-1.9856],[29.9997,-1.9772],'+
+									'[29.999,-1.9764],[29.9986,-1.9751],[29.9984,-1.9744],[29.9978,-1.968],[30.0025,-1.9642],[30.0012,-1.9537],'+
+									'[30.0004,-1.9544],[29.9875,-1.9316],[29.9871,-1.9308],[29.9876,-1.9284],[29.9879,-1.9282],[29.9873,-1.9217],'+
+									'[29.9868,-1.921],[29.9811,-1.9094]]]'
+
 			//Add Location
-			def rwanda = newLocation(['en':RWANDA], RWANDA,null,country)
+			def rwanda = newLocation(['en':RWANDA], RWANDA,null,country,rwandaCoordinates)
 			
-			def kigali = newLocation(['en':KIGALI_CITY],KIGALI_CITY,rwanda,province)
-			def north = newLocation(['en':NORTH], NORTH, rwanda, province)
-			def south = newLocation(['en':SOUTH],SOUTH,rwanda,province)
-			def west = newLocation(['en':WEST], WEST,rwanda,province)
-			def east = newLocation(['en':EAST], EAST,rwanda,province)
+			def kigali = newLocation(['en':KIGALI_CITY],KIGALI_CITY,rwanda,province,'')
+			def north = newLocation(['en':NORTH], NORTH, rwanda, province,'')
+			def south = newLocation(['en':SOUTH],SOUTH,rwanda,province,'')
+			def west = newLocation(['en':WEST], WEST,rwanda,province,'')
+			def east = newLocation(['en':EAST], EAST,rwanda,province,'')
 			
-			def burera = newLocation(['en':BURERA], BURERA, north, district)
-			def huye = newLocation(['en':HUYE], HUYE, south, district)
-			def nyaruguru = newLocation(['en':NYARUGURU], NYARUGURU, huye, sector)
-			def gitarama = newLocation(['en':GITARAMA], GITARAMA, west, district)
-			def kibuye = newLocation(['en':KIBUYE], KIBUYE, west, district)
+			def burera = newLocation(['en':BURERA], BURERA, north, district,'')
+			def huye = newLocation(['en':HUYE], HUYE, south, district,'')
+			def nyaruguru = newLocation(['en':NYARUGURU], NYARUGURU, huye, sector,'')
+			def gitarama = newLocation(['en':GITARAMA], GITARAMA, west, district,'')
+			def kibuye = newLocation(['en':KIBUYE], KIBUYE, west, district,'')
 			
 			//Add DataLocation
-			def butaro = newDataLocation(['en':BUTARO],BUTARO,burera,dh)
-			def ruhindo = newDataLocation(['en':RUHINDO],RUHINDO,burera,hc)
+			def butaro = newDataLocation(['en':BUTARO],BUTARO,burera,dh, '[29.836585,-1.408931]')
+			def ruhindo = newDataLocation(['en':RUHINDO],RUHINDO,burera,hc, '')
 			butaro.addToManages(ruhindo)
 			butaro.save(failOnError:true)
 			
-			def gahini  = newDataLocation(['en':GAHINI],GAHINI,gitarama,dh)
-			def musange = newDataLocation(['en':MUSANGE],MUSANGE,gitarama,hc)
+			def gahini  = newDataLocation(['en':GAHINI],GAHINI,gitarama,dh, '[30.48322,-1.84073]')
+			def musange = newDataLocation(['en':MUSANGE],MUSANGE,gitarama,hc, '[29.78134,-2.07579]')
 			gahini.addToManages(musange)
 			gahini.save(failOnError:true)
 			
-			def nyanza = newDataLocation(['en':NYANZA],NYANZA,huye,dh)
-			def kivuye = newDataLocation(['en':KIVUYE],KIVUYE,nyaruguru,hc)
-			def bungwe = newDataLocation(['en':BUNGWE],BUNGWE,huye,hc)
+			def nyanza = newDataLocation(['en':NYANZA],NYANZA,huye,dh, '[29.73036,-2.59908]')
+			def kivuye = newDataLocation(['en':KIVUYE],KIVUYE,nyaruguru,hc, '[29.93128,-1.49218]')
+			def bungwe = newDataLocation(['en':BUNGWE],BUNGWE,huye,hc, '[29.97292,-1.503]')
 			[kivuye,bungwe].each{it -> nyanza.addToManages(it)}
 			nyanza.save(failOnError:true)
 			
-			def nyange = newDataLocation(['en':NYANGE],NYANGE,kibuye,dh)
-			def gitwe = newDataLocation(['en':GITWE],GITWE,kibuye,hc)
-			def kirehe = newDataLocation(['en':KIREHE],KIREHE,kibuye,hc)
-			def kayonza = newDataLocation(['en':KAYONZA],KAYONZA,kibuye,hc)
+			def nyange = newDataLocation(['en':NYANGE],NYANGE,kibuye,dh, '')
+			def gitwe = newDataLocation(['en':GITWE],GITWE,kibuye,hc, '[29.68998,-2.24103]')
+			def kirehe = newDataLocation(['en':KIREHE],KIREHE,kibuye,hc, '[30.65359,-2.26663]')
+			def kayonza = newDataLocation(['en':KAYONZA],KAYONZA,kibuye,hc, '')
 			[gitwe,kirehe,kayonza].each{it -> nyange.addToManages(it)}
 			nyange.save(failOnError:true)
-		}		
+		}
+
+       
 	}
 	
 	public static createInventoryStructure(){
@@ -1082,7 +1115,7 @@ public class Initializer {
 	
 	public static newWorkOrderStatus(def workOrder,def status,def changedBy,def escalation){
 		def equipment = workOrder.equipment
-		def stat = new WorkOrderStatus(workOrder:workOrder,status:status,changedBy:changedBy,escalation:escalation)
+		def stat = new WorkOrderStatus(workOrder:workOrder,previousStatus:workOrder?.getTimeBasedStatus()?.status, status:status,changedBy:changedBy,escalation:escalation)
 		
 		//Create First Work Order
 		if(status == OrderStatus.OPENATFOSA){
@@ -1134,7 +1167,7 @@ public class Initializer {
 	}
 
 	public static newEquipmentStatus(def dateOfEvent,def changedBy,def value, def equipment,def reasons){
-		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value)
+		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,previousStatus:equipment?.getTimeBasedStatus()?.status,status:value)
 		Utils.setLocaleValueInMap(status,reasons,"Reasons")
 		equipment.addToStatus(status) 
 		equipment.save(failOnError:true,flush:true)
@@ -1211,8 +1244,8 @@ public class Initializer {
 		return locationLevel.save(failOnError: true)
 	}
 	
-	public static newLocation(def names, def code, def parent, def level) {
-		def location = new Location(code: code, parent: parent, level: level)
+	public static newLocation(def names, def code, def parent, def level, def coordinates) {
+		def location = new Location(code: code, parent: parent, level: level, coordinates: coordinates)
 		Utils.setLocaleValueInMap(location,names,"Names")
 		location.save(failOnError: true)
 		level.addToLocations(location)
@@ -1224,8 +1257,8 @@ public class Initializer {
 		return location
 	}
 	
-	public static newDataLocation(def names, def code, def location, def type) {
-		def dataLocation = new DataLocation(code: code, location: location, type: type)
+	public static newDataLocation(def names, def code, def location, def type, def coordinates) {
+		def dataLocation = new DataLocation(code: code, location: location, type: type, coordinates: coordinates)
 		Utils.setLocaleValueInMap(dataLocation,names,"Names")
 		dataLocation.save(failOnError: true)
 		if (location != null) {

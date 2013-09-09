@@ -88,6 +88,7 @@
     font-weight: regular
   a
     cursor: pointer
+    text-decoration: none
 
   .custom
     position: absolute
@@ -191,7 +192,7 @@
   background: url('../images/arrow-left.png') no-repeat center
 
 
-// Dynamic slider navigation
+// Listing dynamic slider navigation
 
 .v-tabs-dynav-wrap
   position: relative
@@ -199,6 +200,7 @@
   > *
     float: right
   a
+    background-color: none
     color: #bbb
     display: block
     max-width: 167px
@@ -214,7 +216,7 @@
       color: $primary
     &:hover, &:focus
       color: $primary
-      background: rgba(0, 0, 0, 0.05)
+      background: rgba(0, 0, 0, 0.02)
 
     &.v-tabs-dynav-scroll-right, &.v-tabs-dynav-scroll-left
       background: white
@@ -240,7 +242,6 @@
       &:hover, &:focus
         background-image: url('../images/arrow-left-hover.png')
 
-
 .v-tabs-dynav
   height: 46px
   line-height: 1.4
@@ -259,23 +260,33 @@
     width: 183px
     &:nth-child(7n+5)
       border-right: none
+    &:hover, &:focus
+      a
+        background: rgba(0, 0, 0, 0.05)
+        color: $primary
+      .delete-node
+        background: url('../images/delete-box.png') no-repeat center transparent !important
 
 
 .delete-node
-  background: url('../images/icons/mini_delete.png') no-repeat center
+  background: url('../images/delete-box.png') no-repeat center
   cursor: pointer
   display: inline-block
-  height: 13px
+  height: 12px
   line-height: 13px
-  margin-left: 0
-  position: absolute
-  right: 5px
+  margin-left: 0 !important
+  padding: 0 !important
+  position: absolute !important
+  right: 3px
   text-indent: -9999em
-  top: 5px
-  width: 13px
+  top: 3px
+  width: 12px
   opacity: 0.25
+  z-index: 1
+  +transition(all, .4s)
 
   &:hover, &:focus
+    background: url('../images/delete-box.png') no-repeat center transparent !important
     opacity: 1
 
 // end
@@ -314,7 +325,7 @@
 
 .v-tabs-filters
   border-bottom: 1px solid $primary
-  padding: 0 0 10px 15px
+  padding: 10px 0 10px 15px
   +pie-clearfix
   li
     display: inline
@@ -497,8 +508,7 @@
 .v-tabs-fold-container
   display: none
 
-
-div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment, div#spare_parts, div#monitoring
+div.comparison, div.geo_trend, div.info_by, div.preventive, div.equipment, div.spare_parts, div.monitoring
   display: none
 
 //slister start
@@ -696,18 +706,29 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
   .ui-dialog-titlebar
     background: none !important
     border: none !important
+    height: 30px
     padding: 15px
     position: relative
   .ui-dialog-titlebar-close
     background: url("../images/icon_close.png") no-repeat !important
+    border: none !important
     height: 18px
-    position: absolute
-    right: -8px
+    margin: 0 !important
+    opacity: .2
+    padding: 0 !important
+    right: 10px !important
     text-indent: -9999em !important
-    top: -8px
+    top: 10px !important
     width: 18px
+    +transition(all, .4s)
     span
       display: none !important
+    &:hover, &:focus
+      opacity: 1
+    &.ui-state-hover
+      border: none !important
+      margin: 0 !important
+      padding: 0 !important
 
 .ui-widget-overlay
   background: rgba(0, 0, 0, 0.15)

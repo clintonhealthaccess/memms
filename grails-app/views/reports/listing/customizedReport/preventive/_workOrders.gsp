@@ -4,7 +4,7 @@
   <g:set var="statusValues" value="${PreventiveOrderStatus.values()}"/>
   <g:render template="/reports/listing/customizedReport/workOrderStatusAndPeriod" model="[statusValues:statusValues]" />
   <li>
-    <label for="whoIsResponsible"><g:message code="reports.preventive.workOrders.whoIsResponsible"/>:</label>
+    <label for="whoIsResponsible"><g:message code="reports.preventive.workOrders.whoIsResponsible"/></label>
     <ul class="checkbox-list">
       <g:each in="${PreventionResponsible.values() - PreventionResponsible.NONE}" var="statusEnum">
         <li>

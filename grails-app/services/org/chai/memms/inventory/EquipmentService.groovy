@@ -159,24 +159,25 @@ class EquipmentService {
 		}
 	}
 
-	public def getEquipmentTimeBasedStatusChange(Equipment equipment, List<EquipmentStatusChange> equipmentStatusChanges){
-		EquipmentStatusChange equipmentStatusChange = null
+	//Return list dataLocations that has at least one equipment associated to it
+	public def getDataLocationsWithEquipments(){
+		def equipments = this.getDistinctEquipmentsByLocation()
+		def dataLocations = []
+		for(def equipment: equipments){
+			def dataLoc = DataLocation.get(equipment.id)
+			if(dataLoc!=null) dataLocations.add(dataLoc)
+		}
+		return dataLocations
+	}
 
-		def previousStatus = equipment.getTimeBasedPreviousStatus()?.status
-		def currentStatus = equipment.getTimeBasedStatus().status
-
-		if(equipmentStatusChanges == null) equipmentStatusChanges = EquipmentStatusChange.values()
-	 	equipmentStatusChanges.each{ statusChange ->
- 			
- 			def previousStatusMap = statusChange.getStatusChange()['previous']
-			def currentStatusMap = statusChange.getStatusChange()['current']
-
-			def previousStatusChange = previousStatusMap.contains(previousStatus) || (previousStatusMap.contains(Status.NONE) && previousStatus == null)
-			def currentStatusChange = currentStatusMap.contains(currentStatus)
-
-			if(previousStatusChange && currentStatusChange) equipmentStatusChange = statusChange
-	 	}
-	 	return equipmentStatusChange
+	//Return equipments based on distinct dataLocation
+	public def getDistinctEquipmentsByLocation(){
+		def criteria = Equipment.createCriteria()
+		return criteria.list(){
+			projections{
+			  distinct("dataLocation")
+			}
+		}
 	}
 
 	// fterrier: signature is very long

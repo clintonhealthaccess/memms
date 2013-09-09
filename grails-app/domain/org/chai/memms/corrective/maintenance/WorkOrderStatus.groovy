@@ -30,7 +30,7 @@ package org.chai.memms.corrective.maintenance
 import groovy.transform.EqualsAndHashCode;
 
 import org.chai.memms.security.User;
-
+import org.chai.memms.corrective.maintenance.WorkOrder;
 /**
  * @author Jean Kahigiso M.
  *
@@ -52,7 +52,7 @@ public class WorkOrderStatus {
 	enum WorkOrderStatusChange{
 		NEWORDER("newOrder",
 			[
-				'previous':[OrderStatus.NONE],
+				'previous':[null,OrderStatus.NONE],
 				'current':[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC]
 			]),
 		ORDERESCALATEDTOMMC("orderEscalatedToMmc",
@@ -94,6 +94,7 @@ public class WorkOrderStatus {
 	
 	Date dateCreated
 	User changedBy
+	OrderStatus previousStatus
 	OrderStatus status
 	Boolean escalation = false
 	
@@ -104,6 +105,7 @@ public class WorkOrderStatus {
 	}
 	
 	static constraints = {
+		previousStatus nullable: true
 		status nullable: false, inList:[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC,OrderStatus.CLOSEDFIXED,OrderStatus.CLOSEDFORDISPOSAL]
 		escalation validator:{ val, obj ->
 			def valid = true
@@ -112,7 +114,24 @@ public class WorkOrderStatus {
 			return valid
 		}
 	}
-	
+
+	public def getWorkOrderStatusChange(List<WorkOrderStatusChange> workOrderStatusChanges){
+		WorkOrderStatusChange workOrderStatusChange = null
+
+		if(workOrderStatusChanges == null) workOrderStatusChanges = WorkOrderStatusChange.values()
+	 	workOrderStatusChanges.each{ statusChange ->
+ 			
+ 			def previousStatusMap = statusChange.getStatusChange()['previous']
+			def currentStatusMap = statusChange.getStatusChange()['current']
+
+			def previousStatusChange = previousStatusMap.contains(previousStatus) || (previousStatusMap.contains(OrderStatus.NONE) && previousStatus == null)
+			def currentStatusChange = currentStatusMap.contains(status)
+
+			if(previousStatusChange && currentStatusChange) workOrderStatusChange = statusChange
+	 	}
+	 	return workOrderStatusChange
+	}
+
 	@Override
 	public String toString() {
 		return "WorkOrderStatus [id= " + id + " status= "+status+"]";

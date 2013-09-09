@@ -86,8 +86,10 @@ class EquipmentStatusController extends AbstractEntityController{
 	}
 	
 	def saveEntity(def entity) {
-		if(!entity.equipment?.currentStatus?.equals(Status.DISPOSED))
+		if(!entity.equipment?.currentStatus?.equals(Status.DISPOSED)){
+			entity.previousStatus = entity.equipment?.currentStatus
 			equipmentService.updateCurrentEquipmentStatus(entity.equipment,entity,user)
+		}
 		else flash.message = message(code: "error.cannot.modify.disposed.equipment", default: 'Cannot modify a disposed equipment, please reactivate it')
 	}
 	

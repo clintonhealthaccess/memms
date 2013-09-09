@@ -190,7 +190,12 @@ class WorkOrderViewController extends AbstractController{
 
 		adaptParamsForList()
 		log.debug("location = " +location)
-		if (location != null) 
+
+		if(params['q'] != null && !params['q'].empty){
+			List<DataLocation> dataLocations = locationService.searchLocation(DataLocation.class, params['q'], params)
+			maintenances = maintenanceService.getMaintenancesByDataLocation(WorkOrder.class,location,dataLocations,dataLocationTypesFilter,params)
+		}
+		else if (location != null) 
 			maintenances = maintenanceService.getMaintenancesByLocation(WorkOrder.class,location,dataLocationTypesFilter,params)
 		
 		if(log.isDebugEnabled()) log.debug("maintenances: " +maintenances?.maintenanceList)

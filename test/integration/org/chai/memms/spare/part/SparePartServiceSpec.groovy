@@ -28,6 +28,7 @@
 package org.chai.memms.spare.part
 
 import org.chai.location.DataLocation;
+import org.chai.location.Location;
 import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests;
 import org.chai.memms.inventory.Equipment;
@@ -236,8 +237,11 @@ class SparePartServiceSpec extends IntegrationTests{
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		def manufacturer = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
-		
 		def user  = newUser("admin", "Admin UID")
+
+		user.location = Location.findByCode(RWANDA)
+		user.save()
+
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",manufacturer,Initializer.now())
 		
 		def sparePartOne = Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),"","",kivuyeHC,sparePartType,
@@ -247,7 +251,7 @@ class SparePartServiceSpec extends IntegrationTests{
 
 		def spareParts
 		when://Filter by defaults
-		spareParts = sparePartService.filterSparePart(butaroDH,supplier,sparePartType,StockLocation.FACILITY,SparePartPurchasedBy.NONE,SparePartStatus.INSTOCK,[:])
+		spareParts = sparePartService.filterSparePart(user,supplier,sparePartType,StockLocation.FACILITY,SparePartPurchasedBy.NONE,SparePartStatus.INSTOCK,[:])
 
 		then://This should bring 2 records as kivuye HD is managed by butaro HD
 		SparePart.count() == 2
@@ -260,7 +264,11 @@ class SparePartServiceSpec extends IntegrationTests{
 		spareParts[1].sparePartPurchasedBy == SparePartPurchasedBy.BYMOH
 
 		when://Search by SparePartPurchasedBy
-		spareParts = sparePartService.filterSparePart(kivuyeHC,supplier,sparePartType,StockLocation.FACILITY,SparePartPurchasedBy.NONE,SparePartStatus.INSTOCK,[:])		
+
+		user.location = kivuyeHC
+		user.save()
+
+		spareParts = sparePartService.filterSparePart(user,supplier,sparePartType,StockLocation.FACILITY,SparePartPurchasedBy.NONE,SparePartStatus.INSTOCK,[:])		
 		then:
 		SparePart.count() == 2
 		spareParts.size() == 1

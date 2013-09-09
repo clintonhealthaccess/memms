@@ -56,11 +56,10 @@ class EquipmentStatus {
 		Status(String name){ this.name=name }
 		String getKey() { return name() }
 	}
-
 	enum EquipmentStatusChange{
 		NEWORDER("newEquipment", 
 			[
-				'previous':[Status.NONE], 
+				'previous':[null,Status.NONE],
 				'current':(Status.values()-[Status.NONE])
 			]),
 		DISPOSEDEQUIPMENT("disposedEquipment", 
@@ -89,10 +88,13 @@ class EquipmentStatus {
 		 String getKey() { return name }
 		 Map<String,List<Status>> getStatusChange() { return statusChange }
 	}
-	
+
+	//WHY THIS TWO DATES ASKED BY APHRORWA
 	Date dateOfEvent
 	Date dateCreated
+	
 	User changedBy
+	Status previousStatus
 	Status status
 	String reasons
 	
@@ -104,7 +106,8 @@ class EquipmentStatus {
 			//TODO be uncomment after first data collection
 			return (val <= new Date()) //&&  (val.after(obj.equipment.purchaseDate) || (val.compareTo(obj.equipment.purchaseDate)==0))
 		} 
-		changedBy nullable: false 
+		changedBy nullable: false
+		previousStatus nullable: true
 		status blank: false, nullable: false, inList:[Status.OPERATIONAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]
 		reasons nullable: true, blank: true
 	}
@@ -114,8 +117,25 @@ class EquipmentStatus {
 		table "memms_equipment_status"
 	}
 
+	public def getEquipmentStatusChange(List<EquipmentStatusChange> equipmentStatusChanges){
+		EquipmentStatusChange equipmentStatusChange = null
+
+		if(equipmentStatusChanges == null) equipmentStatusChanges = EquipmentStatusChange.values()
+	 	equipmentStatusChanges.each{ statusChange ->
+ 			
+ 			def previousStatusMap = statusChange.getStatusChange()['previous']
+			def currentStatusMap = statusChange.getStatusChange()['current']
+
+			def previousStatusChange = previousStatusMap.contains(previousStatus) // || (previousStatusMap.contains(Status.NONE) && previousStatus == null)
+			def currentStatusChange = currentStatusMap.contains(status)
+
+			if(previousStatusChange && currentStatusChange) equipmentStatusChange = statusChange
+	 	}
+	 	return equipmentStatusChange
+	}
+
 	@Override
 	public String toString() {
-		return "EquipmentStatus [dateOfEvent=" + dateOfEvent + ", changedBy="+ changedBy + ", status=" + status + " dateCreated=" + dateCreated + "]";
+		return "EquipmentStatus [dateOfEvent=" + dateOfEvent + ", changedBy="+ changedBy + ", status=" + status + " previousStatus=" + previousStatus + " dateCreated=" + dateCreated + "]";
 	}	
 }

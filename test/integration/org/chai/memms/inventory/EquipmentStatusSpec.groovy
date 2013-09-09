@@ -6,6 +6,7 @@ import org.chai.memms.inventory.Equipment.PurchasedBy;
 import org.chai.memms.inventory.EquipmentType.Observation;
 import org.chai.location.DataLocation;
 import org.chai.memms.inventory.EquipmentStatus.Status;
+import org.chai.memms.inventory.EquipmentStatus.EquipmentStatusChange;
 import org.chai.memms.security.User
 import org.chai.memms.inventory.Provider.Type;
 import org.chai.memms.inventory.EquipmentStatus;
@@ -84,7 +85,7 @@ class EquipmentStatusSpec extends IntegrationTests{
 		
 		when:
 		def statusOne = Initializer.newEquipmentStatus(new Date(),User.findByUsername("admin"),Status.INSTOCK,equipment,[:])
-		def statusTwo = new EquipmentStatus(changedBy:User.findByUsername("admin"),status:Status.INSTOCK,equipment:equipment,dateOfEvent:Initializer.getDate(10, 07,2012)).save(failOnError: true)
+		def statusTwo = new EquipmentStatus(changedBy:User.findByUsername("admin"),previousStatus:equipment?.currentStatus,status:Status.OPERATIONAL,equipment:equipment,dateOfEvent:Initializer.getDate(10, 07,2012)).save(failOnError: true)
 		then:
 		EquipmentStatus.count() == 2
 
@@ -93,7 +94,8 @@ class EquipmentStatusSpec extends IntegrationTests{
 		def previousState = equipment.getTimeBasedPreviousStatus()
 
 		then:
-		currentState.equals(statusOne)
-		//previousState.equals(statusTwo)
+		statusTwo.previousStatus.equals(statusOne.status)
+		statusTwo.getEquipmentStatusChange().equals(EquipmentStatusChange.FROMSTOCKTOOPERATIONAL)
+		statusTwo.getEquipmentStatusChange([EquipmentStatusChange.DISPOSEDEQUIPMENT]).equals(null)
 	}
 }

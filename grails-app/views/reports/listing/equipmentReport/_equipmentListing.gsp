@@ -17,7 +17,7 @@
 	<tbody>
 	 
 		<g:each in="${entities}" status="i" var="equipment">
-			<tr >
+			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<td>${equipment.dataLocation.names}</td>
 				<td>${equipment.code}</td>
 				<td>${equipment.serialNumber}</td>
@@ -35,10 +35,10 @@
 				<td>${equipment.manufacturer?.contact?.contactName}</td>
 				<td>${equipment.supplier?.contact?.contactName}</td>
 				<td>${message(code: equipment.purchaser?.messageCode+'.'+equipment.purchaser?.name)}</td>
-				<td><g:formatNumber number="${equipment.currentValueOfThisEquipment}" type="number" format="###.##"/></td>
+				<td><g:formatNumber number="${equipment.currentValueOfThisEquipment}" type="number" format="###.#" maxFractionDigits="0"/> ${equipment.currency} </td>
 			</tr>
 		</g:each>
 
 	</tbody>	
 </table>
-<g:render template="/templates/pagination" />
+<g:render template="/templates/pagination" model="[entities:entities, entityCount:entities.totalCount]" />

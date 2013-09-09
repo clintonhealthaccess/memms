@@ -9,8 +9,11 @@
 	<body>
 		<div>
 			<div class="filter-bar">
-				<g:locationFilter linkParams="${[order:'desc']}" selected="${currentLocation}" selectedTypes="${currentLocationTypes}" skipLevels="${locationSkipLevels}"/>
+				<g:locationFilter linkParams="${params << [order:'desc']}" selected="${currentLocation}" selectedTypes="${currentLocationTypes}" skipLevels="${locationSkipLevels}"/>
 				<g:dataLocationTypeFilter linkParams="${params}" selected="${currentLocationTypes}"/>
+				<span class="right">
+					<g:searchBox action="summaryPage" controller="equipmentView" />
+				</span>
 			</div>			
 			<div class="main table">
 				<g:if test="${inventories == null}">

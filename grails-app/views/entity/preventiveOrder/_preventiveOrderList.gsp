@@ -54,7 +54,7 @@
 					${message(code: order.occurency?.messageCode+'.'+order.occurency?.name)}					
 				</td>
 				<td>
-					${order.occurInterval}					
+					${order.occurInterval}			
 				</td>
 				<td>
 					${message(code: order.status?.messageCode+'.'+order.status?.name)}
@@ -81,7 +81,7 @@
 		</g:each>
 	</tbody>
 </table>
-<g:render template="/templates/pagination" />
+<g:render template="/templates/pagination" model="[entities:entities, entityCount:entities.totalCount]" />
 <script type="text/javascript">
 	$(document).ready(function() {
 		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}")

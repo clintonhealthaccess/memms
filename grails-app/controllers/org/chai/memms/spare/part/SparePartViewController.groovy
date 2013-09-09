@@ -80,6 +80,9 @@ class SparePartViewController extends AbstractController{
 	def list = {
 		adaptParamsForList()
 		def type = SparePartType.get(params.long('type.id'))
+
+		if (log.isDebugEnabled()) log.debug("spare.parts.list, type="+type)
+
 		def spareParts = sparePartService.getSpareParts(user,type,params)
 		if(request.xhr)
 			this.ajaxModel(spareParts,type,"")
@@ -131,7 +134,7 @@ class SparePartViewController extends AbstractController{
 	def filter = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("spare.parts.filter, command "+cmd)
 		adaptParamsForList()
-		def spareParts = sparePartService.filterSparePart(user.location,cmd.supplier,cmd.sparePartType,cmd.stockLocation,cmd.sparePartPurchasedBy,cmd.status,params)
+		def spareParts = sparePartService.filterSparePart(user,cmd.supplier,cmd.sparePartType,cmd.stockLocation,cmd.sparePartPurchasedBy,cmd.status,params)
 		if(!request.xhr)
 			response.sendError(404)
 		else this.ajaxModel(spareParts,null,"")
@@ -140,7 +143,7 @@ class SparePartViewController extends AbstractController{
 	def export = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("spareParts.export, command "+cmd)
 		adaptParamsForList()
-		def spareParts = sparePartService.filterSparePart(user.location,cmd.supplier,cmd.sparePartType,cmd.stockLocation,cmd.sparePartPurchasedBy,cmd.status,params)
+		def spareParts = sparePartService.filterSparePart(user,cmd.supplier,cmd.sparePartType,cmd.stockLocation,cmd.sparePartPurchasedBy,cmd.status,params)
 		File file = sparePartService.exporter(user.location,spareParts)
 
 		response.setHeader "Content-disposition", "attachment; filename=${file.name}.csv"

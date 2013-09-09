@@ -15,4 +15,4 @@
 	</thead>
 	<g:render template="/entity/provider/listBody" model="[entities: entities]"/>
 </table>
-<g:render template="/templates/pagination" />
+<g:render template="/templates/pagination" model="[entities:entities, entityCount:entities.totalCount]" />

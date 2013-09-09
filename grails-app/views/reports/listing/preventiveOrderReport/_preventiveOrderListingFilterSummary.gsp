@@ -7,10 +7,11 @@
   %{-- customized but unsaved listing --}%
   <g:if test="${customizedReportName != null && !customizedReportName.empty}">
     <h1>${customizedReportName}</h1>
+    <a href="${createLink(action:'saveCustomizedReport', params: params)}">Save</a>
   </g:if>
   %{-- customized saved listing --}%
-  <g:elseif test="${selectedReport != null}">
-    <h1>${selectedReport.reportName}</h1>
+  <g:elseif test="${savedReport != null}">
+    <h1>${savedReport.reportName}</h1>
   </g:elseif>
   %{-- predefined listing --}%
   <g:else>
@@ -30,7 +31,7 @@
   </ul>
   
   <ul>
-    <g:if test="${selectedReport != null || (customizedReportName != null && !customizedReportName.empty)}">
+    <g:if test="${savedReport != null || (customizedReportName != null && !customizedReportName.empty)}">
       <li>
         <span>Report Filter Summary:</span>
         <a href="#"><g:message code="reports.dataLocation"/> = 

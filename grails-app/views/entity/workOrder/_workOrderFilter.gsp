@@ -22,7 +22,9 @@
 		<ul class="filters-list third">
 	      <li><g:selectFromEnum name="currentStatus" values="${OrderStatus.values()}" field="currentStatus" 
 	      		label="${message(code:'entity.status.label')}" bean="${filterCmd}"/></li>
-	      <li>
+		</ul>
+		<ul class="filters-list third">
+			<li>
 	        <div class="half">
 	          <g:input name="openOn" dateClass="date-picker" label="${message(code:'order.open.on.label')}" 
 	          	bean="${filterCmd}" field="openOn" value="${filterCmd?.openOn}"/>

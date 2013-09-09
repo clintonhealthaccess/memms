@@ -8,7 +8,7 @@
 	<thead>
 		<tr>
 			<g:if test="${reportTypeOptions.contains('location')}">
-				<g:sortableColumn property="dataLocation"  title="${message(code: 'location.label')}" params="[q:q]" />
+				<g:sortableColumn property="dataLocation"  title="${message(code: 'location.label')}" params="${params}" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('code')}">
 				<th><g:message code="default.equipment.code.label"/></th>
@@ -20,20 +20,15 @@
 				<th><g:message code="default.equipment.type.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('model')}">
-				<g:sortableColumn property="model"  title="${message(code: 'equipment.model.label')}" params="[q:q]" />
+				<g:sortableColumn property="model"  title="${message(code: 'equipment.model.label')}" params="${params}" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('manufacturer')}">
-				<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q]" />
+				<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="${params}" />
 			</g:if>
-
-			%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-				//TODO SL
-			</g:if> --}%
-
 			<g:if test="${reportTypeOptions.contains('currentStatus')}">
-				<g:sortableColumn property="status"  title="${message(code: 'entity.status.label')}" params="[q:q]" />
+				<g:sortableColumn property="status"  title="${message(code: 'entity.status.label')}" params="${params}" />
 			</g:if>
-			<g:if test="${reportTypeOptions.contains('scheduleNextInterventions')}">
+			<g:if test="${reportTypeOptions.contains('nextInterventionScheduledOn')}">
 				<th><g:message code="listing.report.preventive.schedule.next.interventions.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('percentageInterventionsDone')}">
@@ -77,28 +72,21 @@
 				<g:if test="${reportTypeOptions.contains('manufacturer')}">
 					<td>${order.equipment.manufacturer?.contact?.contactName}</td>
 				</g:if>
-
-				%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-					// TODO SL AFTER RELEASE
-				</g:if> --}%
-
 				<g:if test="${reportTypeOptions.contains('currentStatus')}">
 					<td>${message(code: order.status?.messageCode+'.'+order.status?.name)}</td>
 				</g:if>
-				<g:if test="${reportTypeOptions.contains('scheduleNextInterventions')}">
-					%{-- TODO AR calculation AFTER RELEASE --}%
-					<td></td>
+				<g:if test="${reportTypeOptions.contains('nextInterventionScheduledOn')}">
+					<td>${(order.type.equals(PreventiveOrderType.DURATIONBASED))?Utils.formatDateWithTime(order.nextOccurence):''}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('percentageInterventionsDone')}">
-					%{-- TODO AR calculation AFTER RELEASE --}%
-					<td></td>
+					%{-- TODO AR create util method for formatting percentage --}%
+					<td>${order.percentageOfInterventionsDone} %</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('recurrencePeriod')}">
-					%{-- TODO AR calculation AFTER RELEASE --}%
-					<td></td>
+					<td>${order.occurInterval} ${message(code: order.occurency?.messageCode+'.'+order.occurency?.name)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('startDate')}">
-					<td>${order.firstOccurenceOn?.timeDate}</td>
+					<td>${Utils.formatDateWithTime(order.firstOccurenceOn?.timeDate)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('responsible')}">
 					<td>${order.preventionResponsible}</td>
@@ -113,4 +101,4 @@
 		</g:each>
 	</tbody>
 </table>
-<g:render template="/templates/pagination" />
+<g:render template="/templates/pagination" model="[entities:entities, entityCount:entities.totalCount]" />

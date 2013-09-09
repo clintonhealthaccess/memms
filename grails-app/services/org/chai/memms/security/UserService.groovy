@@ -36,10 +36,10 @@ import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation
 import org.chai.location.Location;
 import org.chai.memms.corrective.maintenance.WorkOrder;
-import org.chai.memms.report.listing.CorrectiveMaintenanceReport;
-import org.chai.memms.report.listing.EquipmentReport;
-import org.chai.memms.report.listing.PreventiveMaintenanceReport;
-import org.chai.memms.report.listing.SparePartReport
+import org.chai.memms.reports.listing.CorrectiveMaintenanceReport;
+import org.chai.memms.reports.listing.EquipmentReport;
+import org.chai.memms.reports.listing.PreventiveMaintenanceReport;
+import org.chai.memms.reports.listing.SparePartReport;
 import org.chai.memms.security.User.UserType;
 import org.chai.memms.security.User;
 import org.chai.memms.util.Utils;
@@ -176,6 +176,8 @@ class UserService {
 				break;
 			case ReportType.SPAREPARTS:
 				criteria = SparePartReport.createCriteria();
+				break;
+			default:
 				break;
 		}
 		if(criteria != null){

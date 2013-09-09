@@ -28,7 +28,7 @@
       </li>
     </ul>
     <ul class="filters-list third">
-      <li><g:selectFromEnum name="status" values="${PreventiveOrderStatus.values()}" field="currentStatus" label="${message(code:'entity.status.label')}" bean="${filterCmd}"/></li>
+      <li><g:selectFromEnum name="status" values="${(PreventiveOrderStatus.values()-PreventiveOrderStatus.OPENLATE)}" field="currentStatus" label="${message(code:'entity.status.label')}" bean="${filterCmd}"/></li>
     </ul>
     <ul class="filters-list third">
       <li><g:selectFromEnum name="preventionResponsible" values="${PreventionResponsible.values()}" field="currentStatus" label="${message(code:'preventive.order.prevention.responsible.label')}" bean="${filterCmd}"/></li>

@@ -75,14 +75,33 @@ public class SparePart {
 	enum SparePartStatus{
 		
 		NONE('none'),
-		INSTOCK("in.stock"),
-		PENDINGORDER("pending.order")
+		PENDINGORDER("pending.order"),
+		INSTOCK("in.stock")
 
 		String messageCode = "spare.part.status"
 
 		final String name
 		SparePartStatus(String name){ this.name=name }
 		String getKey() { return name() }	
+	}
+
+	enum SparePartStatusChange{
+		// new pending order - purchaseDate != null and deliverydate == null
+		NEWPENDINGORDER("newPendingOrder",
+			['previous':[null, SparePartStatus.NONE], 'current':[SparePartStatus.PENDINGORDER]]),
+		//pending order arrived - purchaseDate != null and deliverydate != null
+		PENDINGORDERARRIVED("pendingOrderArrived",
+			['previous':[SparePartStatus.PENDINGORDER], 'current':[SparePartStatus.INSTOCK]]),
+
+		String messageCode = "reports.spareParts.statusChanges"
+		final String name
+		final Map<String,List<SparePartStatus>> statusChange
+		SparePartStatusChange(String name, Map<String,List<SparePartStatus>> statusChange) {
+			this.name=name
+			this.statusChange=statusChange
+		}
+		String getKey() { return name }
+		Map<String,List<SparePartStatus>> getStatusChange() { return statusChange }
 	}
 	
 	String descriptions
@@ -163,6 +182,27 @@ public class SparePart {
 		if(status.equals(SparePartStatus.INSTOCK) && inStockQuantity==0)
 			return true
 		else return false
+	}
+
+	public def getSparePartStatusChange(List<SparePartStatusChange> sparePartStatusChanges){
+		SparePartStatusChange sparePartStatusChange = null
+
+		if(sparePartStatusChanges == null) sparePartStatusChanges = SparePartStatusChange.values()
+	 	sparePartStatusChanges.each{ statusChange ->
+ 			
+ 			if(statusChange.equals(SparePartStatusChange.NEWPENDINGORDER)){
+ 				if(purchaseDate != null && deliveryDate == null && status == SparePartStatus.PENDINGORDER)
+ 					sparePartStatusChange = statusChange
+ 			}
+ 			else if(statusChange.equals(SparePartStatusChange.PENDINGORDERARRIVED)){
+ 				if(purchaseDate != null && deliveryDate == null && status == SparePartStatus.INSTOCK){
+ 					sparePartStatusChange = statusChange
+ 				}
+ 				else if(purchaseDate != null && deliveryDate != null)
+ 					sparePartStatusChange = statusChange
+ 			}
+	 	}
+	 	return sparePartStatusChange
 	}
 	
 	static mapping = {

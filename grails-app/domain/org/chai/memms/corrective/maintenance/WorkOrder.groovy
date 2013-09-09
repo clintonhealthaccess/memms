@@ -224,10 +224,6 @@ public class WorkOrder extends MaintenanceOrder{
 		return "WorkOrder [id= " + id + " currentStatus= "+currentStatus+"]";
 	}
 	
-	
-	
-	
-	
 	//TODO To finalize this Method on map that must hold key and another map as value
 	@Transient
 	def getSparePartTypesUsed(){

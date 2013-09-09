@@ -41,93 +41,123 @@ import org.chai.memms.TimeDate
  */
 @i18nfields.I18nFields
 public abstract class PreventiveOrder extends MaintenanceOrder {
-	
+
 	// fterrier: why this if there is a class to distinguish them?
 	enum PreventiveOrderType{
-		
+
 		NONE("none"),
 		DURATIONBASED("duration.based"),
 		WORKBASED("work.based")
-		
+
 		String messageCode = "preventive.order.type"
 		String name
 		PreventiveOrderType(String name){this.name=name}
 		String getKey(){ return name() }
 	}
-	
+
 	enum PreventiveOrderStatus{
-		
+
 		OPEN("open"),
+		OPENLATE("open.late"),
 		CLOSED("closed")
-		
+
 		String messageCode = "preventive.order.status"
 		String name
 		PreventiveOrderStatus(String name){this.name=name}
 		String getKey(){ return name() }
 	}
-	
+
 	enum PreventionResponsible{
-		
+
 		NONE("none"),
 		SERVICEPROVIDER("service.provider"),
 		DEPARTMENTUSER("department.user"),
 		HCTITULAIRE("hc.titulaire"),
 		HCTECHNICIAN("hc.technician")
-		
+
 		String messageCode = "prevention.in.charge"
 		String name
 		PreventionResponsible(String name){this.name=name}
 		String getKey(){ return name() }
-		
+
 	}
 	String names
 	PreventionResponsible  preventionResponsible
-	
+
 	User technicianInCharge
 	PreventiveOrderType type
 	PreventiveOrderStatus status
 	TimeDate firstOccurenceOn
 	Integer occurInterval = 1
-	
+
 	static belongsTo = [equipment: Equipment]
 	static hasMany = [preventions: Prevention]
 	static i18nFields = ["names"]
 	static embedded = ["firstOccurenceOn"]
-	
+
 	static constraints = {
-		importFrom MaintenanceOrder, exclude:["closedOn","lastUpdated"]
+		importFrom MaintenanceOrder, exclude:["closedOn", "lastUpdated"]
 		lastUpdated nullable: true, validator:{ val, obj ->
 			if(val!=null) return (val <= new Date())
 		}
 		occurInterval nullable: false, validator:{return (it >= 1)}
 		firstOccurenceOn nullable: false, validator:{ return (it.timeDate >= new Date())}
 		names nullable: true, blank: true
-		type nullable: false, inList:[PreventiveOrderType.DURATIONBASED,PreventiveOrderType.WORKBASED]
-		status nullable:false, inList:[PreventiveOrderStatus.OPEN,PreventiveOrderStatus.CLOSED]
+		type nullable: false, inList:[
+			PreventiveOrderType.DURATIONBASED,
+			PreventiveOrderType.WORKBASED
+		]
+		status nullable:false, inList:[
+			PreventiveOrderStatus.OPEN,
+			PreventiveOrderStatus.CLOSED
+		]
 
 		closedOn nullable:true, validator:{ val, obj ->
 			if(val!=null) return (val<=new Date() && obj.status.equals(PreventiveOrderStatus.CLOSED))
 		}
-		preventionResponsible nullable:false,inList:[PreventionResponsible.HCTECHNICIAN,PreventionResponsible.HCTITULAIRE,PreventionResponsible.SERVICEPROVIDER,PreventionResponsible.DEPARTMENTUSER]
+		preventionResponsible nullable:false,inList:[
+			PreventionResponsible.HCTECHNICIAN,
+			PreventionResponsible.HCTITULAIRE,
+			PreventionResponsible.SERVICEPROVIDER,
+			PreventionResponsible.DEPARTMENTUSER
+		]
 		technicianInCharge nullable:true, validator:{ val, obj ->
 			if(obj.preventionResponsible.equals(PreventionResponsible.HCTECHNICIAN)) return (val!=null)
 			else return (val==null)
 		}
-		
+
 	}
 	static mapping = {
 		table "memms_preventive_order_abstract"
-		tablePerHierarchy false 
+		tablePerHierarchy false
 		cache true
 		version false
 	}
 
 	def getDurationMinutes() {
-        return Minutes.minutesBetween(new DateTime(firstOccurenceOn.timeDate), getEndTimeForOrder()).minutes
-    }
+		return Minutes.minutesBetween(new DateTime(firstOccurenceOn.timeDate), getEndTimeForOrder()).minutes
+	}
 
-    def getEndTimeForOrder() {
-        return new DateTime(firstOccurenceOn.timeDate).plusHours(1)
-    }
-	
+	def getEndTimeForOrder() {
+		return new DateTime(firstOccurenceOn.timeDate).plusHours(1)
+	}
+
+	def getPercentageOfInterventionsDone(){
+		def interventionsDone =0;
+		def interventionMissed = 0;
+		for (Prevention prevention: preventions){
+			//if (prevention.scheduledOn.equals(prevention.eventDate)){
+			if (prevention.eventDate!=null){
+				interventionsDone++;
+			}else {
+				interventionMissed++;
+			}
+		}
+		if ((interventionMissed+interventionsDone)>0){
+			return (interventionsDone/(interventionsDone+interventionMissed))*100
+		}else{
+			return 0
+		}
+	}
+
 }

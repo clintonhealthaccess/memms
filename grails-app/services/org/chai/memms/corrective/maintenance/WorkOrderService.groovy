@@ -104,17 +104,16 @@ class WorkOrderService {
 		def currentStatus = workOrder.getTimeBasedStatus().status
 
 		if(workOrderStatusChanges == null) workOrderStatusChanges = WorkOrderStatusChange.values()
-	 	workOrderStatusChanges.each{ statusChange ->
- 			
- 			def previousStatusMap = statusChange.getStatusChange()['previous']
+		 workOrderStatusChanges.each{ statusChange ->
+			 
+			 def previousStatusMap = statusChange.getStatusChange()['previous']
 			def currentStatusMap = statusChange.getStatusChange()['current']
 
 			def previousStatusChange = previousStatusMap.contains(previousStatus) || (previousStatusMap.contains(OrderStatus.NONE) && previousStatus == null)
 			def currentStatusChange = currentStatusMap.contains(currentStatus)
 
 			if(previousStatusChange && currentStatusChange) workOrderStatusChange = statusChange
-	 	}
-	 	return workOrderStatusChange
+		 }
+		 return workOrderStatusChange
 	}
-
 }

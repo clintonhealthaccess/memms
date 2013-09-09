@@ -1,10 +1,10 @@
-<%@ page import="org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart" %>
+<%@ page import="org.chai.memms.spare.part.SparePart.SparePartStatus" %>
 <%@ page import="org.chai.memms.util.Utils" %>
 <ul>
   <li>
     <label for="sparePartStatus"><g:message code="reports.spareParts.inventory.sparePartStatus"/>:</label>
     <ul class="checkbox-list">
-      <g:each in="${StatusOfSparePart.values() - StatusOfSparePart.NONE}" var="statusEnum">
+      <g:each in="${SparePartStatus.values() - SparePartStatus.NONE}" var="statusEnum">
         <li>
           <input name="sparePartStatus" type="checkbox" value="${statusEnum.key}"/>
           <label for="${statusEnum.key}">${message(code: statusEnum?.messageCode+'.'+statusEnum?.name)}</label>
