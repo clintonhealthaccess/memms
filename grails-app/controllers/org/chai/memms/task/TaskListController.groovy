@@ -9,7 +9,7 @@ class TaskListController extends AbstractController{
 	 */
 	def list = {
 		adaptParamsForList()
-		def tasks = Task.list(params)
+		def tasks = Task.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc")
 		if(request.xhr)
 			this.ajaxModel(tasks)
 		else{

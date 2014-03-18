@@ -25,38 +25,46 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package org.chai.memms.reports.hmis
 
-package org.chai.task
+import groovy.transform.EqualsAndHashCode
+import org.chai.location.DataLocation
+import i18nfields.I18nFields
+/**
+ * @author Eric Dusabe, Jean Kahigiso M.
+ *
+ */
+@i18nfields.I18nFields
+@EqualsAndHashCode(includes="periodCode")
+class HmisReport {
 
-import groovy.transform.EqualsAndHashCode;
+	String periodCode
+	String names
+	Date dateCreated
+	Date lastUpdated
 
-import java.util.Map;
-import java.util.Set;
+	static hasMany = [hmisFacilityReports: HmisFacilityReport]
+	static i18nFields = ["names"]
 
-import org.chai.memms.inventory.EquipmentType;
-import org.chai.memms.inventory.Provider;
-import org.chai.memms.inventory.EquipmentStatus.Status;
-import org.chai.memms.exports.EquipmentExport;
-import org.chai.memms.exports.EquipmentTypeExport;
-import org.chai.memms.task.Exporter;
-import org.chai.location.CalculationLocation;
-import org.chai.location.DataLocationType;
-import org.chai.memms.util.Utils;
-
-@EqualsAndHashCode(includes='id')
-class ExportFilter {
-
-	static hasMany = [calculationLocations:CalculationLocation,dataLocationTypes:DataLocationType]
-	
 	static constraints = {
-		calculationLocations nullable: true, blank: true
-		dataLocationTypes nullable: true, blank: true
-		
+
+		periodCode nullable: false, blank: false,  unique: true
+		names nullable: true, blank: true
+		lastUpdated nullable: true, validator: {
+			if(it != null) return (it <= new Date())
+		}
 	}
+
 	static mapping = {
-		table "memms_equipment_export_filter"
-		version false
-		calculationLocations joinTable:[name:"memms_equipment_calc_location_export_filter",key:"calc_location_id",column:"export_filter_id"]
-		dataLocationTypes joinTable:[name:"memms_equipment_location_type_export_filter",key:"location_type_id",column:"export_filter_id"]
+		table "memms_hmis_report"
+		version false 
 	}
+
+	@Override
+	public String toString() {
+		return "HmisReport [Id: " + id + " periodCode: " + periodCode +"]";
+	}
+
+
+
 }

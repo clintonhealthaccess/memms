@@ -25,38 +25,40 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package org.chai.memms.reports.hmis
 
-package org.chai.task
-
-import groovy.transform.EqualsAndHashCode;
-
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import org.chai.memms.inventory.EquipmentType;
-import org.chai.memms.inventory.Provider;
-import org.chai.memms.inventory.EquipmentStatus.Status;
-import org.chai.memms.exports.EquipmentExport;
-import org.chai.memms.exports.EquipmentTypeExport;
-import org.chai.memms.task.Exporter;
-import org.chai.location.CalculationLocation;
+import org.chai.location.Location;
 import org.chai.location.DataLocationType;
+import org.chai.location.DataLocation;
+import org.chai.memms.reports.hmis.HmisEquipmentType;
 import org.chai.memms.util.Utils;
+import org.chai.memms.inventory.EquipmentService;
+/**
+ * @author Eric Dusabe, Jean Kahigiso M.
+ *
+ */
+class HmisEquipmentTypeService {
 
-@EqualsAndHashCode(includes='id')
-class ExportFilter {
+	static transactional = true
+	def languageService;
+	def locationService
+	def grailsApplication
+	def equipmentService
 
-	static hasMany = [calculationLocations:CalculationLocation,dataLocationTypes:DataLocationType]
-	
-	static constraints = {
-		calculationLocations nullable: true, blank: true
-		dataLocationTypes nullable: true, blank: true
-		
+	public def searchHmisEquipmentType(String text,Map<String, String> params) {
+		text = text.trim()
+		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
+		def criteria = HmisEquipmentType.createCriteria()
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			or{
+				ilike("code","%"+text+"%")
+				ilike(dbFieldName,"%"+text+"%")
+			}
+		}
+
+
 	}
-	static mapping = {
-		table "memms_equipment_export_filter"
-		version false
-		calculationLocations joinTable:[name:"memms_equipment_calc_location_export_filter",key:"calc_location_id",column:"export_filter_id"]
-		dataLocationTypes joinTable:[name:"memms_equipment_location_type_export_filter",key:"location_type_id",column:"export_filter_id"]
-	}
+
 }

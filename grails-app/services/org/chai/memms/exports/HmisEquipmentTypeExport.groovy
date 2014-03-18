@@ -45,22 +45,25 @@ import org.chai.memms.util.Utils;
 import org.supercsv.io.CsvListWriter;
 import org.supercsv.io.ICsvListWriter;
 import org.supercsv.prefs.CsvPreference;
-import org.chai.memms.task.Exporter
+import org.chai.memms.task.Exporter;
+import org.chai.memms.reports.hmis.HmisReport;
+import org.chai.task.HmisEquipmentTypeExportFilter;
+import org.chai.memms.reports.hmis.HmisFacilityReport;
 
-public class EquipmentTypeExport implements Exporter {
+public class HmisEquipmentTypeExport implements Exporter {
 
 	public File exportData(DataExportTask task) throws IOException{
 		if (log.isDebugEnabled()) log.debug("exportData");
-		
-		File csvFile = File.createTempFile("equipmentType.export.temp", ImportExportConstant.CSV_FILE_EXTENSION);
+		//def hmisReportId = task.exportFilterId
+		File csvFile = File.createTempFile("hmisEquipmentType.export.temp", ImportExportConstant.CSV_FILE_EXTENSION);
 		FileWriter csvFileWriter = new FileWriter(csvFile);
 		ICsvListWriter writer = new CsvListWriter(csvFileWriter, CsvPreference.EXCEL_PREFERENCE);
-		this.writeFile(writer,task);
+		this.writeFile(writer,task, task.exportFilterId);
 		return csvFile;
 		
 	}
 		
-	private void writeFile(ICsvListWriter writer, Progress progress) throws IOException {
+	private void writeFile(ICsvListWriter writer, Progress progress, Long hmisReportId) throws IOException {
 		try{
 			String[] csvHeaders = null;
 			// headers
@@ -68,16 +71,23 @@ public class EquipmentTypeExport implements Exporter {
 				csvHeaders = this.getExportDataHeaders()
 				writer.writeHeader(csvHeaders);
 			}
-			progress.setMaximum(EquipmentType.count())
-			for(EquipmentType equipmentType: EquipmentType.list()){
+ 			def hmisEquipmentTypeExportFilter = HmisEquipmentTypeExportFilter.get(hmisReportId)
+			//def hmisReport = hmisEquipmentTypeExportFilter.hmisReport
+			def facilityReports = HmisFacilityReport.findAllByHmisReport(hmisEquipmentTypeExportFilter.hmisReport)
+			progress.setMaximum(facilityReports.size())
+			for(def facilityReport: facilityReports){
+				log.debug("cod: " + facilityReport.dataLocation.code + " Hmis Equipment Type: " + facilityReport.hmisEquipmentType.getNames(new Locale("en")) + " Number of Equipment: " + facilityReport.numberOfOpEquipment)
+
 				List<String> line = 
 				[
-					equipmentType.code,
-					(equipmentType.getNames(new Locale("en")))?equipmentType.getNames(new Locale("en")):"",
-					(equipmentType.getNames(new Locale("fr")))?equipmentType.getNames(new Locale("fr")):"",
-					(equipmentType.getDescriptions(new Locale("en")))?equipmentType.getDescriptions(new Locale("en")):"",
-					(equipmentType.getDescriptions(new Locale("fr")))?equipmentType.getDescriptions(new Locale("fr")):"",
-					equipmentType.observation
+					facilityReport.dataLocation.code,
+					(facilityReport.dataLocation.getNames(new Locale("en")))?facilityReport.dataLocation.getNames(new Locale("en")):"",
+					(facilityReport.dataLocation.getNames(new Locale("fr")))?facilityReport.dataLocation.getNames(new Locale("fr")):"",
+					(facilityReport.hmisEquipmentType.getNames(new Locale("en")))?facilityReport.hmisEquipmentType.getNames(new Locale("en")):"",
+					(facilityReport.hmisEquipmentType.getNames(new Locale("fr")))?facilityReport.hmisEquipmentType.getNames(new Locale("fr")):"",
+					facilityReport.hmisEquipmentType.code,
+					facilityReport.dateCreated.toString(),
+					facilityReport.numberOfOpEquipment
 				]
 				writer.write(line)
 				progress.incrementProgress()
@@ -92,21 +102,21 @@ public class EquipmentTypeExport implements Exporter {
 	
 	public List<String> getBasicInfo(){
 		List<String> basicInfo = new ArrayList<String>();
-		basicInfo.add("hmisEquipmentType.export")
+		basicInfo.add("equipmentType.export")
 		return basicInfo;
 	}
 	
 
 	public List<String> getExportDataHeaders() {
 		List<String> headers = new ArrayList<String>();
-		headers.add(ImportExportConstant.DEVICE_CODE);
-		headers.add(ImportExportConstant.DEVICE_NAME_EN);
-		headers.add(ImportExportConstant.DEVICE_NAME_FR);
-		//TODO find if you can do away with this field
-		//headers.add(ImportExportConstant.DEVICE_INCLUDED_IN_MEMMS);
-		headers.add(ImportExportConstant.DEVICE_DESCRIPTION_EN);
-		headers.add(ImportExportConstant.DEVICE_DESCRIPTION_FR);
-		headers.add(ImportExportConstant.DEVICE_OBSERVATION);
+		headers.add(ImportExportConstant.LOCATION_CODE);
+		headers.add(ImportExportConstant.LOCATION_NAME_EN);
+		headers.add(ImportExportConstant.LOCATION_NAME_FR);
+		headers.add(ImportExportConstant.HMIS_EQUIPMENT_TYPE_NAME_EN);
+		headers.add(ImportExportConstant.HMIS_EQUIPMENT_TYPE_NAME_FR);
+		headers.add(ImportExportConstant.HMIS_EQUIPMENT_TYPE_CODE);
+		headers.add(ImportExportConstant.HMIS_EQUIPMENT_TYPE_GENERATED_DATE);
+		headers.add(ImportExportConstant.NUMBER_OF_OPERATIONAL_EQUIPMENT);
 		
 		return headers;
 	}

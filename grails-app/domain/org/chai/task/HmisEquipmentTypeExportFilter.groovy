@@ -25,38 +25,36 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package org.chai.task
 
+import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy
+import org.chai.memms.spare.part.SparePart.SparePartStatus;
+import org.chai.memms.spare.part.SparePartType;
+import org.chai.memms.inventory.Provider;
 import groovy.transform.EqualsAndHashCode;
-
 import java.util.Map;
 import java.util.Set;
-
-import org.chai.memms.inventory.EquipmentType;
-import org.chai.memms.inventory.Provider;
-import org.chai.memms.inventory.EquipmentStatus.Status;
-import org.chai.memms.exports.EquipmentExport;
-import org.chai.memms.exports.EquipmentTypeExport;
 import org.chai.memms.task.Exporter;
-import org.chai.location.CalculationLocation;
-import org.chai.location.DataLocationType;
+import org.chai.location.DataLocation;
 import org.chai.memms.util.Utils;
+import org.chai.memms.reports.hmis.HmisReport;
 
+/**
+ * @author Eric Dusabe, Jean Kahigiso M.
+ *
+ */
 @EqualsAndHashCode(includes='id')
-class ExportFilter {
+class HmisEquipmentTypeExportFilter {
 
-	static hasMany = [calculationLocations:CalculationLocation,dataLocationTypes:DataLocationType]
-	
-	static constraints = {
-		calculationLocations nullable: true, blank: true
-		dataLocationTypes nullable: true, blank: true
-		
-	}
+	HmisReport hmisReport
+
 	static mapping = {
-		table "memms_equipment_export_filter"
+		table "memms_hmis_equipment_type_export"
 		version false
-		calculationLocations joinTable:[name:"memms_equipment_calc_location_export_filter",key:"calc_location_id",column:"export_filter_id"]
-		dataLocationTypes joinTable:[name:"memms_equipment_location_type_export_filter",key:"location_type_id",column:"export_filter_id"]
 	}
+
+	static constraints = {
+	 	hmisReport nullable: false
+	}
+
 }

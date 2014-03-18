@@ -141,7 +141,7 @@ class EquipmentTypeController extends AbstractEntityController{
 
 	
 	def getAjaxData = {
-		def types = equipmentTypeService.searchEquipmentType(params['term'],Observation."$params.observation",[:])
+		def types = equipmentTypeService.searchEquipmentType(params['term'],Observation."$params.observation",['hmis':params['hmis']])
 		render(contentType:"text/json") {
 			elements = array {
 				types.each { type ->				

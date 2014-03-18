@@ -113,7 +113,7 @@ class IndicatorComputationService {
             locationsWithEquipment = rootLocation.collectTreeWithDataLocations((skippedLevel!=null)?[skippedLevel]:null,null)
             if (log.isDebugEnabled()) log.debug("computeCurrentReport locationsWithEquipment " + locationsWithEquipment);
         }
-        def dataLocationsWithEquipment = equipmentService.getDataLocationsWithEquipments()
+        def dataLocationsWithEquipment = equipmentService.getAllDataLocationsWithEquipment()
         if (log.isDebugEnabled()) log.debug("computeCurrentReport dataLocationsWithEquipment " + dataLocationsWithEquipment);
         //TODO optimize this method !
         locationsWithEquipment.addAll(dataLocationsWithEquipment)

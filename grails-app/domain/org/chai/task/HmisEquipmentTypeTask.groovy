@@ -25,38 +25,37 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package org.chai.task;
 
-package org.chai.task
-
-import groovy.transform.EqualsAndHashCode;
-
-import java.util.Map;
-import java.util.Set;
-
-import org.chai.memms.inventory.EquipmentType;
-import org.chai.memms.inventory.Provider;
-import org.chai.memms.inventory.EquipmentStatus.Status;
-import org.chai.memms.exports.EquipmentExport;
-import org.chai.memms.exports.EquipmentTypeExport;
 import org.chai.memms.task.Exporter;
-import org.chai.location.CalculationLocation;
-import org.chai.location.DataLocationType;
 import org.chai.memms.util.Utils;
+import org.chai.memms.exports.HmisEquipmentTypeExport;
+import org.springframework.context.i18n.LocaleContextHolder;
 
-@EqualsAndHashCode(includes='id')
-class ExportFilter {
+/**
+ * @author Eric Dusabe, Jean Kahigiso M.
+ *
+ */
 
-	static hasMany = [calculationLocations:CalculationLocation,dataLocationTypes:DataLocationType]
+class HmisEquipmentTypeTask extends DataExportTask{
+
 	
-	static constraints = {
-		calculationLocations nullable: true, blank: true
-		dataLocationTypes nullable: true, blank: true
-		
+	def messageSource
+	
+	String getInformation() {
+		def informLabel = messageSource.getMessage('hmis.equipment.type.label', new Object[0], LocaleContextHolder.getLocale())
+		return informLabel +" "+'<br/>'+messageSource.getMessage('import.file.label', new Object[0], LocaleContextHolder.getLocale())
 	}
-	static mapping = {
-		table "memms_equipment_export_filter"
-		version false
-		calculationLocations joinTable:[name:"memms_equipment_calc_location_export_filter",key:"calc_location_id",column:"export_filter_id"]
-		dataLocationTypes joinTable:[name:"memms_equipment_location_type_export_filter",key:"location_type_id",column:"export_filter_id"]
+	
+	Exporter getExporter() {
+		return new HmisEquipmentTypeExport()
 	}
+	
+	
+	Map getFormModel() {
+		return [
+			task: this
+		]
+	}
+
 }

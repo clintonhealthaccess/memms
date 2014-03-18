@@ -54,6 +54,8 @@ class BootStrap {
 			    Initializer.createCorrectiveMaintenanceStructure()
 			    Initializer.createPreventiveMaintenanceStructure()
 			    Initializer.createSparePartStructure()
+			    Initializer.createHmisEquipmentTypeStructure()
+			    
                 DashboardInitializer.createDashboardStructure()
                 indicatorComputationService.computeCurrentReport()
 			break;

@@ -35,6 +35,7 @@ import org.chai.memms.spare.part.SparePartType;
 
 import groovy.transform.EqualsAndHashCode;
 import i18nfields.I18nFields
+import org.chai.memms.reports.hmis.HmisEquipmentType
 
 /**
  * @author Eugene Munyaneza
@@ -63,6 +64,7 @@ class EquipmentType {
 	String descriptions
 	Period expectedLifeTime
 	Observation observation
+	HmisEquipmentType hmisType
 
 	static belongsTo = [SparePartType]
 	
@@ -80,6 +82,8 @@ class EquipmentType {
 		descriptions nullable: true, blank: true
 		
 		expectedLifeTime nullable: true
+
+		hmisType nullable: true
 		
 		lastUpdated nullable: false, validator:{it <= new Date()}
 		

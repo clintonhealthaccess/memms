@@ -394,7 +394,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 
 		List<Equipment> equipments = []
 		when:
-		equipments = equipmentService.getDistinctEquipmentsByLocation()
+		equipments = equipmentService.getAllDataLocationsWithEquipment()
 		then:
 		equipments.size() == 2
 		equipments[0] != equipments[1]
@@ -426,7 +426,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 
 		List<DataLocation> dataLocations
 		when:
-		dataLocations = equipmentService.getDataLocationsWithEquipments()
+		dataLocations = equipmentService.getAllDataLocationsWithEquipment()
 		then:
 		dataLocations.size() == 2
 		dataLocations[0] != dataLocations[1]

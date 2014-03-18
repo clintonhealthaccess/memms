@@ -93,5 +93,11 @@ class ImportExportConstant {
 	public final static String SPARE_PART_TYPE_NAME_FR = "spare part type name_fr"
 	public final static String SPARE_PART_TYPE_DESCRIPTION_EN = "spare part type description_en"
 	public final static String SPARE_PART_TYPE_DESCRIPTION_FR = "spare part type description_fr"
-	
+
+	//Hmis equipment type export
+	public final static String HMIS_EQUIPMENT_TYPE_NAME_EN = "hmis equipment type name_en"
+	public final static String HMIS_EQUIPMENT_TYPE_NAME_FR = "hmis equipment type name_fr"
+	public final static String HMIS_EQUIPMENT_TYPE_CODE = "hmis equipment type code"
+	public final static String HMIS_EQUIPMENT_TYPE_GENERATED_DATE = "hmis equipment type generated date"
+	public final static String NUMBER_OF_OPERATIONAL_EQUIPMENT = "number of operational equipment"
 }

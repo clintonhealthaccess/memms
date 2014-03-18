@@ -205,26 +205,27 @@ class EquipmentService {
 		return dataLocations as List
 	}
 
-	//Return list dataLocations that has at least one equipment associated to it
-	public def getDataLocationsWithEquipments(){
-		def equipments = this.getDistinctEquipmentsByLocation()
-		def dataLocations = []
-		for(def equipment: equipments){
-			def dataLoc = DataLocation.get(equipment.id)
-			if(dataLoc!=null) dataLocations.add(dataLoc)
+	//Return a list of DataLocations that has at least one equipment associated to it
+	public def getAllDataLocationsWithEquipment(){
+		List<DataLocation> dataLocations = []
+		dataLocations = Equipment.createCriteria().list(){
+			projections {
+	    		distinct "dataLocation"
+			}
 		}
 		return dataLocations
 	}
 
-	//Return equipments based on distinct dataLocation
-	public def getDistinctEquipmentsByLocation(){
-		def criteria = Equipment.createCriteria()
-		return criteria.list(){
-			projections{
-			  distinct("dataLocation")
-			}
+	//Return a list of DataLocations with no equipment in the system
+	public def getAllDataLocationsWithNoEquipment(){
+		List<DataLocation> dataLocations = []
+		def dataLocationsWithEquipment = getAllDataLocationsWithEquipment()
+		dataLocations = DataLocation.createCriteria().list(){
+			not {'in'("id",dataLocationsWithEquipment*.id)}
 		}
+		return dataLocations
 	}
+
 
 	// fterrier: signature is very long
 	public def filterEquipment(def user, def dataLocation, def supplier, def manufacturer,def serviceProvider, def equipmentType, 
