@@ -13,7 +13,6 @@
 			<g:sortableColumn property="openOn"  title="${message(code: 'order.open.on.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="closedOn"  title="${message(code: 'order.closed.on.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<th><g:message code="work.order.description.label"/></th>
-			<th><g:message code="work.order.status.escalation.label"/></th>
 			<th><g:message code="entity.messages.label"/></th>
 		</tr>
 	</thead>
@@ -63,10 +62,3 @@
 	</tbody>
 </table>
 <g:render template="/templates/pagination" model="[entities:entities, entityCount:entities.totalCount]" />
-<script type="text/javascript">
-	$(document).ready(function() {
-		escaletWorkOrder("${createLink(controller:'workOrderView',action: 'escalate')}","${dataLocation?.id}")
-		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}")
-		showClutips()
-	});
-</script>
