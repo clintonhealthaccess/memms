@@ -68,7 +68,7 @@
 		</g:each>
 	</tbody>	
 </table>
-<g:render template="/templates/pagination" model="[entities:entities, entityCount:entities.totalCount]" />
+<g:render template="/templates/pagination" model="[entities:entities, entityCount:entities.totalCount]" var="instance"/>
 <script type="text/javascript">
 	$(document).ready(function() {
 		updateEquipment("${createLink(controller:'equipmentView',action: 'updateObsolete')}");

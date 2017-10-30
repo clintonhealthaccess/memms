@@ -108,7 +108,7 @@ class UserServiceSpec extends IntegrationTests{
 
 	
 		def userOne = newSystemUser("userOneT",UUID.randomUUID().toString(),locationOne);
-		def userTwo = newUser("userTwo", "jhgashgaSHAjaFSG", true, false)
+		def userTwo = newUser("userTwo", "jhgashgaSHAjaFSG")
 		userTwo.location = locationOne;
 		userTwo.save(failOnError:true);
 		def userThree =  newOtherUserWithType("userThree",UUID.randomUUID().toString(),locationTwo,UserType.ADMIN)
@@ -132,8 +132,8 @@ class UserServiceSpec extends IntegrationTests{
 		def userByTypeFilters = userService.filterUser(UserType.ADMIN,null,null,null,null,[:])
 		def userByLocationFilters = userService.filterUser(null,locationOne,null,null,null,[:])
 		def userByRoleFilters = userService.filterUser(null,null,role,null,null,[:])
-		def userByActiveFilters = userService.filterUser(null,null,null,'false',null,[:])
-		def userByConfirmedFilters = userService.filterUser(null,null,null,null,'false',[:])
+		def userByActiveFilters = userService.filterUser(null,null,null,'true',null,[:])
+		def userByConfirmedFilters = userService.filterUser(null,null,null,null,'true',[:])
 		def userBySWithoutAllVariableFilters = userService.filterUser(null,null,null,null,null,[:])
 		def userBySWithAllVariableFilters = userService.filterUser(UserType.SYSTEM,locationThree,role,'true','true',[:])
 		def ude = User.findByUsername("userAll")
@@ -148,8 +148,8 @@ class UserServiceSpec extends IntegrationTests{
 		userByTypeFilters.size() == 2
 		userByLocationFilters.size() == 4
 		userByRoleFilters.size() == 2
-		userByActiveFilters.size() == 1
-		userByConfirmedFilters.size() == 8
+		userByActiveFilters.size() == 17
+		userByConfirmedFilters.size() == 17
 
 
 	}

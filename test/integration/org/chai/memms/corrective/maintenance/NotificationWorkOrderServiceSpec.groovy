@@ -163,6 +163,11 @@ class NotificationWorkOrderServiceSpec  extends IntegrationTests{
 		receiverMoHTwo.location = Location.findByCode(RWANDA)
 		receiverMoHTwo.save(failOnError:true)
 		
+		def receiverAdmin = newUser("receiverAdmin", true,true)
+		receiverAdmin.userType = UserType.ADMIN
+		receiverAdmin.location = Location.findByCode(RWANDA)
+		receiverAdmin.save(failOnError:true)
+		
 		def equipmentManaged = newEquipment(CODE(123),DataLocation.findByCode(KIVUYE))
 		def equipmentNotManaged = newEquipment(CODE(133),DataLocation.findByCode(BUTARO))
 		
@@ -179,27 +184,27 @@ class NotificationWorkOrderServiceSpec  extends IntegrationTests{
 		notificationWorkOrderService.setNotificationRead(workOrderNotifications[1])
 		
 		when:
-		def allNotifications = notificationWorkOrderService.filterNotifications(null,null, null,null,null, [:])
-		def readNotifications = notificationWorkOrderService.filterNotifications(null,null, null,null,true, [:])
-		def notificationsByWorkOrder = notificationWorkOrderService.filterNotifications(workOrderManaged,null, null,null,null, [:])
-		def notificationsByWorkOrderTwo = notificationWorkOrderService.filterNotifications(workOrderNotManaged,null, null,null,null, [:])
+		def allNotifications = notificationWorkOrderService.filterNotifications(null,receiverAdmin, null,null,null, [:])
+		def readNotifications = notificationWorkOrderService.filterNotifications(null,receiverMoHTwo, null,null,true, [:])
+		def notificationsByWorkOrder = notificationWorkOrderService.filterNotifications(workOrderManaged,receiverFacilityTwo, null,null,null, [:])
+		def notificationsByWorkOrderTwo = notificationWorkOrderService.filterNotifications(workOrderNotManaged,receiverMoHTwo, null,null,null, [:])
 		def notificationsByreceiverMoH = notificationWorkOrderService.filterNotifications(null,receiverMoHOne,null,null,null, [:])
 		def notificationsByreceiverTechDhOne = notificationWorkOrderService.filterNotifications(null,receiverFacilityOne,null,null,null, [:])
 		def notificationsByreceiverTechDhTwo = notificationWorkOrderService.filterNotifications(null,receiverFacilityTwo,null,null,null, [:])
 		def jointFilter = notificationWorkOrderService.filterNotifications(workOrderManaged,receiverFacilityTwo,null,null,true, [:])
-		def madeAfterToday = notificationWorkOrderService.filterNotifications(null,null, Initializer.now()+1,null,null, [:])
-		def madeBeforeToday = notificationWorkOrderService.filterNotifications(null,null, null,Initializer.now()+1,null, [:])
-		def madeBetweenYesterdayAndTomorrow = notificationWorkOrderService.filterNotifications(null,null, Initializer.now()-1,Initializer.now()+1,null, [:])
-		def unreadNotifications = notificationWorkOrderService.filterNotifications(null,null, null,null,false, [:])
+		def madeAfterToday = notificationWorkOrderService.filterNotifications(null,receiverMoHTwo, Initializer.now()+1,null,null, [:])
+		def madeBeforeToday = notificationWorkOrderService.filterNotifications(null,receiverMoHTwo, null,Initializer.now()+1,null, [:])
+		def madeBetweenYesterdayAndTomorrow = notificationWorkOrderService.filterNotifications(null,receiverMoHTwo, Initializer.now()-1,Initializer.now()+1,null, [:])
+		def unreadNotifications = notificationWorkOrderService.filterNotifications(null,receiverMoHTwo, null,null,false, [:])
 		
 		then:
 		allNotifications.size() == 7
 		notificationsByreceiverTechDhOne.size() == 2
 		notificationsByreceiverTechDhTwo.size() == 2
 		readNotifications.size() == 2
-		notificationsByWorkOrder.size() == 5
+		notificationsByWorkOrder.size() == 1
 		notificationsByWorkOrderTwo.size() == 2
-		notificationsByreceiverMoH.size() == 1
+		notificationsByreceiverMoH.size() == 7
 		jointFilter.size() == 1
 		madeAfterToday.size() == 0
 		madeBeforeToday.size() == 7

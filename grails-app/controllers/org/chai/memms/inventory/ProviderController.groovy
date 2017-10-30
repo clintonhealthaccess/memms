@@ -143,7 +143,7 @@ class ProviderController  extends AbstractEntityController {
 				providers.each { provider ->
 					elem (
 							key: provider.id,
-							value: provider.contact.contactName + ' ['+provider.code+']'
+							value: provider.contact?.contactName + ' ['+provider.code+']'
 							)
 				}
 			}

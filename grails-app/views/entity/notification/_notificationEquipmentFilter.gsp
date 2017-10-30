@@ -23,10 +23,10 @@
 		<ul class="filters-list third">
       <li>
         <div class="half">
-          <g:input name="from" dateClass="date-picker" label="${message(code:'notification.date.from.label')}" bean="${filterCmd}" field="from" value="${filterCmd?.from}"/>
+          <g:input name="from" dateClass="date-range-picker" label="${message(code:'notification.date.from.label')}" bean="${filterCmd}" field="from" value="${filterCmd?.from}"/>
         </div>
         <div class="half">
-          <g:input name="to" dateClass="date-picker" label="${message(code:'notification.date.to.label')}" bean="${filterCmd}" field="to" value="${filterCmd?.to}"/>
+          <g:input name="to" dateClass="date-range-picker" label="${message(code:'notification.date.to.label')}" bean="${filterCmd}" field="to" value="${filterCmd?.to}"/>
         </div>
       </li>
 		</ul>

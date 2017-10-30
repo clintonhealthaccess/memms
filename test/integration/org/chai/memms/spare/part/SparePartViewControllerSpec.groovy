@@ -196,7 +196,7 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		def sparePartOne = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions one search term'],Initializer.getDate(22,07,2010),"2900.23","USD",
 			DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,45,45,0)
 		def sparePartTwo = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","EUR",
-			DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,35,33,3)
+			DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,35,33,0)
 		
 		def sparePartThree = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
 			DataLocation.findByCode(MUSANZE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,2233,2233,0)

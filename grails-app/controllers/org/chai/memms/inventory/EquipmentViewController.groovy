@@ -46,6 +46,9 @@ import org.chai.location.LocationLevel
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
 import org.chai.task.EquipmentExportFilter;
+import groovy.time.*
+import org.codehaus.groovy.runtime.TimeCategory
+import groovy.time.TimeCategory
 
 /**
  * @author Jean Kahigiso M.

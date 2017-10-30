@@ -65,6 +65,8 @@ class NotificationEquipmentServiceSpec  extends IntegrationTests{
 		
 		def receiverTwo = newOtherUserWithType("receiverTwo", "receiverTwo", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 		
+		def adminUser = newOtherUserWithType("admin", "admin", DataLocation.findByCode(BUTARO),UserType.ADMIN)
+		
 		
 		notificationEquipmentService.newNotification(null, "Send for rapair, one",senderOne)
 		notificationEquipmentService.newNotification(null, "Send for rapair, two",senderTwo)
@@ -74,26 +76,26 @@ class NotificationEquipmentServiceSpec  extends IntegrationTests{
 		notificationEquipmentService.setNotificationRead(notificationEquipment[1])
 		
 		when:
-		def allNotifications = notificationEquipmentService.filterNotifications(null,null, null,null,null,null, [:])
-		def readNotifications = notificationEquipmentService.filterNotifications(null,null, null,null,null,true, [:])
+		def allNotifications = notificationEquipmentService.filterNotifications(null,null, adminUser,null,null,null, [:])
+		def readNotifications = notificationEquipmentService.filterNotifications(null,null, receiverTwo,null,null,true, [:])
 		//TODO we cannot specify the departments as of now
 		//def notificationsByDepartmentOrder = notificationEquipmentService.filterNotifications(null,null, null,null,null, [:])
 		def notificationsByreceiver = notificationEquipmentService.filterNotifications(null,null,receiverOne,null,null,null, [:])
 		def jointFilter = notificationEquipmentService.filterNotifications(receiverOne.location,null,receiverOne,null,null,null, [:])
-		def madeAfterToday = notificationEquipmentService.filterNotifications(null,null,null, Initializer.now()+1,null,null, [:])
-		def madeBeforeToday = notificationEquipmentService.filterNotifications(null,null, null,null,Initializer.now()+1,null, [:])
-		def madeBetweenYesterdayAndTomorrow = notificationEquipmentService.filterNotifications(null,null,null, Initializer.now()-1,Initializer.now()+1,null, [:])
-		def unreadNotifications = notificationEquipmentService.filterNotifications(null,null, null,null,null,false, [:])
+		def madeAfterToday = notificationEquipmentService.filterNotifications(null,null,receiverOne, Initializer.now()+1,null,null, [:])
+		def madeBeforeToday = notificationEquipmentService.filterNotifications(null,null, receiverOne,null,Initializer.now()+1,null, [:])
+		def madeBetweenYesterdayAndTomorrow = notificationEquipmentService.filterNotifications(null,null,receiverOne, Initializer.now()-1,Initializer.now()+1,null, [:])
+		def unreadNotifications = notificationEquipmentService.filterNotifications(null,null, receiverOne,null,null,false, [:])
 		then:
 		allNotifications.size() == 4
-		readNotifications.size() == 2
+		readNotifications.size() == 1
 		//notificationsByDepartmentOrder.size() == 3
 		notificationsByreceiver.size() == 2
-		jointFilter.size() == 1
+		jointFilter.size() == 2
 		madeAfterToday.size() == 0
-		madeBeforeToday.size() == 4
-		madeBetweenYesterdayAndTomorrow.size() == 4
-		unreadNotifications.size() == 2
+		madeBeforeToday.size() == 2
+		madeBetweenYesterdayAndTomorrow.size() == 2
+		unreadNotifications.size() == 1
 	}
 	
 	def "can search notifications"() {
@@ -111,10 +113,10 @@ class NotificationEquipmentServiceSpec  extends IntegrationTests{
 		notificationEquipmentService.newNotification(null, "Send for rapair, two",senderTwo)
 		
 		when:
-		def found = notificationEquipmentService.searchNotificition("one",null,[:])
+		def found = notificationEquipmentService.searchNotificition("one",receiverOne,[:])
 		then:
 		NotificationEquipment.count() == 4
-		found.size() == 2
+		found.size() == 1
 	}
 	
 	def "get unread notifications count"() {

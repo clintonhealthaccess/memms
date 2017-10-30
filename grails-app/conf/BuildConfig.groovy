@@ -117,8 +117,9 @@ grails.project.dependency.resolution = {
 			excludes "quartz"
 		}
 		compile ":quartz:1.0.1"
+		//compile ":joda-time:2.0.0"
 		//compile ":jquery-ui:1.10.4"
-		runtime ":cached-resources:1.1"
+		//runtime ":cached-resources:1.1"
 		//runtime ':resources:1.2.14'
     }
 	

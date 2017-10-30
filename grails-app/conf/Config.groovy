@@ -216,6 +216,11 @@ file.upload.delimiter=","
 
 task.temp.folder='files/'
 
+grails.resources.mappers.yuicssminify.includes = ['**/*.css']
+grails.resources.mappers.yuijsminify.includes = ['**/*.js']
+grails.resources.mappers.yuicssminify.excludes = ['**/*.min.css']
+grails.resources.mappers.yuijsminify.excludes = ['**/*.min.js']
+
 /**
 * Configuration file override
 */

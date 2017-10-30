@@ -41,6 +41,9 @@
 			if($(this).val()=="FACILITY") $(".hidden-item").slideDown("slow");
 			else $(".hidden-item").slideUp("slow");
 		});
+		$('.clear-form').click(function() {
+		 $(".hidden-item").slideUp("slow");
+		});
 	});
 </script>
 

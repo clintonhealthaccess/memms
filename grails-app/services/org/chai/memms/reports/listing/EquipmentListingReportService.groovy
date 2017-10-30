@@ -264,6 +264,7 @@ class EquipmentListingReportService {
 						equipmentStatusChanges.each{ equipmentStatusChange ->
 							def previousStatus = equipmentStatusChange.statusChange['previous']
 							def currentStatus = equipmentStatusChange.statusChange['current']
+							if (log.isDebugEnabled()) log.debug("PARAMS STATUS CHANGES <<<<<<<<<<<<<<<<<<<<<< Previous :"+previousStatus+" Current :"+currentStatus)
 							and {
 								inList("previousStatus", previousStatus)
 								inList("status", currentStatus)
@@ -331,7 +332,7 @@ class EquipmentListingReportService {
 		equipmentReport.toStatusChangesPeriod=toStatusChangesPeriod
 		
 		equipmentReport.save(failOnError:true)
-		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ equipmentReport.id)
+		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ equipmentReport.id+" >>>> STATUS CHANGES: "+equipmentReport.statusChanges)
 
 		return equipmentReport
 	}

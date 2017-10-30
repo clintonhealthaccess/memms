@@ -139,10 +139,18 @@ class User {
 		registrationToken nullable: true 
 		passwordToken nullable: true 
 		userType nullable: false, blank: false, inList:[UserType.ADMIN,UserType.SYSTEM,UserType.TECHNICIANDH,UserType.ASSISTANTTECHHOSP,UserType.TECHNICIANMMC,UserType.TITULAIREHC,UserType.HOSPITALDEPARTMENT,UserType.OTHER]
-		//TODO fix this
+		confirmed validator: { val, obj ->
+			if (obj.location != null ) return val ? true : false
+		}
 		active validator: { val, obj ->
-			return val ? obj.location != null && (obj.permissionString || obj.roles.size() > 0) : true
-		} 
+			if (obj.confirmed == true && obj.roles.size() > 0) return val ? true : false
+		}
+		//TODO fix this
+		//active validator: { val, obj ->
+			//if(obj.confirmed==true) return val ? obj.location != null && obj.roles.size() > 0 : true
+			//return val ? obj.location != null && obj.roles.size() > 0 : true
+			//if (val==true) return obj.location != null && obj.roles.size() > 0
+		//} 
 		lastUpdated nullable: true, validator:{
 			if(it != null) return (it <= new Date())
 		}

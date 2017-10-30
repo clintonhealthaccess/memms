@@ -745,7 +745,7 @@ ul.element-map label { font-size: 10px; margin-bottom: 3px; }
 /* line 525, ../../src/stylesheets/partials/_forms.sass */
 .simple-list .date select { min-width: 50px; }
 /* line 527, ../../src/stylesheets/partials/_forms.sass */
-.simple-list .date-picker, .simple-list .time-picker, .simple-list .date-time-picker { width: 132px !important; }
+.simple-list .date-picker, .date-range-picker, .simple-list .time-picker, .simple-list .date-time-picker { width: 132px !important; }
 /* line 529, ../../src/stylesheets/partials/_forms.sass */
 .simple-list input[type=text], .simple-list textarea { width: 320px; }
 

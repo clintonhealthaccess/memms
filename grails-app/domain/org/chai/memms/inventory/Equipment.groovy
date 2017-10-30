@@ -44,13 +44,13 @@ import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.location.DataLocation;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-//import org.joda.time.PeriodType;
-//import org.joda.time.Period;
+
 import org.apache.commons.lang.math.RandomUtils;
 import groovy.time.TimeCategory;
 
 import groovy.transform.EqualsAndHashCode;
 import i18nfields.I18nFields
+import java.util.Date
 
 /**
  * @author Jean Kahigiso M.
@@ -238,12 +238,12 @@ public class Equipment {
 	
 	@Transient
 	def generateWarrantyEndDate(){
-		Integer.metaClass.mixin TimeCategory
-		Date.metaClass.mixin TimeCategory
+		use(TimeCategory){
 		if(warranty!=null && warrantyPeriod!=null)
 			warrantyEndDate = warranty.startDate + (warrantyPeriod.numberOfMonths).months
 		else
 			warrantyEndDate = null
+		}
 	}
 	
 	@Transient
