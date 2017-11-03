@@ -293,7 +293,7 @@ class EquipmentViewController extends AbstractController {
 		if (log.isDebugEnabled()) log.debug("EQUIPMENTS TO BE EXPORTED IN SIZE "+equipments.size())
 		File file = equipmentService.exporter(dataLocation?:user.location,equipments)
 
-		response.setHeader "Content-disposition", "attachment; filename=${file.name}.xls"
+		response.setHeader "Content-disposition", "attachment; filename=${file.name}.csv"
 		response.contentType = 'text/csv'
 		response.outputStream << file.text
 		response.outputStream.flush()

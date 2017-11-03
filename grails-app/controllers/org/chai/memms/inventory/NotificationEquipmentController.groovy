@@ -71,7 +71,7 @@ class NotificationEquipmentController extends AbstractEntityController{
 	def getModel(def entity) {
 		[
 			notification:entity
-		]
+		]notifications
 	}
 	
 	def read = {
@@ -117,6 +117,7 @@ class NotificationEquipmentController extends AbstractEntityController{
 				template:"notification/notificationEquipmentList",
 				filterTemplate:"notification/notificationEquipmentFilter",
 				listTop:"notification/notificationEquipmentListTop",
+				code: getLabel(),
 			])
 		}
 	}
@@ -167,6 +168,7 @@ class NotificationEquipmentController extends AbstractEntityController{
 				template:"notification/notificationEquipmentList",
 				filterTemplate:"notification/notificationEquipmentFilter",
 				listTop:"notification/notificationEquipmentListTop",
+				code: getLabel(),
 			])	
 		}
 	}

@@ -122,7 +122,7 @@ class SparePartViewController extends AbstractController{
 		return [
 			entities: entities,
 			entityCount: entities.totalCount,
-			//entityClass:getEntityClass(),
+			entityClass:getEntityClass(),
 			type:type,
 			code: getLabel()
 			

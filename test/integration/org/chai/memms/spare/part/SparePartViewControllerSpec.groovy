@@ -88,7 +88,7 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		then:
 		SparePart.list().size()==4
 		sparePartViewController.response.json.results[0].contains("32")
-		sparePartViewController.response.json.results[0].contains("27")
+		!sparePartViewController.response.json.results[0].contains("27")
 		sparePartViewController.response.json.results[0].contains("12")
 		sparePartViewController.response.json.results[0].contains("22")
 	}
@@ -216,7 +216,7 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		SparePart.list().size()==4
 		sparePartViewController.response.json.results[0].contains(sparePartOne.id+"")
 		!sparePartViewController.response.json.results[0].contains(sparePartTwo.id+"")
-		!sparePartViewController.response.json.results[0].contains(sparePartThree.id+"")
+		sparePartViewController.response.json.results[0].contains(sparePartThree.id+"")
 		!sparePartViewController.response.json.results[0].contains(sparePartFour.id+"")
 
 	}

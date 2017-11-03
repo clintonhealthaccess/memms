@@ -145,12 +145,6 @@ class User {
 		active validator: { val, obj ->
 			if (obj.confirmed == true && obj.roles.size() > 0) return val ? true : false
 		}
-		//TODO fix this
-		//active validator: { val, obj ->
-			//if(obj.confirmed==true) return val ? obj.location != null && obj.roles.size() > 0 : true
-			//return val ? obj.location != null && obj.roles.size() > 0 : true
-			//if (val==true) return obj.location != null && obj.roles.size() > 0
-		//} 
 		lastUpdated nullable: true, validator:{
 			if(it != null) return (it <= new Date())
 		}
