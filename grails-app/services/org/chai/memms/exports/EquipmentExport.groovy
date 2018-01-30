@@ -87,12 +87,12 @@ class EquipmentExport implements Exporter{
 			for(Equipment equipment: equipments){
 				if (log.isDebugEnabled()) log.debug("exporting equipment=" + equipment)
 				List<String> line = [
-					equipment.id,equipment.serialNumber?:"n/a",equipment.type?.code?:"",equipment.type?.getNames(new Locale("en"))?:"",equipment.type?.getNames(new Locale("fr"))?:"",equipment.model?:"n/a",
-					equipment.currentStatus?:"",equipment.dataLocation?.code?:"",equipment.dataLocation?.getNames(new Locale("en"))?:"",equipment.dataLocation?.getNames(new Locale("fr"))?:"n/a",
+					equipment.id,equipment.code,equipment.serialNumber?:"n/a",equipment.type?.code?:"",equipment.type?.getNames(new Locale("en"))?:"",equipment.type?.getNames(new Locale("fr"))?:"",equipment.model?:"n/a",
+					equipment.currentStatus?:"",equipment.dataLocation?.code?:"",equipment.dataLocation?.getNames(new Locale("en"))?:"",equipment.dataLocation?.getNames(new Locale("fr"))?:"n/a",equipment.dataLocation?.type?.getNames(new Locale("en"))?:"",
 					equipment.department?.code?:"",equipment.department?.getNames(new Locale("en"))?:"",equipment.department?.getNames(new Locale("fr"))?:"n/a",equipment.room?:"n/a",equipment.manufacturer?.code?:"n/a",
 					equipment.manufacturer?.contact?.contactName?:"n/a",equipment.manufactureDate?:"n/a",equipment.supplier?.code?:"n/a",equipment.supplier?.contact?.contactName?:"n/a",
 					equipment.purchaseDate?:"n/a",equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",equipment.donorName?:"n/a",equipment.obsolete?:"",equipment.warranty?.startDate?:"n/a",
-					equipment.warrantyPeriod?.numberOfMonths?:"n/a"
+					equipment.warrantyPeriod?.numberOfMonths?:"n/a",equipment.dateCreated?:"",equipment.lastUpdated?:"",equipment.addedBy?.username?:"",equipment.lastModifiedBy?.username?:""
 					]
 				log.debug("exporting line=" + line)
 				writer.write(line)
@@ -109,6 +109,7 @@ class EquipmentExport implements Exporter{
 	public List<String> getExportDataHeaders() {
 		List<String> headers = new ArrayList<String>()
 		headers.add(ImportExportConstant.EQUIPMENT_ID)
+		headers.add(ImportExportConstant.EQUIPMENT_CODE)
 		headers.add(ImportExportConstant.EQUIPMENT_SERIAL_NUMBER)
 		headers.add(ImportExportConstant.DEVICE_CODE)
 		headers.add(ImportExportConstant.DEVICE_NAME_EN)
@@ -118,6 +119,7 @@ class EquipmentExport implements Exporter{
 		headers.add(ImportExportConstant.LOCATION_CODE)
 		headers.add(ImportExportConstant.LOCATION_NAME_EN)
 		headers.add(ImportExportConstant.LOCATION_NAME_FR)
+		headers.add(ImportExportConstant.LOCATION_TYPE)
 		headers.add(ImportExportConstant.DEPARTMENT_CODE)
 		headers.add(ImportExportConstant.DEPARTMENT_NAME_EN)
 		headers.add(ImportExportConstant.DEPARTMENT_NAME_FR)
@@ -134,6 +136,10 @@ class EquipmentExport implements Exporter{
 		headers.add(ImportExportConstant.EQUIPMENT_OBSOLETE)
 		headers.add(ImportExportConstant.EQUIPMENT_WARRANTY_START)
 		headers.add(ImportExportConstant.EQUIPMENT_WARRANTY_END)
+		headers.add(ImportExportConstant.EQUIPMENT_RECORD_DATE)
+		headers.add(ImportExportConstant.EQUIPMENT_LAST_MODIFICATION_DATE)
+		headers.add(ImportExportConstant.EQUIPMENT_CREATED_BY)
+		headers.add(ImportExportConstant.EQUIPMENT_LAST_MODIFIED_BY)
 		return headers;
 	}
 	

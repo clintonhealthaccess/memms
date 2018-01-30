@@ -40,6 +40,7 @@ class HomeController {
 	
 	def languageService
 	def workOrderService
+	def userService
 
 	def getUser() {
 		return User.findByUuid(SecurityUtils.subject.principal, [cache: true])
@@ -58,7 +59,13 @@ class HomeController {
 	}
 	
 	def upgrade = {render (view:'upgrade_'+languageService.currentLanguage)}
-	def about = {render (view:'about_contact_'+languageService.currentLanguage)}
-	def contact = {render (view:'about_contact_'+languageService.currentLanguage)}
+	def about = {render (view:'about_'+languageService.currentLanguage)}
 	def helpdesk = {render (view:'helpdesk_'+languageService.currentLanguage)}
+	
+	
+	def contact = {
+		def users = userService.getAdminActiveUsers(UserType.ADMIN,true,true);
+		if(log.isDebugEnabled()) log.debug("A user accessed contacts: " + users.size())
+			render (view: '/home/contact', model: [users:users])
+	}
 }

@@ -16,7 +16,7 @@
 				<td>
 					${notification?.sender?.names}
 				</td>
-				<td>${notification.dataLocation.code}</td>
+				<td>${notification.dataLocation.code} : ${notification.dataLocation.names}</td>
 				<td>
 					${Utils.formatDateWithTime(notification.dateCreated)}
 				</td>

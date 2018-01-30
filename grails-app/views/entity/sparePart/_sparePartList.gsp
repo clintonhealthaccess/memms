@@ -36,7 +36,10 @@
 					</ul>
 				</td>
 				<td>
-					${sparePart.type.names}
+					${sparePart.type.names}<br/>
+					<g:if test="${!sparePart.type?.model.equals("") && sparePart.type?.model!=null}">
+						<g:message code="spare.part.type.model.label"/>: ${sparePart.type?.model}<br/>
+					</g:if>
 				</td>
 				<td>
 					${message(code: sparePart.stockLocation?.messageCode+'.'+sparePart.stockLocation?.name)}

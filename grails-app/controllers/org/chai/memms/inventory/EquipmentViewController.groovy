@@ -89,9 +89,11 @@ class EquipmentViewController extends AbstractController {
 		
 		if (dataLocation != null){
 			if(!user.canAccessCalculationLocation(dataLocation)) response.sendError(404)
-			equipments = equipmentService.getEquipmentsByDataLocationAndManages(dataLocation,params)
+			//equipments = equipmentService.getEquipmentsByDataLocationAndManages(dataLocation,params)
+			equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,params)
 		}
-		else equipments = equipmentService.getMyEquipments(user,params)
+		else {equipments = equipmentService.getMyEquipments(user,params)
+		}
 		
 		if(request.xhr){
 			 this.ajaxModel(equipments,dataLocation,"")

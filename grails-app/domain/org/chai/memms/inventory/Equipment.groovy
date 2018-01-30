@@ -94,6 +94,7 @@ public class Equipment {
 	}
 	
 	String serialNumber
+	String oldTagNumber
 	String currency
 	String descriptions
 	String model
@@ -166,6 +167,8 @@ public class Equipment {
 
 		//TODO nullable has to be false, but it is true for first iteration
 		serialNumber nullable: true,  unique: true ///blank: false 
+		
+		oldTagNumber nullable: true
 
 		purchaseCost nullable: true, blank: true, validator:{ if(it!=null) return (it>0) }
 		//TODO nullable has to be false, but it is true for first iteration
@@ -177,7 +180,7 @@ public class Equipment {
 		donorName nullable:true,blank:true, validator:{val, obj ->
 			if(obj.purchaser == PurchasedBy.BYDONOR || obj.donor !=null) return (val!=null && val!="")
 		}
-		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
+		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR","GBP"], validator:{ val, obj ->
 			if(obj.purchaseCost != null) return (val != null)
 		}
 
@@ -198,12 +201,16 @@ public class Equipment {
 		//TODO nullable has to be false, but it is true for first iteration
 		manufactureDate nullable: true, blank: false, validator:{it <= new Date()}
 		//TODO nullable has to be false, but it is true for first iteration
-		purchaseDate nullable: true, blank: false, validator:{ val, obj ->
-			//TODO uncomment when fix
-			//return  ((val <= new Date()) && val.after(obj.manufactureDate) || (val.compareTo(obj.manufactureDate)==0))
-		}
+		purchaseDate (nullable: true, blank: false, validator:{ val, obj ->
+			if (val!=null && obj.manufactureDate !=null){
+				return  val.compareTo(obj.manufactureDate)>=0
+			}
+			return true
+		})
+		
 		descriptions nullable: true, blank: true
 		obsolete nullable: false
+		type nullable: false 
 	}
 	
 	static mapping = {

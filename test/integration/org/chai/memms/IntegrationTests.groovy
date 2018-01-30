@@ -220,7 +220,7 @@ abstract class IntegrationTests extends IntegrationSpec {
 	}
 
 	static def newUser(def username, def uuid) {
-		return new User(userType: UserType.OTHER, username: username, permissionString: '', passwordHash:'', active: true, confirmed: true, uuid: uuid, firstname: 'user', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+		return new User(userType: UserType.OTHER, username: username, permissionString: '', passwordHash:'', active: true, confirmed: true, uuid: uuid, firstname: 'user', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11', location:DataLocation.findByCode(BUTARO)).save(failOnError: true)
 	}
 
 	static def newUser(def username, def active, def confirmed) {

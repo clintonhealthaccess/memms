@@ -149,8 +149,8 @@ class EquipmentController extends AbstractEntityController{
 
 	def getModel(def entity) {
 		def manufacturers = Provider.findAllByTypeInList([Type.MANUFACTURER,Type.BOTH],[sort:'contact.contactName']); 
-		def suppliers = Provider.findAllByTypeInList([Type.SUPPLIER,Type.BOTH],[sort:'contact.contactName']);  
-		def serviceProviders = Provider.findAllByType(Type.SERVICEPROVIDER,[sort:'contact.contactName']);  
+		def suppliers = Provider.findAllByTypeInList([Type.SUPPLIER,Type.BOTH,Type.SUPPLIERANDSERVICEPROVIDER],[sort:'contact.contactName']);  
+		def serviceProviders = Provider.findAllByTypeInList([Type.SERVICEPROVIDER,Type.SUPPLIERANDSERVICEPROVIDER],[sort:'contact.contactName']);  
 		def departments = Department.list(sort: names); 
 		
 		def types = []; 

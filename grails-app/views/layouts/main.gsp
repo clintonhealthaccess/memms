@@ -278,15 +278,12 @@
     <div class="wrapper"> 
       &copy;<g:message code="footer.labels.moh"/>
       <br>
-      <a href="#"><g:message code="footer.labels.about"/></a>
+      <a href="${createLink(controller: 'home', action:'about')}"><g:message code="footer.labels.about"/></a>
       |
-      <a href="#"><g:message code="footer.labels.contact"/></a>
+      <a href="${createLink(controller: 'home', action:'contact')}"><g:message code="footer.labels.contact"/></a>
       |
-      <a href="#"><g:message code="footer.labels.helpdesk"/></a>
+      <a href="${createLink(controller: 'home', action:'helpdesk')}"><g:message code="footer.labels.helpdesk"/></a>
     </div>
-  </div>
-  <div class="build-info">
-    <build:buildInfo/>
   </div>
 <r:layoutResources/>
 </body>

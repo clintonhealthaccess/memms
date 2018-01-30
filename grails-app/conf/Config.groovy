@@ -202,7 +202,7 @@ site.contact.email = "memms@dhsst.org"
 site.from.email = "no-reply@dhsst.org"
 
 location.sector.skip.level=["Sector"]
-site.possible.currency = ["":"NONE","RWF":"RWF","USD":"USD","EUR":"EUR"]
+site.possible.currency = ["":"NONE","RWF":"RWF","USD":"USD","EUR":"EUR","GBP":"GBP"]
 
 status.to.display.on.equipment.form = 5
 

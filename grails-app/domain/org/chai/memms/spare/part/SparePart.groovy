@@ -164,7 +164,7 @@ public class SparePart {
 		purchaseDate nullable: true, validator:{if(it!=null) return it <= new Date()}
 
 		currency  nullable: true, blank: true, validator:{ val, obj ->
-			if(obj.purchaseCost != null) return (val != null && val in ["RWF","USD","EUR"])
+			if(obj.purchaseCost != null) return (val != null && val in ["RWF","USD","EUR","GBP"])
 		}
 		purchaseCost nullable: true, validator: {val, obj ->
 			if(obj.currency != null) return val != null

@@ -223,6 +223,11 @@ public class WorkOrder extends MaintenanceOrder{
 	def getUnReadNotificationsForUser(def user){
 		return getNotificationsReceivedByUser(user).findAll{!it.read}
 	}
+	
+//	@Transient
+//	def getUnReadNotificationsForWorkOrder(def user){
+//		return getNotificationsReceivedByUser(user).findAll{it.workOrder == this}
+//	}
 
 	@Override
 	public String toString() {

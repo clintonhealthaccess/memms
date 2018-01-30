@@ -44,7 +44,8 @@ public class Provider{
 		MANUFACTURER("manufacturer"),
 		SUPPLIER("supplier"),
 		BOTH("both"),
-		SERVICEPROVIDER("serviceProvider")
+		SERVICEPROVIDER("serviceProvider"),
+		SUPPLIERANDSERVICEPROVIDER("supplierAndServiceProvider"),
 		String messageCode = "provider.type"
 		final String name
 		Type(String name){
@@ -68,7 +69,7 @@ public class Provider{
 
 	static constraints ={
 		code nullable: false, blank: false, unique: true
-		type nullable: false, inList: [Type.BOTH, Type.MANUFACTURER,Type.SUPPLIER,Type.SERVICEPROVIDER]
+		type nullable: false, inList: [Type.BOTH, Type.MANUFACTURER,Type.SUPPLIER,Type.SERVICEPROVIDER,Type.SUPPLIERANDSERVICEPROVIDER]
 		contact nullable: false
 		lastUpdated nullable: true, validator:{
 			if(it != null) return (it <= new Date())

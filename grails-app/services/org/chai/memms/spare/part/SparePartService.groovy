@@ -103,6 +103,7 @@ class SparePartService {
 						ilike(dbFieldDescriptions,"%"+text+"%") 
 						ilike("t.code","%"+text+"%")
 						ilike("t.partNumber","%"+text+"%")
+						ilike("t.model","%"+text+"%")
 						ilike("t."+dbFieldTypeNames,"%"+text+"%")
 						ilike("t."+dbFieldDescriptions,"%"+text+"%")
 				   	}
@@ -253,6 +254,7 @@ class SparePartService {
 				ilike("t."+dbFieldTypeNames,"%"+text+"%")
 				ilike("t."+dbFieldDescriptions,"%"+text+"%")
 				ilike("t.code","%"+text+"%")
+				ilike("t.model","%"+text+"%")
 			}
 		}
 	}
@@ -370,6 +372,7 @@ class SparePartService {
 			for(SparePart sparePart: spareParts){
 				List<String> line = [
 					sparePart.type?.code?:"",
+					sparePart.type?.partNumber?:"",
 					sparePart.type?.getNames(new Locale("en"))?:"",
 					sparePart.type?.getNames(new Locale("fr"))?:"",
 					sparePart.sparePartPurchasedBy?.name?:"",
@@ -377,6 +380,7 @@ class SparePartService {
 					sparePart.dataLocation?.getNames(new Locale("en"))?:"",
 					sparePart.dataLocation?.getNames(new Locale("fr"))?:"",
 					sparePart.type?.manufacturer?.contact?.contactName?:"",
+					sparePart.type?.model?:"",
 					sparePart.supplier?.code?:"",
 					sparePart.supplier?.contact?.contactName?:"",
 					sparePart.purchaseDate?:"",
@@ -404,6 +408,7 @@ class SparePartService {
 		List<String> headers = new ArrayList<String>();
 
 		headers.add(ImportExportConstant.SPARE_PART_TYPE_CODE)
+		headers.add(ImportExportConstant.SPARE_PART_TYPE_PART_NUMBER)
 		headers.add(ImportExportConstant.SPARE_PART_TYPE_NAME_EN)
 		headers.add(ImportExportConstant.SPARE_PART_TYPE_NAME_FR)
 		headers.add(ImportExportConstant.SPARE_PART_PURCHASED_BY)
@@ -411,6 +416,7 @@ class SparePartService {
 		headers.add(ImportExportConstant.LOCATION_NAME_EN)
 		headers.add(ImportExportConstant.LOCATION_NAME_FR)
 		headers.add(ImportExportConstant.MANUFACTURER_CONTACT_NAME)
+		headers.add(ImportExportConstant.SPARE_PART_TYPE_MODEL)
 		headers.add(ImportExportConstant.SUPPLIER_CODE)
 		headers.add(ImportExportConstant.SUPPLIER_CONTACT_NAME)
 		headers.add(ImportExportConstant.SUPPLIER_DATE)

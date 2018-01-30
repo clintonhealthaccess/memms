@@ -117,9 +117,11 @@ class EquipmentService {
 				or{
 					ilike("code","%"+text+"%")
 					ilike("serialNumber","%"+text+"%")
+					ilike("oldTagNumber","%"+text+"%")
 					ilike("model","%"+text+"%")
 					ilike(dbFieldDescriptions,"%"+text+"%") 
 					ilike("t."+dbFieldTypeNames,"%"+text+"%")
+					ilike("t.code","%"+text+"%")
 			    }
 		}
 	}
@@ -143,6 +145,7 @@ class EquipmentService {
 					or{
 						ilike("code","%"+text+"%")
 						ilike("serialNumber","%"+text+"%")
+						ilike("oldTagNumber","%"+text+"%")
 						ilike("model","%"+text+"%")
 						ilike(dbFieldDescriptions,"%"+text+"%") 
 						ilike("t."+dbFieldTypeNames,"%"+text+"%")
@@ -158,7 +161,7 @@ class EquipmentService {
 		if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([:], [:]))
 		else{
 			dataLocations.add((DataLocation)user.location)
-			if(userService.canViewManagedEquipments(user)) dataLocations.addAll((user.location as DataLocation).manages?.asList())
+			//if(userService.canViewManagedEquipments(user)) dataLocations.addAll((user.location as DataLocation).manages?.asList())
 		}
 		
 		if(log.isDebugEnabled()) log.debug("Current user = " + user + " , Current user's managed dataLocations = " + dataLocations)
@@ -237,7 +240,8 @@ class EquipmentService {
 		else if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([:], [:]))
 		else{
 			dataLocations.add((DataLocation)user.location)
-			dataLocations.addAll((user.location as DataLocation).manages)
+			//Comment to allow displaying only one data location without managed data locations. This doesn't affect users assigned to Administrative entities locations
+			//dataLocations.addAll((user.location as DataLocation).manages)
 		}
 		
 		def criteria = Equipment.createCriteria();
@@ -283,7 +287,7 @@ class EquipmentService {
 			}
 			for(Equipment equipment: equipments){
 				List<String> line = [
-					equipment.code?:"",equipment.serialNumber?:"",equipment.type?.code?:"",equipment.type?.getNames(new Locale("en"))?:"",
+					equipment.id,equipment.code?:"",equipment.serialNumber?:"",equipment.oldTagNumber?:"",equipment.type?.code?:"",equipment.type?.getNames(new Locale("en"))?:"",
 					equipment.type?.getNames(new Locale("fr"))?:"",equipment.model?:"",equipment.currentStatus?:"",
 					equipment.dataLocation?.code,equipment.dataLocation?.getNames(new Locale("en"))?:"",equipment.dataLocation?.getNames(new Locale("fr"))?:"",
 					equipment.department?.code?:"",equipment.department?.getNames(new Locale("en"))?:"",equipment.department?.getNames(new Locale("fr"))?:"",
@@ -315,8 +319,10 @@ class EquipmentService {
 	public List<String> getExportDataHeaders() {
 		List<String> headers = new ArrayList<String>();
 		
+		headers.add(ImportExportConstant.EQUIPMENT_ID)
 		headers.add(ImportExportConstant.EQUIPMENT_CODE)
 		headers.add(ImportExportConstant.EQUIPMENT_SERIAL_NUMBER)
+		headers.add(ImportExportConstant.EQUIPMENT_OLD_TAG_NUMBER)
 		headers.add(ImportExportConstant.DEVICE_CODE)
 		headers.add(ImportExportConstant.DEVICE_NAME_EN)
 		headers.add(ImportExportConstant.DEVICE_NAME_FR)

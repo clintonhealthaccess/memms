@@ -49,6 +49,7 @@ class ImportExportConstant {
 	public final static String LOCATION_CODE = "Facility code"
 	public final static String LOCATION_NAME_EN = "Facility name_en"
 	public final static String LOCATION_NAME_FR = "Facility name_fr"
+	public final static String LOCATION_TYPE = "Facility type"
 	
 	public final static String DEPARTMENT_CODE = "Department"
 	public final static String DEPARTMENT_NAME_EN = "Department name_en"
@@ -57,17 +58,18 @@ class ImportExportConstant {
 	public final static String ROOM = "Room"
 	
 	//Importing/exporting equipment types
-	public final static String DEVICE_CODE = "device_code"
-	public final static String DEVICE_NAME_EN = "device_name_en"
-	public final static String DEVICE_NAME_FR = "device_name_fr"
-	public final static String DEVICE_INCLUDED_IN_MEMMS = "include_in_MEMMS"
-	public final static String DEVICE_DESCRIPTION_EN = "device_description_en"
-	public final static String DEVICE_DESCRIPTION_FR = "device_description_fr"
-	public final static String DEVICE_OBSERVATION = "observations"
+	public final static String DEVICE_CODE = "Type code"
+	public final static String DEVICE_NAME_EN = "Type name_en"
+	public final static String DEVICE_NAME_FR = "Type name_fr"
+	public final static String DEVICE_INCLUDED_IN_MEMMS = "Include in MEMMS"
+	public final static String DEVICE_DESCRIPTION_EN = "Type description_en"
+	public final static String DEVICE_DESCRIPTION_FR = "Type description_fr"
+	public final static String DEVICE_OBSERVATION = "Observations"
 	
 	//Importing/exporting equipment
 	public final static String EQUIPMENT_CODE = "Equipment code"
 	public final static String EQUIPMENT_SERIAL_NUMBER = "Serial number"
+	public final static String EQUIPMENT_OLD_TAG_NUMBER = "Old tag number"
 	public final static String EQUIPMENT_TYPE = "Type"
 	public final static String EQUIPMENT_MODEL = "Model"
 	public final static String MANUFACTURER_CODE = "Manufacturer code"
@@ -81,6 +83,10 @@ class ImportExportConstant {
 	public final static String EQUIPMENT_WARRANTY_START = "Warranty start"
 	public final static String EQUIPMENT_WARRANTY_END = "Warranty period (Months)"
 	public final static String EQUIPMENT_ID = "Id"
+	public final static String EQUIPMENT_RECORD_DATE = "Record date"
+	public final static String EQUIPMENT_LAST_MODIFICATION_DATE = "Last modification date"
+	public final static String EQUIPMENT_LAST_MODIFIED_BY = "Last modified by"
+	public final static String EQUIPMENT_CREATED_BY = "Created by"
 	//Importing/exporting Spare part
 	public final static String SPARE_PART_TYPE = "Type"
 	public final static String SPARE_PART_MANUFACTURE_DATE = "Manufacture date"
@@ -92,9 +98,12 @@ class ImportExportConstant {
 	public final static String SPARE_PART_INSTOCK_QUANTITY = "Quantity in stock"
 	
 	//Importing/exporting spare part types
-	public final static String SPARE_PART_TYPE_CODE = "spare part type code"
-	public final static String SPARE_PART_TYPE_NAME_EN = "spare part type name_en"
-	public final static String SPARE_PART_TYPE_NAME_FR = "spare part type name_fr"
-	public final static String SPARE_PART_TYPE_DESCRIPTION_EN = "spare part type description_en"
-	public final static String SPARE_PART_TYPE_DESCRIPTION_FR = "spare part type description_fr"
+	public final static String SPARE_PART_TYPE_CODE = "Spare part type code"
+	public final static String SPARE_PART_TYPE_PART_NUMBER = "Spare part type part number"
+	
+	public final static String SPARE_PART_TYPE_MODEL = "Spare part type model"
+	public final static String SPARE_PART_TYPE_NAME_EN = "Spare part type name_en"
+	public final static String SPARE_PART_TYPE_NAME_FR = "Spare part type name_fr"
+	public final static String SPARE_PART_TYPE_DESCRIPTION_EN = "Spare part type description_en"
+	public final static String SPARE_PART_TYPE_DESCRIPTION_FR = "Spare part type description_fr"
 }

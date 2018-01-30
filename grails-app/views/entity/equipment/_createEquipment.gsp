@@ -35,7 +35,7 @@
         	<g:selectFromList name="type.id" label="${message(code:'equipment.type.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
     			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData', params: [observation:'USEDINMEMMS'])}"
     			from="${types}" value="${equipment?.type?.id}" values="${types.collect{it.names}}" />
-    			
+    		<g:input name="oldTagNumber" label="${message(code:'equipment.old.tag.number.label')}" bean="${equipment}" field="oldTagNumber"/>	
       		<g:inputYearMonth name="expectedLifeTime" field="expectedLifeTime" years="${equipment.expectedLifeTime?.years}" months="${equipment.expectedLifeTime?.months}" label='entity.expectedLifeTime.label' bean="${equipment}"/>
       		<g:input name="serialNumber" label="${message(code:'equipment.serial.number.label')}" bean="${equipment}" field="serialNumber"/>
       		<g:input name="model" label="${message(code:'equipment.model.label')}" bean="${equipment}" field="model"/>
@@ -71,9 +71,10 @@
 	    		<tr>
 	    			<th></th>
 	    			<th>${message(code:'equipment.status.label')}</th>
-            <th>${message(code:'equipment.previous.status.label')}</th>
+            		<th>${message(code:'equipment.previous.status.label')}</th>
 	    			<th>${message(code:'equipment.status.date.of.event.label')}</th>
 	    			<th>${message(code:'equipment.status.recordedon.label')}</th>
+	    			<th>${message(code:'equipment.status.changed.by.label')}</th>
 	    			<th>${message(code:'equipment.status.current.label')}</th>
 	    		</tr>
 	    		<g:each in="${equipment.status.sort{a,b -> (a.dateCreated > b.dateCreated) ? -1 : 1}}" status="i" var="status">
@@ -90,6 +91,7 @@
                 <td>${status?.previousStatus != null && status?.previousStatus != status?.status? message(code: status?.previousStatus?.messageCode+'.'+status?.previousStatus?.name):''}</td>
 			    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
 			    			<td>${Utils.formatDateWithTime(status?.dateCreated)}</td>
+			    			<td>${status?.changedBy?.names}</td>
 			    			<td>${(status==equipment.timeBasedStatus)? '\u2713':''}</td>
 			    		</tr>
 		    		</g:if>

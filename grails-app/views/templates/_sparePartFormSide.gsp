@@ -9,6 +9,10 @@
 					<span class="text">${sparePart.type?.code}</span>
 					<span class="label"><g:message code="entity.name.label" /></span>
 					<span class="text">${sparePart.type?.names}</span>
+					<span class="label"><g:message code="entity.part.number.label" /></span>
+					<span class="text">${sparePart.type?.partNumber}</span>
+					<span class="label"><g:message code="entity.model.label" /></span>
+					<span class="text">${sparePart.type?.model}</span>
 				</li>
 			</ul>
 		</li>

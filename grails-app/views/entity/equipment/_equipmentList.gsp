@@ -7,7 +7,7 @@
 			<g:sortableColumn property="model"  title="${message(code: 'equipment.model.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<th><g:message code="location.label"/></th>
 			<g:sortableColumn property="currentStatus"  title="${message(code: 'equipment.status.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="obsolete"  title="${message(code: 'equipment.obsolete.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="oldTagNumber"  title="${message(code: 'equipment.old.tag.number.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="purchaser"  title="${message(code: 'equipment.purchaser.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
@@ -37,7 +37,7 @@
 				<td>${equipment.model}</td>
 				<td>
 					<g:message code="datalocation.label"/>: ${equipment.dataLocation.names}<br/>
-					<g:message code="department.label"/>: ${equipment.department.names}<br/>
+					<g:message code="department.label"/>: ${equipment.department?.names}<br/>
 					<g:message code="equipment.room.label"/>: ${equipment.room}<br/>
 				</td>
 				<td>
@@ -45,9 +45,7 @@
   	    				${message(code: equipment.currentStatus?.messageCode+'.'+equipment.currentStatus?.name)}
   	    			</a>
 				</td>
-				<td>
-					<g:listCheckBox name="obsolete" id="${equipment.id}" checked="${(!equipment.obsolete)?:'checked'}"/>
-				</td>
+				<td>${equipment.oldTagNumber}</td>
 				<td>${equipment.manufacturer?.contact?.contactName}</td>
 				<td>${equipment.supplier?.contact?.contactName}</td>
 				

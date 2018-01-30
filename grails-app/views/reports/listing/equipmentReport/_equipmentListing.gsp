@@ -7,7 +7,6 @@
 			<g:sortableColumn property="type"  title="${message(code: 'equipment.type.label')}" params="[q:q]" />
 			<g:sortableColumn property="model"  title="${message(code: 'equipment.model.label')}" params="[q:q]" />
 			<g:sortableColumn property="currentStatus"  title="${message(code: 'equipment.status.label')}" params="[q:q]" />
-			<g:sortableColumn property="obsolete"  title="${message(code: 'equipment.obsolete.label')}" params="[q:q]" />
 			<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q]" />
 			<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q]" />
 			<g:sortableColumn property="purchaser"  title="${message(code: 'equipment.purchaser.label')}" params="[q:q]" />
@@ -24,10 +23,6 @@
 				<td>${equipment.type.names}</td>
 				<td>${equipment.model}</td>
 				<td>${message(code: equipment.currentStatus?.messageCode+'.'+equipment.currentStatus?.name)}</td>
-				<td>
-					<g:if test="${(equipment.obsolete==true)}">&radic;</g:if>
-					<g:else>&nbsp;</g:else>
-				</td>
 				<td>${equipment.manufacturer?.contact?.contactName}</td>
 				<td>${equipment.supplier?.contact?.contactName}</td>
 				<td>${message(code: equipment.purchaser?.messageCode+'.'+equipment.purchaser?.name)}</td>
