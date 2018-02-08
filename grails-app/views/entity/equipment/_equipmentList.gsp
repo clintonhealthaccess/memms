@@ -10,7 +10,6 @@
 			<g:sortableColumn property="oldTagNumber"  title="${message(code: 'equipment.old.tag.number.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="purchaser"  title="${message(code: 'equipment.purchaser.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<th><g:message code="work.order.label"/></th>
 			<th><g:message code="preventive.order.label"/></th>
 		</tr>
@@ -48,10 +47,6 @@
 				<td>${equipment.oldTagNumber}</td>
 				<td>${equipment.manufacturer?.contact?.contactName}</td>
 				<td>${equipment.supplier?.contact?.contactName}</td>
-				
-				
-				<td>${message(code: equipment.purchaser?.messageCode+'.'+equipment.purchaser?.name)}</td>
-				
 				<td>
 					<a href="${createLinkWithTargetURI(controller:'workOrderView', action:'list', params:['equipment.id': equipment?.id])}" title="${message(code: 'work.order.see.list.label')}" class="tooltip">
   	    				${equipment.workOrders?.size()}
