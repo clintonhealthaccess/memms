@@ -38,7 +38,6 @@
     		<g:input name="oldTagNumber" label="${message(code:'equipment.old.tag.number.label')}" bean="${equipment}" field="oldTagNumber"/>	
       		<g:inputYearMonth name="expectedLifeTime" field="expectedLifeTime" years="${equipment.expectedLifeTime?.years}" months="${equipment.expectedLifeTime?.months}" label='entity.expectedLifeTime.label' bean="${equipment}"/>
       		<g:input name="serialNumber" label="${message(code:'equipment.serial.number.label')}" bean="${equipment}" field="serialNumber"/>
-      		<g:input name="model" label="${message(code:'equipment.model.label')}" bean="${equipment}" field="model"/>
       		<g:i18nTextarea name="descriptions" bean="${equipment}" label="${message(code:'entity.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
       		<g:selectFromList name="department.id" label="${message(code:'department.label')}" bean="${equipment}" field="department" optionKey="id" multiple="false"
     			ajaxLink="${createLink(controller:'department', action:'getAjaxData')}"
@@ -51,6 +50,32 @@
       	 	  <g:render template="/templates/typeFormSide" model="['type':equipment?.type,'cssClass':'current','field':'type' ]" />
           </g:if>
         </div>
+      </div>  
+      <div class="form-section">
+      	<fieldset class="form-content">
+      	<h4 class="section-title">
+          <span class="question-default">
+            <img src="${resource(dir:'images/icons',file:'star_small.png')}">
+
+          </span>
+          <g:message code="equipment.section.manufacturer.information.label" default="Manufacturer Information"/>
+        </h4>
+      	<g:selectFromList name="manufacturer.id" label="${message(code:'provider.type.manufacturer')}" bean="${equipment}" field="manufacturer" optionKey="id" multiple="false"
+  			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'MANUFACTURER'])}"
+  			from="${manufacturers}" value="${equipment?.manufacturer?.id}" values="${manufacturers.collect{it.contact?.contactName}}" />	
+  			<g:input name="model" label="${message(code:'equipment.model.label')}" bean="${equipment}" field="model"/>
+  			<g:inputDate name="manufactureDate"  precision="month" label="${message(code:'equipment.manufacture.date.label')}" value="${equipment?.manufactureDate}" bean="${equipment}" field="manufactureDate"/>
+     	</fieldset>
+    	  <div id="form-aside-manufacturer" class="form-aside">
+    	   <g:if test="${equipment?.manufacturer != null}">
+	    	 	 <g:render template="/templates/providerFormSide" model="['provider':equipment?.manufacturer,'type':equipment?.manufacturer?.type,'label':'provider.manufacturer.details','cssClass':'current','field':'manufacturer' ]" />
+         </g:if>
+         <g:else>
+            <g:each in="${manufacturers}" var="provider">
+                <g:render template="/templates/providerFormSide" model="['provider':provider,'type':provider.type,'label':'provider.manufacturer.details','cssClass':'form-aside-hidden','field':'manufacturer' ]" />
+            </g:each>
+         </g:else> 
+       	</div>
       </div>
       <div class="form-section">
       	<fieldset class="form-content">
@@ -107,32 +132,7 @@
   	    	<br />
      		</g:if>
      	</fieldset>
-      </div>   
-      <div class="form-section">
-      	<fieldset class="form-content">
-      	<h4 class="section-title">
-          <span class="question-default">
-            <img src="${resource(dir:'images/icons',file:'star_small.png')}">
-
-          </span>
-          <g:message code="equipment.section.manufacturer.information.label" default="Manufacturer Information"/>
-        </h4>
-      	<g:selectFromList name="manufacturer.id" label="${message(code:'provider.type.manufacturer')}" bean="${equipment}" field="manufacturer" optionKey="id" multiple="false"
-  			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'MANUFACTURER'])}"
-  			from="${manufacturers}" value="${equipment?.manufacturer?.id}" values="${manufacturers.collect{it.contact?.contactName}}" />	
-  			<g:inputDate name="manufactureDate"  precision="month" label="${message(code:'equipment.manufacture.date.label')}" value="${equipment?.manufactureDate}" bean="${equipment}" field="manufactureDate"/>
-     	</fieldset>
-    	  <div id="form-aside-manufacturer" class="form-aside">
-    	   <g:if test="${equipment?.manufacturer != null}">
-	    	 	 <g:render template="/templates/providerFormSide" model="['provider':equipment?.manufacturer,'type':equipment?.manufacturer?.type,'label':'provider.manufacturer.details','cssClass':'current','field':'manufacturer' ]" />
-         </g:if>
-         <g:else>
-            <g:each in="${manufacturers}" var="provider">
-                <g:render template="/templates/providerFormSide" model="['provider':provider,'type':provider.type,'label':'provider.manufacturer.details','cssClass':'form-aside-hidden','field':'manufacturer' ]" />
-            </g:each>
-         </g:else> 
-       	</div>
-      </div>
+      </div> 
       <div class="form-section">
       	<fieldset class="form-content">
       	<h4 class="section-title">
