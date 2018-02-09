@@ -28,6 +28,7 @@
 package org.chai.memms
 import org.chai.memms.util.Utils;
 import java.util.Date;
+import org.joda.time.DateTime;
 import groovy.time.TimeCategory;
 
 /**
@@ -58,27 +59,33 @@ class TimeDate {
 	static transients =["date","time","formatDate"]
 	
 	public String getDate(){
-		def split = this.getFormatDate().split(" ")
+		def split = this.getFormatDate()?.split(" ")
 		return split[0]
 	}
 
 	public String getTime(){
-		def split = this.getFormatDate().split(" ")
+		def split = this.getFormatDate()?.split(" ")
 		return split[1]
 	}
 
 	public String getFormatDate(){
+		if (timeDate!=null){
 		return Utils.formatDateWithTime(timeDate)
+		}else{
+		//Default date is set to NOW when no timeDate available
+		return Utils.formatDateWithTime(new Date())
+		}
 	}
 
 	private buildTimeDate(Date sentDate,String sentTime){
-		Integer.metaClass.mixin TimeCategory
-		Date.metaClass.mixin TimeCategory
+// 	    mixin causes pagination to fail and replaced by use(TimeCategory)
+		use(TimeCategory){
 		Date time = sentDate.clearTime()
 		sentTime.trim()
 		def hourMinSecond =  sentTime.split(":")
 		timeDate = time + Integer.parseInt(hourMinSecond[0]).hours + Integer.parseInt(hourMinSecond[1]).minutes + Integer.parseInt(hourMinSecond[2]).seconds
 		return timeDate
+		}
 	}
 
 	private hasTimeFormat(String sentTime){
