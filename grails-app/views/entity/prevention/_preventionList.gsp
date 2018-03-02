@@ -3,9 +3,11 @@
 	<thead>
 		<tr>
 			<th/>
-			<g:sortableColumn property="eventDate"  title="${message(code: 'prevention.event.date.label')}" params="[q:q,'order.id':order?.id]" />
-			<g:sortableColumn property="scheduledOn"  title="${message(code: 'prevention.scheduled.on.label')}" params="[q:q,'order.id':order?.id]" />
-			<g:sortableColumn property="timeSpend"  title="${message(code: 'prevention.time.spend.label')}" params="[q:q,'order.id':order?.id]" />
+			<th><g:message code="equipment.label"/></th>
+			<g:sortableColumn property="order" title="${message(code: 'entity.names.label')}" params="[q:q,'order.id':order?.id,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="eventDate"  title="${message(code: 'prevention.event.date.label')}" params="[q:q,'order.id':order?.id,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="scheduledOn"  title="${message(code: 'prevention.scheduled.on.label')}" params="[q:q,'order.id':order?.id,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="timeSpend"  title="${message(code: 'prevention.time.spend.label')}" params="[q:q,'order.id':order?.id,'dataLocation.id':dataLocation?.id]" />
 			<th><g:message code="entity.descriptions.label"/></th>
 			<th/>
 		</tr>
@@ -31,6 +33,15 @@
 							</shiro:hasPermission>
 						</li>	
 					</ul>
+				</td>
+				<td>
+					<a rel="${createLinkWithTargetURI(controller:'equipmentView', action:'getEquipmentClueTipsAjaxData', params:['equipment.id': prevention.order.equipment.id])}" class="clueTip">
+						${prevention.order.equipment.code}
+					</a>
+					
+				</td>
+				<td>
+					${prevention.order.names}
 				</td>
 				<td>
 					${Utils.formatDate(prevention.eventDate)}

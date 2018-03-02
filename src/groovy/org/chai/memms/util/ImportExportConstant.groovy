@@ -37,11 +37,11 @@ class ImportExportConstant {
 	//For use in imports
 	public final static Integer NUMBER_OF_LINES_TO_IMPORT = 100;
 	
-	public final static String SUPPLIER_CODE = "Supplier"
+	public final static String SUPPLIER_CODE = "Supplier code"
 	public final static String SUPPLIER_DATE = "Supply date"
 	public final static String SUPPLIER_CONTACT_NAME = "Supplier name"
 	
-	public final static String SERVICEPROVIDER_CODE = "Service Code"
+	public final static String SERVICEPROVIDER_CODE = "Service code"
 	public final static String SERVICEPROVIDER_CONTACT_NAME= "Service Provider"
 	public final static String SERVICEPROVIDER_DATE = "Contract Start Date"
 	public final static String SERVICEPROVIDER_PERIOD = "Contract Start Number of Months"
@@ -51,7 +51,7 @@ class ImportExportConstant {
 	public final static String LOCATION_NAME_FR = "Facility name_fr"
 	public final static String LOCATION_TYPE = "Facility type"
 	
-	public final static String DEPARTMENT_CODE = "Department"
+	public final static String DEPARTMENT_CODE = "Department code"
 	public final static String DEPARTMENT_NAME_EN = "Department name_en"
 	public final static String DEPARTMENT_NAME_FR = "Department name_fr"
 	
@@ -80,13 +80,15 @@ class ImportExportConstant {
 	public final static String EQUIPMENT_STATUS = "Status"
 	public final static String EQUIPMENT_DONOR= "Donor" 
 	public final static String EQUIPMENT_OBSOLETE = "Obsolete"
-	public final static String EQUIPMENT_WARRANTY_START = "Warranty start"
-	public final static String EQUIPMENT_WARRANTY_END = "Warranty period (Months)"
+	public final static String EQUIPMENT_WARRANTY_START = "Warranty start date"
+	public final static String EQUIPMENT_WARRANTY_PERIOD = "Warranty period (Months)"
+	public final static String EQUIPMENT_WARRANTY_END = "Warranty end date"
 	public final static String EQUIPMENT_ID = "Id"
 	public final static String EQUIPMENT_RECORD_DATE = "Record date"
 	public final static String EQUIPMENT_LAST_MODIFICATION_DATE = "Last modification date"
 	public final static String EQUIPMENT_LAST_MODIFIED_BY = "Last modified by"
 	public final static String EQUIPMENT_CREATED_BY = "Created by"
+	public final static String EQUIPMENT_INSTALLATION_DATE = "Installation date"
 	//Importing/exporting Spare part
 	public final static String SPARE_PART_TYPE = "Type"
 	public final static String SPARE_PART_MANUFACTURE_DATE = "Manufacture date"

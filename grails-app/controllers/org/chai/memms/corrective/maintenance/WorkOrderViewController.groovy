@@ -334,6 +334,21 @@ class WorkOrderViewController extends AbstractController{
 
 		render(contentType:"text/json") { results = [result,html,options]}
 	}
+	
+	def export = { FilterCommand cmd ->
+		if (log.isDebugEnabled()) log.debug("workOrder.export, command "+cmd)
+		def dataLocation = DataLocation.get(params.int('dataLocation.id'))
+		adaptParamsForList()
+		def workOrders = workOrderService.exportWorkOrders(dataLocation) {
+		if (log.isDebugEnabled()) log.debusg("WORK ORDERS TO BE EXPORTED IN SIZE "+workOrders.size())
+		File file = workOrderService.exporter(dataLocation?:user.location, workOrders)
+
+		response.setHeader "Content-disposition", "attachment; filename=${file.name}.csv"
+		response.contentType = 'text/csv'
+		response.outputStream << file.text
+		response.outputStream.flush()
+	}
+
 }
 
 class FilterWorkOrderCommand {
@@ -359,5 +374,18 @@ class FilterWorkOrderCommand {
 		return "FilterCommand[OrderStatus="+currentStatus+", Criticality="+criticality+ 
 		", closedOn="+closedOn+", openOn="+openOn+"]"
 	}
+}
+
+class FilterCommand {
+	DataLocation dataLocation
+
+	static constraints = {
+		dataLocation nullable:false
+	}
+
+	String toString() {
+		return "FilterCommand[DataLocation="+dataLocation+"]"
+	}
+}
 }
 

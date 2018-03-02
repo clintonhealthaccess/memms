@@ -91,8 +91,8 @@ class EquipmentExport implements Exporter{
 					equipment.currentStatus?:"",equipment.dataLocation?.code?:"",equipment.dataLocation?.getNames(new Locale("en"))?:"",equipment.dataLocation?.getNames(new Locale("fr"))?:"n/a",equipment.dataLocation?.type?.getNames(new Locale("en"))?:"",
 					equipment.department?.code?:"",equipment.department?.getNames(new Locale("en"))?:"",equipment.department?.getNames(new Locale("fr"))?:"n/a",equipment.room?:"n/a",equipment.manufacturer?.code?:"n/a",
 					equipment.manufacturer?.contact?.contactName?:"n/a",equipment.manufactureDate?:"n/a",equipment.supplier?.code?:"n/a",equipment.supplier?.contact?.contactName?:"n/a",
-					equipment.purchaseDate?:"n/a",equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",equipment.donorName?:"n/a",equipment.obsolete?:"",equipment.warranty?.startDate?:"n/a",
-					equipment.warrantyPeriod?.numberOfMonths?:"n/a",equipment.dateCreated?:"",equipment.lastUpdated?:"",equipment.addedBy?.username?:"",equipment.lastModifiedBy?.username?:""
+					equipment.purchaseDate?:"n/a",equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",equipment.donorName?:"n/a",equipment.obsolete,equipment.warranty?.startDate?:"n/a",
+					equipment.warrantyPeriod?.numberOfMonths?:"n/a",equipment.warrantyEndDate?:"n/a",equipment.installationDate?:"",equipment.dateCreated?:"",equipment.lastUpdated?:"",equipment.addedBy?.username?:"",equipment.lastModifiedBy?.username?:""
 					]
 				log.debug("exporting line=" + line)
 				writer.write(line)
@@ -135,7 +135,9 @@ class EquipmentExport implements Exporter{
 		headers.add(ImportExportConstant.EQUIPMENT_DONOR)
 		headers.add(ImportExportConstant.EQUIPMENT_OBSOLETE)
 		headers.add(ImportExportConstant.EQUIPMENT_WARRANTY_START)
+		headers.add(ImportExportConstant.EQUIPMENT_WARRANTY_PERIOD)
 		headers.add(ImportExportConstant.EQUIPMENT_WARRANTY_END)
+		headers.add(ImportExportConstant.EQUIPMENT_INSTALLATION_DATE)
 		headers.add(ImportExportConstant.EQUIPMENT_RECORD_DATE)
 		headers.add(ImportExportConstant.EQUIPMENT_LAST_MODIFICATION_DATE)
 		headers.add(ImportExportConstant.EQUIPMENT_CREATED_BY)

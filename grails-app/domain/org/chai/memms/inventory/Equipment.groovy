@@ -126,6 +126,7 @@ public class Equipment {
 	
 	User addedBy
 	User lastModifiedBy
+	Date installationDate
 	
 	
 	static hasMany = [status: EquipmentStatus, workOrders: WorkOrder,preventiveOrders: PreventiveOrder]
@@ -211,6 +212,7 @@ public class Equipment {
 		descriptions nullable: true, blank: true
 		obsolete nullable: false
 		type nullable: false 
+		installationDate nullable: true
 	}
 	
 	static mapping = {

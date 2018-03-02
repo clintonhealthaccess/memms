@@ -43,6 +43,7 @@
     			ajaxLink="${createLink(controller:'department', action:'getAjaxData')}"
     			from="${departments}" value="${equipment?.department?.id}" values="${departments.collect{it.names}}" />
       		<g:input name="room" label="${message(code:'equipment.room.label')}" bean="${equipment}" field="room"/>
+      		<g:input name="installationDate" dateClass="date-picker" label="${message(code:'equipment.installation.date.label')}" bean="${equipment}" field="installationDate"/>
       	</fieldset>
       	
      		<div id="form-aside-type" class="form-aside">
@@ -87,7 +88,7 @@
         </h4>
       	<g:if test="${equipment.id == null}">
       			<g:selectFromEnum name="status" bean="${cmd}" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}"/>
-    			<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'equipment.status.date.of.event.label')}" bean="${cmd}" value="${Utils.formatDate(now)}" field="dateOfEvent"/>
+      			<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'equipment.status.date.of.event.label')}" bean="${cmd}" value="${Utils.formatDate(now)}" field="dateOfEvent"/>
       			<g:inputBox name="obsolete"  label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" field="obsolete" value="${equipment.obsolete}" checked="${(equipment.obsolete)? true:false}"/>
       	</g:if>
       	<g:if test="${equipment?.status!=null}">
@@ -113,7 +114,7 @@
 							</ul>
 			    			</td>
 			    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
-                <td>${status?.previousStatus != null && status?.previousStatus != status?.status? message(code: status?.previousStatus?.messageCode+'.'+status?.previousStatus?.name):''}</td>
+                			<td>${status?.previousStatus != null && status?.previousStatus != status?.status? message(code: status?.previousStatus?.messageCode+'.'+status?.previousStatus?.name):''}</td>
 			    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
 			    			<td>${Utils.formatDateWithTime(status?.dateCreated)}</td>
 			    			<td>${status?.changedBy?.names}</td>
@@ -221,5 +222,15 @@
 		numberOnlyField();
 		getToHide("${message(code:'equipment.purchase.cost.label')}","${message(code:'equipment.estimated.cost.label')}");
 		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
+
+		//status==forDisposal
+		if($("select[name=status]").val()!="FORDISPOSAL") $(".status-information").hide()
+		$("select[name=status]").change(function(e){
+			if($(this).val()=="FORDISPOSAL"){
+				$(".status-information").slideDown()
+			}else{
+				$(".status-information").slideUp()
+			}
+		})
 	});
 </script>

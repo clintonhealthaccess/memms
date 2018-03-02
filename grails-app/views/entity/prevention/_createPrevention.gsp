@@ -90,7 +90,7 @@
                             <br/> 
                   <label>Spare Parts</label>
                   <select class="spare-parts" name="spareParts" >
-                    <option value="_" class="first-option">Select used compantible</option>
+                    <option value="_" class="first-option">Select used compatible</option>
                             <g:each in="${compatibleSpareParts}" var="sparePartType">
                               <option value="${sparePartType.key.id}">${sparePartType.key.names} - [${sparePartType.value}]</option>
                             </g:each>

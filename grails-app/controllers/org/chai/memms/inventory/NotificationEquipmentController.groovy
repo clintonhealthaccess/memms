@@ -71,7 +71,7 @@ class NotificationEquipmentController extends AbstractEntityController{
 	def getModel(def entity) {
 		[
 			notification:entity
-		]notifications
+		]
 	}
 	
 	def read = {

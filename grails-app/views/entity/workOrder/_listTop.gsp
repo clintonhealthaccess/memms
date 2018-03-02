@@ -4,6 +4,9 @@
 			<g:message code="default.new.label" args="[entityName]" />
 		</a>
 	</shiro:hasPermission>
+		<a href="${createLinkWithTargetURI(controller: 'workOrderView', action:'export', params:['location.id': location?.id,'dataLocation.id': dataLocation?.id])}" class="next medium gray left export push-r">
+			<g:message code="default.export.label" />
+		</a>
 	<g:searchBox action="search"  controller="workOrderView"/>
 </span>
 	

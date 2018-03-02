@@ -31,7 +31,7 @@
 					<g:message code="equipment.room.label"/>: ${order.equipment.room}<br/> 
 				</td>
 				<td>
-					${order.equipment.code}
+					${order.equipment.code} <br/> ${order.equipment.type.names}
 				</td>
 				<td>
 					${message(code: order.currentStatus?.messageCode+'.'+order.currentStatus?.name)}

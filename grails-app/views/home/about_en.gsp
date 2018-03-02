@@ -20,11 +20,11 @@
 						MEMMS has been developed by the <a
 							href="http://www.clintonhealthaccess.org">Clinton Health
 							Access Initiative</a> in partnership with the <a
-							href="http://www.moh.gov.rw">Rwandan Ministry of Health</a>.
+							href="http://www.moh.gov.rw">Ministry of Health of Rwanda</a>.
 					</p>
 				<br/>
 					<p>
-						If you have any questions concerning the site, please <a
+						If you have any questions concerning the system, please <a
 							href="mailto:${grailsApplication.config.site.contact.email}">contact
 							us</a>.
 					</p>

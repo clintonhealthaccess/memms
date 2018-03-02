@@ -33,7 +33,7 @@ import java.util.Map;
 
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation;
-import org.chai.location.Location
+import org.chai.location.Location;
 import org.chai.memms.Notification;
 import org.chai.memms.corrective.maintenance.NotificationWorkOrder;
 import org.chai.memms.corrective.maintenance.WorkOrder;

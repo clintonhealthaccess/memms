@@ -97,6 +97,7 @@ class EquipmentStatus {
 	Status previousStatus
 	Status status
 	String reasons
+	String disposalRefNumber
 	
 	static belongsTo = [equipment: Equipment]
 	static i18nFields = ["reasons"]
@@ -110,6 +111,11 @@ class EquipmentStatus {
 		previousStatus nullable: true
 		status blank: false, nullable: false, inList:[Status.OPERATIONAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]
 		reasons nullable: true, blank: true
+		
+		disposalRefNumber nullable: true, validator: { val, obj ->
+			if(obj.status.equals(Status.FORDISPOSAL)) return val != null
+			else return val == null
+		}
 	}
 	
 	static mapping = {

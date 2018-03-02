@@ -13,7 +13,7 @@
 			<th><g:message code="preventive.occurance.label"/></th>
 			<th><g:message code="preventive.occurance.interval.label"/></th>
 			<g:sortableColumn property="status"  title="${message(code: 'entity.status.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="openOn"  title="${message(code: 'preventive.order.open.on.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="firstOccurenceOn"  title="${message(code: 'preventive.order.open.on.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<th><g:message code="preventive.next.occurence.label"/></th>
 			<g:sortableColumn property="closedOn"  title="${message(code: 'preventive.order.closed.on.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<th><g:message code="entity.descriptions.label"/></th>

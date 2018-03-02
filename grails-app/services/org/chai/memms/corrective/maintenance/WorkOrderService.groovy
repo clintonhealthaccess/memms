@@ -45,6 +45,10 @@ import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
 import org.chai.memms.util.Utils;
 import org.chai.memms.corrective.maintenance.NotificationWorkOrderService;
+import org.supercsv.io.CsvListWriter
+import org.supercsv.io.ICsvListWriter
+import org.supercsv.prefs.CsvPreference
+import org.chai.memms.util.ImportExportConstant
 
 
 /**
@@ -74,7 +78,7 @@ class WorkOrderService {
 		def criteria = WorkOrder.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocation)
-				equipment{ eq('dataLocation',dataLocation)}
+				eq('dataLocation',dataLocation)
 			if(equip)
 				eq("equipment",equip)
 			if(openOn)
@@ -152,5 +156,101 @@ class WorkOrderService {
 			if(previousStatusChange && currentStatusChange) workOrderStatusChange = statusChange
 		 }
 		 return workOrderStatusChange
+	}
+	
+	public File exporter(DataLocation dataLocation,List<WorkOrder> workOrders){
+		if (log.isDebugEnabled()) log.debug("workOrderService.exporter, dataLocation code: "+dataLocation.code + ", ImportExportConstant: "+ImportExportConstant.CSV_FILE_EXTENSION)
+		
+		File csvFile = File.createTempFile(dataLocation.code+"_"+dataLocation.getNames(new Locale("en")).replaceAll(" ", "_")+"_work_order_export",ImportExportConstant.CSV_FILE_EXTENSION);
+		FileWriter csvFileWriter = new FileWriter(csvFile);
+		ICsvListWriter writer = new CsvListWriter(csvFileWriter, CsvPreference.EXCEL_PREFERENCE);
+		this.writeFile(writer,workOrders);
+		return csvFile;
+	}
+	
+	private void writeFile(ICsvListWriter writer,List<WorkOrder> workOrders) throws IOException {
+		try{
+			String[] csvHeaders = null;
+			// headers
+			if(csvHeaders == null){
+				csvHeaders = this.getExportDataHeaders()
+				writer.writeHeader(csvHeaders);
+			}
+			for(WorkOrder workOrder: workOrders){
+				List<String> line = [
+					workOrder.id,workOrder.equipment.code?:"",workOrder.equipment.serialNumber?:"",workOrder.equipment.oldTagNumber?:"",workOrder.equipment.type?.code?:"",workOrder.equipment.type?.getNames(new Locale("en"))?:"",
+					workOrder.equipment.type?.getNames(new Locale("fr"))?:"",workOrder.equipment.model?:"",workOrder.equipment.currentStatus?:"",
+					workOrder.equipment.dataLocation?.code,workOrder.equipment.dataLocation?.getNames(new Locale("en"))?:"",workOrder.equipment.dataLocation?.getNames(new Locale("fr"))?:"",
+					workOrder.equipment.department?.code?:"",workOrder.equipment.department?.getNames(new Locale("en"))?:"",workOrder.equipment.department?.getNames(new Locale("fr"))?:"",
+					workOrder.equipment.room?:"",workOrder.equipment.manufacturer?.code?:"",workOrder.equipment.manufacturer?.contact?.contactName?:"",
+					workOrder.equipment.manufactureDate?:"",workOrder.equipment.supplier?.code?:"",workOrder.equipment.supplier?.contact?.contactName?:"",workOrder.equipment.purchaseDate?:"",
+					workOrder.equipment.serviceProvider?.code?:"",workOrder.equipment.serviceProvider?.contact?.contactName?:"",workOrder.equipment.serviceContractStartDate?:"",
+					workOrder.equipment.serviceContractPeriod?.numberOfMonths?:"",workOrder.equipment.purchaseCost?:"n/a",workOrder.equipment.currency?:"n/a",
+					workOrder.equipment.purchaser?.name?:"",workOrder.equipment.obsolete?:"",workOrder.equipment.warranty?.startDate?:"",workOrder.equipment.warrantyPeriod?.numberOfMonths?:""
+					]
+				writer.write(line)
+			}
+			
+		} catch (IOException ioe){
+			// TODO throw something that make sense
+			throw ioe;
+		} finally {
+			writer.close();
+		}
+	}
+	
+	
+	public List<String> getBasicInfo(){
+		List<String> basicInfo = new ArrayList<String>();
+		basicInfo.add("workOrder.export")
+		return basicInfo;
+	}
+	
+
+	public List<String> getExportDataHeaders() {
+		List<String> headers = new ArrayList<String>();
+		
+		headers.add(ImportExportConstant.EQUIPMENT_ID)
+		headers.add(ImportExportConstant.EQUIPMENT_CODE)
+		headers.add(ImportExportConstant.EQUIPMENT_SERIAL_NUMBER)
+		headers.add(ImportExportConstant.EQUIPMENT_OLD_TAG_NUMBER)
+		headers.add(ImportExportConstant.DEVICE_CODE)
+		headers.add(ImportExportConstant.DEVICE_NAME_EN)
+		headers.add(ImportExportConstant.DEVICE_NAME_FR)
+		headers.add(ImportExportConstant.EQUIPMENT_MODEL)
+		headers.add(ImportExportConstant.EQUIPMENT_STATUS)
+		headers.add(ImportExportConstant.LOCATION_CODE)
+		headers.add(ImportExportConstant.LOCATION_NAME_EN)
+		headers.add(ImportExportConstant.LOCATION_NAME_FR)
+		headers.add(ImportExportConstant.DEPARTMENT_CODE)
+		headers.add(ImportExportConstant.DEPARTMENT_NAME_EN)
+		headers.add(ImportExportConstant.DEPARTMENT_NAME_FR)
+		headers.add(ImportExportConstant.ROOM)
+		headers.add(ImportExportConstant.MANUFACTURER_CODE)
+		headers.add(ImportExportConstant.MANUFACTURER_CONTACT_NAME)
+		headers.add(ImportExportConstant.EQUIPMENT_MANUFACTURE_DATE)
+		headers.add(ImportExportConstant.SUPPLIER_CODE)
+		headers.add(ImportExportConstant.SUPPLIER_CONTACT_NAME)
+		headers.add(ImportExportConstant.SUPPLIER_DATE)
+		headers.add(ImportExportConstant.SERVICEPROVIDER_CODE)
+		headers.add(ImportExportConstant.SERVICEPROVIDER_CONTACT_NAME)
+		headers.add(ImportExportConstant.SERVICEPROVIDER_DATE)
+		headers.add(ImportExportConstant.SERVICEPROVIDER_PERIOD)
+		headers.add(ImportExportConstant.EQUIPMENT_PURCHASE_COST)
+		headers.add(ImportExportConstant.EQUIPMENT_PURCHASE_COST_CURRENCY)
+		headers.add(ImportExportConstant.EQUIPMENT_DONOR)
+		headers.add(ImportExportConstant.EQUIPMENT_OBSOLETE)
+		headers.add(ImportExportConstant.EQUIPMENT_WARRANTY_START)
+		headers.add(ImportExportConstant.EQUIPMENT_WARRANTY_END)
+		
+		return headers;
+	}
+	
+	def exportWorkOrders(dataLocation) {
+		def criteria = WorkOrder.createCriteria();
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			if(dataLocation)
+				eq('dataLocation',dataLocation)
+		}
 	}
 }

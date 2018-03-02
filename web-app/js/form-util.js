@@ -380,6 +380,16 @@ function getToHide(parchaseCost,estimatedCost){
 		if($(this).is(":checked")) $("#address").slideUp()
 		else $("#address").slideDown()
 	})
+	
+	//status==forDisposal
+	if($("select[name=status]").val()!="FORDISPOSAL") $(".status-information").hide()
+	$("select[name=status]").change(function(e){
+		if($(this).val()=="FORDISPOSAL"){
+			$(".status-information").slideDown()
+		}else{
+			$(".status-information").slideUp()
+		}
+	})
 
 	//purchaser==donor
 	if($("select[name=purchaser]").val()!="BYDONOR") $(".donor-information").hide()
