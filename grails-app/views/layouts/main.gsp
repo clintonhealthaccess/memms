@@ -283,6 +283,8 @@
       <a href="${createLink(controller: 'home', action:'contact')}"><g:message code="footer.labels.contact"/></a>
       |
       <a href="${createLink(controller: 'home', action:'helpdesk')}"><g:message code="footer.labels.helpdesk"/></a>
+       |
+      <g:link action="userManual" resource="${instance}" target="_blank"><g:message code="footer.labels.user.manual"/></g:link>
     </div>
   </div>
 <r:layoutResources/>

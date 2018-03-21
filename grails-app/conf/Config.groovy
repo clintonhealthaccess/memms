@@ -216,6 +216,8 @@ file.upload.delimiter=","
 
 task.temp.folder='files/'
 
+file.user.manual="${userHome}/usermanual.pdf"
+
 grails.resources.mappers.yuicssminify.includes = ['**/*.css']
 grails.resources.mappers.yuijsminify.includes = ['**/*.js']
 grails.resources.mappers.yuicssminify.excludes = ['**/*.min.css']

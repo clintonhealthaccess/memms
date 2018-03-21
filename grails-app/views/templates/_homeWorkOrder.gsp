@@ -27,8 +27,8 @@
 				</td>
 				<td>
 					<g:message code="datalocation.label"/>: ${order.equipment.dataLocation.names}<br/>
-					<g:message code="department.label"/>: ${order.equipment.department.names}<br/>
-					<g:message code="equipment.room.label"/>: ${order.equipment.room}<br/> 
+					<g:message code="department.label"/>: ${order.equipment.department?.names}<br/>
+					<g:message code="equipment.room.label"/>: ${order.equipment?.room}<br/> 
 				</td>
 				<td>
 					${order.equipment.code} <br/> ${order.equipment.type.names}

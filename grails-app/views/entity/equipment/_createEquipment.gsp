@@ -35,32 +35,41 @@
         	<g:selectFromList name="type.id" label="${message(code:'equipment.type.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
     			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData', params: [observation:'USEDINMEMMS'])}"
     			from="${types}" value="${equipment?.type?.id}" values="${types.collect{it.names}}" />
+    		<g:input name="serialNumber" label="${message(code:'equipment.serial.number.label')}" bean="${equipment}" field="serialNumber"/>
     		<g:input name="oldTagNumber" label="${message(code:'equipment.old.tag.number.label')}" bean="${equipment}" field="oldTagNumber"/>	
       		<g:inputYearMonth name="expectedLifeTime" field="expectedLifeTime" years="${equipment.expectedLifeTime?.years}" months="${equipment.expectedLifeTime?.months}" label='entity.expectedLifeTime.label' bean="${equipment}"/>
-      		<g:input name="serialNumber" label="${message(code:'equipment.serial.number.label')}" bean="${equipment}" field="serialNumber"/>
       		<g:i18nTextarea name="descriptions" bean="${equipment}" label="${message(code:'entity.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
+            <g:input name="installationDate" dateClass="date-picker" label="${message(code:'equipment.installation.date.label')}" bean="${equipment}" field="installationDate"/>
+           </fieldset>
+           	<div id="form-aside-type" class="form-aside">
+      	  		<g:if test="${equipment?.type != null}">
+      	 	  	<g:render template="/templates/typeFormSide" model="['type':equipment?.type,'cssClass':'current','field':'type' ]" />
+          		</g:if>
+      		</div>
+      	</div>
+        <div class="form-section">
+      	<fieldset class="form-content">
+        	<h4 class="section-title">
+            <span class="question-default">
+              <img src="${resource(dir:'images/icons',file:'star_small.png')}">
+            </span>
+            <g:message code="equipment.section.location.information.label" default="Location of the equipment"/>
+          </h4>		
       		<g:selectFromList name="department.id" label="${message(code:'department.label')}" bean="${equipment}" field="department" optionKey="id" multiple="false"
     			ajaxLink="${createLink(controller:'department', action:'getAjaxData')}"
     			from="${departments}" value="${equipment?.department?.id}" values="${departments.collect{it.names}}" />
       		<g:input name="room" label="${message(code:'equipment.room.label')}" bean="${equipment}" field="room"/>
-      		<g:input name="installationDate" dateClass="date-picker" label="${message(code:'equipment.installation.date.label')}" bean="${equipment}" field="installationDate"/>
       	</fieldset>
-      	
-     		<div id="form-aside-type" class="form-aside">
-      	  <g:if test="${equipment?.type != null}">
-      	 	  <g:render template="/templates/typeFormSide" model="['type':equipment?.type,'cssClass':'current','field':'type' ]" />
-          </g:if>
-        </div>
-      </div>  
-      <div class="form-section">
-      	<fieldset class="form-content">
-      	<h4 class="section-title">
-          <span class="question-default">
-            <img src="${resource(dir:'images/icons',file:'star_small.png')}">
+      	</div>
+      	<div class="form-section">
+      		<fieldset class="form-content">
+      		<h4 class="section-title">
+          	<span class="question-default">
+            	<img src="${resource(dir:'images/icons',file:'star_small.png')}">
 
-          </span>
-          <g:message code="equipment.section.manufacturer.information.label" default="Manufacturer Information"/>
-        </h4>
+          	</span>
+          	<g:message code="equipment.section.manufacturer.information.label" default="Manufacturer Information"/>
+       	</h4>
       	<g:selectFromList name="manufacturer.id" label="${message(code:'provider.type.manufacturer')}" bean="${equipment}" field="manufacturer" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'MANUFACTURER'])}"
   			from="${manufacturers}" value="${equipment?.manufacturer?.id}" values="${manufacturers.collect{it.contact?.contactName}}" />	

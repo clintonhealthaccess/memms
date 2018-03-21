@@ -18,6 +18,7 @@
 			<g:sortableColumn property="closedOn"  title="${message(code: 'preventive.order.closed.on.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<th><g:message code="entity.descriptions.label"/></th>
 			<th><g:message code="prevention.label"/></th>
+			<th>%</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -76,6 +77,9 @@
 					<a href="${createLinkWithTargetURI(controller:'prevention', action:'list', params:['order.id': order?.id])}">
   	    				${order.preventions?.size()}
   	    			</a>
+				</td>
+				<td>
+					${order.percentageOfInterventionsDone}			
 				</td>
 			</tr>
 		</g:each>

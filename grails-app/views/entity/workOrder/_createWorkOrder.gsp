@@ -37,8 +37,10 @@
 		  		 <label class="top"><g:message code="work.order.last.modified.by.label"/> :</label>
 		  		 ${order.lastModifiedBy?.names} - ${Utils.formatDateWithTime(order?.lastUpdated)}
 	  		</div>
-  		</g:if>						
+  		</g:if>	
+  		<!-- 				
    		<g:textarea name="description" rows="12" width="380" label="${message(code:'entity.description.label')}" readonly="${(closed)? true:false}" bean="${order}" field="description" value="${order.description}"/>
+   		 -->	
    		<g:selectFromEnum name="criticality" bean="${order}" values="${Criticality.values()}" field="criticality" readonly="${(closed)? true:false}" label="${message(code:'work.order.criticality.label')}"/>
    		<g:if test="${order.id != null}">
    			<g:selectFromEnum name="currentStatus" bean="${order}" values="${OrderStatus.values()}" field="currentStatus" label="${message(code:'entity.status.label')}"/>
@@ -172,7 +174,7 @@
 	  		<div class="comment-field">
 		  		<label><g:message code="work.order.comment.label" args="${['']}"/></label>
 		  		<input type="hidden" name="order" value="${order.id}"/>
-		  		<textarea name="content" class="idle-field" id="comment-content" rows="2" cols="90"></textarea>
+		  		<textarea name="content" class="idle-field" id="comment-content" rows="5" cols="90"></textarea>
 	  		</div>
 	  		<div class="comment-button">
 	  			<button class="medium" id="add-comment"><g:message code="work.order.comment.label.alt" args="${['']}"/></button>
