@@ -127,6 +127,7 @@ public class Equipment {
 	User addedBy
 	User lastModifiedBy
 	Date installationDate
+	String contractNumber
 	
 	
 	static hasMany = [status: EquipmentStatus, workOrders: WorkOrder,preventiveOrders: PreventiveOrder]
@@ -170,6 +171,8 @@ public class Equipment {
 		serialNumber nullable: true,  unique: true ///blank: false 
 		
 		oldTagNumber nullable: true
+		
+		contractNumber nullable: true
 
 		purchaseCost nullable: true, blank: true, validator:{ if(it!=null) return (it>0) }
 		//TODO nullable has to be false, but it is true for first iteration

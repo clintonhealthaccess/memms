@@ -1,3 +1,4 @@
+<%@ page import="org.chai.memms.inventory.Equipment.PurchasedBy" %>
 <table class="items spaced">
 	<thead>
 		<tr>
@@ -25,7 +26,11 @@
 				<td>${message(code: equipment.currentStatus?.messageCode+'.'+equipment.currentStatus?.name)}</td>
 				<td>${equipment.manufacturer?.contact?.contactName}</td>
 				<td>${equipment.supplier?.contact?.contactName}</td>
+				<g:if test="${equipment.purchaser==PurchasedBy.NONE}">
+				</g:if>
+				<g:else>
 				<td>${message(code: equipment.purchaser?.messageCode+'.'+equipment.purchaser?.name)}</td>
+				</g:else>
 				<td><g:formatNumber number="${equipment.currentValueOfThisEquipment}" type="number" format="###.#" maxFractionDigits="0"/> ${equipment.currency} </td>
 			</tr>
 		</g:each>
