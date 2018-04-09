@@ -186,7 +186,8 @@ class WorkOrderService {
 					workOrder.equipment.manufactureDate?:"",workOrder.equipment.supplier?.code?:"",workOrder.equipment.supplier?.contact?.contactName?:"",workOrder.equipment.purchaseDate?:"",
 					workOrder.equipment.serviceProvider?.code?:"",workOrder.equipment.serviceProvider?.contact?.contactName?:"",workOrder.equipment.serviceContractStartDate?:"",
 					workOrder.equipment.serviceContractPeriod?.numberOfMonths?:"",workOrder.equipment.purchaseCost?:"n/a",workOrder.equipment.currency?:"n/a",
-					workOrder.equipment.purchaser?.name?:"",workOrder.equipment.obsolete?:"",workOrder.equipment.warranty?.startDate?:"",workOrder.equipment.warrantyPeriod?.numberOfMonths?:""
+					workOrder.equipment.purchaser?.name?:"",workOrder.equipment.obsolete?:"",workOrder.equipment.warranty?.startDate?:"",workOrder.equipment.warrantyPeriod?.numberOfMonths?:"",
+					workOrder.currentStatus?:"",workOrder.criticality?:"",Utils.formatDateWithTime(workOrder.openOn)?:"",Utils.formatDateWithTime(workOrder.closedOn)?:""
 					]
 				writer.write(line)
 			}
@@ -242,15 +243,21 @@ class WorkOrderService {
 		headers.add(ImportExportConstant.EQUIPMENT_OBSOLETE)
 		headers.add(ImportExportConstant.EQUIPMENT_WARRANTY_START)
 		headers.add(ImportExportConstant.EQUIPMENT_WARRANTY_END)
+		headers.add(ImportExportConstant.WORK_ORDER_STATUS)
+		headers.add(ImportExportConstant.WORK_ORDER_PRIORITY)
+		headers.add(ImportExportConstant.WORK_ORDER_OPEN_DATE)
+		headers.add(ImportExportConstant.WORK_ORDER_CLOSING_DATE)
 		
 		return headers;
 	}
 	
-	def exportWorkOrders(dataLocation) {
+	public def exportWorkOrders(def dataLocation) {
 		def criteria = WorkOrder.createCriteria();
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+		//return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+		return criteria.list(sort:"id",order:"desc"){
+			createAlias("equipment","equip")
 			if(dataLocation)
-				eq('dataLocation',dataLocation)
+				eq('equip.dataLocation',dataLocation)
 		}
 	}
 }

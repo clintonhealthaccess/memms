@@ -108,4 +108,10 @@ class ImportExportConstant {
 	public final static String SPARE_PART_TYPE_NAME_FR = "Spare part type name_fr"
 	public final static String SPARE_PART_TYPE_DESCRIPTION_EN = "Spare part type description_en"
 	public final static String SPARE_PART_TYPE_DESCRIPTION_FR = "Spare part type description_fr"
+	
+	//Exporting work orders
+	public final static String WORK_ORDER_STATUS = "Work order status"
+	public final static String WORK_ORDER_PRIORITY = "Work order priority"
+	public final static String WORK_ORDER_OPEN_DATE = "Work order open date"
+	public final static String WORK_ORDER_CLOSING_DATE = "Work order closing date"
 }
