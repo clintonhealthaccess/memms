@@ -6,6 +6,9 @@ import java.util.Map;
 
 import org.chai.location.DataLocation;
 import org.chai.location.Location;
+import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocationType;
+import org.chai.location.LocationLevel;
 import org.chai.memms.Notification;
 import org.chai.memms.corrective.maintenance.NotificationWorkOrder;
 import org.chai.memms.corrective.maintenance.WorkOrder;
@@ -80,8 +83,7 @@ class NotificationEquipmentService {
 		
 		if(!user.userType.equals(UserType.ADMIN) && !user.userType.equals(UserType.TECHNICIANMMC) && !user.userType.equals(UserType.SYSTEM))
 		{
-			if(user.location instanceof Location)
-				dataLocations.addAll(user.location.getDataLocations([:], [:]))
+			if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([:], [:]))
 			else{
 				dataLocations.add((DataLocation)user.location)
 				if(userService.canViewManagedSpareParts(user)) dataLocations.addAll((user.location as DataLocation).manages?.asList())
@@ -107,8 +109,8 @@ class NotificationEquipmentService {
 		
 		if(!receiver.userType.equals(UserType.ADMIN) && !receiver.userType.equals(UserType.TECHNICIANMMC) && !receiver.userType.equals(UserType.SYSTEM))
 		{
-			if(receiver.location instanceof Location)
-				dataLocations.addAll(receiver.location.getDataLocations([:], [:]))
+			if(receiver.location instanceof Location) 
+				dataLocations.addAll(receiver.location.getDataLocations([].toSet(), [].toSet()))
 			else{
 				dataLocations.add((DataLocation)receiver.location)
 				if(userService.canViewManagedSpareParts(receiver)) dataLocations.addAll((receiver.location as DataLocation).manages?.asList())

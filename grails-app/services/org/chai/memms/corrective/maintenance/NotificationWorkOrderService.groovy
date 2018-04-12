@@ -109,7 +109,7 @@ class NotificationWorkOrderService {
 		if(!receiver.userType.equals(UserType.ADMIN) && !receiver.userType.equals(UserType.TECHNICIANMMC) && !receiver.userType.equals(UserType.SYSTEM))
 		{
 			if(receiver.location instanceof Location)
-				dataLocations.addAll(receiver.location.getDataLocations([:], [:]))
+				dataLocations.addAll(receiver.location.getDataLocations([].toSet(), [].toSet()))
 			else{
 				dataLocations.add((DataLocation)receiver.location)
 				if(userService.canViewManagedSpareParts(receiver)) dataLocations.addAll((receiver.location as DataLocation).manages?.asList())

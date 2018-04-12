@@ -116,11 +116,13 @@
                   <g:message code="header.navigation.inventory"/>
                 </a>
               </li>
+              <shiro:hasPermission permission="notificationEquipment:list">
               <li>
                 <a class="${controllerName=='notificationEquipment' ?'active':''}" href="${createLink(controller:'notificationEquipment', action:'list')}">
                   <g:message code="header.navigation.notification.equipment"/>
                 </a>
               </li>
+              </shiro:hasPermission>
             </ul>
           </li>
         </shiro:hasPermission>

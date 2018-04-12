@@ -30,6 +30,10 @@ dataSource {
 //    driverClassName = "org.h2.Driver"
 //    username = "sa"
 //    password = ""
+	//username = "root"
+	//password = "chwcf123"
+	//password = "memms1!"
+	
 }
 hibernate {
     cache.use_second_level_cache = true
@@ -54,10 +58,10 @@ environments {
     }
     production {
         dataSource {
-dbCreate = "update"
-driverClassName = "com.mysql.jdbc.Driver"
-//dialect = "org.hibernate.dialect.MySQLMyISAMDialect"
-            //url = "jdbc:h2:prodDb;MVCC=TRUE"
+			dbCreate = "update"
+			driverClassName = "com.mysql.jdbc.Driver"
+			//dialect = "org.hibernate.dialect.MySQLMyISAMDialect"
+			//url = "jdbc:mysql://127.0.0.1:3306/memms"
             pooled = true
             properties {
                maxActive = -1
