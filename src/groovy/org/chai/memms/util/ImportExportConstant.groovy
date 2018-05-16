@@ -45,6 +45,8 @@ class ImportExportConstant {
 	public final static String SERVICEPROVIDER_CONTACT_NAME= "Service Provider"
 	public final static String SERVICEPROVIDER_DATE = "Contract Start Date"
 	public final static String SERVICEPROVIDER_PERIOD = "Contract Start Number of Months"
+	public final static String SERVICEPROVIDER_CONTRACT_NUMBER = "Contract Reference Number"
+	
 	
 	public final static String LOCATION_CODE = "Facility code"
 	public final static String LOCATION_NAME_EN = "Facility name_en"
@@ -75,6 +77,7 @@ class ImportExportConstant {
 	public final static String MANUFACTURER_CODE = "Manufacturer code"
 	public final static String MANUFACTURER_CONTACT_NAME = "Manufacturer name"
 	public final static String EQUIPMENT_MANUFACTURE_DATE = "Manufacture date"
+	public final static String EQUIPMENT_PURCHASED_BY = "Purchaser"
 	public final static String EQUIPMENT_PURCHASE_COST = "Cost"
 	public final static String EQUIPMENT_PURCHASE_COST_CURRENCY = "Currency"
 	public final static String EQUIPMENT_STATUS = "Status"
@@ -83,6 +86,7 @@ class ImportExportConstant {
 	public final static String EQUIPMENT_WARRANTY_START = "Warranty start date"
 	public final static String EQUIPMENT_WARRANTY_PERIOD = "Warranty period (Months)"
 	public final static String EQUIPMENT_WARRANTY_END = "Warranty end date"
+	public final static String EQUIPMENT_EXPECTED_LIFE_TIME = "Expected life time (Months)"
 	public final static String EQUIPMENT_ID = "Id"
 	public final static String EQUIPMENT_RECORD_DATE = "Record date"
 	public final static String EQUIPMENT_LAST_MODIFICATION_DATE = "Last modification date"

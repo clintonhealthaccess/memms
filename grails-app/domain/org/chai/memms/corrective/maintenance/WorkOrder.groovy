@@ -114,7 +114,7 @@ public class WorkOrder extends MaintenanceOrder{
 		travelTime nullable: true, validator:{ 
 			if(it!=null) return (it.numberOfMinutes > 0)	
 		}
-		description nullable: false, blank: false
+		//description nullable: false, blank: false
 		returnedTo nullable: true, blank: true
 		
 		returnedOn nullable: true, validator:{it <= new Date()}
@@ -141,7 +141,7 @@ public class WorkOrder extends MaintenanceOrder{
 			if(val == null && obj.currency != null) return false
 			if(val!=null && val<=0) return false
 		}
-		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
+		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR","GBP"], validator:{ val, obj ->
 			if(val == null && obj.estimatedCost != null) return false
 		}
 		

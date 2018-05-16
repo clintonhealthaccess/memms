@@ -88,39 +88,26 @@ grails.project.dependency.resolution = {
     
         compile ":hibernate:$grailsVersion"
 		compile ":mail:1.0"
-        //runtime ":jquery:1.10.2"
-		//runtime ":jquery:1.9.1"
-		//runtime ":jquery:1.7.2"
 		compile ":jquery:1.8.2"
-        //compile ":resources:1.2-RC1"	
-		//compile ":cached-resources:1.0"
 		compile ":cache-headers:1.1.5"
 		compile ":springcache:1.3.1"
 		compile ":compass-sass:0.7"
 		compile ":i18n-fields:0.6.1-CHAI"
 		compile ":yui-minify-resources:0.1.5"
 		compile ":rabbitmq-tasks:0.5.3-SNAPSHOT"
-		//compile ":rabbitmq-tasks:0.5.4"
 		compile ":chai-locations:0.5.1-CHAI"
 		compile ":build-info-tag:0.3.1"
-		//compile ":quartz:1.0-RC2"
-		//compile ":shiro:1.1.5"
 		compile ":google-visualization:0.6.2"
 		compile ":rest-client-builder:1.0.2"
 		compile ":release:2.0.3" 
 		compile ":webxml:1.4.1"
 		test (":spock:0.6") {changing = false}
-		//		test ":geb:0.7.1"
 		compile ":csv:0.3.1"
 		
 		compile (":shiro:1.2.1"){
 			excludes "quartz"
 		}
 		compile ":quartz:1.0.1"
-		//compile ":joda-time:2.0.0"
-		//compile ":jquery-ui:1.10.4"
-		//runtime ":cached-resources:1.1"
-		//runtime ':resources:1.2.14'
     }
 	
 }

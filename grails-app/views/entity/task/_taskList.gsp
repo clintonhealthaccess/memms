@@ -9,6 +9,7 @@
 			<th><g:message code="task.information.label"/></th>
 			<th><g:message code="task.senttoqueue.label"/></th>
 			<th><g:message code="task.numberoftries.label"/></th>
+			<th><g:message code="task.numberofitems.label"/></th>
 			<g:sortableColumn property="status" params="[q:q]" title="${message(code: 'task.status.label')}" />
 			<g:sortableColumn property="added" params="[q:q]" title="${message(code: 'task.added.label')}" defaultOrder="desc" />
 			<th><g:message code="task.progress.bar.label"/></th>
@@ -32,6 +33,7 @@
 				<td>${task.information}</td>
 				<td>${task.sentToQueue}</td>
 				<td>${task.numberOfTries}</td>
+				<td>${task.max}</td>
 				<td class="js_task-status">${task.status}</td>
 				<td><g:formatDate format="yyyy-MM-dd HH:mm" date="${task.added}"/></td>
 				<td><span class="js_progress-bar ${task.status != TaskStatus.IN_PROGRESS?'hidden':''}">${task.retrievePercentage()}</span></td>

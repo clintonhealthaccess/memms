@@ -291,11 +291,11 @@ class EquipmentService {
 					equipment.type?.getNames(new Locale("fr"))?:"",equipment.model?:"",equipment.currentStatus?:"",
 					equipment.dataLocation?.code,equipment.dataLocation?.getNames(new Locale("en"))?:"",equipment.dataLocation?.getNames(new Locale("fr"))?:"",
 					equipment.department?.code?:"",equipment.department?.getNames(new Locale("en"))?:"",equipment.department?.getNames(new Locale("fr"))?:"",
-					equipment.room?:"",equipment.manufacturer?.code?:"",equipment.manufacturer?.contact?.contactName?:"",
+					equipment.room?:"",equipment.installationDate?:"",equipment.manufacturer?.code?:"",equipment.manufacturer?.contact?.contactName?:"",
 					equipment.manufactureDate?:"",equipment.supplier?.code?:"",equipment.supplier?.contact?.contactName?:"",equipment.purchaseDate?:"",
-					equipment.serviceProvider?.code?:"",equipment.serviceProvider?.contact?.contactName?:"",equipment.serviceContractStartDate?:"",
-					equipment.serviceContractPeriod?.numberOfMonths?:"",equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",
-					equipment.purchaser?.name?:"",equipment.obsolete?:"",equipment.warranty?.startDate?:"",equipment.warrantyPeriod?.numberOfMonths?:""
+					equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",equipment.purchaser?.name?:"",equipment.donor?.name?:"",equipment.expectedLifeTime?.numberOfMonths?:"",
+					equipment.obsolete?:"",equipment.warranty?.startDate?:"",equipment.warrantyPeriod?.numberOfMonths?:"",equipment.serviceProvider?.code?:"",
+					equipment.serviceProvider?.contact?.contactName?:"",equipment.serviceContractStartDate?:"",equipment.serviceContractPeriod?.numberOfMonths?:"",equipment.contractNumber?:""
 					]
 				writer.write(line)
 			}
@@ -335,24 +335,56 @@ class EquipmentService {
 		headers.add(ImportExportConstant.DEPARTMENT_NAME_EN)
 		headers.add(ImportExportConstant.DEPARTMENT_NAME_FR)
 		headers.add(ImportExportConstant.ROOM)
+		headers.add(ImportExportConstant.EQUIPMENT_INSTALLATION_DATE)
 		headers.add(ImportExportConstant.MANUFACTURER_CODE)
 		headers.add(ImportExportConstant.MANUFACTURER_CONTACT_NAME)
 		headers.add(ImportExportConstant.EQUIPMENT_MANUFACTURE_DATE)
 		headers.add(ImportExportConstant.SUPPLIER_CODE)
 		headers.add(ImportExportConstant.SUPPLIER_CONTACT_NAME)
 		headers.add(ImportExportConstant.SUPPLIER_DATE)
+		headers.add(ImportExportConstant.EQUIPMENT_PURCHASE_COST)
+		headers.add(ImportExportConstant.EQUIPMENT_PURCHASE_COST_CURRENCY)
+		headers.add(ImportExportConstant.EQUIPMENT_PURCHASED_BY)
+		headers.add(ImportExportConstant.EQUIPMENT_DONOR)
+		headers.add(ImportExportConstant.EQUIPMENT_EXPECTED_LIFE_TIME)
+		headers.add(ImportExportConstant.EQUIPMENT_OBSOLETE)
+		headers.add(ImportExportConstant.EQUIPMENT_WARRANTY_START)
+		headers.add(ImportExportConstant.EQUIPMENT_WARRANTY_END)
 		headers.add(ImportExportConstant.SERVICEPROVIDER_CODE)
 		headers.add(ImportExportConstant.SERVICEPROVIDER_CONTACT_NAME)
 		headers.add(ImportExportConstant.SERVICEPROVIDER_DATE)
 		headers.add(ImportExportConstant.SERVICEPROVIDER_PERIOD)
-		headers.add(ImportExportConstant.EQUIPMENT_PURCHASE_COST)
-		headers.add(ImportExportConstant.EQUIPMENT_PURCHASE_COST_CURRENCY)
-		headers.add(ImportExportConstant.EQUIPMENT_DONOR)
-		headers.add(ImportExportConstant.EQUIPMENT_OBSOLETE)
-		headers.add(ImportExportConstant.EQUIPMENT_WARRANTY_START)
-		headers.add(ImportExportConstant.EQUIPMENT_WARRANTY_END)
+		headers.add(ImportExportConstant.SERVICEPROVIDER_CONTRACT_NUMBER)
 		
 		return headers;
+	}
+	
+	
+	def importBooleanValue = {
+		if(it.compareToIgnoreCase("no")) return false
+		else if(it.compareToIgnoreCase("yes")) return true
+		else return null
+	}
+
+	def importStatusValue = {
+		if (it == null) return Status.NONE
+		else if(it?.compareToIgnoreCase("Operational")) return Status.OPERATIONAL
+		else if(it?.compareToIgnoreCase("Partially Operational")) return Status.PARTIALLYOPERATIONAL
+		else if(it?.compareToIgnoreCase("In Stock")) return Status.INSTOCK
+		else if(it?.compareToIgnoreCase("Under Maintenance")) return Status.UNDERMAINTENANCE
+		else if(it?.compareToIgnoreCase("For Disposal")) return Status.FORDISPOSAL
+		else if(it?.compareToIgnoreCase("Disposed")) return Status.DISPOSED
+		else return Status.NONE
+	}
+	
+	def importPurchaserValue = {
+		if (it == null) return PurchasedBy.NONE
+		else if(it?.compareToIgnoreCase("Ministry of Health - MoH")) return PurchasedBy.BYMOH
+		else if(it?.compareToIgnoreCase("Facility")) return PurchasedBy.BYFACILITY
+		else if(it?.compareToIgnoreCase("Donor")) return PurchasedBy.BYDONOR
+		else if(it?.compareToIgnoreCase("Single project implementation unit - SPIU")) return PurchasedBy.BYSPIU
+		else if(it?.compareToIgnoreCase("Rwanda biomedical center - RBC")) return PurchasedBy.BYRBC
+		else return PurchasedBy.NONE
 	}
 
 

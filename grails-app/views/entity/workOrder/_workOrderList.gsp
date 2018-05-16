@@ -12,7 +12,6 @@
 			<g:sortableColumn property="criticality"  title="${message(code: 'work.order.criticality.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="openOn"  title="${message(code: 'order.open.on.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="closedOn"  title="${message(code: 'order.closed.on.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
-			<th><g:message code="work.order.description.label"/></th>
 			<th><g:message code="entity.messages.label"/></th>
 		</tr>
 	</thead>
@@ -50,9 +49,6 @@
 				</td>
 				<td>
 					${Utils.formatDateWithTime(order.closedOn)}
-				</td>
-				<td>
-					<g:stripHtml field="${order.description}" chars="30"/>
 				</td>
 				<td>
 					<a href="${createLinkWithTargetURI(controller:'notificationWorkOrder', action:'list', params:[id: order.id, read:false])}">${order.getUnReadNotificationsForUser(User.findByUuid(SecurityUtils.subject.principal, [cache: true])).size()}</a>

@@ -37,10 +37,7 @@
 		  		 <label class="top"><g:message code="work.order.last.modified.by.label"/> :</label>
 		  		 ${order.lastModifiedBy?.names} - ${Utils.formatDateWithTime(order?.lastUpdated)}
 	  		</div>
-  		</g:if>	
-  		<!-- 				
-   		<g:textarea name="description" rows="12" width="380" label="${message(code:'entity.description.label')}" readonly="${(closed)? true:false}" bean="${order}" field="description" value="${order.description}"/>
-   		 -->	
+  		</g:if>		
    		<g:selectFromEnum name="criticality" bean="${order}" values="${Criticality.values()}" field="criticality" readonly="${(closed)? true:false}" label="${message(code:'work.order.criticality.label')}"/>
    		<g:if test="${order.id != null}">
    			<g:selectFromEnum name="currentStatus" bean="${order}" values="${OrderStatus.values()}" field="currentStatus" label="${message(code:'entity.status.label')}"/>

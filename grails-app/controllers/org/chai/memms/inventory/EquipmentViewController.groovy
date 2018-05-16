@@ -101,7 +101,8 @@ class EquipmentViewController extends AbstractController {
 			render(view:"/entity/list", model: model(equipments, dataLocation) << [
 				template:"equipment/equipmentList",
 				filterTemplate:"equipment/equipmentFilter",
-				listTop:"equipment/listTop"
+				listTop:"equipment/listTop",
+				importTask:'EquipmentImportTask'
 			])
 		}
 	}

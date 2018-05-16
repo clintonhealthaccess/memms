@@ -60,7 +60,7 @@ class EquipmentTypeImporter extends FileImporter {
 		this.sessionFactory = sessionFactory
 	}
 
-	private boolean importData(String fileName,ICsvMapReader reader,Integer numberOfLinesToImport,  String[] headers,  Map<String,Integer> positions,ImportTask task) throws IOException{
+	private boolean importDataOne(String fileName,ICsvMapReader reader,Integer numberOfLinesToImport,  String[] headers,  Map<String,Integer> positions,ImportTask task) throws IOException{
 
 		Map<String, String> rowValues = reader.read(headers);
 
