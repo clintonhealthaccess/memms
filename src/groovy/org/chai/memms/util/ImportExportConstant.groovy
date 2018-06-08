@@ -51,6 +51,7 @@ class ImportExportConstant {
 	public final static String LOCATION_CODE = "Facility code"
 	public final static String LOCATION_NAME_EN = "Facility name_en"
 	public final static String LOCATION_NAME_FR = "Facility name_fr"
+	public final static String LOCATION_NAME_MANAGED_BY = "Catchment area"
 	public final static String LOCATION_TYPE = "Facility type"
 	
 	public final static String DEPARTMENT_CODE = "Department code"

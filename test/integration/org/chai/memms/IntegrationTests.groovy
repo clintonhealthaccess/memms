@@ -117,6 +117,7 @@ abstract class IntegrationTests extends IntegrationSpec {
 		def sector = Initializer.newLocationLevel(['en':SECTOR], SECTOR,4)
 
 		def rwanda = Initializer.newLocation(['en':RWANDA], RWANDA,null,country)
+		rwanda.save(failOnError:true)
 		
 		def north = Initializer.newLocation(['en':NORTH], NORTH, rwanda, province)
 		def south = Initializer.newLocation(['en':SOUTH], SOUTH, rwanda, province)
@@ -220,7 +221,7 @@ abstract class IntegrationTests extends IntegrationSpec {
 	}
 
 	static def newUser(def username, def uuid) {
-		return new User(userType: UserType.OTHER, username: username, permissionString: '', passwordHash:'', active: true, confirmed: true, uuid: uuid, firstname: 'user', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11', location:DataLocation.findByCode(BUTARO)).save(failOnError: true)
+		return new User(userType: UserType.OTHER, username: username, permissionString: '', passwordHash:'', active: true, confirmed: true, uuid: uuid, firstname: 'user', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11', location: DataLocation.findByCode(BUTARO)).save(failOnError: true)
 	}
 
 	static def newUser(def username, def active, def confirmed) {

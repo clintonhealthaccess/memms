@@ -112,7 +112,7 @@ class EquipmentStatus {
 		status blank: false, nullable: false, inList:[Status.OPERATIONAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]
 		reasons nullable: true, blank: true
 		
-		disposalRefNumber nullable: true, validator: { val, obj ->
+		disposalRefNumber nullable: true, blank: true, validator: { val, obj ->
 			if(obj.status.equals(Status.FORDISPOSAL)) return val != null
 			else return val == null
 		}

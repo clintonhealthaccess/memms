@@ -113,7 +113,7 @@
             <ul class="submenu">
               <li>
                 <a class="${controllerName=='equipment' || controllerName=='equipmentView' ?'active':''}" href="${createLink(controller:'equipmentView', action:'summaryPage')}">
-                  <g:message code="header.navigation.inventory"/>
+                  <g:message code="header.navigation.equipment"/>
                 </a>
               </li>
               <shiro:hasPermission permission="notificationEquipment:list">

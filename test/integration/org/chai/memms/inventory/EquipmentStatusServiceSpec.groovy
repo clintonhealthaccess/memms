@@ -19,7 +19,7 @@ class EquipmentStatusServiceSpec extends IntegrationTests{
 		when:
 		def user  = newUser("admin", "Admin UID")
 		def equipment = Equipment.findBySerialNumber(CODE(123))
-		equipmentStatusService.createEquipmentStatus(user,Status.OPERATIONAL,equipment,Initializer.now(),[:])
+		equipmentStatusService.createEquipmentStatus(user,Status.OPERATIONAL,equipment,Initializer.now(),null,[:])
 		then:
 		EquipmentStatus.count()==1
 	}
@@ -31,7 +31,7 @@ class EquipmentStatusServiceSpec extends IntegrationTests{
 	  setupSystemUser()
 	  def user  = newUser("admin", "Admin UID")
 	  def equipment = Equipment.findBySerialNumber(CODE(123))
-	  equipmentStatusService.createEquipmentStatus(user,Status.OPERATIONAL,equipment,Initializer.now(),[:])
+	  equipmentStatusService.createEquipmentStatus(user,Status.OPERATIONAL,equipment,Initializer.now(),null,[:])
 	  when:
 	  def stats = equipmentStatusService.getEquipmentStatusByEquipment(equipment,[:])
 	  then:

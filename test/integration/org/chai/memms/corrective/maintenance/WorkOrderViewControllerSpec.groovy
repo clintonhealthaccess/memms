@@ -178,7 +178,7 @@ class WorkOrderViewControllerSpec extends IntegrationTests{
 	def "can list workOrders - by admin"(){
 		setup:
 		setupLocationTree()
-		setupSystemUser()
+		//setupSystemUser()
 		
 		def admin = newOtherUserWithType("admin", "admin", Location.findByCode(RWANDA),UserType.ADMIN)
 		
@@ -210,7 +210,7 @@ class WorkOrderViewControllerSpec extends IntegrationTests{
 		def equipmentTwo = newEquipment(CODE(124),DataLocation.findByCode(KIVUYE))
 		def workOrderOne = Initializer.newWorkOrder(equipmentOne, "Nothing yet", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		def workOrder = Initializer.newWorkOrder(equipmentTwo, "Nothing yet, not even after escalations", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		setupSecurityManager( admin)
+		setupSecurityManager(admin)
 		workOrderViewController = new WorkOrderViewController()
 		when:
 		workOrderViewController.params."dataLocation.id" = DataLocation.findByCode(BUTARO).id

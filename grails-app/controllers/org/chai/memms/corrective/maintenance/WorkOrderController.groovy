@@ -151,7 +151,7 @@ class WorkOrderController extends AbstractEntityController{
 		if(entity.id==null){
 			newEntity=true
 			entity = workOrderStatusService.createWorkOrderStatus(entity,OrderStatus.OPENATFOSA,user,escalation)
-			equipment = equipmentStatusService.createEquipmentStatus(user,Status.UNDERMAINTENANCE,entity.equipment,now,[:])
+			equipment = equipmentStatusService.createEquipmentStatus(user,Status.UNDERMAINTENANCE,entity.equipment,now,null,[:])
 			equipment.addToWorkOrders(entity)
 			equipment.save(failOnError:true)
 		}else{
@@ -162,9 +162,9 @@ class WorkOrderController extends AbstractEntityController{
 				if(entity.currentStatus == OrderStatus.OPENATMMC && params.oldStatus == OrderStatus.OPENATFOSA) escalation = true			
 				//Change Equipment Status When closing workorder
 				if(entity.currentStatus == OrderStatus.CLOSEDFIXED)
-					equipment = equipmentStatusService.createEquipmentStatus(user,Status.OPERATIONAL,entity.equipment,now,[:])
+					equipment = equipmentStatusService.createEquipmentStatus(user,Status.OPERATIONAL,entity.equipment,now,null,[:])
 				if(entity.currentStatus == OrderStatus.CLOSEDFORDISPOSAL)
-					equipment = equipmentStatusService.createEquipmentStatus(user,Status.FORDISPOSAL,entity.equipment,now,[:])
+					equipment = equipmentStatusService.createEquipmentStatus(user,Status.FORDISPOSAL,entity.equipment,now,params.disposalRefNumber,[:])
 					
 				entity = workOrderStatusService.createWorkOrderStatus(entity,entity.currentStatus,user,escalation)
 			}

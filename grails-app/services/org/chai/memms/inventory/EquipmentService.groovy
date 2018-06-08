@@ -293,7 +293,7 @@ class EquipmentService {
 					equipment.department?.code?:"",equipment.department?.getNames(new Locale("en"))?:"",equipment.department?.getNames(new Locale("fr"))?:"",
 					equipment.room?:"",equipment.installationDate?:"",equipment.manufacturer?.code?:"",equipment.manufacturer?.contact?.contactName?:"",
 					equipment.manufactureDate?:"",equipment.supplier?.code?:"",equipment.supplier?.contact?.contactName?:"",equipment.purchaseDate?:"",
-					equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",equipment.purchaser?.name?:"",equipment.donor?.name?:"",equipment.expectedLifeTime?.numberOfMonths?:"",
+					equipment.purchaseCost?:"",equipment.currency?:"",equipment.purchaser?.name?:"",equipment.donor?.name?:"",equipment.expectedLifeTime?.numberOfMonths?:"",
 					equipment.obsolete?:"",equipment.warranty?.startDate?:"",equipment.warrantyPeriod?.numberOfMonths?:"",equipment.serviceProvider?.code?:"",
 					equipment.serviceProvider?.contact?.contactName?:"",equipment.serviceContractStartDate?:"",equipment.serviceContractPeriod?.numberOfMonths?:"",equipment.contractNumber?:""
 					]

@@ -228,7 +228,7 @@ class UserSpec  extends IntegrationTests {
 		!departmentButaro.canAccessCalculationLocation(gitweHc)
 		!departmentButaro.canAccessCalculationLocation(musanzeDh)
 		!departmentButaro.canAccessCalculationLocation(bureraDistrict)
-		!departmentButaro.canAccessCalculationLocation(kivuyeHc)
+		departmentButaro.canAccessCalculationLocation(kivuyeHc)
 		!departmentButaro.canAccessCalculationLocation(gitaramaDistrict)
 		!departmentButaro.canAccessCalculationLocation(rwanda)
 		

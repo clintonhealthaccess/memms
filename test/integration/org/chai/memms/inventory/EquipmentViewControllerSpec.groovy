@@ -240,7 +240,7 @@ class EquipmentViewControllerSpec extends IntegrationTests{
 		equipmentViewController.response.status == 404
 	}
 	
-	def "technician accessing equipments at their dh - datalocation  provided"(){
+	def "technician accessing equipments, cannot list equipments at his location dh and managed locations at the same time - datalocation  provided"(){
 		setup:
 		setupLocationTree()
 		def user = newOtherUser("user", "user", DataLocation.findByCode(KIVUYE))
@@ -279,7 +279,7 @@ class EquipmentViewControllerSpec extends IntegrationTests{
 		equipmentViewController.list()
 		
 		then:
-		equipmentViewController.modelAndView.model.entities.size() == 2
+		equipmentViewController.modelAndView.model.entities.size() == 1
 
 		when:
 		equipmentViewController.request.content = '{"dataLocation.id":'+DataLocation.findByCode(BUTARO).id+'}'.getBytes()
@@ -287,13 +287,13 @@ class EquipmentViewControllerSpec extends IntegrationTests{
 		equipmentViewController.list()
 		
 		then:
-		equipmentViewController.response.json.results[0].contains(Equipment.findBySerialNumber(CODE(123)).code)
+		!equipmentViewController.response.json.results[0].contains(Equipment.findBySerialNumber(CODE(123)).code)
 		equipmentViewController.response.json.results[0].contains(Equipment.findBySerialNumber(CODE(124)).code)
 		!equipmentViewController.response.json.results[0].contains(Equipment.findBySerialNumber(CODE(125)).code)
 		!equipmentViewController.response.json.results[0].contains(Equipment.findBySerialNumber(CODE(126)).code)
 	}
 	
-	def "technician accessing equipments at their dh - datalocation not provided"(){
+	def "technician accessing equipments, cannot list equipments at his location dh and managed locations at the same time  - datalocation not provided"(){
 		setup:
 		setupLocationTree()
 		def user = newOtherUser("user", "user", DataLocation.findByCode(KIVUYE))
@@ -330,10 +330,10 @@ class EquipmentViewControllerSpec extends IntegrationTests{
 		equipmentViewController.list()
 		
 		then:
-		equipmentViewController.modelAndView.model.entities.size() == 2
+		equipmentViewController.modelAndView.model.entities.size() == 1
 	}
 	
-	def "can list equipments using ajax"(){
+	def "can list equipments at his facility using ajax"(){
 		setup:
 		setupLocationTree()
 		def user = newOtherUser("user", "user", DataLocation.findByCode(KIVUYE))
@@ -372,7 +372,7 @@ class EquipmentViewControllerSpec extends IntegrationTests{
 		equipmentViewController.list()
 		
 		then:
-		equipmentViewController.response.json.results[0].contains(Equipment.findBySerialNumber(CODE(123)).code)
+		!equipmentViewController.response.json.results[0].contains(Equipment.findBySerialNumber(CODE(123)).code)
 		equipmentViewController.response.json.results[0].contains(Equipment.findBySerialNumber(CODE(124)).code)
 	}
 	//TODO throwing a json parsing exception
@@ -500,10 +500,10 @@ class EquipmentViewControllerSpec extends IntegrationTests{
 	def "redirects to listing when accessing summary page by a user with a datalocation"(){
 		setup:
 		setupLocationTree()
-
+		def user = newOtherUserWithType("user", "user", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
 		Initializer.createDummyStructure()
-		Initializer.createUsers()
-		setupSecurityManager(User.findByUsername('titulaireHC'))//data location
+		//Initializer.createUsers()
+		setupSecurityManager(user)
 
 		equipmentViewController = new EquipmentViewController();
 		when:
@@ -516,10 +516,10 @@ class EquipmentViewControllerSpec extends IntegrationTests{
 	def "does not redirects to listing when accessing summary page by a user with a location"(){
 		setup:
 		setupLocationTree()
-
+		def user = newOtherUserWithType("user", "user", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
 		Initializer.createDummyStructure()
 		Initializer.createUsers()
-		setupSecurityManager(User.findByUsername('user1'))
+		setupSecurityManager(user)
 
 		equipmentViewController = new EquipmentViewController();
 		when:

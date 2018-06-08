@@ -99,11 +99,11 @@ class UserServiceSpec extends IntegrationTests{
 	def "can filter user test"(){
 		setup:
 		Initializer.createDummyStructure()
-		Initializer.createUsers()
+	    Initializer.createUsers()
 		Initializer.createInventoryStructure()
 		def locationOne = Location.findByCode(RWANDA);
 		def locationTwo = DataLocation.findByCode(KIVUYE);
-		def locationThree = DataLocation.findByCode(BURERA);
+		def locationThree = Location.findByCode(BURERA);
 		def role = newRole("roleOne","permission")
 
 	
@@ -235,7 +235,7 @@ class UserServiceSpec extends IntegrationTests{
 		
 		def techMMC = newOtherUserWithType("techMMC", "techMMC", DataLocation.findByCode(BUTARO),UserType.TECHNICIANMMC)
 		
-		def admin = newOtherUserWithType("admin", "admin", DataLocation.findByCode(RWANDA),UserType.ADMIN)
+		def admin = newOtherUserWithType("admin", "admin", Location.findByCode(RWANDA),UserType.ADMIN)
 
 		expect:
 		userService.canRequestEquipmentRegistration(userOne)
@@ -256,7 +256,7 @@ class UserServiceSpec extends IntegrationTests{
 		
 		def techMMC = newOtherUserWithType("techMMC", "techMMC", DataLocation.findByCode(BUTARO),UserType.TECHNICIANMMC)
 		
-		def admin = newOtherUserWithType("admin", "admin", DataLocation.findByCode(RWANDA),UserType.ADMIN)
+		def admin = newOtherUserWithType("admin", "admin", Location.findByCode(RWANDA),UserType.ADMIN)
 
 		expect:
 		!userService.canViewManagedEquipments(userOne)

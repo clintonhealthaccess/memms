@@ -87,12 +87,12 @@ class EquipmentExport implements Exporter{
 			for(Equipment equipment: equipments){
 				if (log.isDebugEnabled()) log.debug("exporting equipment=" + equipment)
 				List<String> line = [
-					equipment.id,equipment.code,equipment.serialNumber?:"n/a",equipment.type?.code?:"",equipment.type?.getNames(new Locale("en"))?:"",equipment.type?.getNames(new Locale("fr"))?:"",equipment.model?:"n/a",
-					equipment.currentStatus?:"",equipment.dataLocation?.code?:"",equipment.dataLocation?.getNames(new Locale("en"))?:"",equipment.dataLocation?.getNames(new Locale("fr"))?:"n/a",equipment.dataLocation?.type?.getNames(new Locale("en"))?:"",
-					equipment.department?.code?:"",equipment.department?.getNames(new Locale("en"))?:"",equipment.department?.getNames(new Locale("fr"))?:"n/a",equipment.room?:"n/a",equipment.installationDate?:"",equipment.manufacturer?.code?:"n/a",
-					equipment.manufacturer?.contact?.contactName?:"n/a",equipment.manufactureDate?:"n/a",equipment.supplier?.code?:"n/a",equipment.supplier?.contact?.contactName?:"n/a",equipment.purchaseDate?:"",
-					equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",equipment.donorName?:"n/a",equipment.obsolete,equipment.warranty?.startDate?:"n/a",equipment.warrantyPeriod?.numberOfMonths?:"n/a",
-					equipment.warrantyEndDate?:"n/a",equipment.serviceProvider?.code?:"",equipment.serviceProvider?.contact?.contactName?:"",equipment.serviceContractStartDate?:"",equipment.serviceContractPeriod?.numberOfMonths?:"",equipment.contractNumber?:"",
+					equipment.id,equipment.code,equipment.serialNumber?:"",equipment.type?.code?:"",equipment.type?.getNames(new Locale("en"))?:"",equipment.type?.getNames(new Locale("fr"))?:"",equipment.model?:"",
+					equipment.currentStatus?:"",equipment.dataLocation?.code?:"",equipment.dataLocation?.getNames(new Locale("en"))?:"",equipment.dataLocation?.getNames(new Locale("fr"))?:"",equipment.dataLocation?.managedBy?.getNames(new Locale("en"))?:equipment.dataLocation?.getNames(new Locale("en"))?:"",equipment.dataLocation?.type?.getNames(new Locale("en"))?:"",
+					equipment.department?.code?:"",equipment.department?.getNames(new Locale("en"))?:"",equipment.department?.getNames(new Locale("fr"))?:"",equipment.room?:"",equipment.installationDate?:"",equipment.manufacturer?.code?:"",
+					equipment.manufacturer?.contact?.contactName?:"",equipment.manufactureDate?:"",equipment.supplier?.code?:"",equipment.supplier?.contact?.contactName?:"",equipment.purchaseDate?:"",
+					equipment.purchaseCost?:"",equipment.currency?:"",equipment.donorName?:"",equipment.obsolete,equipment.warranty?.startDate?:"",equipment.warrantyPeriod?.numberOfMonths?:"",
+					equipment.warrantyEndDate?:"",equipment.serviceProvider?.code?:"",equipment.serviceProvider?.contact?.contactName?:"",equipment.serviceContractStartDate?:"",equipment.serviceContractPeriod?.numberOfMonths?:"",equipment.contractNumber?:"",
 					equipment.dateCreated?:"",equipment.lastUpdated?:"",equipment.addedBy?.username?:"",equipment.lastModifiedBy?.username?:""
 					]
 				log.debug("exporting line=" + line)
@@ -120,6 +120,7 @@ class EquipmentExport implements Exporter{
 		headers.add(ImportExportConstant.LOCATION_CODE)
 		headers.add(ImportExportConstant.LOCATION_NAME_EN)
 		headers.add(ImportExportConstant.LOCATION_NAME_FR)
+		headers.add(ImportExportConstant.LOCATION_NAME_MANAGED_BY)
 		headers.add(ImportExportConstant.LOCATION_TYPE)
 		headers.add(ImportExportConstant.DEPARTMENT_CODE)
 		headers.add(ImportExportConstant.DEPARTMENT_NAME_EN)

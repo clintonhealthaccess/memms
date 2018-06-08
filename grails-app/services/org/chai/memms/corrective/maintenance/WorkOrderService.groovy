@@ -77,8 +77,9 @@ class WorkOrderService {
 	def filterWorkOrders(def dataLocation,def equip,def openOn,def closedOn,def criticality,def currentStatus,def params) {
 		def criteria = WorkOrder.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			createAlias("equipment","equip")
 			if(dataLocation)
-				eq('dataLocation',dataLocation)
+				eq('equip.dataLocation',dataLocation)
 			if(equip)
 				eq("equipment",equip)
 			if(openOn)

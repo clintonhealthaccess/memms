@@ -239,6 +239,7 @@ class ImportTaskSpec extends IntegrationTests {
 	
 	def "test get folder"() {
 		setup:
+		setupLocationTree()
 		def user = newUser('user', 'uuid')
 		
 		when:
@@ -253,6 +254,7 @@ class ImportTaskSpec extends IntegrationTests {
 	
 	def "test clean task"() {
 		setup:
+		setupLocationTree()
 		def user = newUser('user', 'uuid')
 		
 		when:

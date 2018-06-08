@@ -40,8 +40,9 @@ class UserControllerSpec extends IntegrationTests{
 	def userController
 	
 	def "create user with correct required data in fields"(){
-		
 		setup:
+		setupLocationTree()
+		def kivuyeHC = DataLocation.findByCode('Kivuye HC')
 		userController = new UserController();
 		
 		when: 
@@ -55,6 +56,7 @@ class UserControllerSpec extends IntegrationTests{
 		userController.params.password = "exemple";
 		userController.params.repeat = "exemple";
 		userController.params.permissionString = "*";
+		userController.params.location = kivuyeHC;
 		userController.params.confirmed = true
 		userController.params.active = false
 		userController.save()
@@ -69,6 +71,8 @@ class UserControllerSpec extends IntegrationTests{
 	def "create user with incorrect repeat password"(){
 		
 		setup:
+		setupLocationTree()
+		def kivuyeHC = DataLocation.findByCode('Kivuye HC')
 		userController = new UserController();
 		
 		when:
@@ -82,6 +86,7 @@ class UserControllerSpec extends IntegrationTests{
 		userController.params.password = "exemple";
 		userController.params.repeat = "exemple1";
 		userController.params.permissionString = "*";
+		userController.params.location = kivuyeHC;
 		userController.params.confirmed = true
 		userController.params.active = true
 		userController.save()
@@ -95,6 +100,7 @@ class UserControllerSpec extends IntegrationTests{
 	def "edit user without password change"(){
 		
 		setup:
+		setupLocationTree()
 		userController = new UserController();
 		def user = newUser("myuser1",UUID.randomUUID().toString());
 
@@ -116,6 +122,7 @@ class UserControllerSpec extends IntegrationTests{
 	def "edit user with password change"(){
 		
 		setup:
+		setupLocationTree()
 		userController = new UserController();
 		def user = newUser("myuser2",UUID.randomUUID().toString());
 		
@@ -139,6 +146,7 @@ class UserControllerSpec extends IntegrationTests{
 	
 	def "cannot change uuid"(){
 		setup:
+		setupLocationTree()
 		userController = new UserController();
 		def uuid = UUID.randomUUID().toString();
 		def user = newUser("myuser1",uuid);
@@ -156,6 +164,7 @@ class UserControllerSpec extends IntegrationTests{
 	
 	def "cannot change password hash"(){
 		setup:
+		setupLocationTree()
 		userController = new UserController();
 		def user = newUser("myuser1",UUID.randomUUID().toString());
 

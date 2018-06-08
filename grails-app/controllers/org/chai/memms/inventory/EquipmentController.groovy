@@ -137,7 +137,7 @@ class EquipmentController extends AbstractEntityController{
 		if(entity.dataLocation) hasAccess(entity.dataLocation)
 		if(entity.id==null){
 			entity.currentStatus = Status."$params.cmd.status"
-			equipmentStatusService.createEquipmentStatus(user,params.cmd.status,entity,params.cmd.dateOfEvent,[:])
+			equipmentStatusService.createEquipmentStatus(user,params.cmd.status,entity,params.cmd.dateOfEvent,params.cmd.disposalRefNumber,[:])
 		}
 		else entity.save(failOnError:true)
 	}
@@ -214,12 +214,17 @@ class EquipmentController extends AbstractEntityController{
 class StatusCommand {
 	Status status
 	Date dateOfEvent
+	String disposalRefNumber
 
 	static constraints = {
 		status nullable: false, inList: [Status.DISPOSED,Status.FORDISPOSAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.OPERATIONAL,Status.UNDERMAINTENANCE]
 		dateOfEvent nullable: false, validator:{ val, obj ->
 			//TODO be uncomment after first data collection
 			return (val <= new Date()) //&&  (val.after(obj.equipment.purchaseDate) || (val.compareTo(obj.equipment.purchaseDate)==0))
+		}
+		disposalRefNumber nullable: true, blank: true, validator: { val, obj ->
+			if(obj.status.equals(Status.FORDISPOSAL)) return val != null
+			else return val == null
 		}
 	}
 

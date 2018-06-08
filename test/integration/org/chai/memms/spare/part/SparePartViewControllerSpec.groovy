@@ -28,6 +28,7 @@
 package org.chai.memms.spare.part
 
 import org.chai.location.DataLocation;
+import org.chai.location.CalculationLocation;
 import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests;
 import org.chai.memms.inventory.Provider;
@@ -100,7 +101,7 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		user.userType = UserType.TITULAIREHC
 		user.save(failOnError:true)
 		
-		def admin = newOtherUserWithType("admin", "admin", DataLocation.findByCode(RWANDA),UserType.ADMIN)
+		def techDh = newOtherUserWithType("techDh", "techDh", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
@@ -122,7 +123,7 @@ class SparePartViewControllerSpec extends IntegrationTests{
 			DataLocation.findByCode(GITWE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,17,17,0)
 	
 		sparePartViewController = new SparePartViewController()
-		setupSecurityManager(admin)
+		setupSecurityManager(techDh)
 		
 		when:
 		sparePartViewController.params.'type.id' = sparePartType.id
@@ -132,9 +133,9 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		then:
 		SparePart.list().size()==4
 		sparePartViewController.response.json.results[0].contains("33")
-		sparePartViewController.response.json.results[0].contains("34")
-		sparePartViewController.response.json.results[0].contains("17")
-		!sparePartViewController.response.json.results[0].contains("323")
+		!sparePartViewController.response.json.results[0].contains("34")
+		!sparePartViewController.response.json.results[0].contains("17")
+		sparePartViewController.response.json.results[0].contains("323")
 
 	}
 
@@ -216,8 +217,8 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		SparePart.list().size()==4
 		sparePartViewController.response.json.results[0].contains(sparePartOne.id+"")
 		!sparePartViewController.response.json.results[0].contains(sparePartTwo.id+"")
-		sparePartViewController.response.json.results[0].contains(sparePartThree.id+"")
-		!sparePartViewController.response.json.results[0].contains(sparePartFour.id+"")
+		!sparePartViewController.response.json.results[0].contains(sparePartThree.id+"")
+		sparePartViewController.response.json.results[0].contains(sparePartFour.id+"")
 
 	}
 }

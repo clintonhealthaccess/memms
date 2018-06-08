@@ -102,7 +102,8 @@ class EquipmentViewController extends AbstractController {
 				template:"equipment/equipmentList",
 				filterTemplate:"equipment/equipmentFilter",
 				listTop:"equipment/listTop",
-				importTask:'EquipmentImportTask'
+				importTask:'EquipmentImportTask',
+				code:getLabel()
 			])
 		}
 	}
@@ -111,14 +112,28 @@ class EquipmentViewController extends AbstractController {
 	def selectFacility = {
 		adaptParamsForList()
 		def dataLocations = []
+		def inventories = null
+		def dataLocationTypesFilter = getLocationTypes()
 		dataLocations.add(user.location as DataLocation)
 		if((user.location as DataLocation).manages)
 			dataLocations.addAll((user.location as DataLocation).manages)
 			
+			if(location == null){
+					location = user.location
+				}
+			if (location != null) {
+				inventories = inventoryService.getInventoryByDataLocations(location,dataLocations,dataLocationTypesFilter,params)
+			}
+			
 		render(view:"/entity/list", model:[
 			listTop:"equipment/listTop",
 			template:"equipment/selectFacility",
-			dataLocations:dataLocations
+			
+			inventories:inventories?.inventoryList,
+			currentLocation: location,
+			currentLocationTypes: dataLocationTypesFilter,
+			entityCount: inventories?.totalCount,
+			code:getLabel()
 		])
 	}
 	
