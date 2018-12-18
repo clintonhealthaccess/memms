@@ -123,11 +123,13 @@
                 </a>
               </li>
               </shiro:hasPermission>
+              <!-- 
                <li>
                 <a class="${controllerName=='infrastructure' || controllerName=='infrastructureView' ?'active':''}" href="${createLink(controller:'infrastructureView', action:'summaryPage')}">
                   <g:message code="header.navigation.infrastructure"/>
                 </a>
               </li>
+               -->
             </ul>
           </li>
         </shiro:hasPermission>

@@ -1141,28 +1141,32 @@ public class Initializer {
 	}
 	
 	//Inventory
-	public static newEquipment(def serialNumber,def purchaser,def donor,def donorName,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def model,def dataLocation,def department, def type,def manufacture,def supplier,def currentStatus,def addedBy,def lastModifiedBy,def lastModifiedOn){
+	public static newEquipment(def serialNumber,def purchaser,def donor,def donorName,def obsolete,def expectedLifeTime,def room,def purchaseCost,
+		def descriptions,def manufactureDate, def purchaseDate,def currency,def model,def dataLocation,def department, def type,def manufacture,
+		def supplier,def currentStatus,def addedBy,def lastModifiedBy,def lastModifiedOn){
 		def equipment = new Equipment(
 			serialNumber:serialNumber,
 			purchaser:purchaser,
 			donor:donor,
 			donorName:donorName,
 			obsolete:obsolete,
+			expectedLifeTime:expectedLifeTime,
 			room:room,
 			purchaseCost:purchaseCost,
-			currency:currency,
+			descriptions:descriptions,
 			manufactureDate:manufactureDate,
 			purchaseDate:purchaseDate,
+			currency:currency,
 			model:model,
 			dataLocation:dataLocation,
-			expectedLifeTime:expectedLifeTime,
 			department:department,
 			type:type,
 			manufacturer:manufacture,
 			supplier:supplier,
 			currentStatus:currentStatus,
 			addedBy:addedBy,
-			lastModifiedBy:lastModifiedBy
+			lastModifiedBy:lastModifiedBy,
+			lastModifiedOn:lastModifiedOn
 			);
 		Utils.setLocaleValueInMap(equipment,descriptions,"Descriptions")
 		return equipment.save(failOnError: true,flush:true)

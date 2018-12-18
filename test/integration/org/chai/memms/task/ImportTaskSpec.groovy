@@ -10,12 +10,19 @@ import org.chai.task.FileType;
 import org.chai.task.ImportTask;
 import org.chai.task.Task
 import org.codehaus.groovy.grails.plugins.testing.GrailsMockMultipartFile;
+import org.chai.memms.security.User
+import org.chai.memms.security.User.UserType
+import org.chai.location.DataLocation
+import org.chai.location.Location
+import org.chai.memms.Initializer
 
 class ImportTaskSpec extends IntegrationTests {
 
 	def "test constraints"() {
 		setup:
-		def user = newUser('user', 'uuid')
+		setupLocationTree()
+		def kivuyeHc = DataLocation.findByCode(KIVUYE)
+		def user = newOtherUser('user', 'uuid',kivuyeHc)
 		
 		when:
 		new EquipmentTypeImportTask( user: user, status: TaskStatus.NEW, encoding: 'UTF-8', delimiter: ',', inputFilename: 'test.csv').save(failOnError: true)
@@ -101,7 +108,10 @@ class ImportTaskSpec extends IntegrationTests {
 	
 	def "test execute - NominativeImportTask"() {
 		setup:
-		def user = newUser('user', 'uuid')
+		setupLocationTree()
+		def kivuyeHc = DataLocation.findByCode(KIVUYE)
+		def user = newOtherUser('user', 'uuid',kivuyeHc)
+		
 		def task = new EquipmentTypeImportTask(user: user, status: TaskStatus.NEW, encoding: 'UTF-8', delimiter: ',', inputFilename: 'equipments.zip').save(failOnError: true)
 		FileUtils.deleteDirectory(task.folder)
 		new File(task.folder, task.inputFilename).createNewFile()

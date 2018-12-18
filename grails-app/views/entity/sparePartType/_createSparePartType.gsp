@@ -26,7 +26,7 @@
 			<g:input name="model" label="${message(code:'entity.model.label')}" bean="${type}" field="model" />
 			<g:selectFromList name="compatibleEquipmentTypes" label="${message(code:'equipmentType.compatible.equipment.types.label')}" bean="${type}" field="compatibleEquipmentTypes" optionKey="id" multiple="true" ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData',params:['observation':'USEDINMEMMS'])}" from="${compatibleEquipmentTypes}" value="${type.compatibleEquipmentTypes*.id}" values="${compatibleEquipmentTypes.collect{it.names}}" />
 				
-			<g:selectFromList name="vendors" label="${message(code:'provider.vendors.label')}" bean="${type}" field="vendors" optionKey="id" multiple="true" ajaxLink="${createLink(controller:'provider', action:'getAjaxData',params:['type':'SUPPLIER'])}" from="${vendors}" value="${type.vendors*.id}" values="${vendors.collect{it.contact.contactName}}" />
+			<g:selectFromList name="vendors" label="${message(code:'provider.vendors.label')}" bean="${type}" field="vendors" optionKey="id" multiple="true" ajaxLink="${createLink(controller:'provider', action:'getAjaxData',params:['type':'BOTH'])}" from="${vendors}" value="${type.vendors*.id}" values="${vendors.collect{it.contact.contactName}}" />
 
 			<g:i18nTextarea name="descriptions" bean="${type}" label="${message(code:'entity.comment.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
 				

@@ -502,7 +502,6 @@ class EquipmentViewControllerSpec extends IntegrationTests{
 		setupLocationTree()
 		def user = newOtherUserWithType("user", "user", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
 		Initializer.createDummyStructure()
-		//Initializer.createUsers()
 		setupSecurityManager(user)
 
 		equipmentViewController = new EquipmentViewController();
@@ -516,7 +515,7 @@ class EquipmentViewControllerSpec extends IntegrationTests{
 	def "does not redirects to listing when accessing summary page by a user with a location"(){
 		setup:
 		setupLocationTree()
-		def user = newOtherUserWithType("user", "user", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
+		def user = newOtherUserWithType("user", "user", Location.findByCode(BURERA),UserType.OTHER)
 		Initializer.createDummyStructure()
 		Initializer.createUsers()
 		setupSecurityManager(user)

@@ -1,4 +1,5 @@
 <%@ page import="org.chai.memms.security.User.UserType" %>
+<%@ page import="org.chai.memms.util.Utils" %>
 
 <div>
 	<div class="heading1-bar">
@@ -33,6 +34,12 @@
 			<g:inputBox name="active"  label="${message(code:'user.active.label')}" bean="${user}" field="active" value="${user.active}" checked="${(user.active)? true:false}"/>						
 			<g:selectFromList name="roles" label="${message(code:'roles.label')}" bean="${user}" field="roles" optionKey="id" multiple="true"
 				from="${roles}" value="${user.roles*.id}" optionValue="name" />				
+			<g:if test="${user.id != null}">
+				<div class="row">
+		  		 	<label class="top"><g:message code="user.last.modified.on"/> :</label>
+		  		 	${Utils.formatDateWithTime(user?.lastUpdated)}
+	  			</div>
+			</g:if>
 			<g:if test="${user.id != null}">
 				<input type="hidden" name="id" value="${user.id}"/>
 			</g:if>

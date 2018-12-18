@@ -81,6 +81,7 @@ grails.project.dependency.resolution = {
 		compile 'net.sf.ezmorph:ezmorph:1.0.6'
 		runtime 'mysql:mysql-connector-java:5.1.5'
 		compile 'org.supercsv:SuperCSV:1.52'
+		//compile "org.grails.plugins:audit-logging:1.1.3"
     }
 
     plugins {
@@ -94,12 +95,13 @@ grails.project.dependency.resolution = {
 		compile ":compass-sass:0.7"
 		compile ":i18n-fields:0.6.1-CHAI"
 		compile ":yui-minify-resources:0.1.5"
-		compile ":rabbitmq-tasks:0.5.3-SNAPSHOT"
+		//compile ":rabbitmq-tasks:0.5.3-SNAPSHOT"
+		compile ":rabbitmq-tasks:0.5.4"
 		compile ":chai-locations:0.5.1-CHAI"
 		compile ":build-info-tag:0.3.1"
 		compile ":google-visualization:0.6.2"
 		compile ":rest-client-builder:1.0.2"
-		compile ":release:2.0.3" 
+		compile ":release:2.0.3"
 		compile ":webxml:1.4.1"
 		test (":spock:0.6") {changing = false}
 		compile ":csv:0.3.1"
@@ -108,6 +110,7 @@ grails.project.dependency.resolution = {
 			excludes "quartz"
 		}
 		compile ":quartz:1.0.1"
+		compile ":audit-logging:1.1.3"
     }
 	
 }

@@ -116,6 +116,7 @@ class User {
 	public boolean canAccessCalculationLocation(CalculationLocation calculationLocation){
 		if(log.isDebugEnabled()) log.debug("User = " + this + ", of type = " +this.username + "	, of CalculationLocation = " + location + " , is trying to access CalculationLocation = " + calculationLocation)
 		if(calculationLocation instanceof Location && location instanceof DataLocation) return false
+		if(calculationLocation instanceof DataLocation && ((DataLocation)calculationLocation).managedBy == location) return true
 		if((calculationLocation == location) || (location instanceof DataLocation && ((DataLocation)calculationLocation).managedBy == location)) {return true}
 		else {return (location.instanceOf(Location)) ? calculationLocation.getParentOfLevel(location.level) == location : calculationLocation.getParentOfLevel(location.location.level) == location}
 

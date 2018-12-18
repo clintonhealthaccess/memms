@@ -59,6 +59,24 @@ import java.util.Date
 @i18nfields.I18nFields
 @EqualsAndHashCode(includes="code")
 public class Equipment {
+	static auditable = true
+	
+	/*enum Status{
+		
+		NONE("none"),
+		OPERATIONAL("operational"),
+		PARTIALLYOPERATIONAL("partially.operational"),
+		INSTOCK("in.stock"),
+		UNDERMAINTENANCE("under.maintenance"),
+		FORDISPOSAL("for.disposal"),
+		DISPOSED("disposed")
+		
+		String messageCode = "equipment.status"
+		
+		final String name
+		Status(String name){ this.name=name }
+		String getKey() { return name() }
+	}*/
 	
 	enum PurchasedBy{
 		
@@ -198,7 +216,7 @@ public class Equipment {
 			if(val!=null) return (val.numberOfMonths >= 0)
 		}
 		serviceContractStartDate nullable: true, blank: true, validator:{ val, obj ->
-			if(val!=null) return (val<=new Date() && (val.after(obj.purchaseDate) || (val.compareTo(obj.purchaseDate)==0)))
+			if(val!=null && obj?.purchaseDate!=null) return (val<=new Date() && (val.after(obj.purchaseDate) || (val.compareTo(obj.purchaseDate)==0)))
 			if(val==null) return (obj.serviceContractPeriod==null && obj.serviceProvider==null)
 		}
 		room nullable: true, blank: true
@@ -323,4 +341,5 @@ public class Equipment {
 		return "Equipment[id= " + id + " code= "+code+" dataLocationId= "+dataLocation.id+" serialNumber= "+serialNumber+" currentState= "+currentStatus+", previousState= "+getTimeBasedPreviousStatus()?.status+"]";
 
 	}
+	
 }

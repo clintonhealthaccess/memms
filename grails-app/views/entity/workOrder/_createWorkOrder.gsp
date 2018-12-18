@@ -39,6 +39,7 @@
 	  		</div>
   		</g:if>		
    		<g:selectFromEnum name="criticality" bean="${order}" values="${Criticality.values()}" field="criticality" readonly="${(closed)? true:false}" label="${message(code:'work.order.criticality.label')}"/>
+   		<g:textarea name="description" rows="12" width="380" label="${message(code:'entity.description.label')}" readonly="${(closed)? true:false}" bean="${order}" field="description" value="${order.description}" dateClass="disabled-on-edit"/>
    		<g:if test="${order.id != null}">
    			<g:selectFromEnum name="currentStatus" bean="${order}" values="${OrderStatus.values()}" field="currentStatus" label="${message(code:'entity.status.label')}"/>
    			<table class="items">

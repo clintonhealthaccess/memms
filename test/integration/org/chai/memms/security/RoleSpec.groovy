@@ -99,9 +99,9 @@ class RoleSpec  extends IntegrationTests {
 		def userThree
 		
 		User.withNewTransaction{
-			userOne = newUser('userone', 'userone', false, true)
-			userTwo = newUser('usertwo', 'userone', false, true)
-			userThree = newUser('userthree', 'userone', false, true)
+			userOne = newUser('userone', 'userone', false, false)
+			userTwo = newUser('usertwo', 'userone', false, false)
+			userThree = newUser('userthree', 'userone', false, false)
 		}
 
 		roleOne.addToUsers(userOne)
@@ -132,8 +132,8 @@ class RoleSpec  extends IntegrationTests {
 		def userTwo
 		
 		User.withNewTransaction{
-			userOne = newUser('userone', 'userone', false, true)
-			userTwo = newUser('usertwo', 'userone', false, true)
+			userOne = newUser('userone', 'userone', false, false)
+			userTwo = newUser('usertwo', 'userone', false, false)
 		}
 
 		roleOne.addToUsers(userOne)

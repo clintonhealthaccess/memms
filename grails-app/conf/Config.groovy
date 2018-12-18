@@ -233,3 +233,8 @@ environments {
 	   grails.config.locations = locations
    }
 }
+
+// Added by the Audit-Logging plugin:
+grails.plugin.auditLog.auditDomainClassName = 'org.chai.memms.logs.AuditLogEvent'
+grails.plugin.auditLog.disabled = false
+

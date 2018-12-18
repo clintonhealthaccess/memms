@@ -31,10 +31,25 @@
     			  <input type="hidden" name="dataLocation.id" value="${equipment.dataLocation.id}" />
     			  <label><g:message code="datalocation.label"/>:</label> ${equipment.dataLocation.names}
     		  </div>
+    		  <g:if test="${equipment.id != null}">
+	  			<div class="row">
+		  		 	<label class="top"><g:message code="equipment.created.by.label"/> :</label>
+		  		 	${equipment.addedBy.names}  - ${Utils.formatDateWithTime(equipment?.dateCreated)}
+	  			</div>
+	  			<div class="row">
+		  		 	<label class="top"><g:message code="equipment.last.modified.by.label"/> :</label>
+		  		 	${equipment.lastModifiedBy?.names} - ${Utils.formatDateWithTime(equipment?.lastUpdated)}
+	  			</div>
+  			</g:if>	
     		  				
         	<g:selectFromList name="type.id" label="${message(code:'equipment.type.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
     			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData', params: [observation:'USEDINMEMMS'])}"
     			from="${types}" value="${equipment?.type?.id}" values="${types.collect{it.names}}" />
+    		<g:if test="${equipment.id != null}">
+    			<div class="row">
+		  		 	<label class="top"><g:message code="equipment.code.label"/> :</label> ${equipment.code}
+	  			</div>
+	  		</g:if>	
     		<g:selectFromList name="manufacturer.id" label="${message(code:'provider.type.manufacturer')}" bean="${equipment}" field="manufacturer" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'MANUFACTURER'])}"
   			from="${manufacturers}" value="${equipment?.manufacturer?.id}" values="${manufacturers.collect{it.contact?.contactName}}" />	
@@ -53,7 +68,7 @@
           		</g:if>
       		</div>
 			<div id="form-aside-manufacturer" class="form-aside">
-    	   		<g:if test="${equipment?.manufacturer != null}">
+    	   		<g:if test="${equipment?.manufacturer!= null}">
 	    	 	 	<g:render template="/templates/providerFormSide" model="['provider':equipment?.manufacturer,'type':equipment?.manufacturer?.type,'label':'provider.manufacturer.details','cssClass':'current','field':'manufacturer' ]" />
          		</g:if>
          		<g:else>
@@ -148,7 +163,7 @@
           <g:message code="equipment.section.supplier.information.label" default="Supplier Information"/>
         </h4>
       	<g:selectFromList name="supplier.id" label="${message(code:'provider.type.supplier')}" bean="${equipment}" field="supplier" optionKey="id" multiple="false"
-  			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'SUPPLIER'])}"
+  			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'BOTH'])}"
   			from="${suppliers}" value="${equipment?.supplier?.id}" values="${suppliers.collect{it.contact?.contactName}}" />		
     		<g:selectFromEnum name="purchaser" bean="${equipment}" values="${PurchasedBy.values()}" field="purchaser" label="${message(code:'equipment.purchaser.label')}"/>
     		<div class="donor-information">
@@ -182,7 +197,7 @@
 		
         <g:inputBox name="warranty.sameAsSupplier"  label="${message(code:'equipment.same.as.supplier.label')}" bean="${equipment}" field="warranty.sameAsSupplier" checked="${(equipment.warranty?.sameAsSupplier)? true:false}"/>
       	<g:input name="warranty.startDate" dateClass="date-picker" label="${message(code:'warranty.start.date.label')}" bean="${equipment}" field="warranty.startDate"/>
-    	<g:inputYearMonth name="warrantyPeriod" field="warrantyPeriod" years="${equipment.warrantyPeriod?.years}" months="${equipment.warrantyPeriod?.months}" bean="${equipment}" label='equipment.warranty.period.label'/>
+    	<g:inputYearMonth name="warrantyPeriod" field="warrantyPeriod" years="${equipment.warrantyPeriod?.years}" months="${equipment.warrantyPeriod?.months}" bean="${equipment}" label="${message(code:'equipment.warranty.period.label')}"/>
       	<g:address  bean="${equipment}" warranty="true" field="warranty.contact"/>
      	<g:i18nTextarea name="warranty.descriptions" bean="${equipment}" label="${message(code:'warranty.descriptions.label')}" field="warranty.descriptions" height="150" width="300" maxHeight="150" />	 			
   		</fieldset> 

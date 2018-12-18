@@ -201,6 +201,7 @@ class WorkOrderViewControllerSpec extends IntegrationTests{
 	def "can list workOrders - by admin using ajax"(){
 		setup:
 		setupLocationTree()
+		setupSystemUser()
 		
 		def admin = newOtherUserWithType("admin", "admin", Location.findByCode(RWANDA),UserType.ADMIN)
 		
@@ -225,6 +226,7 @@ class WorkOrderViewControllerSpec extends IntegrationTests{
 	def "can search notifications workorder"(){
 		setup:
 		setupLocationTree()
+		setupSystemUser()
 		
 		def admin = newOtherUserWithType("admin", "admin", Location.findByCode(RWANDA),UserType.ADMIN)
 		
