@@ -26,20 +26,16 @@
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 dataSource {
- //   pooled = true
-//    driverClassName = "org.h2.Driver"
-//    username = "sa"
-//    password = ""
-	//username = "root"
-	//password = "chwcf123"
-	//password = "memms1!"
+    pooled = true
+    driverClassName = "org.h2.Driver"
+    username = "sa"
+    password = ""
 	
 }
 hibernate {
     cache.use_second_level_cache = true
     cache.use_query_cache = true
     cache.region.factory_class = 'net.sf.ehcache.hibernate.EhCacheRegionFactory'
-//show_sql = true
 }
 // environment specific settings
 environments {
@@ -47,7 +43,6 @@ environments {
         dataSource {
             dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
             url = "jdbc:h2:mem:devDb;MVCC=TRUE"
-            //url = "jdbc:h2:prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
         }
     }
     test {
@@ -60,8 +55,6 @@ environments {
         dataSource {
 			dbCreate = "update"
 			driverClassName = "com.mysql.jdbc.Driver"
-			//dialect = "org.hibernate.dialect.MySQLMyISAMDialect"
-			//url = "jdbc:mysql://127.0.0.1:3306/memms"
             pooled = true
             properties {
                maxActive = -1
