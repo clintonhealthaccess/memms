@@ -119,4 +119,8 @@ class ImportExportConstant {
 	public final static String WORK_ORDER_PRIORITY = "Work order priority"
 	public final static String WORK_ORDER_OPEN_DATE = "Work order open date"
 	public final static String WORK_ORDER_CLOSING_DATE = "Work order closing date"
+	public final static String WORK_ORDER_CREATED_BY = "Work order created by"
+	public final static String WORK_ORDER_LAST_MODIFIED_BY = "Work order last modified by"
+	public final static String WORK_ORDER_FIXED_BY = "Work order fixed by"
+	public final static String WORK_ORDER_EQUIPMENT_RECEIVED_BY = "Equipment received in service by"
 }

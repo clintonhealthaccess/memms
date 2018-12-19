@@ -188,7 +188,8 @@ class WorkOrderService {
 					workOrder.equipment.serviceProvider?.code?:"",workOrder.equipment.serviceProvider?.contact?.contactName?:"",workOrder.equipment.serviceContractStartDate?:"",
 					workOrder.equipment.serviceContractPeriod?.numberOfMonths?:"",workOrder.equipment.purchaseCost?:"n/a",workOrder.equipment.currency?:"n/a",
 					workOrder.equipment.purchaser?.name?:"",workOrder.equipment.obsolete?:"",workOrder.equipment.warranty?.startDate?:"",workOrder.equipment.warrantyPeriod?.numberOfMonths?:"",
-					workOrder.currentStatus?:"",workOrder.criticality?:"",Utils.formatDateWithTime(workOrder.openOn)?:"",Utils.formatDateWithTime(workOrder.closedOn)?:""
+					workOrder.currentStatus?:"",workOrder.criticality?:"",Utils.formatDateWithTime(workOrder.openOn)?:"",Utils.formatDateWithTime(workOrder.closedOn)?:"",workOrder.addedBy?.username?:"",
+					workOrder.lastModifiedBy?.username?:"",workOrder.fixedBy?.username?:"",workOrder.returnedTo?:""
 					]
 				writer.write(line)
 			}
@@ -248,6 +249,12 @@ class WorkOrderService {
 		headers.add(ImportExportConstant.WORK_ORDER_PRIORITY)
 		headers.add(ImportExportConstant.WORK_ORDER_OPEN_DATE)
 		headers.add(ImportExportConstant.WORK_ORDER_CLOSING_DATE)
+		headers.add(ImportExportConstant.WORK_ORDER_CREATED_BY)
+		headers.add(ImportExportConstant.WORK_ORDER_LAST_MODIFIED_BY)
+		headers.add(ImportExportConstant.WORK_ORDER_FIXED_BY)
+		headers.add(ImportExportConstant.WORK_ORDER_EQUIPMENT_RECEIVED_BY)
+		
+		
 		
 		return headers;
 	}

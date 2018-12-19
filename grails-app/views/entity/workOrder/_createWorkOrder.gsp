@@ -54,7 +54,7 @@
 			    		<tr>
 			    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
 			    			<td>${status?.previousStatus != null && status?.previousStatus != status?.status? message(code: status?.previousStatus?.messageCode+'.'+status?.previousStatus?.name):''}</td>
-			    			<td>${Utils.formatDate(status?.dateCreated)}</td>
+			    			<td>${Utils.formatDateWithTime(status?.dateCreated)}</td>
 			    			<td>${status.changedBy.names}</td>
 			    			<td>${(status.escalation)? '\u2713':''}</td>
 			    		</tr>
