@@ -17,6 +17,11 @@
             <g:message code="default.link.edit.label" />
           </a>
         </li>
+         <li>
+		<a href="${createLinkWithTargetURI(controller:'userDefinedVariable', action:'delete', params:[id: userDefinedVariable.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button">
+			<g:message code="default.link.delete.label" />
+		</a>
+	</li>
       </ul>
     </td>
     <td><g:stripHtml field="${userDefinedVariable.code}" chars="25"/></td>

@@ -13,7 +13,7 @@
 				</ul>
 				<ul class="filters-list third">
 					<li><g:selectFromList name="calculationLocationIds" label="${message(code:'equipment.search.location.label')}" bean="${searchCmd}" field="calculationLocationIds" optionKey="id" multiple="true"
-				  			ajaxLink="${createLink(controller:'location', action:'getAjaxData', params: [class: 'CalulculationLocation'])}"
+				  			ajaxLink="${createLink(controller:'location', action:'getAjaxData', params: [class: 'CalculationLocation'])}"
 				  			from="${locations}" value="${location?.id}" values="${locations.collect{it.names}}" />
 					</li>
 				</ul>

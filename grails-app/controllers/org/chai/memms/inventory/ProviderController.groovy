@@ -134,7 +134,7 @@ class ProviderController  extends AbstractEntityController {
 		def type =params['type']
 		type = Type."$type";
 		if(type.equals(Type.MANUFACTURER)) detailsLabel="provider.manufacturer.details"
-		else if(type.equals(Type.SUPPLIER)) detailsLabel="provider.supplier.details"
+		else if(type.equals(Type.SUPPLIER)||Type.SUPPLIERANDSERVICEPROVIDER) detailsLabel="provider.supplier.details"
 		else detailsLabel="provider.serviceProvider.details"
 		
 		def providers = providerService.searchProvider(type,params['term'],[:])
@@ -143,7 +143,7 @@ class ProviderController  extends AbstractEntityController {
 				providers.each { provider ->
 					elem (
 							key: provider.id,
-							value: provider.contact.contactName + ' ['+provider.code+']'
+							value: provider.contact?.contactName + ' ['+provider.code+']'
 							)
 				}
 			}

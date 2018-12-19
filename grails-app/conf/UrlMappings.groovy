@@ -35,6 +35,7 @@ class UrlMappings {
 		"/contact"(controller:'home', action:"contact")
 		"/upgrade"(controller:'home', action:"upgrade")
 		"/task/list"(controller:'taskList', action:"list")
+		"/userManual"(controller:'home', action:"userManual")
 		
 		
 		

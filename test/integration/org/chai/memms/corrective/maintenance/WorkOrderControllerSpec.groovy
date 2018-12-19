@@ -65,6 +65,7 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		workOrderController.params."equipment.id" = equipment.id
 		workOrderController.params.description = "equiment description"
 		workOrderController.params.criticality = "NORMAL"
+		workOrderController.params.disposalRefNumber = "DISPREFNUM01"
 		workOrderController.save()
 		def workOrder = WorkOrder.list()[0]
 		then:
@@ -95,7 +96,7 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		equipment.addToWorkOrders(workOrder)
 		equipment.save(failOnError:true)
 		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,false)
-		equipmentStatusService.createEquipmentStatus(user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),[:])
+		equipmentStatusService.createEquipmentStatus(user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),null,[:])
 		when:
 		workOrderController = new WorkOrderController()
 		workOrderController.params."id" = workOrder.id+''
@@ -136,7 +137,7 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		equipment.addToWorkOrders(workOrder)
 		equipment.save(failOnError:true)
 		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,false)
-		equipmentStatusService.createEquipmentStatus(user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),[:])
+		equipmentStatusService.createEquipmentStatus(user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),null,[:])
 		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATMMC,user,true)
 		when:
 		workOrderController = new WorkOrderController()
@@ -178,7 +179,7 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		equipment.save(failOnError:true)
 		
 		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,false)
-		equipmentStatusService.createEquipmentStatus(user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),[:])
+		equipmentStatusService.createEquipmentStatus(user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),null,[:])
 		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATMMC,user,true)
 		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,false)
 		
@@ -220,7 +221,7 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		equipment.addToWorkOrders(workOrder)
 		equipment.save(failOnError:true,flush:true)
 		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,false)
-		equipmentStatusService.createEquipmentStatus(user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),[:])
+		equipmentStatusService.createEquipmentStatus(user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),null,[:])
 		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATMMC,user,true)
 		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,false)
 	
@@ -229,6 +230,7 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		workOrderController.params."id" = workOrder.id+''
 		workOrderController.params.criticality 	= 'NORMAL'
 		workOrderController.params.currentStatus = 'CLOSEDFORDISPOSAL'
+		workOrderController.params.disposalRefNumber = 'DISPMEC001'
 		workOrderController.save()
 
 		then:
@@ -265,9 +267,9 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		equipment.save(failOnError:true,flush:true)
 		
 		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,false)
-		equipmentStatusService.createEquipmentStatus(user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),[:])
+		equipmentStatusService.createEquipmentStatus(user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),null,[:])
 		workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.CLOSEDFIXED,user,false)
-		equipmentStatusService.createEquipmentStatus(user,Status.OPERATIONAL,equipment,Initializer.now(),[:])
+		equipmentStatusService.createEquipmentStatus(user,Status.OPERATIONAL,equipment,Initializer.now(),null,[:])
 		
 		when:
 		workOrderController = new WorkOrderController()

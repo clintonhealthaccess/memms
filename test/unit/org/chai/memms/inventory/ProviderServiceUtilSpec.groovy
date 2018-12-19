@@ -13,7 +13,7 @@ class ProviderServiceUtilSpec extends UnitSpec {
 		expect:
 		ProviderService.getEnumeMatcher("both") == [Type.BOTH]
 		ProviderService.getEnumeMatcher("manufact") == [Type.MANUFACTURER]
-		ProviderService.getEnumeMatcher("suppl") == [Type.SUPPLIER]
+		ProviderService.getEnumeMatcher("suppl") == [Type.SUPPLIER,Type.SUPPLIERANDSERVICEPROVIDER]
 		ProviderService.getEnumeMatcher("") == []
 		
 	}

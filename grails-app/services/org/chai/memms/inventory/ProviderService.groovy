@@ -51,7 +51,15 @@ class ProviderService {
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(type!=null){
 				if(type==Type.SERVICEPROVIDER){
-					eq('type',type)
+					or{
+						eq('type',type)
+						eq('type',Type.SUPPLIERANDSERVICEPROVIDER)
+					}
+				}else if(type==Type.SUPPLIER){
+					or{
+						eq('type',type)
+						eq('type',Type.SUPPLIERANDSERVICEPROVIDER)
+					}
 				}else{
 					or{
 						eq('type',type)
@@ -61,9 +69,9 @@ class ProviderService {
 			}
 			or{
 
-				for(Type t: this.getEnumeMatcher(text))
-					eq("type",t)
-
+				//for(Type t: this.getEnumeMatcher(text))
+					//eq("type",t)
+					
 				ilike("code","%"+text+"%")
 				ilike("phone","%"+text+"%")
 				ilike("contactName","%"+text+"%")
@@ -71,6 +79,7 @@ class ProviderService {
 				ilike("street","%"+text+"%")
 				ilike("poBox","%"+text+"%")
 				ilike(dbFieldDescriptions,"%"+text+"%")
+				//ilike("type.name","%"+text+"%")
 			}
 		}
 	}

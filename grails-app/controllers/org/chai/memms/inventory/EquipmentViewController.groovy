@@ -46,6 +46,9 @@ import org.chai.location.LocationLevel
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
 import org.chai.task.EquipmentExportFilter;
+import groovy.time.*
+import org.codehaus.groovy.runtime.TimeCategory
+import groovy.time.TimeCategory
 
 /**
  * @author Jean Kahigiso M.
@@ -86,9 +89,11 @@ class EquipmentViewController extends AbstractController {
 		
 		if (dataLocation != null){
 			if(!user.canAccessCalculationLocation(dataLocation)) response.sendError(404)
-			equipments = equipmentService.getEquipmentsByDataLocationAndManages(dataLocation,params)
+			//equipments = equipmentService.getEquipmentsByDataLocationAndManages(dataLocation,params)
+			equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,params)
 		}
-		else equipments = equipmentService.getMyEquipments(user,params)
+		else {equipments = equipmentService.getMyEquipments(user,params)
+		}
 		
 		if(request.xhr){
 			 this.ajaxModel(equipments,dataLocation,"")
@@ -96,7 +101,9 @@ class EquipmentViewController extends AbstractController {
 			render(view:"/entity/list", model: model(equipments, dataLocation) << [
 				template:"equipment/equipmentList",
 				filterTemplate:"equipment/equipmentFilter",
-				listTop:"equipment/listTop"
+				listTop:"equipment/listTop",
+				importTask:'EquipmentImportTask',
+				code:getLabel()
 			])
 		}
 	}
@@ -105,14 +112,30 @@ class EquipmentViewController extends AbstractController {
 	def selectFacility = {
 		adaptParamsForList()
 		def dataLocations = []
+		def inventories = null
+		def dataLocationTypesFilter = getLocationTypes()
 		dataLocations.add(user.location as DataLocation)
 		if((user.location as DataLocation).manages)
 			dataLocations.addAll((user.location as DataLocation).manages)
 			
+			if(location == null){
+					location = user.location
+					if (log.isDebugEnabled()) log.debug("Location of user, when null location "+user.location)
+				}
+			if (location != null && dataLocations!=null) {
+				inventories = inventoryService.getInventoryByDataLocations(location,dataLocations,dataLocationTypesFilter,params)
+				if (log.isDebugEnabled()) log.debug("Location of user, when not null location "+location)
+			}
+			if (log.isDebugEnabled()) log.debug("Equipment size of location "+inventories?.totalCount)
 		render(view:"/entity/list", model:[
 			listTop:"equipment/listTop",
 			template:"equipment/selectFacility",
-			dataLocations:dataLocations
+			
+			inventories:inventories?.inventoryList,
+			currentLocation: location,
+			currentLocationTypes: dataLocationTypesFilter,
+			entityCount: inventories?.totalCount,
+			code:getLabel()
 		])
 	}
 	
@@ -127,7 +150,8 @@ class EquipmentViewController extends AbstractController {
 				render(view:"/entity/list", model: model(equipments, dataLocation) << [
 					template:"equipment/equipmentList",
 					filterTemplate:"equipment/equipmentFilter",
-					listTop:"equipment/listTop"
+					listTop:"equipment/listTop",
+					code: getLabel()
 				])
 			else
 				this.ajaxModel(equipments,dataLocation,params['q'])
@@ -147,7 +171,8 @@ class EquipmentViewController extends AbstractController {
 				render(view:"/entity/list", model: model(equipments, cmd.dataLocation) << [
 					template:"equipment/equipmentList",
 					filterTemplate:"equipment/equipmentFilter",
-					listTop:"equipment/listTop"
+					listTop:"equipment/listTop",
+					code: getLabel()
 				])
 			}
 		}
@@ -199,7 +224,8 @@ class EquipmentViewController extends AbstractController {
 					currentLocationTypes: dataLocationTypesFilter,
 					template: "/inventorySummaryPage/sectionTable",
 					entityCount: inventories?.totalCount,
-					locationSkipLevels: locationSkipLevels
+					locationSkipLevels: locationSkipLevels,
+					code:getLabel()
 				])
 	}
 
@@ -318,7 +344,7 @@ class EquipmentViewController extends AbstractController {
 	def getAjaxData = {
 		def dataLocation =null
 		if(params['dataLocation']) dataLocation = DataLocation.get(params.int('dataLocation'))
-		List<Equipment> equipments = equipmentService.searchEquipment(params['term'],user,dataLocation,[:])
+		def equipments = equipmentService.searchEquipment(params['term'],user,dataLocation,[:])
 		render(contentType:"text/json") {
 			elements = array {
 				equipments.each { equipment ->

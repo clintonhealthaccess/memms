@@ -77,6 +77,7 @@ class SparePartSpec extends IntegrationTests {
 			addedBy: User.findByUsername("systemUser"),
 			stockLocation:StockLocation.MMC,
 			status:SparePartStatus.INSTOCK,
+			orderedQuantity:20,
 			receivedQuantity:20,
 			inStockQuantity:10
 			)
@@ -85,6 +86,7 @@ class SparePartSpec extends IntegrationTests {
 		then:
 		SparePart.count() == 1
 		sparePart.usedQuantity == 10
+		sparePart.orderedQuantity == 20
 		sparePart.isEmptyStock == false
 	}
 
@@ -213,7 +215,7 @@ class SparePartSpec extends IntegrationTests {
 		when: //"can save with supplier not spacified"
 		sparePart = new SparePart(descriptions:['en':'Spare Part Descriptions'],sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,purchaseDate:Initializer.getDate(22,07,2010),
 			purchaseCost:2344,currency:"RWF",type:sparePartType,addedBy: User.findByUsername("systemUser"),stockLocation:StockLocation.MMC,
-			status:SparePartStatus.INSTOCK,receivedQuantity:20,inStockQuantity:10
+			status:SparePartStatus.INSTOCK,orderedQuantity:20,receivedQuantity:20,inStockQuantity:10
 			)
 		sparePart.save()
 		
@@ -249,6 +251,7 @@ class SparePartSpec extends IntegrationTests {
 			addedBy: User.findByUsername("systemUser"),
 			stockLocation:StockLocation.MMC,
 			status:SparePartStatus.INSTOCK,
+			orderedQuantity:20,
 			receivedQuantity:20,
 			inStockQuantity:10
 			)

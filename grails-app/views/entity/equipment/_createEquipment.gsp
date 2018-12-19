@@ -31,27 +31,68 @@
     			  <input type="hidden" name="dataLocation.id" value="${equipment.dataLocation.id}" />
     			  <label><g:message code="datalocation.label"/>:</label> ${equipment.dataLocation.names}
     		  </div>
+    		  <g:if test="${equipment.id != null}">
+	  			<div class="row">
+		  		 	<label class="top"><g:message code="equipment.created.by.label"/> :</label>
+		  		 	${equipment.addedBy.names}  - ${Utils.formatDateWithTime(equipment?.dateCreated)}
+	  			</div>
+	  			<div class="row">
+		  		 	<label class="top"><g:message code="equipment.last.modified.by.label"/> :</label>
+		  		 	${equipment.lastModifiedBy?.names} - ${Utils.formatDateWithTime(equipment?.lastUpdated)}
+	  			</div>
+  			</g:if>	
     		  				
         	<g:selectFromList name="type.id" label="${message(code:'equipment.type.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
     			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData', params: [observation:'USEDINMEMMS'])}"
     			from="${types}" value="${equipment?.type?.id}" values="${types.collect{it.names}}" />
-    			
+    		<g:if test="${equipment.id != null}">
+    			<div class="row">
+		  		 	<label class="top"><g:message code="equipment.code.label"/> :</label> ${equipment.code}
+	  			</div>
+	  		</g:if>	
+    		<g:selectFromList name="manufacturer.id" label="${message(code:'provider.type.manufacturer')}" bean="${equipment}" field="manufacturer" optionKey="id" multiple="false"
+  			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'MANUFACTURER'])}"
+  			from="${manufacturers}" value="${equipment?.manufacturer?.id}" values="${manufacturers.collect{it.contact?.contactName}}" />	
+  			<g:input name="model" label="${message(code:'equipment.model.label')}" bean="${equipment}" field="model"/>
+  			<g:inputDate name="manufactureDate"  precision="month" label="${message(code:'equipment.manufacture.date.label')}" value="${equipment?.manufactureDate}" bean="${equipment}" field="manufactureDate"/>
+     	
+    		<g:input name="serialNumber" label="${message(code:'equipment.serial.number.label')}" bean="${equipment}" field="serialNumber"/>
+    		<g:input name="oldTagNumber" label="${message(code:'equipment.old.tag.number.label')}" bean="${equipment}" field="oldTagNumber"/>	
       		<g:inputYearMonth name="expectedLifeTime" field="expectedLifeTime" years="${equipment.expectedLifeTime?.years}" months="${equipment.expectedLifeTime?.months}" label='entity.expectedLifeTime.label' bean="${equipment}"/>
-      		<g:input name="serialNumber" label="${message(code:'equipment.serial.number.label')}" bean="${equipment}" field="serialNumber"/>
-      		<g:input name="model" label="${message(code:'equipment.model.label')}" bean="${equipment}" field="model"/>
       		<g:i18nTextarea name="descriptions" bean="${equipment}" label="${message(code:'entity.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
+            <g:input name="installationDate" dateClass="date-picker" label="${message(code:'equipment.installation.date.label')}" bean="${equipment}" field="installationDate"/>
+           </fieldset>
+           	<div id="form-aside-type" class="form-aside">
+      	  		<g:if test="${equipment?.type != null}">
+      	 	  	<g:render template="/templates/typeFormSide" model="['type':equipment?.type,'cssClass':'current','field':'type' ]" />
+          		</g:if>
+      		</div>
+			<div id="form-aside-manufacturer" class="form-aside">
+    	   		<g:if test="${equipment?.manufacturer!= null}">
+	    	 	 	<g:render template="/templates/providerFormSide" model="['provider':equipment?.manufacturer,'type':equipment?.manufacturer?.type,'label':'provider.manufacturer.details','cssClass':'current','field':'manufacturer' ]" />
+         		</g:if>
+         		<g:else>
+            		<g:each in="${manufacturers}" var="provider">
+                		<g:render template="/templates/providerFormSide" model="['provider':provider,'type':provider.type,'label':'provider.manufacturer.details','cssClass':'form-aside-hidden','field':'manufacturer' ]" />
+            		</g:each>
+				</g:else> 
+			</div>
+      	</div>
+        <div class="form-section">
+      	<fieldset class="form-content">
+        	<h4 class="section-title">
+            <span class="question-default">
+              <img src="${resource(dir:'images/icons',file:'star_small.png')}">
+            </span>
+            <g:message code="equipment.section.location.information.label" default="Location of the equipment"/>
+          </h4>		
       		<g:selectFromList name="department.id" label="${message(code:'department.label')}" bean="${equipment}" field="department" optionKey="id" multiple="false"
     			ajaxLink="${createLink(controller:'department', action:'getAjaxData')}"
     			from="${departments}" value="${equipment?.department?.id}" values="${departments.collect{it.names}}" />
       		<g:input name="room" label="${message(code:'equipment.room.label')}" bean="${equipment}" field="room"/>
       	</fieldset>
-      	
-     		<div id="form-aside-type" class="form-aside">
-      	  <g:if test="${equipment?.type != null}">
-      	 	  <g:render template="/templates/typeFormSide" model="['type':equipment?.type,'cssClass':'current','field':'type' ]" />
-          </g:if>
-        </div>
-      </div>
+      	</div>
+     
       <div class="form-section">
       	<fieldset class="form-content">
       	<h4 class="section-title">
@@ -62,7 +103,10 @@
         </h4>
       	<g:if test="${equipment.id == null}">
       			<g:selectFromEnum name="status" bean="${cmd}" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}"/>
-    			<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'equipment.status.date.of.event.label')}" bean="${cmd}" value="${Utils.formatDate(now)}" field="dateOfEvent"/>
+      			<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'equipment.status.date.of.event.label')}" bean="${cmd}" value="${Utils.formatDate(now)}" field="dateOfEvent"/>
+      			<div class="status-information">
+	    			<g:input name="disposalRefNumber"  label="${message(code:'equipment.disposal.ref.number.label')}" bean="${cmd}" field="disposalRefNumber"/>
+    			</div>
       			<g:inputBox name="obsolete"  label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" field="obsolete" value="${equipment.obsolete}" checked="${(equipment.obsolete)? true:false}"/>
       	</g:if>
       	<g:if test="${equipment?.status!=null}">
@@ -71,9 +115,11 @@
 	    		<tr>
 	    			<th></th>
 	    			<th>${message(code:'equipment.status.label')}</th>
-            <th>${message(code:'equipment.previous.status.label')}</th>
+            		<th>${message(code:'equipment.previous.status.label')}</th>
 	    			<th>${message(code:'equipment.status.date.of.event.label')}</th>
 	    			<th>${message(code:'equipment.status.recordedon.label')}</th>
+	    			<th>${message(code:'equipment.disposal.ref.number.label')}</th>
+	    			<th>${message(code:'equipment.status.changed.by.label')}</th>
 	    			<th>${message(code:'equipment.status.current.label')}</th>
 	    		</tr>
 	    		<g:each in="${equipment.status.sort{a,b -> (a.dateCreated > b.dateCreated) ? -1 : 1}}" status="i" var="status">
@@ -87,9 +133,11 @@
 							</ul>
 			    			</td>
 			    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
-                <td>${status?.previousStatus != null && status?.previousStatus != status?.status? message(code: status?.previousStatus?.messageCode+'.'+status?.previousStatus?.name):''}</td>
+                			<td>${status?.previousStatus != null && status?.previousStatus != status?.status? message(code: status?.previousStatus?.messageCode+'.'+status?.previousStatus?.name):''}</td>
 			    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
 			    			<td>${Utils.formatDateWithTime(status?.dateCreated)}</td>
+			    			<td>${status?.disposalRefNumber}</td>
+			    			<td>${status?.changedBy?.names}</td>
 			    			<td>${(status==equipment.timeBasedStatus)? '\u2713':''}</td>
 			    		</tr>
 		    		</g:if>
@@ -105,32 +153,7 @@
   	    	<br />
      		</g:if>
      	</fieldset>
-      </div>   
-      <div class="form-section">
-      	<fieldset class="form-content">
-      	<h4 class="section-title">
-          <span class="question-default">
-            <img src="${resource(dir:'images/icons',file:'star_small.png')}">
-
-          </span>
-          <g:message code="equipment.section.manufacturer.information.label" default="Manufacturer Information"/>
-        </h4>
-      	<g:selectFromList name="manufacturer.id" label="${message(code:'provider.type.manufacturer')}" bean="${equipment}" field="manufacturer" optionKey="id" multiple="false"
-  			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'MANUFACTURER'])}"
-  			from="${manufacturers}" value="${equipment?.manufacturer?.id}" values="${manufacturers.collect{it.contact?.contactName}}" />	
-  			<g:inputDate name="manufactureDate"  precision="month" label="${message(code:'equipment.manufacture.date.label')}" value="${equipment?.manufactureDate}" bean="${equipment}" field="manufactureDate"/>
-     	</fieldset>
-    	  <div id="form-aside-manufacturer" class="form-aside">
-    	   <g:if test="${equipment?.manufacturer != null}">
-	    	 	 <g:render template="/templates/providerFormSide" model="['provider':equipment?.manufacturer,'type':equipment?.manufacturer?.type,'label':'provider.manufacturer.details','cssClass':'current','field':'manufacturer' ]" />
-         </g:if>
-         <g:else>
-            <g:each in="${manufacturers}" var="provider">
-                <g:render template="/templates/providerFormSide" model="['provider':provider,'type':provider.type,'label':'provider.manufacturer.details','cssClass':'form-aside-hidden','field':'manufacturer' ]" />
-            </g:each>
-         </g:else> 
-       	</div>
-      </div>
+      </div> 
       <div class="form-section">
       	<fieldset class="form-content">
       	<h4 class="section-title">
@@ -140,15 +163,16 @@
           <g:message code="equipment.section.supplier.information.label" default="Supplier Information"/>
         </h4>
       	<g:selectFromList name="supplier.id" label="${message(code:'provider.type.supplier')}" bean="${equipment}" field="supplier" optionKey="id" multiple="false"
-  			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'SUPPLIER'])}"
+  			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'BOTH'])}"
   			from="${suppliers}" value="${equipment?.supplier?.id}" values="${suppliers.collect{it.contact?.contactName}}" />		
-  			<g:input name="purchaseDate" dateClass="date-picker" label="${message(code:'equipment.purchase.date.label')}" bean="${equipment}" field="purchaseDate"/>
     		<g:selectFromEnum name="purchaser" bean="${equipment}" values="${PurchasedBy.values()}" field="purchaser" label="${message(code:'equipment.purchaser.label')}"/>
     		<div class="donor-information">
 	    		<g:selectFromEnum name="donor" bean="${equipment}" values="${Donor.values()}" field="donor" label="${message(code:'equipment.donor.label')}"/>
 	    		<g:input name="donorName"  label="${message(code:'equipment.donor.name.label')}" bean="${equipment}" field="donorName"/>
     		</div>
+    		<g:input name="contractNumber" label="${message(code:'equipment.contract.number.label')}" bean="${equipment}" field="contractNumber"/>	
     		<g:currency costName="purchaseCost" id="purchase-cost" costLabel="${message(code:'equipment.purchase.cost.label')}" bean="${equipment}" costField="purchaseCost"  currencyName="currency" values="${currencies}" currencyField="currency" currencyLabel="${message(code:'equipment.currency.label')}"/>
+     		<g:input name="purchaseDate" dateClass="date-picker" label="${message(code:'equipment.purchase.date.label')}" bean="${equipment}" field="purchaseDate"/>
      	</fieldset>
      	 <div id="form-aside-supplier" class="form-aside">
        		<g:if test="${equipment?.supplier != null}">
@@ -173,7 +197,7 @@
 		
         <g:inputBox name="warranty.sameAsSupplier"  label="${message(code:'equipment.same.as.supplier.label')}" bean="${equipment}" field="warranty.sameAsSupplier" checked="${(equipment.warranty?.sameAsSupplier)? true:false}"/>
       	<g:input name="warranty.startDate" dateClass="date-picker" label="${message(code:'warranty.start.date.label')}" bean="${equipment}" field="warranty.startDate"/>
-    	<g:inputYearMonth name="warrantyPeriod" field="warrantyPeriod" years="${equipment.warrantyPeriod?.years}" months="${equipment.warrantyPeriod?.months}" bean="${equipment}" label='equipment.warranty.period.label'/>
+    	<g:inputYearMonth name="warrantyPeriod" field="warrantyPeriod" years="${equipment.warrantyPeriod?.years}" months="${equipment.warrantyPeriod?.months}" bean="${equipment}" label="${message(code:'equipment.warranty.period.label')}"/>
       	<g:address  bean="${equipment}" warranty="true" field="warranty.contact"/>
      	<g:i18nTextarea name="warranty.descriptions" bean="${equipment}" label="${message(code:'warranty.descriptions.label')}" field="warranty.descriptions" height="150" width="300" maxHeight="150" />	 			
   		</fieldset> 
@@ -219,5 +243,15 @@
 		numberOnlyField();
 		getToHide("${message(code:'equipment.purchase.cost.label')}","${message(code:'equipment.estimated.cost.label')}");
 		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
+
+		//status==forDisposal
+		if($("select[name=status]").val()!="FORDISPOSAL") $(".status-information").hide()
+		$("select[name=status]").change(function(e){
+			if($(this).val()=="FORDISPOSAL"){
+				$(".status-information").slideDown()
+			}else{
+				$(".status-information").slideUp()
+			}
+		})
 	});
 </script>

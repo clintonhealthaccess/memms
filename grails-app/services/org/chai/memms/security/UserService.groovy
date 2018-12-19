@@ -189,4 +189,13 @@ class UserService {
 		return savedReportsByUser
 	}
 	
+	public def getAdminActiveUsers(def userType,def active,def confirmed){
+		def criteria = User.createCriteria();
+		return criteria.list(){
+				eq('userType', userType)
+				eq ("active", active)
+				eq ("confirmed", confirmed)
+		}
+	}
+	
 }

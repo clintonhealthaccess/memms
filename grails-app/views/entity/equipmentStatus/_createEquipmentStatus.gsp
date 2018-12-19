@@ -15,10 +15,16 @@
 			<label><g:message code="entity.code.label"/>:</label>${status.equipment.code}
 		</div>
 		<div class="row">
+			<label><g:message code="entity.name.label"/>:</label>${status.equipment.type.names} 
+		</div>
+		<div class="row">
 			<label><g:message code="equipment.serial.number.label"/>:</label>${status.equipment.serialNumber}
 		</div>
 		<g:selectFromEnum name="status" bean="${status}" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}"/>
 		<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'equipment.status.date.of.event.label')}" bean="${status}" field="dateOfEvent" value="${(status.id!=null)?:Utils.formatDate(now)}"/>
+    	<div class="status-information">
+	    	<g:input name="disposalRefNumber"  label="${message(code:'equipment.disposal.ref.number.label')}" bean="${status}" field="disposalRefNumber"/>
+    	</div>
     	<g:i18nTextarea name="reasons" bean="${status}" label="${message(code:'equipment.status.reason')}" field="reasons" height="150" width="300" maxHeight="150" />
 		
 		<g:if test="${status.id != null}">
@@ -38,6 +44,8 @@
     			<th><g:message code="equipment.previous.status.label"/></th>
     			<th><g:message code="equipment.status.date.of.event.label"/></th>
     			<th><g:message code="equipment.status.recordedon.label"/></th>
+    			<th><g:message code="equipment.status.changed.by.label"/></th>
+    			<th><g:message code="equipment.disposal.document.number.label"/></th>
     			<th><g:message code="equipment.status.current.label"/></th>
     		</tr>
     		<g:each in="${equipment.status.sort{a,b -> (a.dateCreated > b.dateCreated) ? -1 : 1}}" status="i" var="status">
@@ -54,6 +62,8 @@
 		    			 <td>${status?.previousStatus != null && status?.previousStatus != status?.status? message(code: status?.previousStatus?.messageCode+'.'+status?.previousStatus?.name):''}</td>
 		    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
 		    			<td>${Utils.formatDateWithTime(status?.dateCreated)}</td>
+		    			<td>${status?.changedBy?.names}</td>
+		    			<td>${status?.disposalRefNumber}</td>
 		    			<td>${(status==equipment.timeBasedStatus)? '\u2713':''}</td>
 		    		</tr>
 		    	</g:if>
@@ -69,5 +79,15 @@
 <script type="text/javascript">
 	$(document).ready(function() {		
 		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}")
+
+		//status==forDisposal
+		if($("select[name=status]").val()!="FORDISPOSAL") $(".status-information").hide()
+		$("select[name=status]").change(function(e){
+			if($(this).val()=="FORDISPOSAL"){
+				$(".status-information").slideDown()
+			}else{
+				$(".status-information").slideUp()
+			}
+		})
 	});
 </script>

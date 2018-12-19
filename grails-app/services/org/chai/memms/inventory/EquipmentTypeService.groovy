@@ -46,16 +46,12 @@ class EquipmentTypeService {
 
 	public def searchEquipmentType(String text,Observation observation,Map<String, String> params) {
 		text = text.trim()
-		def hmis = (params.hmis.equals("true"))?true:false
 		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescritpion = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = EquipmentType.createCriteria()
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(observation!=null)
 				eq("observation",observation)
-			if(hmis) {
-				isNull("hmisType")
-			}
 			or{
 				if(observation==null){
 					for(Observation obs: this.getEnumeMatcher(text))

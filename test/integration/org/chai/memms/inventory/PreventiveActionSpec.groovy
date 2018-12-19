@@ -40,7 +40,7 @@ class PreventiveActionSpec extends IntegrationTests{
 		def "can create and save an preventionAction"() {
 
 		setup:
-		setupSystemUser()
+		setupLocationTree()
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),34)
 		
 		when:

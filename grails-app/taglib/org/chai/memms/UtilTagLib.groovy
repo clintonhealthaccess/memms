@@ -134,4 +134,12 @@ class UtilTagLib {
 		def smallText = strippedText.length() > attrs.int('chars')?strippedText.substring(0, attrs.int('chars')):strippedText
 		out << render(template:"/tags/util/stripHtml", model: [fullText: strippedText, smallText: smallText])
 	}
+	
+	def infrastructureRegistration = { attrs, body ->
+		def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])
+		if(attrs["dataLocation"])
+			out << '<a href=' + createLinkWithTargetURI(controller: "infrastructure", action: "create", params:["dataLocation.id": attrs["dataLocation"] ]) + ' class="next medium left push-r">' + message(code:"default.new.label" , args: attrs["entityName"] ) + '</a>'
+		else
+			out << '<a href=' + createLinkWithTargetURI(controller: "infrastructureView", action: "selectFacility") + ' class="next medium left push-r">' + message(code:"default.new.label" , args: attrs["entityName"] ) + '</a>'
+	}
 }

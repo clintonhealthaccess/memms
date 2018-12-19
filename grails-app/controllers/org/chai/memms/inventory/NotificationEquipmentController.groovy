@@ -101,7 +101,7 @@ class NotificationEquipmentController extends AbstractEntityController{
 			render(view:"/entity/list", model: model(notifications) << [
 				template:"notification/notificationEquipmentList",
 				filterTemplate:"notification/notificationEquipmentFilter",
-				listTop:"notification/notificationEquipmentListTop"
+				listTop:"notification/notificationEquipmentListTop",
 			])
 		}
 	}
@@ -116,7 +116,8 @@ class NotificationEquipmentController extends AbstractEntityController{
 			render(view:"/entity/list", model: model(notifications) << [
 				template:"notification/notificationEquipmentList",
 				filterTemplate:"notification/notificationEquipmentFilter",
-				listTop:"notification/notificationEquipmentListTop"
+				listTop:"notification/notificationEquipmentListTop",
+				code: getLabel(),
 			])
 		}
 	}
@@ -166,7 +167,8 @@ class NotificationEquipmentController extends AbstractEntityController{
 			render(view:"/entity/list", model: model(notifications) << [
 				template:"notification/notificationEquipmentList",
 				filterTemplate:"notification/notificationEquipmentFilter",
-				listTop:"notification/notificationEquipmentListTop"
+				listTop:"notification/notificationEquipmentListTop",
+				code: getLabel(),
 			])	
 		}
 	}

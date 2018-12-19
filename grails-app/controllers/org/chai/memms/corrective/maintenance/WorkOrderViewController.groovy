@@ -158,7 +158,7 @@ class WorkOrderViewController extends AbstractController{
 		else {
 			def equipment = order.equipment
 			//TODO define default escalation message
-			def content = "Please review work order on equipment serial number: ${order.equipment.code}"
+			def content = "Please review work order on equipment with code: ${order.equipment.code}"
 			workOrderService.escalateWorkOrder(order, content, user)
 			result=true
 			def orders
@@ -185,6 +185,7 @@ class WorkOrderViewController extends AbstractController{
 				template:"workOrder/workOrderList",
 				filterTemplate:"workOrder/workOrderFilter",
 				listTop:"workOrder/listTop",
+				code: getLabel()
 			])
 		}
 	}
@@ -333,6 +334,19 @@ class WorkOrderViewController extends AbstractController{
 
 		render(contentType:"text/json") { results = [result,html,options]}
 	}
+	
+	def export = {
+		DataLocation dataLocation = DataLocation.get(params.int('dataLocation.id'))
+		adaptParamsForList()
+		def workOrders = workOrderService.exportWorkOrders(dataLocation)
+		if (log.isDebugEnabled()) log.debug("WORK ORDERS TO BE EXPORTED IN SIZE "+workOrders.size())
+		File file = workOrderService.exporter(dataLocation?:user.location, workOrders)
+
+		response.setHeader "Content-disposition", "attachment; filename=${file.name}.csv"
+		response.contentType = 'text/csv'
+		response.outputStream << file.text
+		response.outputStream.flush()
+
 }
 
 class FilterWorkOrderCommand {
@@ -358,5 +372,18 @@ class FilterWorkOrderCommand {
 		return "FilterCommand[OrderStatus="+currentStatus+", Criticality="+criticality+ 
 		", closedOn="+closedOn+", openOn="+openOn+"]"
 	}
+}
+
+class FilterCommand {
+	DataLocation dataLocation
+
+	static constraints = {
+		dataLocation nullable:false
+	}
+
+	String toString() {
+		return "FilterCommand[DataLocation="+dataLocation+"]"
+	}
+}
 }
 

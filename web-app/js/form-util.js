@@ -183,6 +183,22 @@ function getDatePicker(iconPath){
 			addSliderAccess: true,
 			sliderAccessArgs: { touchonly: false }
 		});
+		$('.date-range-picker').datepicker({
+			changeYear: true,
+			dateFormat: "dd/mm/yy",
+			showOn: "both",
+			buttonImage: iconPath,
+			buttonImageOnly: true,
+			onSelect: function (arg) {
+				var name = $(this).attr("name")
+					if (name == "from") {
+							$("input[name='to']").datepicker('option', 'minDate', arg)
+								}
+								else {
+									$("input[name='from']").datepicker('option', 'maxDate', arg)
+								}
+					}
+			});
 	});
 }
 
@@ -363,6 +379,16 @@ function getToHide(parchaseCost,estimatedCost){
 	$("input[name='sameAsManufacturer']").change(function(e){
 		if($(this).is(":checked")) $("#address").slideUp()
 		else $("#address").slideDown()
+	})
+	
+	//status==forDisposal
+	if($("select[name=status]").val()!="FORDISPOSAL") $(".status-information").hide()
+	$("select[name=status]").change(function(e){
+		if($(this).val()=="FORDISPOSAL"){
+			$(".status-information").slideDown()
+		}else{
+			$(".status-information").slideUp()
+		}
 	})
 
 	//purchaser==donor

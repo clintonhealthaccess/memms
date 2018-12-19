@@ -18,7 +18,12 @@
           <a href="${createLinkWithTargetURI(controller:'indicator', action:'edit', params:[id: indicator.id])}"  class="edit-button">
             <g:message code="default.link.edit.label" />
           </a>
-        </li>
+       </li>
+       <li>
+		<a href="${createLinkWithTargetURI(controller:'indicator', action:'delete', params:[id: indicator.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button">
+			<g:message code="default.link.delete.label" />
+		</a>
+	</li>
       </ul>
     </td>
     <td>${indicator.category.names}</td>

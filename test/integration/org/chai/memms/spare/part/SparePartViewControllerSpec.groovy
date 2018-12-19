@@ -28,6 +28,7 @@
 package org.chai.memms.spare.part
 
 import org.chai.location.DataLocation;
+import org.chai.location.CalculationLocation;
 import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests;
 import org.chai.memms.inventory.Provider;
@@ -71,10 +72,10 @@ class SparePartViewControllerSpec extends IntegrationTests{
 			DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,32,32,0)
 
 		def sparePartTwo = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","EUR",
-			DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,null,12,0)
+			DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,12,12,0)
 		
 		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
-			DataLocation.findByCode(MUSANZE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,null,22,0)
+			DataLocation.findByCode(MUSANZE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,22,22,0)
 		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
 			DataLocation.findByCode(GITWE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,33,27,3)
 	
@@ -88,7 +89,7 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		then:
 		SparePart.list().size()==4
 		sparePartViewController.response.json.results[0].contains("32")
-		sparePartViewController.response.json.results[0].contains("27")
+		!sparePartViewController.response.json.results[0].contains("27")
 		sparePartViewController.response.json.results[0].contains("12")
 		sparePartViewController.response.json.results[0].contains("22")
 	}
@@ -100,7 +101,7 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		user.userType = UserType.TITULAIREHC
 		user.save(failOnError:true)
 		
-		def admin = newOtherUserWithType("admin", "admin", DataLocation.findByCode(RWANDA),UserType.ADMIN)
+		def techDh = newOtherUserWithType("techDh", "techDh", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
@@ -110,19 +111,19 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		def sparePartTypeTwo = Initializer.newSparePartType(CODE(15819),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
 		
 		def sparePartOne = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions one'],Initializer.getDate(22,07,2010),"2900.23",,"USD",
-			DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,null,33,1)
+			DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,33,33,1)
 
 		def sparePartTwo = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","EUR",
 			DataLocation.findByCode(BUTARO),sparePartTypeTwo,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,323,323,2)
 		
 		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
-			DataLocation.findByCode(MUSANZE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,null,34,3)
+			DataLocation.findByCode(MUSANZE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,34,34,3)
 
 		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
 			DataLocation.findByCode(GITWE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,17,17,0)
 	
 		sparePartViewController = new SparePartViewController()
-		setupSecurityManager(admin)
+		setupSecurityManager(techDh)
 		
 		when:
 		sparePartViewController.params.'type.id' = sparePartType.id
@@ -132,9 +133,9 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		then:
 		SparePart.list().size()==4
 		sparePartViewController.response.json.results[0].contains("33")
-		sparePartViewController.response.json.results[0].contains("34")
-		sparePartViewController.response.json.results[0].contains("17")
-		!sparePartViewController.response.json.results[0].contains("323")
+		!sparePartViewController.response.json.results[0].contains("34")
+		!sparePartViewController.response.json.results[0].contains("17")
+		sparePartViewController.response.json.results[0].contains("323")
 
 	}
 
@@ -155,12 +156,12 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
 
 		def sparePartOne = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions searched item'],Initializer.getDate(22,07,2010),"2900.23","USD",
-			DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,null,33,9)
+			DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,33,33,9)
 		def sparePartTwo = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","EUR",
 			DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,55,55,7)
 		
 		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
-			DataLocation.findByCode(MUSANZE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,null,67,0)
+			DataLocation.findByCode(MUSANZE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,67,67,0)
 		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
 			DataLocation.findByCode(GITWE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,659,659,0)
 	
@@ -194,14 +195,14 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
 
 		def sparePartOne = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions one search term'],Initializer.getDate(22,07,2010),"2900.23","USD",
-			DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,null,45,0)
+			DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,45,45,0)
 		def sparePartTwo = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","EUR",
-			DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,35,33,3)
+			DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,35,33,0)
 		
 		def sparePartThree = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
 			DataLocation.findByCode(MUSANZE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,2233,2233,0)
 		def sparePartFour = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
-			DataLocation.findByCode(GITWE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,null,29432,0)
+			DataLocation.findByCode(GITWE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,29432,29432,0)
 	
 		sparePartViewController = new SparePartViewController()
 		setupSecurityManager(techDh)
@@ -217,7 +218,7 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		sparePartViewController.response.json.results[0].contains(sparePartOne.id+"")
 		!sparePartViewController.response.json.results[0].contains(sparePartTwo.id+"")
 		!sparePartViewController.response.json.results[0].contains(sparePartThree.id+"")
-		!sparePartViewController.response.json.results[0].contains(sparePartFour.id+"")
+		sparePartViewController.response.json.results[0].contains(sparePartFour.id+"")
 
 	}
 }

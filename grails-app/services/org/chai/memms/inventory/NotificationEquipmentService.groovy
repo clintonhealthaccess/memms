@@ -4,11 +4,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.chai.location.DataLocation
+import org.chai.location.DataLocation;
+import org.chai.location.Location;
+import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocationType;
+import org.chai.location.LocationLevel;
 import org.chai.memms.Notification;
 import org.chai.memms.corrective.maintenance.NotificationWorkOrder;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.security.User;
+import org.chai.memms.security.User.UserType;
 import org.chai.memms.util.Utils;
 
 /**
@@ -73,30 +78,60 @@ class NotificationEquipmentService {
 	}
 	//TODO refactor and rename
 	def searchNotificition(String text,User user,Map<String, String> params) {
+		text= text.trim()
+		def dataLocations = []
+		
+		if(!user.userType.equals(UserType.ADMIN) && !user.userType.equals(UserType.TECHNICIANMMC) && !user.userType.equals(UserType.SYSTEM))
+		{
+			if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([:], [:]))
+			else{
+				dataLocations.add((DataLocation)user.location)
+				if(userService.canViewManagedSpareParts(user)) dataLocations.addAll((user.location as DataLocation).manages?.asList())
+			}
+		}
 		def criteria = NotificationEquipment.createCriteria()
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(user)
+			if(!dataLocations.isEmpty())
+			inList('dataLocation',dataLocations)
+			and{
+			
+			if(user && !user.userType.equals(UserType.ADMIN) && !user.userType.equals(UserType.TECHNICIANMMC) && !user.userType.equals(UserType.SYSTEM))
 				eq('receiver',user)
 			if(text)
 				ilike("content","%"+text+"%")
+			}
 		}
 	}
 	
 	def filterNotifications(DataLocation dataLocation, Department department,User receiver,Date from, Date to,Boolean read, Map<String, String> params){
+		
+		def dataLocations = []
+		
+		if(!receiver.userType.equals(UserType.ADMIN) && !receiver.userType.equals(UserType.TECHNICIANMMC) && !receiver.userType.equals(UserType.SYSTEM))
+		{
+			if(receiver.location instanceof Location) 
+				dataLocations.addAll(receiver.location.getDataLocations([].toSet(), [].toSet()))
+			else{
+				dataLocations.add((DataLocation)receiver.location)
+				if(userService.canViewManagedSpareParts(receiver)) dataLocations.addAll((receiver.location as DataLocation).manages?.asList())
+			}
+		}
 		def criteria = NotificationEquipment.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(dataLocation)
-				eq("dataLocation",dataLocation)
-			if(department)
-				eq("department",department)
-			if(from)
-				ge("dateCreated",Utils.getMinDateFromDateTime(from))
-			if(to)
-				le("dateCreated",Utils.getMaxDateFromDateTime(to))
-			if(receiver)
-				eq("receiver",receiver)
-			if(read!=null)
-				eq("read",read)
+			if(!dataLocations.isEmpty())
+			inList('dataLocation',dataLocations)
+			and{
+				if(department)
+					eq("department",department)
+				if(from)
+					ge("dateCreated",Utils.getMinDateFromDateTime(from))
+				if(to)
+					le("dateCreated",Utils.getMaxDateFromDateTime(to))
+				if(receiver && !receiver.userType.equals(UserType.ADMIN) && !receiver.userType.equals(UserType.TECHNICIANMMC) && !receiver.userType.equals(UserType.SYSTEM))
+					eq("receiver",receiver)
+				if(read!=null)
+					eq("read",read)
+			}
 		}
 	}
 	

@@ -48,6 +48,7 @@ import org.chai.memms.inventory.Provider.Type;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Date;
 
 /**
  * @author Jean Kahigiso M.
@@ -136,7 +137,7 @@ class EquipmentController extends AbstractEntityController{
 		if(entity.dataLocation) hasAccess(entity.dataLocation)
 		if(entity.id==null){
 			entity.currentStatus = Status."$params.cmd.status"
-			equipmentStatusService.createEquipmentStatus(user,params.cmd.status,entity,params.cmd.dateOfEvent,[:])
+			equipmentStatusService.createEquipmentStatus(user,params.cmd.status,entity,params.cmd.dateOfEvent,params.cmd.disposalRefNumber,[:])
 		}
 		else entity.save(failOnError:true)
 	}
@@ -148,8 +149,8 @@ class EquipmentController extends AbstractEntityController{
 
 	def getModel(def entity) {
 		def manufacturers = Provider.findAllByTypeInList([Type.MANUFACTURER,Type.BOTH],[sort:'contact.contactName']); 
-		def suppliers = Provider.findAllByTypeInList([Type.SUPPLIER,Type.BOTH],[sort:'contact.contactName']);  
-		def serviceProviders = Provider.findAllByType(Type.SERVICEPROVIDER,[sort:'contact.contactName']);  
+		def suppliers = Provider.findAllByTypeInList([Type.SUPPLIER,Type.BOTH,Type.SUPPLIERANDSERVICEPROVIDER],[sort:'contact.contactName']);  
+		def serviceProviders = Provider.findAllByTypeInList([Type.SERVICEPROVIDER,Type.SUPPLIERANDSERVICEPROVIDER],[sort:'contact.contactName']);  
 		def departments = Department.list(sort: names); 
 		
 		def types = []; 
@@ -213,12 +214,17 @@ class EquipmentController extends AbstractEntityController{
 class StatusCommand {
 	Status status
 	Date dateOfEvent
+	String disposalRefNumber
 
 	static constraints = {
 		status nullable: false, inList: [Status.DISPOSED,Status.FORDISPOSAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.OPERATIONAL,Status.UNDERMAINTENANCE]
 		dateOfEvent nullable: false, validator:{ val, obj ->
 			//TODO be uncomment after first data collection
 			return (val <= new Date()) //&&  (val.after(obj.equipment.purchaseDate) || (val.compareTo(obj.equipment.purchaseDate)==0))
+		}
+		disposalRefNumber nullable: true, blank: true, validator: { val, obj ->
+			if(obj.status.equals(Status.FORDISPOSAL)) return val != null
+			else return val == null
 		}
 	}
 

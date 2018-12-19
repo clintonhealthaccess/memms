@@ -99,16 +99,16 @@ class UserServiceSpec extends IntegrationTests{
 	def "can filter user test"(){
 		setup:
 		Initializer.createDummyStructure()
-		Initializer.createUsers()
+	    Initializer.createUsers()
 		Initializer.createInventoryStructure()
 		def locationOne = Location.findByCode(RWANDA);
 		def locationTwo = DataLocation.findByCode(KIVUYE);
-		def locationThree = DataLocation.findByCode(BURERA);
+		def locationThree = Location.findByCode(BURERA);
 		def role = newRole("roleOne","permission")
 
 	
 		def userOne = newSystemUser("userOneT",UUID.randomUUID().toString(),locationOne);
-		def userTwo = newUser("userTwo", "jhgashgaSHAjaFSG", true, false)
+		def userTwo = newUser("userTwo", "jhgashgaSHAjaFSG")
 		userTwo.location = locationOne;
 		userTwo.save(failOnError:true);
 		def userThree =  newOtherUserWithType("userThree",UUID.randomUUID().toString(),locationTwo,UserType.ADMIN)
@@ -132,8 +132,8 @@ class UserServiceSpec extends IntegrationTests{
 		def userByTypeFilters = userService.filterUser(UserType.ADMIN,null,null,null,null,[:])
 		def userByLocationFilters = userService.filterUser(null,locationOne,null,null,null,[:])
 		def userByRoleFilters = userService.filterUser(null,null,role,null,null,[:])
-		def userByActiveFilters = userService.filterUser(null,null,null,'false',null,[:])
-		def userByConfirmedFilters = userService.filterUser(null,null,null,null,'false',[:])
+		def userByActiveFilters = userService.filterUser(null,null,null,'true',null,[:])
+		def userByConfirmedFilters = userService.filterUser(null,null,null,null,'true',[:])
 		def userBySWithoutAllVariableFilters = userService.filterUser(null,null,null,null,null,[:])
 		def userBySWithAllVariableFilters = userService.filterUser(UserType.SYSTEM,locationThree,role,'true','true',[:])
 		def ude = User.findByUsername("userAll")
@@ -148,8 +148,8 @@ class UserServiceSpec extends IntegrationTests{
 		userByTypeFilters.size() == 2
 		userByLocationFilters.size() == 4
 		userByRoleFilters.size() == 2
-		userByActiveFilters.size() == 1
-		userByConfirmedFilters.size() == 8
+		userByActiveFilters.size() == 17
+		userByConfirmedFilters.size() == 17
 
 
 	}
@@ -235,7 +235,7 @@ class UserServiceSpec extends IntegrationTests{
 		
 		def techMMC = newOtherUserWithType("techMMC", "techMMC", DataLocation.findByCode(BUTARO),UserType.TECHNICIANMMC)
 		
-		def admin = newOtherUserWithType("admin", "admin", DataLocation.findByCode(RWANDA),UserType.ADMIN)
+		def admin = newOtherUserWithType("admin", "admin", Location.findByCode(RWANDA),UserType.ADMIN)
 
 		expect:
 		userService.canRequestEquipmentRegistration(userOne)
@@ -256,7 +256,7 @@ class UserServiceSpec extends IntegrationTests{
 		
 		def techMMC = newOtherUserWithType("techMMC", "techMMC", DataLocation.findByCode(BUTARO),UserType.TECHNICIANMMC)
 		
-		def admin = newOtherUserWithType("admin", "admin", DataLocation.findByCode(RWANDA),UserType.ADMIN)
+		def admin = newOtherUserWithType("admin", "admin", Location.findByCode(RWANDA),UserType.ADMIN)
 
 		expect:
 		!userService.canViewManagedEquipments(userOne)

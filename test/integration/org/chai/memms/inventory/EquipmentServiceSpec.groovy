@@ -40,6 +40,7 @@ import org.chai.memms.inventory.EquipmentStatus;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.EquipmentStatus.EquipmentStatusChange;
 import org.chai.memms.inventory.EquipmentType.Observation;
+import org.chai.location.CalculationLocation;
 import org.chai.location.Location;
 import org.chai.location.DataLocation;
 import org.chai.memms.security.User;
@@ -70,7 +71,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		def userHc = newOtherUserWithType("userHc", "userHc", DataLocation.findByCode(KIVUYE), UserType.TITULAIREHC)
 		def techDH = newOtherUserWithType("techDH", "techDH", DataLocation.findByCode(BUTARO), UserType.TECHNICIANDH)
-		def techMMC = newOtherUserWithType("techMMC", "techMMC", DataLocation.findByCode(RWANDA), UserType.TECHNICIANMMC)
+		def techMMC = newOtherUserWithType("techMMC", "techMMC", Location.findByCode(RWANDA), UserType.TECHNICIANMMC)
 		
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now())
@@ -132,7 +133,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 		equipments[0].serialNumber.equals(CODE(123))
 	}
 
-	def "user can only view his equipments, if a technician at dh they can also view for the locations they manage"() {
+	def "user can only view his equipments, if a technician at dh he can also list for his location excluding locations he manages"() {
 		setup:
 		setupLocationTree()
 		def user = newOtherUser("user", "user", DataLocation.findByCode(KIVUYE))
@@ -164,7 +165,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 		equipmentsTech = equipmentService.getMyEquipments(techDh,[:])
 		equipmentsUser = equipmentService.getMyEquipments(user,[:])
 		then:
-		equipmentsTech.size() == 2
+		equipmentsTech.size() == 1
 		equipmentsUser.size() == 1
 	}
 	
@@ -380,7 +381,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		def userHc = newOtherUserWithType("userHc", "userHc", DataLocation.findByCode(KIVUYE), UserType.TITULAIREHC)
 		def techDH = newOtherUserWithType("techDH", "techDH", DataLocation.findByCode(BUTARO), UserType.TECHNICIANDH)
-		def techMMC = newOtherUserWithType("techMMC", "techMMC", DataLocation.findByCode(RWANDA), UserType.TECHNICIANMMC)
+		def techMMC = newOtherUserWithType("techMMC", "techMMC", Location.findByCode(RWANDA), UserType.TECHNICIANMMC)
 		
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now())
@@ -412,7 +413,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		def userHc = newOtherUserWithType("userHc", "userHc", DataLocation.findByCode(KIVUYE), UserType.TITULAIREHC)
 		def techDH = newOtherUserWithType("techDH", "techDH", DataLocation.findByCode(BUTARO), UserType.TECHNICIANDH)
-		def techMMC = newOtherUserWithType("techMMC", "techMMC", DataLocation.findByCode(RWANDA), UserType.TECHNICIANMMC)
+		def techMMC = newOtherUserWithType("techMMC", "techMMC", Location.findByCode(RWANDA), UserType.TECHNICIANMMC)
 		
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now())

@@ -34,7 +34,8 @@ package memms.reports.dashboard
 class IndicatorComputationJob {
 
     static triggers = {
-    	def cronExpression = "0 0 4 1 * ?" // "s m h D M W Y" //
+    	//def cronExpression = "0 0 4 1 * ?" // "s m h D M W Y" //
+		def cronExpression = "0 0 0 * * ?" // "s m h D M W Y" //
    		//Every day at 1 AM the cron job will execute
     	cron name: 'dashboardIndicatorComputation', cronExpression: cronExpression
 	}

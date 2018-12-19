@@ -16,11 +16,11 @@
 				<td>
 					${notification?.sender?.names}
 				</td>
-				<td>${notification.dataLocation.code}</td>
+				<td>${notification.dataLocation.code} : ${notification.dataLocation.names}</td>
 				<td>
 					${Utils.formatDateWithTime(notification.dateCreated)}
 				</td>
-				<td><g:stripHtml field="${notification.content}" chars="30"/></td>
+				<td><g:stripHtml field="${notification?.content}" chars="30"/></td>
 				<td>
 						<a href="${createLinkWithTargetURI(controller:'notificationEquipment', action:'read', params:[id: notification.id])}">
 							<g:message code="notification.read.label" />
@@ -35,3 +35,4 @@
 		</g:each>
 	</tbody>
 </table>
+<g:render template="/templates/pagination" model="[entities:entities, entityCount:entities.totalCount]" />

@@ -117,6 +117,7 @@ abstract class IntegrationTests extends IntegrationSpec {
 		def sector = Initializer.newLocationLevel(['en':SECTOR], SECTOR,4)
 
 		def rwanda = Initializer.newLocation(['en':RWANDA], RWANDA,null,country)
+		rwanda.save(failOnError:true)
 		
 		def north = Initializer.newLocation(['en':NORTH], NORTH, rwanda, province)
 		def south = Initializer.newLocation(['en':SOUTH], SOUTH, rwanda, province)
@@ -220,7 +221,7 @@ abstract class IntegrationTests extends IntegrationSpec {
 	}
 
 	static def newUser(def username, def uuid) {
-		return new User(userType: UserType.OTHER, username: username, permissionString: '', passwordHash:'', uuid: uuid, firstname: 'user', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+		return new User(userType: UserType.OTHER, username: username, permissionString: '', passwordHash:'', active: true, confirmed: true, uuid: uuid, firstname: 'user', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11', location: DataLocation.findByCode(BUTARO)).save(failOnError: true)
 	}
 
 	static def newUser(def username, def active, def confirmed) {
@@ -236,13 +237,17 @@ abstract class IntegrationTests extends IntegrationSpec {
 	}
 
 	static def newOtherUser(def username, def uuid, def location) {
-		return new User(userType: UserType.OTHER, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, location: location, firstname: 'other', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11',active:true).save(failOnError: true)
+		return new User(userType: UserType.OTHER, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, location: location, firstname: 'other', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11', confirmed:true, active:true).save(failOnError: true)
 	}
+	
+//	static def newOtherUser(def username, def uuid, def location, def active, def confirmed, def userType) {
+//		return new User(userType: userType, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, location: location, firstname: 'other', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11',active:active).save(failOnError: true)
+//	}
 	static def newOtherUserWithType(def username, def uuid, def location, def userType) {
-		return new User(userType: userType, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, location: location, firstname: 'other', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11',active:true).save(failOnError: true)
+		return new User(userType: userType, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, location: location, firstname: 'other', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11', confirmed:true, active:true).save(failOnError: true)
 	}
 	static def newSystemUser(def username, def uuid, def location) {
-		return new User(userType: UserType.SYSTEM, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, location: location, firstname: 'system', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+		return new User(userType: UserType.SYSTEM, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, location: location, firstname: 'system', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11', confirmed:true, active:true).save(failOnError: true)
 	}
 	static def setupSecurityManager(def user) {
 		def subject = [getPrincipal: { user?.uuid }, isAuthenticated: { user==null?false:true }, login: { token -> null }] as Subject

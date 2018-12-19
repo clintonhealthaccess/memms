@@ -124,7 +124,6 @@ class UserController  extends  AbstractEntityController{
 		}
 	}
 	
-	
 	def search = {
 		adaptParamsForList()
 		def users = userService.searchUser(params['q'], params);

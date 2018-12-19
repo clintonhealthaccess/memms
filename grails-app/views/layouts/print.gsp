@@ -13,5 +13,6 @@
 			<g:layoutBody />
 			<div class=clear></div>
 		</div>
+		<r:layoutResources/>
 	</body>
 </html>

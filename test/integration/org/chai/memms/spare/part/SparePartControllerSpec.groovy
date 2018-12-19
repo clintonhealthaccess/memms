@@ -72,22 +72,24 @@ class SparePartControllerSpec extends IntegrationTests{
 		sparePartController.params.type = sparePartType
 		sparePartController.params."supplier.id" = supplier.id
 		sparePartController.params.status="INSTOCK"
+		sparePartController.params.orderedQuantity="130"
 		sparePartController.save()
 
 		then:
 		SparePart.count() == 1;
 		SparePart.findByDescriptions_en("test_english_descriptions").getDescriptions(new Locale("en")).equals("test_english_descriptions")
 		SparePart.findByReceivedQuantity(44) != null
+		SparePart.findByOrderedQuantity(130) != null
 	}
-	def "create spare part with correct required data in fields - for english input"(){
+	def "create spare part with correct required data in fields - for french input"(){
 
 		setup:
 		setupLocationTree()
 		setupSystemUser()
-		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def manufactureContact = Initializer.newContact(['fr':'Addresse detaille '],"Fabriquant","aphro@gmail.com","0788-448-261","Avenue de la Paix","6139")
 		def manufacturer = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
-		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
-		def supplierContact = Initializer.newContact(['en':'Address Descriptions '],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def sparePartType = Initializer.newSparePartType(CODE(15810),["fr":"Test des noms"],["fr":"test des noms en details"],"CODE Spare Part",manufacturer,Initializer.now())
+		def supplierContact = Initializer.newContact(['fr':'Description addresse '],"Fournisseur","aphro@gmail.com","0788-448-261","Avenue de la Paix","6139")
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		
 		when:
@@ -97,19 +99,21 @@ class SparePartControllerSpec extends IntegrationTests{
 		sparePartController.params.currency = "USD"
 		sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYMOH
 		sparePartController.params.stockLocation = StockLocation.FACILITY
-		sparePartController.params.descriptions_en = "test_english_descriptions 3"
+		sparePartController.params.descriptions_fr = "Un test francais"
 		sparePartController.params.purchaseDate = Initializer.getDate(2,1,2012)
 		sparePartController.params.type = sparePartType
 		sparePartController.params."supplier.id" = supplier.id
 		sparePartController.params.dataLocation = DataLocation.list().first()
 		sparePartController.params.status="INSTOCK"
+		sparePartController.params.orderedQuantity="55"
 		sparePartController.save()
 
 		then:
 		SparePart.count() == 1;
-		SparePart.findByDescriptions_en("test_english_descriptions 3").getDescriptions(new Locale("en")).equals("test_english_descriptions 3")
+		SparePart.findByDescriptions_fr("Un test francais").getDescriptions(new Locale("fr")).equals("Un test francais")
 		SparePart.findByReceivedQuantity(55) != null
 		SparePart.findByPurchaseCost(327670) != null
+		SparePart.findByOrderedQuantity(55) != null
 
 	}
 	def "create spare part with correct required data in fields - for all locale"(){
@@ -139,6 +143,7 @@ class SparePartControllerSpec extends IntegrationTests{
 		sparePartController.params.type = sparePartType
 		sparePartController.params."supplier.id" = supplier.id
 		sparePartController.params.status="INSTOCK"
+		sparePartController.params.orderedQuantity="44"
 		sparePartController.save()
 		
 		then:
@@ -175,6 +180,7 @@ class SparePartControllerSpec extends IntegrationTests{
 		sparePartController.params.type = sparePartType
 		sparePartController.params."supplier.id" = supplier.id
 		sparePartController.params.status="INSTOCK"
+		sparePartController.params.orderedQuantity = 10
 		sparePartController.save()
 		
 		then:
@@ -194,10 +200,65 @@ class SparePartControllerSpec extends IntegrationTests{
 		sparePartController.params.type = sparePartType
 		sparePartController.params."supplier.id" = supplier.id
 		sparePartController.params.status="INSTOCK"
+		sparePartController.params.orderedQuantity = 43
 		sparePartController.save()
 		
 		then:
 		SparePart.count() == 0;
+		
+	}
+	
+	def "Create spare part without oredered quantity not allowed"(){
+		
+		setup:
+		setupLocationTree()
+		setupSystemUser()
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def manufacturer = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
+		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
+		def supplierContact = Initializer.newContact(['en':'Address Descriptions '],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+		
+		sparePartController = new SparePartController();
+
+		when:
+		sparePartController.params.receivedQuantity = 13
+		sparePartController.params.purchaseCost = "32000"
+		sparePartController.params.currency = "USD"
+		sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYMOH
+		sparePartController.params.stockLocation = StockLocation.FACILITY
+		sparePartController.params.dataLocation = null
+		sparePartController.params.room = ''
+		sparePartController.params.shelve = ''
+		sparePartController.params.descriptions_en = "test_english_descriptions"
+		sparePartController.params.purchaseDate = Initializer.getDate(2,1,2012)
+		sparePartController.params.type = sparePartType
+		sparePartController.params."supplier.id" = supplier.id
+		sparePartController.params.status="INSTOCK"
+		sparePartController.params.orderedQuantity = null
+		sparePartController.save()
+		
+		then:
+		SparePart.count() == 0;
+
+		when:
+		sparePartController.params.receivedQuantity = 43
+		sparePartController.params.purchaseCost = "32000"
+		sparePartController.params.currency = "USD"
+		sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYMOH
+		sparePartController.params.dataLocation = DataLocation.findByCode(KIVUYE)
+		sparePartController.params.room = ''
+		sparePartController.params.shelve = ''
+		sparePartController.params.descriptions_en = "test_english_descriptions"
+		sparePartController.params.purchaseDate = Initializer.getDate(2,1,2012)
+		sparePartController.params.type = sparePartType
+		sparePartController.params."supplier.id" = supplier.id
+		sparePartController.params.status="INSTOCK"
+		sparePartController.params.orderedQuantity = 43
+		sparePartController.save()
+		
+		then:
+		SparePart.count() == 1;
 		
 	}
 	

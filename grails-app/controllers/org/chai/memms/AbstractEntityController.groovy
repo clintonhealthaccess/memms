@@ -138,6 +138,7 @@ abstract class AbstractEntityController extends AbstractController {
 			flash.message = message(code: 'default.saved.message', args: [message(code: getLabel(), default: 'entity'), params.id ?: entity.id])
 			if (log.isInfoEnabled())  log.info ("getTargetURI() ${targetURI}")
 			redirect(url: getTargetURI())
+			
 		}
 	}	
 	

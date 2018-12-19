@@ -140,6 +140,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params."supplier.id" = supplier.id
 		equipmentController.params.dataLocation = DataLocation.list().first()
 		equipmentController.params.status="FORDISPOSAL"
+		equipmentController.params.disposalRefNumber="DISPMEEC001"
 		equipmentController.params.dateOfEvent=Initializer.now()
 		equipmentController.save()
 
@@ -153,4 +154,85 @@ class EquipmentControllerSpec extends IntegrationTests{
 			Equipment."findByDescriptions_$it"("test descriptions $it").getDescriptions(new Locale("$it")).equals("test descriptions $it")
 		}
 	}
+	
+	def "can't create equipment with for disposal status and without disposal decision reference number"(){
+		
+				setup:
+				setupLocationTree()
+				setupSystemUser()
+		
+				def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+				def supplierContact = Initializer.newContact(['en':'Address Descriptions '],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+				def serviceProvider = Initializer.newContact(['en':'Address Descriptions '],"service Provider","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		
+		
+				def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
+				def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+				def servicePr = Initializer.newProvider(CODE(125), Type.SERVICEPROVIDER,serviceProvider)
+		
+				def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
+				def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now())
+		
+				equipmentController = new EquipmentController();
+				when:
+				equipmentController.params.serialNumber = 'SERIAL129'
+				equipmentController.params.purchaseCost = ""
+				equipmentController.params.currency = ""
+				equipmentController.params.model = "model one"
+				equipmentController.params.room = "ROOM A1"
+				equipmentController.params.purchaser = PurchasedBy.BYFACILITY
+				equipmentController.params.obsolete = false
+		
+				equipmentController.params."warranty.startDate" = Initializer.getDate(1,1,2012)
+				equipmentController.params."warranty.sameAsSupplier" = true
+				equipmentController.params.warrantyPeriod = "struct"
+				equipmentController.params.warrantyPeriod_years = "1"
+				equipmentController.params.warrantyPeriod_months = "4"
+				grailsApplication.config.i18nFields.locales.each{
+					equipmentController.params."warranty.descriptions_$it" = "new warranty for testing $it"
+				}
+		
+				equipmentController.params."serviceProvider.id" = servicePr.id
+				equipmentController.params.serviceContractStartDate = Initializer.getDate(1,1,2012)
+				equipmentController.params.serviceContractPeriod = "struct"
+				equipmentController.params.serviceContractPeriod_years = "2"
+				equipmentController.params.serviceContractPeriod_months = "3"
+		
+				grailsApplication.config.i18nFields.locales.each{
+					equipmentController.params."descriptions_$it" = "test descriptions $it"
+				}
+				equipmentController.params.manufactureDate = Initializer.getDate(1,1,2012)
+				equipmentController.params.purchaseDate = Initializer.getDate(1,1,2012)
+				equipmentController.params.department = department
+				equipmentController.params.type = equipmentType
+				equipmentController.params.expectedLifeTime = "struct"
+				equipmentController.params.expectedLifeTime_years = "1"
+				equipmentController.params.expectedLifeTime_months = "3"
+				equipmentController.params."manufacturer.id" = manufacture.id
+				equipmentController.params."supplier.id" = supplier.id
+				equipmentController.params.dataLocation = DataLocation.list().first()
+				equipmentController.params.status="FORDISPOSAL"
+				equipmentController.params.disposalRefNumber=""
+				equipmentController.params.dateOfEvent=Initializer.now()
+				equipmentController.save()
+		
+				then:
+				Equipment.count() == 0;
+				
+				when:
+				equipmentController.params.status="FORDISPOSAL"
+				equipmentController.params.disposalRefNumber="DISPMEEC001"
+				equipmentController.save()
+				
+				then:
+				
+				Equipment.count() == 1;
+				Equipment.findBySerialNumber("SERIAL129").serialNumber.equals("SERIAL129")
+				Equipment.findBySerialNumber("SERIAL129").expectedLifeTime.numberOfMonths == 15
+				Equipment.findBySerialNumber("SERIAL129").warrantyPeriod.numberOfMonths == 16
+				Equipment.findBySerialNumber("SERIAL129").serviceContractPeriod.numberOfMonths == 27
+				grailsApplication.config.i18nFields.locales.each{
+					Equipment."findByDescriptions_$it"("test descriptions $it").getDescriptions(new Locale("$it")).equals("test descriptions $it")
+				}
+			}
 }

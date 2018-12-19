@@ -87,7 +87,7 @@ class ListingController extends AbstractController{
 	def model(def entities, def dataLocation) {
 		return [
 			entities: entities,
-			entityCount: entities.totalCount,
+			entityCount: entities?.totalCount,
 			//entityCount: entities.size(),
 			dataLocation: dataLocation,
 			entityClass: getEntityClass(),

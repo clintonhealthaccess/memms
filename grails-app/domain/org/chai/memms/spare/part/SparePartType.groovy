@@ -51,6 +51,7 @@ class SparePartType {
 	String code
 	String names
 	String partNumber
+	String model
 	String descriptions
 	Date discontinuedDate
 	Date dateCreated
@@ -66,6 +67,7 @@ class SparePartType {
 		names nullable: true, blank: true
 		descriptions nullable: true, blank: true
 		partNumber nullable: false,blank:false
+		model nullable: true,blank:true
 		discontinuedDate nullable: true
 		manufacturer nullable:false,blank:false, validator:{
 			return it.type in [Type.BOTH, Type.MANUFACTURER]		
@@ -153,6 +155,6 @@ class SparePartType {
 
 	@Override
 	public String toString() {
-		return "SparePartType [id ="+id+" code=" + code + ", partNumber=" + partNumber + "]";
+		return "SparePartType [id ="+id+" code=" + code + ", partNumber=" + partNumber + ", model=" + model +"]";
 	}
 }

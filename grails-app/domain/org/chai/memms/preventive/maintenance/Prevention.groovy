@@ -57,9 +57,10 @@ public class Prevention {
 
 	
 	String descriptions
+	String actionNotDoneReason
 	
 	
-	static i18nFields = ["descriptions"]
+	static i18nFields = ["descriptions","actionNotDoneReason"]
 	static belongsTo = [order:  PreventiveOrder]
 	static hasMany = [actions: PreventiveAction]
 	static embedded = ["timeSpend","scheduledOn"]
@@ -77,6 +78,7 @@ public class Prevention {
 		scheduledOn nullable: false
 		eventDate nullable: false, validator:{it <= new Date()}
 		lastUpdated nullable: true, validator:{if(it != null) return (it <= new Date())}
+		actionNotDoneReason nullable: true, blank: true
 	}
 
 	def beforeDelete(){

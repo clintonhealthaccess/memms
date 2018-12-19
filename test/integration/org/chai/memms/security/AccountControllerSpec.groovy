@@ -9,6 +9,7 @@ class AccountControllerSpec extends IntegrationTests {
 	
 	def "test not logged-in user has no access to page"() {
 		setup:
+		setupLocationTree()
 		def user = newUser('test', false, true)
 		setupSecurityManager(user)
 		accountController = new AccountController()
@@ -23,6 +24,7 @@ class AccountControllerSpec extends IntegrationTests {
 	
 	def "test not logged-in user cannot save"() {
 		setup:
+		setupLocationTree()
 		def user = newUser('test', false, true)
 		setupSecurityManager(user)
 		accountController = new AccountController()

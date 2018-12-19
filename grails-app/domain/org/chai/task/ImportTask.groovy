@@ -89,7 +89,7 @@ abstract class ImportTask extends Task {
 			fileWriter.flush()
 			IOUtils.closeQuietly(fileWriter)
 		}
-		else {
+		else {	
 			throw new IllegalStateException("task is invalid, data, period or file not found")
 		}
 	}

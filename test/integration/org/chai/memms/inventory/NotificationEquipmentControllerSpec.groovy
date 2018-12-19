@@ -157,7 +157,7 @@ class NotificationEquipmentControllerSpec  extends IntegrationTests{
 		notificationEquipmentController.filter()
 
 		then:
-		!notificationEquipmentController.response.json.results[0].contains("Send for rapair, oneTwo")
+		notificationEquipmentController.response.json.results[0].contains("Send for rapair, oneTwo")
 		notificationEquipmentController.response.json.results[0].contains("Send for rapair, two")
 		!notificationEquipmentController.response.json.results[0].contains("Send for rapair, oneOld")
 		NotificationEquipment.count() == 6

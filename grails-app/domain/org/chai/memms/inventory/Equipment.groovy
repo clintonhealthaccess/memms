@@ -44,13 +44,13 @@ import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.location.DataLocation;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-//import org.joda.time.PeriodType;
-//import org.joda.time.Period;
+
 import org.apache.commons.lang.math.RandomUtils;
 import groovy.time.TimeCategory;
 
 import groovy.transform.EqualsAndHashCode;
 import i18nfields.I18nFields
+import java.util.Date
 
 /**
  * @author Jean Kahigiso M.
@@ -59,6 +59,24 @@ import i18nfields.I18nFields
 @i18nfields.I18nFields
 @EqualsAndHashCode(includes="code")
 public class Equipment {
+	static auditable = true
+	
+	/*enum Status{
+		
+		NONE("none"),
+		OPERATIONAL("operational"),
+		PARTIALLYOPERATIONAL("partially.operational"),
+		INSTOCK("in.stock"),
+		UNDERMAINTENANCE("under.maintenance"),
+		FORDISPOSAL("for.disposal"),
+		DISPOSED("disposed")
+		
+		String messageCode = "equipment.status"
+		
+		final String name
+		Status(String name){ this.name=name }
+		String getKey() { return name() }
+	}*/
 	
 	enum PurchasedBy{
 		
@@ -94,6 +112,7 @@ public class Equipment {
 	}
 	
 	String serialNumber
+	String oldTagNumber
 	String currency
 	String descriptions
 	String model
@@ -125,6 +144,8 @@ public class Equipment {
 	
 	User addedBy
 	User lastModifiedBy
+	Date installationDate
+	String contractNumber
 	
 	
 	static hasMany = [status: EquipmentStatus, workOrders: WorkOrder,preventiveOrders: PreventiveOrder]
@@ -166,6 +187,10 @@ public class Equipment {
 
 		//TODO nullable has to be false, but it is true for first iteration
 		serialNumber nullable: true,  unique: true ///blank: false 
+		
+		oldTagNumber nullable: true
+		
+		contractNumber nullable: true
 
 		purchaseCost nullable: true, blank: true, validator:{ if(it!=null) return (it>0) }
 		//TODO nullable has to be false, but it is true for first iteration
@@ -177,7 +202,7 @@ public class Equipment {
 		donorName nullable:true,blank:true, validator:{val, obj ->
 			if(obj.purchaser == PurchasedBy.BYDONOR || obj.donor !=null) return (val!=null && val!="")
 		}
-		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
+		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR","GBP"], validator:{ val, obj ->
 			if(obj.purchaseCost != null) return (val != null)
 		}
 
@@ -191,19 +216,24 @@ public class Equipment {
 			if(val!=null) return (val.numberOfMonths >= 0)
 		}
 		serviceContractStartDate nullable: true, blank: true, validator:{ val, obj ->
-			if(val!=null) return (val<=new Date() && (val.after(obj.purchaseDate) || (val.compareTo(obj.purchaseDate)==0)))
+			if(val!=null && obj?.purchaseDate!=null) return (val<=new Date() && (val.after(obj.purchaseDate) || (val.compareTo(obj.purchaseDate)==0)))
 			if(val==null) return (obj.serviceContractPeriod==null && obj.serviceProvider==null)
 		}
 		room nullable: true, blank: true
 		//TODO nullable has to be false, but it is true for first iteration
 		manufactureDate nullable: true, blank: false, validator:{it <= new Date()}
 		//TODO nullable has to be false, but it is true for first iteration
-		purchaseDate nullable: true, blank: false, validator:{ val, obj ->
-			//TODO uncomment when fix
-			//return  ((val <= new Date()) && val.after(obj.manufactureDate) || (val.compareTo(obj.manufactureDate)==0))
-		}
+		purchaseDate (nullable: true, blank: false, validator:{ val, obj ->
+			if (val!=null && obj.manufactureDate !=null){
+				return  val.compareTo(obj.manufactureDate)>=0
+			}
+			return true
+		})
+		
 		descriptions nullable: true, blank: true
 		obsolete nullable: false
+		type nullable: false 
+		installationDate nullable: true
 	}
 	
 	static mapping = {
@@ -238,12 +268,12 @@ public class Equipment {
 	
 	@Transient
 	def generateWarrantyEndDate(){
-		Integer.metaClass.mixin TimeCategory
-		Date.metaClass.mixin TimeCategory
+		use(TimeCategory){
 		if(warranty!=null && warrantyPeriod!=null)
 			warrantyEndDate = warranty.startDate + (warrantyPeriod.numberOfMonths).months
 		else
 			warrantyEndDate = null
+		}
 	}
 	
 	@Transient
@@ -311,4 +341,5 @@ public class Equipment {
 		return "Equipment[id= " + id + " code= "+code+" dataLocationId= "+dataLocation.id+" serialNumber= "+serialNumber+" currentState= "+currentStatus+", previousState= "+getTimeBasedPreviousStatus()?.status+"]";
 
 	}
+	
 }

@@ -81,9 +81,6 @@ import org.chai.memms.util.Utils;
 import org.chai.memms.TimeDate;
 import org.chai.memms.TimeSpend
 
-import org.chai.memms.reports.hmis.HmisEquipmentType
-import org.chai.memms.reports.hmis.HmisFacilityReport
-
 public class Initializer {
 		
 	static final String HEALTH_CENTER_GROUP = "Health Center"
@@ -881,7 +878,7 @@ public class Initializer {
 				User.findByUsername("admin"),
 				StockLocation.MMC,
 				SparePartStatus.INSTOCK,
-				null,89,80
+				89,89,80
 				)
 
 			def sparePartTwo = newSparePart(
@@ -988,35 +985,6 @@ public class Initializer {
 		}
 	}
 
-	public static createHmisEquipmentTypeStructure(){
-
-		if(!HmisEquipmentType.count()) {
-		
-			def hmisEqTypeOne = newHmisEquipmentType(123,["en":"HmisEquipmentType one en","fr":"HmisEquipmentType one en"])
-			def eqTypeOne = EquipmentType.findByCode("15810")
-			hmisEqTypeOne.addToEquipmentTypes(eqTypeOne)
-			def eqTypeTwo = EquipmentType.findByCode("15819")
-			hmisEqTypeOne.addToEquipmentTypes(eqTypeTwo)
-			hmisEqTypeOne.save(failOnError:true)
-			eqTypeOne.save(failOnError:true)
-			eqTypeTwo.save(failOnError:true)
-			
-
-			def hmisEqTypeTwo = newHmisEquipmentType(124,["en":"HmisEquipmentType Two en","fr":"HmisEquipmentType Two en"])
-			def eqTypeThree = EquipmentType.findByCode("15966")
-			def eqTypeFour = EquipmentType.findByCode("10035")
-			hmisEqTypeTwo.addToEquipmentTypes(eqTypeThree)
-			hmisEqTypeTwo.addToEquipmentTypes(eqTypeFour)
-			hmisEqTypeTwo.save(failOnError:true)
-			eqTypeThree.save(failOnError:true)			
-			eqTypeFour.save(failOnError:true)
-			
-			def hmisEqTypeThree= newHmisEquipmentType(125,["en":"HmisEquipmentType Three en","fr":"HmisEquipmentType Three en"])
-			def hmisEqTypeFour = newHmisEquipmentType(126,["en":"HmisEquipmentType Four en","fr":"HmisEquipmentType Four en"])
-			def hmisEqTypeFive = newHmisEquipmentType(127,["en":"HmisEquipmentType Five en","fr":"HmisEquipmentType Five en"])
-		}
-	}	
-	
 	//Models definition
 	//Spare Part type
 	public static newSparePartType(def code, def names, def descriptions,def partNumber,def manufacturer, def discontinuedDate){
@@ -1173,28 +1141,32 @@ public class Initializer {
 	}
 	
 	//Inventory
-	public static newEquipment(def serialNumber,def purchaser,def donor,def donorName,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def model,def dataLocation,def department, def type,def manufacture,def supplier,def currentStatus,def addedBy,def lastModifiedBy,def lastModifiedOn){
+	public static newEquipment(def serialNumber,def purchaser,def donor,def donorName,def obsolete,def expectedLifeTime,def room,def purchaseCost,
+		def descriptions,def manufactureDate, def purchaseDate,def currency,def model,def dataLocation,def department, def type,def manufacture,
+		def supplier,def currentStatus,def addedBy,def lastModifiedBy,def lastModifiedOn){
 		def equipment = new Equipment(
 			serialNumber:serialNumber,
 			purchaser:purchaser,
 			donor:donor,
 			donorName:donorName,
 			obsolete:obsolete,
+			expectedLifeTime:expectedLifeTime,
 			room:room,
 			purchaseCost:purchaseCost,
-			currency:currency,
+			descriptions:descriptions,
 			manufactureDate:manufactureDate,
 			purchaseDate:purchaseDate,
+			currency:currency,
 			model:model,
 			dataLocation:dataLocation,
-			expectedLifeTime:expectedLifeTime,
 			department:department,
 			type:type,
 			manufacturer:manufacture,
 			supplier:supplier,
 			currentStatus:currentStatus,
 			addedBy:addedBy,
-			lastModifiedBy:lastModifiedBy
+			lastModifiedBy:lastModifiedBy,
+			lastModifiedOn:lastModifiedOn
 			);
 		Utils.setLocaleValueInMap(equipment,descriptions,"Descriptions")
 		return equipment.save(failOnError: true,flush:true)
@@ -1333,12 +1305,6 @@ public class Initializer {
 			type.save(failOnError: true)
 	   }
 		return dataLocation
-	}
-	
-	public static newHmisEquipmentType(def code, def names) {
-		def hmisEqType = new HmisEquipmentType(code:code)
-		Utils.setLocaleValueInMap(hmisEqType,names,"Names")
-		return hmisEqType.save(failOnError:true)
 	}
 
 	static mapping ={

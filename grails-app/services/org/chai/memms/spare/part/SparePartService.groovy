@@ -103,6 +103,7 @@ class SparePartService {
 						ilike(dbFieldDescriptions,"%"+text+"%") 
 						ilike("t.code","%"+text+"%")
 						ilike("t.partNumber","%"+text+"%")
+						ilike("t.model","%"+text+"%")
 						ilike("t."+dbFieldTypeNames,"%"+text+"%")
 						ilike("t."+dbFieldDescriptions,"%"+text+"%")
 				   	}
@@ -231,7 +232,8 @@ class SparePartService {
 		def dataLocations = []
 		def criteria = SparePart.createCriteria();
 
-		if(!user.userType.equals(UserType.ADMIN) && !user.userType.equals(UserType.TECHNICIANMMC) && !user.userType.equals(UserType.SYSTEM) && !user.userType.equals(UserType.TECHNICIANDH))
+		//if(!user.userType.equals(UserType.ADMIN) && !user.userType.equals(UserType.TECHNICIANMMC) && !user.userType.equals(UserType.SYSTEM) && !user.userType.equals(UserType.TECHNICIANDH))
+		if(!user.userType.equals(UserType.ADMIN) && !user.userType.equals(UserType.TECHNICIANMMC) && !user.userType.equals(UserType.SYSTEM))
 		{
 			if(user.location instanceof Location)
 				dataLocations.addAll(user.location.getDataLocations([:], [:]))
@@ -252,6 +254,7 @@ class SparePartService {
 				ilike("t."+dbFieldTypeNames,"%"+text+"%")
 				ilike("t."+dbFieldDescriptions,"%"+text+"%")
 				ilike("t.code","%"+text+"%")
+				ilike("t.model","%"+text+"%")
 			}
 		}
 	}
@@ -260,7 +263,8 @@ class SparePartService {
 		def dataLocations = []
 		def criteria = SparePart.createCriteria();
 
-		if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM) || user.userType.equals(UserType.TECHNICIANDH))
+		//if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM) || user.userType.equals(UserType.TECHNICIANDH))
+		if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM))
 			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				if(type!=null) eq("type",type)
 		}
@@ -285,9 +289,10 @@ class SparePartService {
 
 	public def filterSparePart(User user, def supplier, def type,def stockLocation,def sparePartPurchasedBy,def status,Map<String, String> params){
 
-		def dataLocations = null
+		def dataLocations = []
 		
-		if(!user.userType.equals(UserType.ADMIN) && !user.userType.equals(UserType.TECHNICIANMMC) && !user.userType.equals(UserType.SYSTEM) && !user.userType.equals(UserType.TECHNICIANDH)){
+		//if(!user.userType.equals(UserType.ADMIN) && !user.userType.equals(UserType.TECHNICIANMMC) && !user.userType.equals(UserType.SYSTEM) && !user.userType.equals(UserType.TECHNICIANDH)){
+		if(!user.userType.equals(UserType.ADMIN) && !user.userType.equals(UserType.TECHNICIANMMC) && !user.userType.equals(UserType.SYSTEM)){
 			dataLocations = []
 			if(user.location instanceof Location)
 				dataLocations.addAll(user.location.collectDataLocations(null))
@@ -320,9 +325,36 @@ class SparePartService {
 				eq ("stockLocation",stockLocation)
 		}
 	}
+	//TO DO APHRO TO CONTINUE WORKING ON THIS METHODE TO MAKE SURE USER IS ACCESSING ONLY HIS SPARE PART
+	public def userScopeSparePartExport(User user, Map<String,String> params){
+		def dataLocations = []
+		def criteria = SparePart.createCriteria();
+		
+		if(!user.userType.equals(UserType.ADMIN) && user.userType.equals(!UserType.TECHNICIANMMC) && user.userType.equals(!UserType.SYSTEM)){
+			dataLocations = []
+			if(user.location instanceof Location)
+				dataLocations.addAll(user.location.collectDataLocations(null))
+			else{
+				def location = (DataLocation)user.location
+				dataLocations.add(location)
+				if(userService.canViewManagedSpareParts(user))
+					(location.manages==null)?:dataLocations.addAll(location.manages?.asList())
+			}
+
+			if(log.isDebugEnabled()) log.debug(" user: " + user + " user's managed dataLocations: " + dataLocations)
+		}
+
+		if (log.isDebugEnabled())
+			log.debug("spare.parts.filter dataLocations="+dataLocations)
+		
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			if(dataLocations != null && !dataLocations.empty)
+				inList('dataLocation',dataLocations)
+		}
+	}
 	public File exporter(def location,List<SparePart> spareParts){
 		if (log.isDebugEnabled()) log.debug("sparePartService.exporter, location code: "+location.code + ", ImportExportConstant: "+ImportExportConstant.CSV_FILE_EXTENSION)
-		File csvFile = File.createTempFile(location.code+"_export",ImportExportConstant.CSV_FILE_EXTENSION);
+		File csvFile = File.createTempFile(location.code+"_"+location.getNames(new Locale("en")).replaceAll(" ", "_")+"_spare_part_export",ImportExportConstant.CSV_FILE_EXTENSION);
 		FileWriter csvFileWriter = new FileWriter(csvFile);
 		ICsvListWriter writer = new CsvListWriter(csvFileWriter, CsvPreference.EXCEL_PREFERENCE);
 		this.writeFile(writer,spareParts);
@@ -339,20 +371,24 @@ class SparePartService {
 			}
 			for(SparePart sparePart: spareParts){
 				List<String> line = [
-					sparePart.type.code,
-					sparePart.type?.getNames(new Locale("en")),
-					sparePart.type?.getNames(new Locale("fr")),
-					sparePart.sparePartPurchasedBy.name(),
-					sparePart.dataLocation?.code,
-					sparePart.dataLocation?.getNames(new Locale("en")),
-					sparePart.dataLocation?.getNames(new Locale("fr")),
-					sparePart.type?.manufacturer?.contact?.contactName,
-					sparePart.supplier?.code,
-					sparePart.supplier?.contact?.contactName,
-					sparePart.purchaseDate,
-					sparePart.purchaseCost?:"n/a",
-					sparePart.currency?:"n/a",
-					sparePart.receivedQuantity
+					sparePart.type?.code?:"",
+					sparePart.type?.partNumber?:"",
+					sparePart.type?.getNames(new Locale("en"))?:"",
+					sparePart.type?.getNames(new Locale("fr"))?:"",
+					sparePart.sparePartPurchasedBy?.name?:"",
+					sparePart.dataLocation?.code?:"",
+					sparePart.dataLocation?.getNames(new Locale("en"))?:"",
+					sparePart.dataLocation?.getNames(new Locale("fr"))?:"",
+					sparePart.type?.manufacturer?.contact?.contactName?:"",
+					sparePart.type?.model?:"",
+					sparePart.supplier?.code?:"",
+					sparePart.supplier?.contact?.contactName?:"",
+					sparePart.purchaseDate?:"",
+					sparePart.orderedQuantity?:"",
+					sparePart.receivedQuantity?:"",
+					sparePart.inStockQuantity?:"",
+					sparePart.purchaseCost?:"",
+					sparePart.currency?:"",
 				]
 				writer.write(line)
 			}
@@ -372,6 +408,7 @@ class SparePartService {
 		List<String> headers = new ArrayList<String>();
 
 		headers.add(ImportExportConstant.SPARE_PART_TYPE_CODE)
+		headers.add(ImportExportConstant.SPARE_PART_TYPE_PART_NUMBER)
 		headers.add(ImportExportConstant.SPARE_PART_TYPE_NAME_EN)
 		headers.add(ImportExportConstant.SPARE_PART_TYPE_NAME_FR)
 		headers.add(ImportExportConstant.SPARE_PART_PURCHASED_BY)
@@ -379,12 +416,15 @@ class SparePartService {
 		headers.add(ImportExportConstant.LOCATION_NAME_EN)
 		headers.add(ImportExportConstant.LOCATION_NAME_FR)
 		headers.add(ImportExportConstant.MANUFACTURER_CONTACT_NAME)
+		headers.add(ImportExportConstant.SPARE_PART_TYPE_MODEL)
 		headers.add(ImportExportConstant.SUPPLIER_CODE)
 		headers.add(ImportExportConstant.SUPPLIER_CONTACT_NAME)
 		headers.add(ImportExportConstant.SUPPLIER_DATE)
+		headers.add(ImportExportConstant.SPARE_PART_ORDERED_QUANTITY)
+		headers.add(ImportExportConstant.SPARE_PART_RECEIVED_QUANTITY)
+		headers.add(ImportExportConstant.SPARE_PART_INSTOCK_QUANTITY)
 		headers.add(ImportExportConstant.SPARE_PART_PURCHASE_COST)
 		headers.add(ImportExportConstant.SPARE_PART_PURCHASE_COST_CURRENCY)
-		headers.add(ImportExportConstant.SPARE_PART_QUANTITY)
 
 		return headers;
 	}

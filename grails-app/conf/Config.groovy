@@ -48,6 +48,12 @@ grails.mime.types = [ html: ['text/html','application/xhtml+xml'],
 
 // What URL patterns should be processed by the resources plugin
 grails.resources.adhoc.patterns = ['/images/*', '/css/*', '/js/*', '/plugins/*']
+//grails.resources.adhoc.includes = ['/images/**', '/css/**', '/js/**', '/plugins/**']
+grails.resources.adhoc.includes = ['/images/**', '/css/**', '/js/**', '/plugins/**']
+
+// uri-to-url resolution cache timeout in milliseconds
+// 0 == caching disabled , -1 == no timeout
+grails.resources.uriToUrlCacheTimeout = 30000
 
 
 // The default codec used to encode data with ${}
@@ -58,6 +64,7 @@ grails.converters.encoding = "UTF-8"
 grails.views.gsp.sitemesh.preprocess = true
 // scaffolding templates configuration
 grails.scaffolding.templates.domainSuffix = 'Instance'
+//grails.resources.debug=true
 
 // Set to false to use the new Grails 1.2 JSONBuilder in the render method
 grails.json.legacy.builder = false
@@ -195,7 +202,7 @@ site.contact.email = "memms@dhsst.org"
 site.from.email = "no-reply@dhsst.org"
 
 location.sector.skip.level=["Sector"]
-site.possible.currency = ["":"NONE","RWF":"RWF","USD":"USD","EUR":"EUR"]
+site.possible.currency = ["":"NONE","RWF":"RWF","USD":"USD","EUR":"EUR","GBP":"GBP"]
 
 status.to.display.on.equipment.form = 5
 
@@ -209,6 +216,13 @@ file.upload.delimiter=","
 
 task.temp.folder='files/'
 
+file.user.manual="${userHome}/usermanual.pdf"
+
+grails.resources.mappers.yuicssminify.includes = ['**/*.css']
+grails.resources.mappers.yuijsminify.includes = ['**/*.js']
+grails.resources.mappers.yuicssminify.excludes = ['**/*.min.css']
+grails.resources.mappers.yuijsminify.excludes = ['**/*.min.js']
+
 /**
 * Configuration file override
 */
@@ -219,3 +233,8 @@ environments {
 	   grails.config.locations = locations
    }
 }
+
+// Added by the Audit-Logging plugin:
+grails.plugin.auditLog.auditDomainClassName = 'org.chai.memms.logs.AuditLogEvent'
+grails.plugin.auditLog.disabled = false
+

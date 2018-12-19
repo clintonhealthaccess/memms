@@ -16,7 +16,7 @@
 </div>
 <script type="text/javascript">
 	$(document).ready(function() {
-		loadCalendar(${dataLocation.id})
+		loadCalendar(${dataLocation?.id})
 	});
 </script>
 

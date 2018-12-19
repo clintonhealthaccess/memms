@@ -23,7 +23,7 @@
               </span>
               <g:message code="prevention.section.process.information.label"/>
           </h4> 
-      		<g:input name="code" label="${message(code:'entity.code.label')}" bean="${type}" field="code"/>
+      		<g:input name="code" label="${message(code:'equipment.type.code.label')}" bean="${type}" field="code"/>
       		<g:i18nInput name="names" label="${message(code:'entity.names.label')}" bean="${type}" field="names"/>
       		<g:i18nTextarea name="descriptions" bean="${type}" label="${message(code:'entity.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
       		<g:selectFromEnum name="observation" bean="${type}" values="${Observation.values()}" field="observation" label="${message(code:'entity.observation.label')}"/>

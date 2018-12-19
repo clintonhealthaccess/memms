@@ -49,7 +49,7 @@ class EquipmentStatusService {
 		}
 	}
 	
-	Equipment createEquipmentStatus(User changedBy,Status value, Equipment equipment,Date dateOfEvent, Map<String,String> reasons){
+	Equipment createEquipmentStatus(User changedBy,Status value, Equipment equipment,Date dateOfEvent, String disposalRefNumber, Map<String,String> reasons){
 		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,previousStatus:equipment?.getTimeBasedStatus()?.status,status:value)
 		Utils.setLocaleValueInMap(status,reasons,"Reasons")
 		equipment.currentStatus = value
@@ -57,7 +57,13 @@ class EquipmentStatusService {
 			//When updating an equipment
 			equipment.lastModifiedBy = changedBy
 		}
+		if(value.equals(Status.FORDISPOSAL)){
+			status.disposalRefNumber = disposalRefNumber
+		} else {
+			status.disposalRefNumber = null
+		}
 		equipment.addToStatus(status)
+		
 		if(!equipment.currentStatus.equals(Status.DISPOSED))
 			equipment.save(failOnError:true, flush:true)
 		return equipment

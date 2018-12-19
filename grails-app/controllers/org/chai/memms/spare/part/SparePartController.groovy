@@ -85,7 +85,11 @@ class SparePartController extends AbstractEntityController{
 	def bindParams(def entity) {
 		def stockLocation = params['stockLocation']
 		def status = params['status']
-		def previousStatus = entity.status
+		def previousStatus = null;
+		if(entity.id!=null){
+			previousStatus = entity.status
+		}
+		
 		if(status!=null) status = SparePartStatus."$status"
 		if(stockLocation!=null) stockLocation = StockLocation."$stockLocation"
 
@@ -123,7 +127,8 @@ class SparePartController extends AbstractEntityController{
 			types: types,
 			dataLocations: dataLocations,
 			currencies: grailsApplication.config.site.possible.currency,
-			now:now
+			now:now,
+			code: getLabel()
 		]
 	}
 }

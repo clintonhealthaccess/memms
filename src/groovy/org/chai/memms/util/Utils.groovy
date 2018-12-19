@@ -56,6 +56,7 @@ import org.chai.memms.security.User
 import org.joda.time.DateTime
 import org.joda.time.Days;
 import org.joda.time.Weeks;
+import groovy.time.TimeCategory;
 
 /**
  * @author Jean Kahigiso M.
@@ -192,11 +193,11 @@ public class Utils {
 	}
 	
 	public static Date getMaxDateFromDateTime(Date date){
-		Integer.metaClass.mixin TimeCategory
-		Date.metaClass.mixin TimeCategory
+		use(TimeCategory){
 		Date cleanedDate = date.clearTime()
 		cleanedDate = cleanedDate + 0.hours + 59.minutes + 59.seconds
 		return cleanedDate
+		}
 	}
 	public static Date getMinDateFromDateTime(Date date){
 		return date.clearTime()

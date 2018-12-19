@@ -6,6 +6,7 @@
 			<g:sortableColumn property="${i18nField(field: 'names')}" params="[q:q]" title="${message(code: 'entity.name.label')}" />
 			<g:sortableColumn property="partNumber" params="[q:q]" title="${message(code: 'entity.part.number.label')}" />	
 			<th><g:message code="entity.manufacturer.label"/></th>
+			<g:sortableColumn property="model" params="[q:q]" title="${message(code: 'entity.model.label')}" />	
 			<th><g:message code="sparePartType.quantity.in.stock.label"/></th>	
 			<th><g:message code="sparePartType.estimated.date.stockout.label"/></th>
 			<g:sortableColumn property="discontinuedDate" params="[q:q]" title="${message(code: 'entity.discontinued.date.label')}" />
@@ -36,6 +37,9 @@
 				</td>
 				<td>
 					${type.manufacturer.contact.contactName}
+				</td>
+				<td>
+					${type.model}
 				</td>
 				<td>
 					<g:if test="${(type.inStockSpareParts?.size()>0)}">

@@ -264,6 +264,7 @@ class AuthControllerSpec extends IntegrationTests {
 	def "activate account with confirmed user"() {
 		setup:
 		authController = new AuthController()
+		setupLocationTree()
 		def user = newUser('test', false, true)
 		
 		when:

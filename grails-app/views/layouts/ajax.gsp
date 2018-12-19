@@ -1,3 +1,3 @@
-<g:layoutBody/>
 <r:layoutResources/>
+<g:layoutBody/>
 <r:layoutResources/>

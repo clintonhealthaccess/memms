@@ -31,11 +31,10 @@ grails.servlet.version = "2.5" // Change depending on target container complianc
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
-grails.project.target.level = 1.6
-grails.project.source.level = 1.6
+grails.project.target.level = 1.7
+grails.project.source.level = 1.7
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
-grails.tomcat.jvmArgs= ["-Xms256m",  "-Xmx1024m", "-XX:PermSize=512m", "-XX:MaxPermSize=512m"]
 
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
@@ -43,7 +42,7 @@ grails.project.dependency.resolution = {
         // uncomment to disable ehcache
         excludes 'ehcache'
     }
-    log "error" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+    log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     checksums true // Whether to verify checksums on resolve
 
     repositories {
@@ -55,11 +54,14 @@ grails.project.dependency.resolution = {
         // uncomment these to enable remote dependency resolution from public Maven repositories
         mavenCentral()
         mavenLocal()
-		mavenRepo "http://m2repo.spockframework.org/snapshots"
+		mavenRepo "https://repo.spring.io/plugins-release"
+	    mavenRepo "http://m2repo.spockframework.org/snapshots"
         mavenRepo "http://snapshots.repository.codehaus.org"
         mavenRepo "http://repository.codehaus.org"
         mavenRepo "http://download.java.net/maven/2/"
         mavenRepo "http://repository.jboss.com/maven2/"
+        mavenRepo "http://repo.grails.org/grails/core"
+	    mavenRepo "http://repo.grails.org/grails/plugins"
 		
 		/**
 		* Configure our resolver.
@@ -79,6 +81,7 @@ grails.project.dependency.resolution = {
 		compile 'net.sf.ezmorph:ezmorph:1.0.6'
 		runtime 'mysql:mysql-connector-java:5.1.5'
 		compile 'org.supercsv:SuperCSV:1.52'
+		//compile "org.grails.plugins:audit-logging:1.1.3"
     }
 
     plugins {
@@ -86,27 +89,28 @@ grails.project.dependency.resolution = {
     
         compile ":hibernate:$grailsVersion"
 		compile ":mail:1.0"
-        compile ":jquery:1.7.1"
-        compile ":resources:1.2-RC1"	
-		compile ":cached-resources:1.0"
+		compile ":jquery:1.8.2"
 		compile ":cache-headers:1.1.5"
-		compile ":shiro:1.1.5"
 		compile ":springcache:1.3.1"
 		compile ":compass-sass:0.7"
 		compile ":i18n-fields:0.6.1-CHAI"
 		compile ":yui-minify-resources:0.1.5"
-		compile ":rabbitmq-tasks:0.5.3-SNAPSHOT"
+		//compile ":rabbitmq-tasks:0.5.3-SNAPSHOT"
+		compile ":rabbitmq-tasks:0.5.4"
 		compile ":chai-locations:0.5.1-CHAI"
 		compile ":build-info-tag:0.3.1"
-		compile ":quartz:1.0-RC2"
 		compile ":google-visualization:0.6.2"
 		compile ":rest-client-builder:1.0.2"
-		compile ":release:2.0.3" 
+		compile ":release:2.0.3"
 		compile ":webxml:1.4.1"
-		//compile ':cloud-foundry:1.2.3'
 		test (":spock:0.6") {changing = false}
-		//		test ":geb:0.7.1"
 		compile ":csv:0.3.1"
+		
+		compile (":shiro:1.2.1"){
+			excludes "quartz"
+		}
+		compile ":quartz:1.0.1"
+		compile ":audit-logging:1.1.3"
     }
 	
 }
